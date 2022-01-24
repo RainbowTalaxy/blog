@@ -9,7 +9,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 70px 10px;
+    padding: 20px 20px;
     min-height: 75vh;
     overflow-y: scroll;
 `;
@@ -166,7 +166,7 @@ export default function Home(): JSX.Element {
                         fujianchensiwei@163.com
                     </ContactCell>
                     <ContactCell>
-                        <img src="https://img.icons8.com/ios-glyphs/90/000000/github.png" />
+                        <img src="img/github.png" />
                         <a href="https://github.com/RainbowTalaxy">RainbowTalaxy</a>
                     </ContactCell>
                 </ContactBar>
