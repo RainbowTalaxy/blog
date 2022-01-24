@@ -2,8 +2,9 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { TabBarItems } from '../data';
 
-interface Props {
-    children: ReactNode;
+interface ProgressViewProps {
+    topSpace?: number;
+    bottomSpace?: number;
 }
 
 const ProgressView = styled.div`
@@ -11,15 +12,17 @@ const ProgressView = styled.div`
     --progress-line-width: 4px;
 
     position: relative;
-    padding: 15px 0;
+    margin-left: var(--progress-left-size);
+    padding: ${({ topSpace = 1, bottomSpace = 1 }: ProgressViewProps) =>
+        `${topSpace}px 0 ${bottomSpace}px`};
 
     ::before {
-        content: '';
         position: absolute;
         top: 0;
-        left: 0;
+        left: calc(-1 * var(--progress-left-size));
         bottom: 0;
         border-right: var(--progress-line-width) dashed var(--theme-secondary);
+        content: '';
     }
 
     > div + div {
@@ -29,32 +32,26 @@ const ProgressView = styled.div`
 
 export default ProgressView;
 
-const Container = styled.div`
+export const ProgressItem = styled.div`
     position: relative;
-    margin: 0 0 0 var(--progress-left-size);
-    padding: 15px 30px;
-    border: 1px solid var(--theme-primary);
-    border-radius: 30px;
-    background: var(--theme-background);
 
     ::before {
         --dot-size: 10px;
-        content: '';
         position: absolute;
         margin: auto 0;
         top: 0;
         bottom: 0;
         left: calc(
-            -1 * var(--progress-left-size) - 0.5 * var(--dot-size) + 0.25 * var(--progress-line-width)
+            -1 * var(--progress-left-size) - 0.5 * var(--dot-size) + 0.5 * var(--progress-line-width)
         );
         width: var(--dot-size);
         height: var(--dot-size);
         border-radius: 50%;
         background: var(--theme-color);
+        content: '';
     }
 
     ::after {
-        content: '';
         position: absolute;
         margin: auto 0;
         top: 0;
@@ -63,9 +60,6 @@ const Container = styled.div`
         width: var(--progress-left-size);
         height: 2px;
         background: var(--theme-primary);
+        content: '';
     }
 `;
-
-export const ProgressItem = ({ children }: Props) => {
-    return <Container>{children}</Container>;
-};

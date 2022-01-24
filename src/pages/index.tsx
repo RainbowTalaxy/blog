@@ -59,13 +59,13 @@ const Paragraph = styled.p`
 
     strong:hover::before {
         position: absolute;
-        content: '';
         height: 0.4em;
         left: 5px;
         right: 5px;
         bottom: 3px;
         background: rgb(136, 136, 136, 0.5);
         z-index: -1;
+        content: '';
     }
 `;
 

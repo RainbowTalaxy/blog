@@ -5,11 +5,11 @@ import TabBar from './components/TabBar';
 
 const Container = styled.div`
     position: relative;
-    margin: 20px 0;
 `;
 
 const Section = styled.div`
-    margin: 30px 0;
+    position: relative;
+    top: -55px;
 `;
 
 const Content = () => {

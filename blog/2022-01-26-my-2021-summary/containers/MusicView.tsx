@@ -6,7 +6,7 @@ interface Props {}
 const Container = styled.div``;
 
 const MusicView = ({}: Props) => {
-    return <Container>Music</Container>;
+    return <Container></Container>;
 };
 
 export default MusicView;

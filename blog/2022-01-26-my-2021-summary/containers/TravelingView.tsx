@@ -6,7 +6,7 @@ interface Props {}
 const Container = styled.div``;
 
 const TravelingView = ({}: Props) => {
-    return <Container>Traveling</Container>;
+    return <Container></Container>;
 };
 
 export default TravelingView;
