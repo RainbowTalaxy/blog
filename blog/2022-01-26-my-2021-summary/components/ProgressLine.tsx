@@ -8,7 +8,7 @@ interface Props {
 
 const ProgressView = styled.div`
     --progress-left-size: 30px;
-    --progress-line-width: 2px;
+    --progress-line-width: 4px;
 
     position: relative;
     padding: 15px 0;
@@ -19,8 +19,7 @@ const ProgressView = styled.div`
         top: 0;
         left: 0;
         bottom: 0;
-        width: 0px;
-        border: var(--progress-line-width) dashed var(--theme-secondary);
+        border-right: var(--progress-line-width) dashed var(--theme-secondary);
     }
 
     > div + div {
@@ -46,7 +45,7 @@ const Container = styled.div`
         top: 0;
         bottom: 0;
         left: calc(
-            -1 * var(--progress-left-size) - 0.5 * var(--dot-size) + var(--progress-line-width)
+            -1 * var(--progress-left-size) - 0.5 * var(--dot-size) + 0.25 * var(--progress-line-width)
         );
         width: var(--dot-size);
         height: var(--dot-size);

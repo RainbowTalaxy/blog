@@ -4,6 +4,7 @@ import { SECTION_ITEMS, TabBarItems } from './data';
 import TabBar from './components/TabBar';
 
 const Container = styled.div`
+    position: relative;
     margin: 20px 0;
 `;
 

@@ -3,15 +3,17 @@ import styled from 'styled-components';
 
 interface Props {
     items: ReactNode[];
-    width?: number;
     gap?: number;
     activeIdx?: number;
     onClickItem: (item: ReactNode, idx: number) => void;
 }
 
 const Container = styled.div`
+    position: sticky;
+    top: 70px;
     display: flex;
     align-items: center;
+    z-index: 50;
 
     > div + div {
         margin-left: ${(props: { gap: number }) => props.gap}px;
@@ -23,7 +25,6 @@ const Container = styled.div`
 `;
 
 interface TabBarItemsProps {
-    width: number;
     isActive: boolean;
 }
 
@@ -32,27 +33,25 @@ const TabBarItem = styled.div`
     align-items: center;
     justify-content: center;
     padding: 5px 20px;
-    width: ${(props: TabBarItemsProps) => props.width}px;
     border-radius: 20px;
     border: 1px solid
         var(
             ${(props: TabBarItemsProps) =>
                 props.isActive ? '--theme-color' : '--theme-background'}
         );
-    background: var(--theme-background);
+    background: var(--theme-white-half);
     color: var(
         ${(props: TabBarItemsProps) => (props.isActive ? '--theme-color' : '--theme-primary')}
     );
     font-weight: ${(props: TabBarItemsProps) => (props.isActive ? 'bold' : 'normal')};
 `;
 
-const TabBar = ({ items, width = 120, gap = 20, activeIdx = 0, onClickItem }: Props) => {
+const TabBar = ({ items, gap = 20, activeIdx = 0, onClickItem }: Props) => {
     return (
         <Container gap={gap}>
             {items.map((item, idx) => (
                 <TabBarItem
                     key={idx}
-                    width={width}
                     isActive={idx === activeIdx}
                     onClick={() => onClickItem(item, idx)}
                 >

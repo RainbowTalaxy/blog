@@ -6,21 +6,21 @@ import TravelingView from './containers/TravelingView';
 export enum Section {
     Activity,
     Traveling,
-    Music,
+    Recreation,
 }
 
 export const SECTION_NAME = {
     [Section.Activity]: '动态',
-    [Section.Traveling]: '徒步日记',
-    [Section.Music]: '音乐',
+    [Section.Traveling]: '外出',
+    [Section.Recreation]: '听歌看视频',
 };
 
-export const TabBarItems = [Section.Activity, Section.Traveling, Section.Music].map(
+export const TabBarItems = [Section.Activity, Section.Traveling, Section.Recreation].map(
     (section) => SECTION_NAME[section],
 );
 
 export const SECTION_ITEMS = {
     [Section.Activity]: <ActivityView />,
     [Section.Traveling]: <TravelingView />,
-    [Section.Music]: <MusicView />,
+    [Section.Recreation]: <MusicView />,
 };
