@@ -18,6 +18,7 @@ const Introduction = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
+    margin: 20px 0 0;
 `;
 
 const Avatar = styled.img`
