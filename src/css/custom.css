@@ -6,6 +6,10 @@
 
 /* You can override the default Infima variables here. */
 :root {
+    --theme-color: rgb(106, 139, 173);
+    --theme-primary: rgb(106, 139, 173, 0.75);
+    --theme-secondary: rgb(106, 139, 173, 0.5);
+    --theme-background: rgb(106, 139, 173, 0.1);
     --ifm-color-primary: rgb(106, 139, 173);
     --ifm-color-primary-dark: rgb(33, 175, 144);
     --ifm-color-primary-darker: rgb(31, 165, 136);
@@ -28,9 +32,7 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 }
 
 html[data-theme='dark'] {
-    --ifm-color-primary: rgb(106, 139, 173);
     --ifm-color-primary-dark: #5a91ea;
-    /* any other colors you wish to overwrite */
 }
 
 .navbar__logo > img {

@@ -15,6 +15,10 @@ const config = {
     organizationName: 'RainbowTalaxy', // Usually your GitHub org/user name.
     projectName: 'blog', // Usually your repo name.
 
+    customFields: {
+        // referrer: 'never',
+    },
+
     presets: [
         [
             'classic',
