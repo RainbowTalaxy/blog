@@ -32,3 +32,8 @@ html[data-theme='dark'] {
     --ifm-color-primary-dark: #5a91ea;
     /* any other colors you wish to overwrite */
 }
+
+.navbar__logo > img {
+    margin: 0 10px;
+    border-radius: 50%;
+}
