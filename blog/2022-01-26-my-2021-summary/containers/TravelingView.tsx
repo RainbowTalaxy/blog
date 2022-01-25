@@ -20,7 +20,7 @@ const ImageGroup = styled.div`
         display: block;
         margin: 0 5px 13px;
         flex: 1;
-        min-width: 200px;
+        min-width: 250px;
         max-width: min(50vh, 350px);
     }
 `;
