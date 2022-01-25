@@ -13,14 +13,24 @@ const Section = styled.div`
 `;
 
 const Content = () => {
-    const [tabBarIdx, setTabBarIdx] = useState(0);
+    const [tabBarIdx, setTabBarIdx] = useState(2);
+
+    const handleClickTabBarItem = (idx: number) => {
+        setTabBarIdx(idx);
+        document.getElementById('anchor').scrollIntoView({
+            behavior: 'smooth',
+        });
+        window.scrollBy({
+            top: -58,
+        });
+    };
 
     return (
-        <Container>
+        <Container id="anchor">
             <TabBar
                 items={TabBarItems}
                 activeIdx={tabBarIdx}
-                onClickItem={(_, idx) => setTabBarIdx(idx)}
+                onClickItem={(_, idx) => handleClickTabBarItem(idx)}
             />
             <Section>{SECTION_ITEMS[tabBarIdx]}</Section>
         </Container>

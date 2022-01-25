@@ -16,7 +16,7 @@ const Container = styled.div`
     padding: 10px 0 10px 46px;
     width: calc(100% + 32px);
     transform: translateX(-16px);
-    background: var(--theme-white-half);
+    background: var(--theme-page-background);
     overflow: scroll;
     z-index: 50;
 

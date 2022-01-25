@@ -1,69 +1,19 @@
 import Emoji from '@site/src/components/Emoji';
 import React from 'react';
 import styled from 'styled-components';
+import { Card, ProgressItemTitle, Image, Paragraph, Quote } from '../components';
 import ProgressView, { ProgressItem } from '../components/ProgressLine';
 
 interface Props {}
 
 const Container = styled.div``;
 
-const DateInfo = styled.div`
-    margin: 10px 14px 20px;
-    color: var(--theme-color);
-    font-size: large;
-    font-weight: bold;
-`;
-
-const Card = styled.div`
-    margin-bottom: 45px;
-    padding: 15px 20px 5px;
-    border: 1px solid var(--theme-primary);
-    border-radius: 26px;
-    background: var(--theme-background);
-`;
-
-const Paragraph = styled.p`
-    margin-bottom: 10px;
-`;
-
-const Image = styled.img`
-    margin-bottom: 10px;
-    max-height: 50vh;
-    border-radius: 15px;
-`;
-
-const Quote = styled.div`
-    --quote-left-size: 18px;
-    position: relative;
-    margin: 0 0 10px var(--quote-left-size);
-    color: var(--theme-primary);
-
-    ::before {
-        position: absolute;
-        top: 0;
-        left: calc(-1 * var(--quote-left-size));
-        bottom: 0;
-        width: 4px;
-        border-radius: 2px;
-        background: var(--theme-secondary);
-        content: '';
-    }
-
-    p {
-        margin: 0 0 5px;
-    }
-
-    p > span {
-        padding: 0 10px;
-    }
-`;
-
 const ActivityView = ({}: Props) => {
     return (
         <Container>
             <ProgressView topSpace={75}>
                 <ProgressItem>
-                    <DateInfo>2021 年 1 月 14 日</DateInfo>
+                    <ProgressItemTitle>2021 年 1 月 14 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>收到了蚂蚁森林送的明信片：</Paragraph>
@@ -73,14 +23,14 @@ const ActivityView = ({}: Props) => {
                     />
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 1 月 21 日</DateInfo>
+                    <ProgressItemTitle>2021 年 1 月 21 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>写了个脚本来应对学校的每日疫情打卡。</Paragraph>
                     <Paragraph>而且一年下来依旧非常的稳定！</Paragraph>
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 4 月 11 日</DateInfo>
+                    <ProgressItemTitle>2021 年 4 月 11 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>在宿舍煮了第一枚茶叶蛋：</Paragraph>
@@ -90,7 +40,7 @@ const ActivityView = ({}: Props) => {
                     />
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 5 月 3 日</DateInfo>
+                    <ProgressItemTitle>2021 年 5 月 3 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>
@@ -100,7 +50,7 @@ const ActivityView = ({}: Props) => {
                     <Paragraph>但是发版后一直没更新，专心学前端了。</Paragraph>
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 5 月 6 日</DateInfo>
+                    <ProgressItemTitle>2021 年 5 月 6 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>用 VuePress 搭建了最初的博客：</Paragraph>
@@ -110,7 +60,7 @@ const ActivityView = ({}: Props) => {
                     />
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 6 月 13 日</DateInfo>
+                    <ProgressItemTitle>2021 年 6 月 13 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>给想搭建服务器的 MC 党写了教程：</Paragraph>
@@ -124,7 +74,7 @@ const ActivityView = ({}: Props) => {
                     </Quote>
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 7 月 8 日</DateInfo>
+                    <ProgressItemTitle>2021 年 7 月 8 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Quote>
@@ -139,13 +89,13 @@ const ActivityView = ({}: Props) => {
                     />
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 7 月 19 日</DateInfo>
+                    <ProgressItemTitle>2021 年 7 月 19 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>暑假的开头，开始了一个人在外租房独居的日子。</Paragraph>
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 9 月 20 日</DateInfo>
+                    <ProgressItemTitle>2021 年 9 月 20 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Quote>
@@ -159,7 +109,7 @@ const ActivityView = ({}: Props) => {
                     />
                 </Card>
                 <ProgressItem>
-                    <DateInfo>2021 年 11 月 17 日</DateInfo>
+                    <ProgressItemTitle>2021 年 11 月 17 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <Paragraph>入职扇贝实习一周后的一天：</Paragraph>
