@@ -18,7 +18,7 @@ const Container = styled.div`
     transform: translateX(-16px);
     background: var(--theme-page-background);
     overflow: scroll;
-    z-index: 300;
+    z-index: 2000;
 
     ::after {
         flex-shrink: 0;
