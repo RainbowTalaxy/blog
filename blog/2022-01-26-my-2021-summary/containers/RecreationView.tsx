@@ -71,6 +71,12 @@ const Hint = styled.span`
     color: var(--theme-color);
 `;
 
+const NumberMark = styled.div`
+    width: 1.7em;
+    font-weight: bold;
+    color: var(--theme-color);
+`;
+
 const RecreationView = ({}: Props) => {
     const favoriteSong = APPLE_MUSIC_DATA.find((song) => song.name === 'Good Days');
 
@@ -94,8 +100,9 @@ const RecreationView = ({}: Props) => {
                     <ProgressItemTitle>这一年我的年度歌单：</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    {APPLE_MUSIC_DATA.map((song) => (
+                    {APPLE_MUSIC_DATA.map((song, idx) => (
                         <ListItem>
+                            <NumberMark>{idx + 1}.</NumberMark>
                             <Album src={song.imgUrl} />
                             <SongInfo>
                                 <SongName>{song.name}</SongName>
@@ -158,7 +165,7 @@ const RecreationView = ({}: Props) => {
                         使用了<Hint>73</Hint>次三连
                     </ListItem>
                     <ListItem>
-                        喜爱的分区为<Hint>游戏/生活/搞笑</Hint>
+                        喜爱的分区<Hint>游戏/生活/搞笑</Hint>
                     </ListItem>
                 </Card>
                 <CardFooter>每天都能看到有创意、走心的视频。</CardFooter>
