@@ -23,8 +23,9 @@ const ActivityView = ({}: Props) => {
                     <ProgressItemTitle>2021 年 1 月 21 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    <Paragraph>写了个脚本来应对学校的每日疫情打卡。</Paragraph>
-                    <Paragraph>而且一年下来依旧非常的稳定！</Paragraph>
+                    <Paragraph>
+                        写了个脚本来应对学校的每日疫情打卡。一年下来依旧非常的稳定！
+                    </Paragraph>
                 </Card>
                 <ProgressItem>
                     <ProgressItemTitle>2021 年 4 月 11 日</ProgressItemTitle>
@@ -39,9 +40,11 @@ const ActivityView = ({}: Props) => {
                 <Card>
                     <Paragraph>
                         爆肝了个 SwiftUI 的 Markdown 渲染器：
-                        <a href="https://github.com/RainbowTalaxy/RoomTime">RoomTime - GitHub</a>
+                        <a href="https://github.com/RainbowTalaxy/RoomTime">
+                            RoomTime - GitHub
+                        </a>{' '}
+                        。但是发版后一直没更新，专心学前端了。
                     </Paragraph>
-                    <Paragraph>但是发版后一直没更新，专心学前端了。</Paragraph>
                 </Card>
                 <ProgressItem>
                     <ProgressItemTitle>2021 年 5 月 6 日</ProgressItemTitle>
