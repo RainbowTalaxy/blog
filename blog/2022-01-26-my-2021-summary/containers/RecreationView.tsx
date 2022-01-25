@@ -89,7 +89,7 @@ const RecreationView = ({}: Props) => {
                 </ProgressItem>
                 <Card>
                     {APPLE_MUSIC_DATA.map((song, idx) => (
-                        <ListItem>
+                        <ListItem key={idx}>
                             <NumberMark>{idx + 1}.</NumberMark>
                             <Album src={song.imgUrl} />
                             <SongInfo>
@@ -104,8 +104,8 @@ const RecreationView = ({}: Props) => {
                     <ProgressItemTitle>这一年在电影院看过的电影：</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    {WATCHED.films.map((film) => (
-                        <ListItem>{film}</ListItem>
+                    {WATCHED.films.map((film, idx) => (
+                        <ListItem key={idx}>{film}</ListItem>
                     ))}
                 </Card>
                 <CardFooter>因为疫情，去电影院的机会也少了...</CardFooter>
@@ -113,8 +113,8 @@ const RecreationView = ({}: Props) => {
                     <ProgressItemTitle>这一年我追过的动漫番剧：</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    {WATCHED.animations.map((film) => (
-                        <ListItem>{film}</ListItem>
+                    {WATCHED.animations.map((animation, idx) => (
+                        <ListItem key={idx}>{animation}</ListItem>
                     ))}
                 </Card>
                 <CardFooter>灵笼，国漫之光！</CardFooter>
@@ -122,8 +122,8 @@ const RecreationView = ({}: Props) => {
                     <ProgressItemTitle>这一年我看过的电视剧：</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    {WATCHED.TVs.map((film) => (
-                        <ListItem>{film}</ListItem>
+                    {WATCHED.TVs.map((tv, idx) => (
+                        <ListItem key={idx}>{tv}</ListItem>
                     ))}
                 </Card>
                 <CardFooter>国产质量越来越好了。</CardFooter>
@@ -131,8 +131,8 @@ const RecreationView = ({}: Props) => {
                     <ProgressItemTitle>这一年我云过的单机游戏：</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    {WATCHED.games.map((film) => (
-                        <ListItem>{film}</ListItem>
+                    {WATCHED.games.map((game, idx) => (
+                        <ListItem key={idx}>{game}</ListItem>
                     ))}
                 </Card>
                 <CardFooter>看来只有恐怖游戏符合我的胃口...</CardFooter>

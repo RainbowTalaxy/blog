@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Section, SECTION_ITEMS, TabBarItems } from './constant';
-import TabBar from './components/TabBar';
+import { Section, SECTION_ITEMS, TabBarItems } from '../constant';
+import TabBar from '../components/TabBar';
 
 const Container = styled.div`
     position: relative;
