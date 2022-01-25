@@ -14,18 +14,39 @@ export const Card = styled.div`
     border: 1px solid var(--theme-primary);
     border-radius: 26px;
     background: var(--theme-background);
-    overflow: scroll;
+    overflow-y: scroll;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 export const Paragraph = styled.p`
     margin-bottom: 10px;
 `;
 
-export const Image = styled.img`
+const ImageWrapper = styled.div`
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
     max-height: 50vh;
     border-radius: 15px;
+    overflow: hidden;
+
+    > img {
+        display: block;
+    }
 `;
+
+export const Image = ({ src, className }: { src: string; className?: string }) => {
+    return (
+        <ImageWrapper className={className}>
+            <img referrerPolicy="no-referrer" src={src} />
+        </ImageWrapper>
+    );
+};
 
 export const Quote = styled.div`
     --quote-left-size: 18px;
@@ -51,4 +72,22 @@ export const Quote = styled.div`
     p > span {
         padding: 0 10px;
     }
+`;
+
+export const Keyword = styled.div`
+    margin: 0 0 0 18px;
+    font-weight: bold;
+    font-size: 1.5em;
+
+    span {
+        padding: 0 10px;
+        font-size: 0.7em;
+        font-weight: normal;
+    }
+`;
+
+export const Primary = styled.span`
+    padding: 0 5px;
+    font-weight: bold;
+    color: var(--theme-primary);
 `;

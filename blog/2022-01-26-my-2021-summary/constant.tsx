@@ -11,7 +11,7 @@ export enum Section {
 
 export const SECTION_NAME = {
     [Section.Activity]: '动态',
-    [Section.Traveling]: '外出',
+    [Section.Traveling]: '户外',
     [Section.Recreation]: '休闲',
 };
 

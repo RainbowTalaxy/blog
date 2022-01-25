@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { TabBarItems } from '../data';
+import { TabBarItems } from '../constant';
 
 interface ProgressViewProps {
     topSpace?: number;

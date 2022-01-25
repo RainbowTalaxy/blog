@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SECTION_ITEMS, TabBarItems } from './data';
+import { Section, SECTION_ITEMS, TabBarItems } from './constant';
 import TabBar from './components/TabBar';
 
 const Container = styled.div`
     position: relative;
 `;
 
-const Section = styled.div`
+const SectionWrapper = styled.div`
     position: relative;
     top: -55px;
 `;
 
 const Content = () => {
-    const [tabBarIdx, setTabBarIdx] = useState(2);
+    const [tabBarIdx, setTabBarIdx] = useState(Section.Activity);
 
     const handleClickTabBarItem = (idx: number) => {
         setTabBarIdx(idx);
@@ -32,7 +32,7 @@ const Content = () => {
                 activeIdx={tabBarIdx}
                 onClickItem={(_, idx) => handleClickTabBarItem(idx)}
             />
-            <Section>{SECTION_ITEMS[tabBarIdx]}</Section>
+            <SectionWrapper>{SECTION_ITEMS[tabBarIdx]}</SectionWrapper>
         </Container>
     );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, ProgressItemTitle, Image, Paragraph } from '../components';
+import { Card, ProgressItemTitle, Image, Paragraph, Keyword } from '../components';
 import ProgressView, { ProgressItem } from '../components/ProgressLine';
-import { APPLE_MUSIC_DATA, WATCHED } from '../data';
+import { APPLE_MUSIC_DATA, WATCHED } from '../constant';
 
 interface Props {}
 
@@ -40,22 +40,10 @@ const Album = styled(Image)`
     margin: 0 15px 0 0;
     width: 50px;
     height: 50px;
-    border-radius: 5px; ;
+    border-radius: 5px;
 `;
 
 const PlayTimes = styled.div``;
-
-const Keyword = styled.div`
-    margin: 0 0 0 18px;
-    font-weight: bold;
-    font-size: 1.5em;
-
-    span {
-        padding: 0 10px;
-        font-size: 0.7em;
-        font-weight: normal;
-    }
-`;
 
 const CardFooter = styled.div`
     position: relative;
