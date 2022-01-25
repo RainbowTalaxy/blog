@@ -13,7 +13,6 @@ const SectionWrapper = styled.div`
 `;
 
 function getCoords(elem) {
-    // crossbrowser version
     var box = elem.getBoundingClientRect();
 
     var body = document.body;

@@ -106,7 +106,7 @@ const TravelingView = ({}: Props) => {
                         <Image src="http://photogz.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEDBLOJK8FFDVmbB0wrvFWu*U4*PXGHRsHrWpINjKpDUnQyZCIynUwXJVeZx*2XPudSFksN6jFDx0vl36*0qx6Xg!/b&bo=VQhABsAP0AsBGTE!&rf=viewer_4" />
                     </ImageGroup>
                     <Paragraph>
-                        站在灵谷塔上，可以看到南京天际线。当时我头一次看到光泻下来的景色。
+                        站在灵谷塔上，可以看到南京天际线。当时我头一次看到光泻下来的景色：
                     </Paragraph>
                     <Image src="http://photogz.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEO*NSUXxC3vbegw9T8ff2RplPVc56AdQMSi5oYyTbSrZzrrHK5OOGTlniTycNF*3M6S3QQk8TlAdgoGd5f1VHcI!/b&bo=VQhABsAP0AsBGTE!&rf=viewer_4" />
                 </Card>
