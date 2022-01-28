@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface Props {}
 
 const Container = styled.div`
-    min-height: 160vh;
+    min-height: 200vh;
 
     > div {
         padding: 20px 30px;
@@ -15,11 +15,13 @@ const Container = styled.div`
 const Sticky = styled.div`
     position: sticky;
     top: 0;
+    z-index: 3000;
 `;
 
 const Fixed = styled.div`
     position: fixed;
     bottom: 0;
+    z-index: 3000;
 `;
 
 const Absolute = styled.div`
@@ -91,6 +93,8 @@ const View = ({}: Props) => {
             <Lorem />
             <Sticky id={stickyId}>Sticky 元素（ top: 0 ）</Sticky>
             <p></p>
+            <Lorem />
+            <Lorem />
             <Lorem />
             <Lorem />
             <Lorem />
