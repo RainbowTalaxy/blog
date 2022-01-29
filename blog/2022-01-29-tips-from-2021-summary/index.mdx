@@ -4,7 +4,7 @@ title: 写 2021 总结时发现的一些技巧
 authors: RainbowTalaxy
 ---
 
-我是名前端新手，这些技巧可能深度不够，但还是希望能对实践中的你有所帮助。
+这些技巧可能深度不够，但还是希望能对实践中的你有所帮助。
 
 <!--truncate-->
 
@@ -29,14 +29,14 @@ import TabItem from '@theme/TabItem';
     style={{ marginBottom: 15 }}
 />
 
-这主要是网站会检查图片请求的来源。如果在 `img` 加上一个 `referrerPolicy="no-referrer"` 属性：
+这主要是网站会检查图片请求的来源。如果在 `img` 加上一个 `referrerpolicy="no-referrer"` 属性：
 
 ```html
 <img referrerpolicy="no-referrer" src="http://photocq.photo.store.qq.com/..." />
 ```
 
 <img
-    referrerpolicy="no-referrer"
+    referrerPolicy="no-referrer"
     src="http://photocq.photo.store.qq.com/psc?/V12to3FW3aSvFz/TCfiP1YaPeRT4Jil9RANXwIx1sMUj*g.vEcWfmhf*S0G3AsdxLop48E3Ol5tN1bbdp0Dbq3lVAZUkyTQWZkZOgqdyX1WGbvsQ9qrUCUPjHY!/b&bo=VQhABsAP0AsROQE!&rf=viewer_4"
     width="400"
     height="300"
