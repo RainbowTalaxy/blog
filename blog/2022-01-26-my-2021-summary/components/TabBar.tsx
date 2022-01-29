@@ -17,6 +17,8 @@ const Container = styled.div`
     width: calc(100% + 32px);
     transform: translateX(-16px);
     background: var(--theme-page-background);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     overflow: scroll;
     z-index: 50;
 
@@ -28,6 +30,7 @@ const Container = styled.div`
     }
 
     /* 隐藏滚动条 */
+    -ms-overflow-style: none;
     scrollbar-width: none;
     ::-webkit-scrollbar {
         display: none;
