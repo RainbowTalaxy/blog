@@ -132,10 +132,7 @@ export default function Home(): JSX.Element {
     const [topTipVisible, setTopTipVisible] = useState(true);
 
     return (
-        <Layout
-            title={`Hello from ${siteConfig.title}`}
-            description="Description will go into a meta tag in <head />"
-        >
+        <Layout title={`Hello from ${siteConfig.title}`}>
             {topTipVisible && (
                 <TopTip>
                     <div>
