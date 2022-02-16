@@ -4,7 +4,7 @@ import Layout from '@theme/Layout';
 const View = () => {
     return (
         <Layout pageClassName="tailwind">
-            <div className="text-blue-600">Tailwind CSS</div>
+            <div className="text-shanbay">Tailwind CSS</div>
         </Layout>
     );
 };
