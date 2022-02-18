@@ -1,6 +1,10 @@
 import React from 'react';
 import '@site/src/css/tailwind.css';
-import { icon, data, imageURL } from './constant';
+import {
+    icon,
+    data,
+    imageURL,
+} from '@site/src/constant/tailwind-demo-constant';
 
 const View = () => {
     return (

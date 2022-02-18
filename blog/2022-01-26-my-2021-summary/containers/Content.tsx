@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Section, SECTION_ITEMS, TabBarItems } from '../constant';
 import TabBar from '../components/TabBar';
 import { getCoordinates } from '@site/src/utils';
 import smoothscroll from 'smoothscroll-polyfill';
-
-smoothscroll.polyfill();
 
 const Container = styled.div`
     position: relative;
@@ -26,6 +24,10 @@ const Content = () => {
             behavior: 'smooth',
         });
     };
+
+    useEffect(() => {
+        smoothscroll.polyfill();
+    }, []);
 
     return (
         <Container id="anchor">

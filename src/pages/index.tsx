@@ -139,7 +139,9 @@ export default function Home(): JSX.Element {
                         这是新博客站点。如果你在找原博客地址，
                         <a href="https://talaxy.cn">点击这里</a>。
                     </div>
-                    <button onClick={() => setTopTipVisible(false)}>关闭</button>
+                    <button onClick={() => setTopTipVisible(false)}>
+                        关闭
+                    </button>
                 </TopTip>
             )}
             <Container>
@@ -165,20 +167,24 @@ export default function Home(): JSX.Element {
                     </ContactCell>
                     <ContactCell>
                         <img src="img/github.png" />
-                        <a href="https://github.com/RainbowTalaxy">RainbowTalaxy</a>
+                        <a href="https://github.com/RainbowTalaxy">
+                            RainbowTalaxy
+                        </a>
                     </ContactCell>
                 </ContactBar>
                 <Paragraph>
-                    欢迎！我是<strong>Talaxy</strong>。你可能也会看到<strong>RainbowTalaxy</strong>
-                    、<strong>MoonstoneTalaxy</strong>
+                    欢迎！我是<strong>Talaxy</strong>。你可能也会看到
+                    <strong>RainbowTalaxy</strong>、
+                    <strong>MoonstoneTalaxy</strong>
                     等名字，那都是我 ^ ^ 。
                 </Paragraph>
                 <Paragraph>
-                    我喜欢玩<strong>守望先锋</strong>，并关注联赛，可以通过邮箱加我好友。
+                    我喜欢玩<strong>守望先锋</strong>
+                    ，并关注联赛，可以通过邮箱加我好友。
                 </Paragraph>
                 <Paragraph>
-                    我也喜欢<strong>Minecraft</strong>基岩版，搭了服务器和朋友一块儿玩，可以加 QQ
-                    一起玩。
+                    我也喜欢<strong>Minecraft</strong>
+                    基岩版，搭了服务器和朋友一块儿玩，可以加 QQ 一起玩。
                 </Paragraph>
             </Container>
         </Layout>
