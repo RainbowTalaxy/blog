@@ -20,7 +20,7 @@ const Container = styled.div`
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     overflow: scroll;
-    z-index: 50;
+    z-index: 1;
 
     ::after {
         flex-shrink: 0;
