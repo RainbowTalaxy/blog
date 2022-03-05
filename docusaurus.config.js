@@ -15,7 +15,17 @@ const config = {
     organizationName: 'RainbowTalaxy', // Usually your GitHub org/user name.
     projectName: 'blog', // Usually your repo name.
 
-    plugins: [],
+    plugins: [
+        [
+            '@docusaurus/plugin-content-docs',
+            {
+                id: 'gallery',
+                path: 'gallery',
+                routeBasePath: 'gallery',
+                sidebarPath: require.resolve('./sidebars.js'),
+            },
+        ],
+    ],
 
     presets: [
         [
@@ -52,6 +62,7 @@ const config = {
                         position: 'left',
                     },
                     { to: '/blog', label: '博客', position: 'left' },
+                    { to: '/gallery', label: '画廊', position: 'left' },
                     {
                         href: 'https://unsplash.com/@talaxy',
                         label: 'Unsplash',

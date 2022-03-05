@@ -19,7 +19,7 @@ const View = () => {
                             className="w-[30px] aspect-square mr-[10px]"
                             src={imageURL}
                         />
-                        <div className="grow font-bold">{section.title}</div>
+                        <div className="grow text-black font-bold">{section.title}</div>
                         <div className="w-[18px] aspect-square">
                             {icon(section.done ? '#28d3b0' : '#eee')}
                         </div>
