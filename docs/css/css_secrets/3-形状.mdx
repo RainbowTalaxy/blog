@@ -1,0 +1,124 @@
+---
+tags:
+  - css
+---
+
+import "./3.css"
+
+# 形状
+
+## 自适应的椭圆
+
+### 椭圆
+
+<div class="basic oval"></div>
+
+```css
+.oval {
+  /* 水平半径 / 垂直半径 */
+  border-radius: 50% / 50%;
+}
+```
+
+### 半椭圆
+
+<div class="basic half-oval"></div>
+
+```css
+.half-oval {
+  border-radius: 100% 0 0 100% / 50%;
+}
+```
+
+### 四分之一椭圆
+
+<div class="basic quarter-oval"></div>
+
+```css
+.quarter-oval {
+  border-radius: 100% 0 0 0;
+}
+```
+
+## 平行四边形
+
+<div class="basic parallel">Hello</div>
+
+```html
+<div class="basic parallel">Hello</div>
+```
+
+```css
+.parallel {
+  transform: skewX(-20deg)
+}
+```
+
+### 矫正内部变形
+
+<div class="basic parallel-1"><div>Hello</div></div>
+
+```html
+<div class="basic parallel-1"><div>Hello</div></div>
+```
+
+```css
+.parallel-1 {
+  transform: skewX(-20deg)
+}
+
+.parallel-1 > div {
+  transform: skewX(20deg)
+}
+```
+
+### 用伪类矫正
+
+<div class="basic parallel-2">Hello</div>
+
+```html
+<div class="basic parallel-2">Hello</div>
+```
+
+```css
+.parallel-2 {
+  position: relative;
+}
+
+.parallel-2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #F5BCBC;
+  transform: skew(-20deg);
+}
+```
+
+## 切角效果
+
+<div class="basic cut-corner"></div>
+
+```css
+.cut-corner {
+  background: linear-gradient(-45deg, transparent 15px, #F5BCBC 0)
+}
+```
+
+### 应用到四个角
+
+<div class="basic cut-all-corner"></div>
+
+```css
+.cut-all-corner {
+  background: 
+    linear-gradient(135deg, transparent 15px, #F5BCBC 0) top left,
+    linear-gradient(-135deg, transparent 15px, #F5BCBC 0) top right,
+    linear-gradient(-45deg, transparent 15px, #F5BCBC 0) bottom right,
+    linear-gradient(45deg, transparent 15px, #F5BCBC 0) bottom left;
+  background-size: 51% 51%;   /* 理论 50% 是够的 */
+  background-repeat: no-repeat;
+}
+```
+
+## 参考
