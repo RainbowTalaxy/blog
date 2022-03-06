@@ -10,8 +10,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     padding: 20px 20px;
-    min-height: 75vh;
-    overflow-y: scroll;
+    min-height: 74vh;
 `;
 
 const Introduction = styled.div`
