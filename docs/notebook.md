@@ -3,6 +3,10 @@ id: notebook
 title: 记事本
 ---
 
+## Docusaurus
+
+[官方文档](https://docusaurus.io/docs)
+
 ## GitHub hosts
 
 [使用方法](https://gitee.com/ineo6/hosts)

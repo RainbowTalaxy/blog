@@ -45,8 +45,3 @@ html[data-theme='dark'] {
     margin: 0 10px;
     border-radius: 50%;
 }
-
-html,
-body {
-    font: 16px;
-}
