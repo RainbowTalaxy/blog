@@ -30,7 +30,7 @@ authors: RainbowTalaxy
 
 ## 断开链接
 
-对应的，可以使用 `yarn unlink` 注销链接，以及用 `yarn unlink 包名` 来断开链接。
+对应的，可以用 `yarn unlink 包名` 来断开链接，使用 `yarn unlink` 注销链接。
 
 项目中断开链接后 Yarn 也会提示你使用 `yarn install --force` ，否则无法用 `yarn add` 安装该包。
 

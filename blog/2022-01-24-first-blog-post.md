@@ -1,5 +1,4 @@
 ---
-slug: first-blog-post
 title: Hello Docusaurus
 authors: RainbowTalaxy
 ---
