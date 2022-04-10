@@ -135,7 +135,7 @@ export default function Home(): JSX.Element {
             {topTipVisible && (
                 <TopTip>
                     <div>
-                        这是新博客站点。如果你在找原博客地址，
+                        这是新博客站点，目前仍在迁移中。如果你在找原博客地址，
                         <a href="https://talaxy.cn">点击这里</a>。
                     </div>
                     <button onClick={() => setTopTipVisible(false)}>
