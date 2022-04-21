@@ -84,7 +84,7 @@ const Component = ({ value }) => {
 
 上面的写法有个缺点，即无法为 `default` 情况定义组件。可以用复杂一点的条件语句解决这个问题：
 
-```
+```jsx
 const Component = ({ value }) => {
     return (
         <div>
