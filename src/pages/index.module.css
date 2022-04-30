@@ -1,0 +1,121 @@
+.main-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px;
+    min-height: 74vh;
+}
+
+.introduction {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0;
+}
+
+.avatar {
+    display: block;
+    margin-right: min(5vmin, 35px);
+    width: min(30vmin, 210px);
+    height: min(30vmin, 210px);
+    border: min(1.5vmin, 10px) solid #f1f1f1;
+    border-radius: 50%;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    font-size: min(10vmin, 70px);
+    font-weight: bold;
+}
+
+.description {
+    font-size: min(6vmin, 42px);
+    color: #888;
+}
+
+p.paragraph {
+    font-size: large;
+    text-align: center;
+}
+
+p.paragraph > strong {
+    position: relative;
+    display: inline-block;
+    padding: 0 5px;
+}
+
+p.paragraph > strong:hover::before {
+    position: absolute;
+    height: 0.4em;
+    left: 5px;
+    right: 5px;
+    bottom: 3px;
+    background: rgb(136, 136, 136, 0.5);
+    z-index: -1;
+    content: '';
+}
+
+.top-tip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 30px;
+    background: rgb(106, 139, 173, 0.75);
+    color: white;
+}
+
+.top-tip a {
+    font-weight: bold;
+    color: #e1f0ff;
+}
+
+.top-tip button {
+    flex-shrink: 0;
+    margin-left: 18px;
+    border: none;
+    background: transparent;
+    font-size: medium;
+    color: white;
+}
+
+.top-tip button:hover {
+    cursor: pointer;
+}
+
+.contact-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+}
+
+.contact-cell {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    padding: 5px 20px 5px 18px;
+    border-radius: 18px;
+    background: rgb(106, 139, 173, 0.1);
+}
+
+.contact-cell > span {
+    padding-right: 10px;
+}
+
+.contact-cell > img {
+    margin-right: 10px;
+    width: 26px;
+    height: 26px;
+}
+
+.contact-cell > a {
+    color: var(--ifm-font-color-base);
+}
