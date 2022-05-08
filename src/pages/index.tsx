@@ -5,11 +5,10 @@ import Emoji from '../components/Emoji';
 import style from './index.module.css';
 
 export default function Home(): JSX.Element {
-    const { siteConfig } = useDocusaurusContext();
     const [topTipVisible, setTopTipVisible] = useState(true);
 
     return (
-        <Layout title={`Hello from ${siteConfig.title}`}>
+        <Layout title="Welcome">
             {topTipVisible && (
                 <div className={style['top-tip']}>
                     <div>
