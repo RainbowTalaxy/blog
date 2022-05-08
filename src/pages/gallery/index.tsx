@@ -3,7 +3,7 @@ import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Emoji from '../../components/Emoji';
 import style from './index.module.css';
-import { GALLERY_CARDS } from '../constants/gallery';
+import { GALLERY_CARDS } from '../../constants/gallery';
 
 export default function Home(): JSX.Element {
     return (
