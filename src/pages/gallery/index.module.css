@@ -69,12 +69,12 @@
 }
 
 .card-title {
-    color: var(--theme-white);
-    font-size: 3vh;
+    color: #fff;
+    font-size: 3.5vh;
     font-weight: bold;
 }
 
 .card-subtitle {
-    color: var(--theme-white);
+    color: #fff;
     font-size: 2vh;
 }
