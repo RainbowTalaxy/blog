@@ -22,6 +22,17 @@
     --ifm-color-primary-lighter: rgb(102, 212, 189);
     --ifm-color-primary-lightest: rgb(146, 224, 208);
     --ifm-code-font-size: 95%;
+    --theme-color-red: #f5bcbc;
+    --theme-color-orange: #fdd0b2;
+    --theme-color-yellow: #fce8b2;
+    --theme-color-green: #d3f2b2;
+    --theme-color-cyan: #c6f3e9;
+    --theme-color-sky: #c1edff;
+    --theme-color-blue: #0xB2DEFF;
+    --theme-color-purple: #cfc2ff;
+    --theme-color-pink: #e9bcf5;
+    --theme-color-gray: #d3d4d6;
+    --theme-color-lightgray: #e9e9e9;
 }
 
 .docusaurus-highlight-code-line {

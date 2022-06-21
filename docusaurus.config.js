@@ -22,7 +22,14 @@ const config = {
                 id: 'gallery',
                 path: 'gallery',
                 routeBasePath: 'gallery',
-                sidebarPath: require.resolve('./sidebars.js'),
+            },
+        ],
+        [
+            '@docusaurus/plugin-content-docs',
+            {
+                id: 'some',
+                path: 'some',
+                routeBasePath: 'some',
             },
         ],
     ],
