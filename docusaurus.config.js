@@ -30,6 +30,7 @@ const config = {
                 id: 'some',
                 path: 'some',
                 routeBasePath: 'some',
+                sidebarPath: false,
             },
         ],
     ],
