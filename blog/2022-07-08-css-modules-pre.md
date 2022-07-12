@@ -52,7 +52,7 @@ css-loader 默认启用了 CSS Modules ，具体为 [`modules`](https://github.c
 declare module '*.module.css';
 ```
 
-## 类名问题
+## 类名转化
 
 因为 CSS 常规用 '-' 来分割词，而非驼峰命名，所以引用类名的时候可能会需要这样：
 
@@ -94,6 +94,17 @@ const Title = ({ children }) => {
 ```json title=".vscode/settings.json"
 {
     "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
+
+## 模式
+
+css-loader 默认启用 'local' 模式（配置中的 `modules.mode` 字段），即对所有的类名进行 hash 处理。如果要在 module.css 文件中使用全局的类名（而非 hash 处理），需要用 `:global()` 包裹：
+
+```css
+.container :global(.title) {
+    font-size: 24px;
+    font-weight: bold;
 }
 ```
 
