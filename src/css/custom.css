@@ -58,3 +58,7 @@ html[data-theme='dark'] {
     margin: 0 10px;
     border-radius: 50%;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
