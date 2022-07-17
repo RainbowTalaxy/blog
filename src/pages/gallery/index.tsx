@@ -72,7 +72,7 @@ export default function Home(): JSX.Element {
                                     (window.location.href = card.link)
                                 }
                             >
-                                <div>
+                                <div className={style['card-text']}>
                                     <div className={style['card-title']}>
                                         {card.title}
                                     </div>
@@ -80,7 +80,6 @@ export default function Home(): JSX.Element {
                                         {card.subtitle}
                                     </div>
                                 </div>
-                                <div className={style['card-filter']}></div>
                                 <img src={card.bg} />
                             </div>
                         ))}
