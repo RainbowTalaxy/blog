@@ -74,9 +74,9 @@
 }
 
 @media (pointer: coarse) {
-    .card-list {
+    /* .card-list {
         padding-top: max(2vw, 3vh);
-    }
+    } */
 
     .cards > svg {
         display: none;
@@ -98,12 +98,12 @@
     margin-left: min(6vh, 6vw);
 }
 
-@media (pointer: coarse) {
+/* @media (pointer: coarse) {
     .card {
         width: max(37vh, 259px);
         height: max(54vh, 378px);
     }
-}
+} */
 
 @media (hover: hover) {
     .card:hover {
