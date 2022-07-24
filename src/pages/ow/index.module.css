@@ -6,6 +6,7 @@ a:hover {
     --button-length: min(64px, 14vw);
     --margin-horizon: min(56px, 4vw);
     position: relative;
+    user-select: none;
 }
 
 .navBar {
@@ -17,7 +18,6 @@ a:hover {
     right: var(--margin-horizon);
     height: var(--button-length);
     background: rgba(51, 55, 72, 0.75);
-    user-select: none;
 }
 
 .navBar > * {
