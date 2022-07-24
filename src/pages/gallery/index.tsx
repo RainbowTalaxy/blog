@@ -52,7 +52,7 @@ export default function Home(): JSX.Element {
     }, []);
 
     return (
-        <Layout title="Welcome">
+        <Layout title="Gallery">
             <div className={style['main-body']}>
                 <div className={style.title}>最新合集</div>
                 <div className={style.cards}>
