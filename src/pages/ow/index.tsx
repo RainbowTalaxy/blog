@@ -45,7 +45,7 @@ const TABS = [
 
 const Overwatch = () => {
     const screen = useScreen();
-    const [isMenuVisible, setMenuVisible] = useState(true);
+    const [isMenuVisible, setMenuVisible] = useState(false);
 
     return (
         <div className={container}>
