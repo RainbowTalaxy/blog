@@ -67,7 +67,7 @@ a.square:hover {
 .info {
     display: flex;
     align-items: center;
-    width: min(360px, 40vw);
+    width: max(min(360px, 30vw), 150px);
     height: 100%;
     color: white;
 }
@@ -127,13 +127,15 @@ a.square:hover {
 }
 
 .menuPage {
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     overflow: hidden;
     z-index: 10;
 }
