@@ -1,10 +1,22 @@
+import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import clsx from 'clsx';
 import styles from './index.module.css';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
+import Menu from '/svg/menu.svg';
 
-const { container, square, navBar, info, online, name, unsplash, github, bg } =
-    styles;
+const {
+    container,
+    square,
+    navBar,
+    info,
+    online,
+    name,
+    unsplash,
+    github,
+    bg,
+    menu,
+} = styles;
 
 const TABS = [
     {
@@ -27,38 +39,49 @@ const TABS = [
 ];
 
 const Overwatch = () => {
+    const screen = useScreen();
     return (
         <div className={container}>
             <nav className={navBar}>
-                {TABS.map((tab) => (
-                    <a
-                        className={clsx(
-                            styles.tab,
-                            tab.active && styles.active,
-                        )}
-                        key={tab.name}
-                        href={tab.link}
-                    >
-                        {tab.name}
+                {screen >= Screen.Large ? (
+                    TABS.map((tab) => (
+                        <a
+                            className={clsx(
+                                styles.tab,
+                                tab.active && styles.active,
+                            )}
+                            key={tab.name}
+                            href={tab.link}
+                        >
+                            {tab.name}
+                        </a>
+                    ))
+                ) : (
+                    <a className={clsx(square, menu, 'mr-[12px]')}>
+                        <Menu />
                     </a>
-                ))}
+                )}
                 <div className="grow" />
-                <a
-                    className={clsx(square, unsplash, 'mr-[6px]')}
-                    href="https://unsplash.com/@talaxy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Unsplash />
-                </a>
-                <a
-                    className={clsx(square, github, 'mr-[12px]')}
-                    href="https://github.com/RainbowTalaxy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <Github />
-                </a>
+                {screen >= Screen.Middle && (
+                    <>
+                        <a
+                            className={clsx(square, unsplash, 'mr-[6px]')}
+                            href="https://unsplash.com/@talaxy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Unsplash />
+                        </a>
+                        <a
+                            className={clsx(square, github, 'mr-[12px]')}
+                            href="https://github.com/RainbowTalaxy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Github />
+                        </a>
+                    </>
+                )}
                 <div className={info}>
                     <div className={online} />
                     <img className={square} src="/img/mercy.png" />
