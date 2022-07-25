@@ -4,7 +4,11 @@ import styles from './index.module.css';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import Menu from '/svg/menu.svg';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import useKeyboard from '@site/src/hooks/useKeyboard';
+import useQuery from '@site/src/hooks/useQuery';
+import Link from '@docusaurus/Link';
+import { useHistory, useLocation } from '@docusaurus/router';
 
 const {
     container,
@@ -25,47 +29,66 @@ const {
 
 const TABS = [
     {
+        code: '',
         name: '主页',
         link: '/ow',
-        active: true,
     },
     {
+        code: 'docs',
         name: '笔记',
-        link: '/docs/doc-intro',
+        link: '/ow?tab=docs',
     },
     {
+        code: 'blog',
         name: '博客',
-        link: 'blog',
+        link: '/ow?tab=blog',
     },
     {
+        code: 'gallery',
         name: '画廊',
-        link: 'gallery',
+        link: '/ow?tab=gallery',
     },
 ];
 
 const Overwatch = () => {
+    const currentTab = useQuery().get('tab') ?? '';
+    const history = useHistory();
     const screen = useScreen();
     const [isMenuVisible, setMenuVisible] = useState(false);
+
+    const closeMenu = () => setMenuVisible(false);
+
+    useKeyboard('Escape', () => setMenuVisible((prev) => !prev));
+
+    useKeyboard('Tab', () => {
+        const idx = TABS.findIndex(
+            (tab) =>
+                tab.code ===
+                (new URLSearchParams(window.location.search).get('tab') ?? ''),
+        );
+        const newTab = TABS[(idx + 1) % TABS.length];
+        if (newTab) history.replace(newTab.link);
+    });
 
     return (
         <div className={container}>
             <nav className={navBar}>
                 {screen >= Screen.Large ? (
                     TABS.map((tab) => (
-                        <a
+                        <Link
                             className={clsx(
                                 styles.tab,
-                                tab.active && styles.active,
+                                tab.code === currentTab && styles.active,
                             )}
                             key={tab.name}
-                            href={tab.link}
+                            to={tab.link}
                         >
                             {tab.name}
-                        </a>
+                        </Link>
                     ))
                 ) : (
                     <a
-                        className={clsx(square, menu, 'mr-[12px]')}
+                        className={clsx(square, menu)}
                         onClick={() => setMenuVisible(true)}
                     >
                         <Menu />
@@ -74,22 +97,18 @@ const Overwatch = () => {
                 <div className="grow" />
                 {screen >= Screen.Middle && (
                     <>
-                        <a
+                        <Link
                             className={clsx(square, unsplash, 'mr-[6px]')}
                             href="https://unsplash.com/@talaxy"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <Unsplash />
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             className={clsx(square, github, 'mr-[12px]')}
                             href="https://github.com/RainbowTalaxy"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <Github />
-                        </a>
+                        </Link>
                     </>
                 )}
                 <div className={info}>
@@ -106,30 +125,35 @@ const Overwatch = () => {
             {isMenuVisible && (
                 <div className={menuPage}>
                     {TABS.map((tab) => (
-                        <a className={menuCell} key={tab.name} href={tab.link}>
+                        <Link
+                            className={menuCell}
+                            key={tab.name}
+                            href={tab.link}
+                            onClick={closeMenu}
+                        >
                             {tab.name}
-                        </a>
+                        </Link>
                     ))}
-                    <a
+                    <Link
                         className={clsx(menuCell, siteCell)}
                         href="https://unsplash.com/@talaxy"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        onClick={closeMenu}
                     >
                         Unsplash
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                         className={clsx(menuCell, siteCell)}
                         href="https://github.com/RainbowTalaxy"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={closeMenu}
                     >
                         GitHub
+                    </Link>
+                    <a className={menuCell} onClick={closeMenu}>
+                        取消
                     </a>
-                    <div
-                        className={mask}
-                        onClick={() => setMenuVisible(false)}
-                    />
+                    <div className={mask} />
                 </div>
             )}
         </div>
