@@ -4,7 +4,7 @@ import styles from './index.module.css';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import Menu from '/svg/menu.svg';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useKeyboard from '@site/src/hooks/useKeyboard';
 import useQuery from '@site/src/hooks/useQuery';
 import Link from '@docusaurus/Link';
@@ -51,10 +51,11 @@ const TABS = [
 ];
 
 const Overwatch = () => {
-    const currentTab = useQuery().get('tab') ?? '';
+    const query = useQuery();
     const history = useHistory();
     const screen = useScreen();
     const [isMenuVisible, setMenuVisible] = useState(false);
+    const [currentTab, setCurretTab] = useState<string>();
 
     const closeMenu = () => setMenuVisible(false);
 
@@ -70,17 +71,21 @@ const Overwatch = () => {
         if (newTab) history.replace(newTab.link);
     });
 
+    useEffect(() => {
+        setCurretTab(query.get('tab') ?? '');
+    }, [query]);
+
     return (
         <div className={container}>
             <nav className={navBar}>
                 {screen >= Screen.Large ? (
                     TABS.map((tab) => (
                         <Link
+                            key={tab.name}
                             className={clsx(
                                 styles.tab,
                                 tab.code === currentTab && styles.active,
                             )}
-                            key={tab.name}
                             to={tab.link}
                         >
                             {tab.name}
@@ -128,7 +133,7 @@ const Overwatch = () => {
                         <Link
                             className={menuCell}
                             key={tab.name}
-                            href={tab.link}
+                            to={tab.link}
                             onClick={closeMenu}
                         >
                             {tab.name}
@@ -144,8 +149,6 @@ const Overwatch = () => {
                     <Link
                         className={clsx(menuCell, siteCell)}
                         href="https://github.com/RainbowTalaxy"
-                        target="_blank"
-                        rel="noopener noreferrer"
                         onClick={closeMenu}
                     >
                         GitHub
