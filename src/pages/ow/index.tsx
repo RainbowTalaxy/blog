@@ -4,9 +4,8 @@ import styles from './index.module.css';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import Menu from '/svg/menu.svg';
-import { useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import useKeyboard from '@site/src/hooks/useKeyboard';
-import useQuery from '@site/src/hooks/useQuery';
 import Link from '@docusaurus/Link';
 import { useHistory, useLocation } from '@docusaurus/router';
 
@@ -29,29 +28,29 @@ const {
 
 const TABS = [
     {
-        code: '',
         name: '主页',
-        link: '/ow',
+        path: '/ow/home',
     },
     {
-        code: 'docs',
         name: '笔记',
-        link: '/ow?tab=docs',
+        path: '/ow/docs',
     },
     {
-        code: 'blog',
         name: '博客',
-        link: '/ow?tab=blog',
+        path: '/ow/blog',
     },
     {
-        code: 'gallery',
         name: '画廊',
-        link: '/ow?tab=gallery',
+        path: '/ow/gallery',
     },
 ];
 
-const Overwatch = () => {
-    const query = useQuery();
+interface Props {
+    children?: ReactNode;
+}
+
+const Overwatch = ({ children }: Props) => {
+    const location = useLocation();
     const history = useHistory();
     const screen = useScreen();
     const [isMenuVisible, setMenuVisible] = useState(false);
@@ -59,21 +58,18 @@ const Overwatch = () => {
 
     const closeMenu = () => setMenuVisible(false);
 
+    const toNextTab = useCallback(() => {
+        const idx = TABS.findIndex((tab) => tab.path === currentTab);
+        const newTab = TABS[(idx + 1) % TABS.length];
+        if (newTab) history.replace(newTab.path);
+    }, [currentTab, location, history]);
+
+    useKeyboard('Tab', toNextTab);
     useKeyboard('Escape', () => setMenuVisible((prev) => !prev));
 
-    useKeyboard('Tab', () => {
-        const idx = TABS.findIndex(
-            (tab) =>
-                tab.code ===
-                (new URLSearchParams(window.location.search).get('tab') ?? ''),
-        );
-        const newTab = TABS[(idx + 1) % TABS.length];
-        if (newTab) history.replace(newTab.link);
-    });
-
     useEffect(() => {
-        setCurretTab(query.get('tab') ?? '');
-    }, [query]);
+        setCurretTab(location.pathname);
+    }, [location]);
 
     return (
         <div className={container}>
@@ -84,9 +80,9 @@ const Overwatch = () => {
                             key={tab.name}
                             className={clsx(
                                 styles.tab,
-                                tab.code === currentTab && styles.active,
+                                tab.path === currentTab && styles.active,
                             )}
-                            to={tab.link}
+                            to={tab.path}
                         >
                             {tab.name}
                         </Link>
@@ -127,13 +123,14 @@ const Overwatch = () => {
                 src="http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqaOObb1ygfTxfj6bQWvWC6EXMACeeba4UvhVubjeBx.mXZx1FYhBNbBdEtjHLL7x7xu7JsY1Pv0ehXf49Bar6*g!/r"
                 alt="background"
             />
+            <main>{children}</main>
             {isMenuVisible && (
                 <div className={menuPage}>
                     {TABS.map((tab) => (
                         <Link
                             className={menuCell}
                             key={tab.name}
-                            to={tab.link}
+                            to={tab.path}
                             onClick={closeMenu}
                         >
                             {tab.name}

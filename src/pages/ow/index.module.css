@@ -3,7 +3,14 @@ a:hover {
     cursor: pointer;
 }
 
+img {
+    display: block;
+}
+
 .container {
+    position: relative;
+    left: 0;
+    right: 0;
     --button-length: min(64px, 14vw);
     --margin-horizon: min(56px, 4vw);
     position: relative;
@@ -19,6 +26,7 @@ a:hover {
     right: var(--margin-horizon);
     height: var(--button-length);
     background: rgba(51, 55, 72, 0.75);
+    z-index: 1000;
 }
 
 .navBar > * {
@@ -184,4 +192,11 @@ a.square:hover {
 
 .menuCell + .menuCell {
     margin-top: 16px;
+}
+
+main {
+    position: relative;
+    padding: calc(68px + var(--button-length))
+        calc(var(--margin-horizon) + 0.6vw) 28px;
+    z-index: 500;
 }

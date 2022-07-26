@@ -13,7 +13,7 @@ const useKeyboard = (key: string | string[], event: () => void) => {
         };
         document.addEventListener('keydown', callback);
         return () => document.removeEventListener('keydown', callback);
-    }, []);
+    }, [key, event]);
 };
 
 export default useKeyboard;
