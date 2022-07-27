@@ -24,24 +24,38 @@ const {
     mask,
     menuCell,
     siteCell,
+    tabHome,
+    tabDocs,
+    tabBlog,
+    tabGallery,
 } = styles;
+
+interface Tab {
+    name: string;
+    path: string;
+    clx: string;
+}
 
 const TABS = [
     {
         name: '主页',
         path: '/ow/home',
+        clx: tabHome,
     },
     {
         name: '笔记',
         path: '/ow/docs',
+        clx: tabDocs,
     },
     {
         name: '博客',
         path: '/ow/blog',
+        clx: tabBlog,
     },
     {
         name: '画廊',
         path: '/ow/gallery',
+        clx: tabGallery,
     },
 ];
 
@@ -54,12 +68,12 @@ const Overwatch = ({ children }: Props) => {
     const history = useHistory();
     const screen = useScreen();
     const [isMenuVisible, setMenuVisible] = useState(false);
-    const [currentTab, setCurretTab] = useState<string>();
+    const [currentTab, setCurretTab] = useState<Tab>();
 
     const closeMenu = () => setMenuVisible(false);
 
     const toNextTab = useCallback(() => {
-        const idx = TABS.findIndex((tab) => tab.path === currentTab);
+        const idx = TABS.findIndex((tab) => tab.path === currentTab?.path);
         const newTab = TABS[(idx + 1) % TABS.length];
         if (newTab) history.replace(newTab.path);
     }, [currentTab, location, history]);
@@ -68,7 +82,9 @@ const Overwatch = ({ children }: Props) => {
     useKeyboard('Escape', () => setMenuVisible((prev) => !prev));
 
     useEffect(() => {
-        setCurretTab(location.pathname);
+        console.log(currentTab);
+        const tab = TABS.find((tab) => tab.path == location.pathname);
+        setCurretTab(tab);
     }, [location]);
 
     return (
@@ -80,7 +96,7 @@ const Overwatch = ({ children }: Props) => {
                             key={tab.name}
                             className={clsx(
                                 styles.tab,
-                                tab.path === currentTab && styles.active,
+                                tab.path === currentTab?.path && styles.active,
                             )}
                             to={tab.path}
                         >
@@ -118,24 +134,27 @@ const Overwatch = ({ children }: Props) => {
                     <span className={name}>TALAXY</span>
                 </div>
             </nav>
+            <main>{children}</main>
             <img
-                className={bg}
+                className={clsx(bg, currentTab?.clx)}
                 src="http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqaOObb1ygfTxfj6bQWvWC6EXMACeeba4UvhVubjeBx.mXZx1FYhBNbBdEtjHLL7x7xu7JsY1Pv0ehXf49Bar6*g!/r"
                 alt="background"
             />
-            <main>{children}</main>
             {isMenuVisible && (
                 <div className={menuPage}>
-                    {TABS.map((tab) => (
-                        <Link
-                            className={menuCell}
-                            key={tab.name}
-                            to={tab.path}
-                            onClick={closeMenu}
-                        >
-                            {tab.name}
-                        </Link>
-                    ))}
+                    {TABS.map(
+                        (tab) =>
+                            tab.path !== currentTab?.path && (
+                                <Link
+                                    className={menuCell}
+                                    key={tab.name}
+                                    to={tab.path}
+                                    onClick={closeMenu}
+                                >
+                                    {tab.name}
+                                </Link>
+                            ),
+                    )}
                     <Link
                         className={clsx(menuCell, siteCell)}
                         href="https://unsplash.com/@talaxy"
@@ -153,7 +172,7 @@ const Overwatch = ({ children }: Props) => {
                     <a className={menuCell} onClick={closeMenu}>
                         取消
                     </a>
-                    <div className={mask} />
+                    <div className={mask} onClick={closeMenu} />
                 </div>
             )}
         </div>

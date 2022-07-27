@@ -1,7 +1,7 @@
 import Overwatch from '..';
 import styles from './index.module.css';
 
-const { info, avatar, label, nickname, topBg, secondary } = styles;
+const { info, avatar, label, nickname, topBg, secondary, bg } = styles;
 
 const Page = () => {
     return (
@@ -18,6 +18,7 @@ const Page = () => {
                 </div>
             </div>
             <div className={topBg} />
+            <div className={bg} />
         </Overwatch>
     );
 };
