@@ -24,38 +24,29 @@ const {
     mask,
     menuCell,
     siteCell,
-    tabHome,
-    tabDocs,
-    tabBlog,
-    tabGallery,
 } = styles;
 
 interface Tab {
     name: string;
     path: string;
-    clx: string;
 }
 
 const TABS = [
     {
         name: '主页',
         path: '/ow/home',
-        clx: tabHome,
     },
     {
         name: '笔记',
         path: '/ow/docs',
-        clx: tabDocs,
     },
     {
         name: '博客',
         path: '/ow/blog',
-        clx: tabBlog,
     },
     {
         name: '画廊',
         path: '/ow/gallery',
-        clx: tabGallery,
     },
 ];
 
@@ -136,7 +127,7 @@ const Overwatch = ({ children }: Props) => {
             </nav>
             <main>{children}</main>
             <img
-                className={clsx(bg, currentTab?.clx)}
+                className={bg}
                 src="http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqaOObb1ygfTxfj6bQWvWC6EXMACeeba4UvhVubjeBx.mXZx1FYhBNbBdEtjHLL7x7xu7JsY1Pv0ehXf49Bar6*g!/r"
                 alt="background"
             />
