@@ -73,7 +73,6 @@ const Overwatch = ({ children }: Props) => {
     useKeyboard('Escape', () => setMenuVisible((prev) => !prev));
 
     useEffect(() => {
-        console.log(currentTab);
         const tab = TABS.find((tab) => tab.path == location.pathname);
         setCurretTab(tab);
     }, [location]);

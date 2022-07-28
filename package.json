@@ -11,6 +11,7 @@
         "deploy": "docusaurus deploy",
         "clear": "docusaurus clear",
         "serve": "docusaurus build && docusaurus serve",
+        "ow": "git checkout feature/ow && git pull && yarn && yarn serve",
         "write-translations": "docusaurus write-translations",
         "write-heading-ids": "docusaurus write-heading-ids",
         "typecheck": "tsc"

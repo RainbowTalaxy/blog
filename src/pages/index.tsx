@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Emoji from '../components/Emoji';
 import style from './index.module.css';
 
