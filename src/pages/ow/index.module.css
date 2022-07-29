@@ -199,7 +199,7 @@ a.square:hover {
     margin-top: 16px;
 }
 
-main {
+.container main {
     position: fixed;
     top: 0;
     left: 0;
