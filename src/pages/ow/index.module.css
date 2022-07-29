@@ -78,7 +78,7 @@ a.square:hover {
 .info {
     display: flex;
     align-items: center;
-    width: max(min(360px, 30vw), 150px);
+    width: max(min(360px, 25vw), 160px);
     height: 100%;
     color: white;
 }
