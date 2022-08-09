@@ -6,6 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+    --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
     --theme-white: #fff;
     --theme-black: #000;
     --theme-white-half: rgb(255, 255, 255, 0.8);
