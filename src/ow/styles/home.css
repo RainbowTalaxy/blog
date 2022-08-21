@@ -1,0 +1,100 @@
+.ow-home-content {
+    --site-v-margin: min(6vw, 50px);
+    --content-h-margin: min(5vw, 58px);
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));
+    left: var(--content-h-margin);
+    right: var(--content-h-margin);
+    bottom: 0;
+    overflow: hidden;
+}
+
+/* 标题 */
+
+.ow-site {
+    position: fixed;
+    top: var(--site-v-margin);
+    left: var(--content-h-margin);
+}
+
+.ow-site-title {
+    margin-top: -28px;
+    font-size: 72px;
+    font-weight: bold;
+    line-height: 1.3;
+    color: white;
+    text-shadow: 0 0 5px white;
+    opacity: 0.8;
+    transform: scaleY(0.8);
+    transform-origin: bottom;
+}
+
+.ow-site-title > span {
+    color: #ffc938;
+    text-shadow: 0 0 5px #ffc938;
+}
+
+.ow-site-description {
+    margin-left: 7px;
+    color: rgb(230, 230, 230);
+}
+
+.ow-site-description:hover {
+    color: rgb(230, 230, 230);
+    text-decoration: none;
+}
+
+/* 手机适配标题 */
+
+.ow-site-sm {
+    position: relative;
+}
+
+.ow-site-sm-title {
+    font-size: min(12vw, 72px);
+    font-weight: bold;
+    line-height: 1.3;
+    color: white;
+    text-shadow: 0 0 5px white;
+    opacity: 0.8;
+    transform: scaleY(0.8);
+    transform-origin: bottom;
+}
+
+.ow-site-sm-title > span {
+    color: #ffc938;
+    text-shadow: 0 0 5px #ffc938;
+}
+
+/* 菜单 */
+
+.ow-home-content menu {
+    padding: 0;
+    list-style-type: none;
+}
+
+.ow-home-content menu li {
+    width: max-content;
+    font-size: min(8vh, 72px);
+    line-height: 1.2;
+    font-style: italic;
+    color: white;
+    text-shadow: 0 0 2px black;
+    transition: transform 0.05s ease-in;
+}
+
+.ow-home-content menu li:hover {
+    cursor: pointer;
+    transform: translateX(var(--content-h-margin));
+}
+
+.top-spacer {
+    flex: 1 0 auto;
+    max-height: 9.6vh;
+}
+
+.bottom-spacer {
+    flex: 4 0 auto;
+}

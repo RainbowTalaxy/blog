@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 export enum Screen {
     Small,
-    Middle,
+    Medium,
     Large,
 }
 
@@ -15,7 +15,7 @@ const useScreen = () => {
             if (window.innerWidth < 640) {
                 setScreen(Screen.Small);
             } else if (window.innerWidth < 845) {
-                setScreen(Screen.Middle);
+                setScreen(Screen.Medium);
             } else {
                 setScreen(Screen.Large);
             }

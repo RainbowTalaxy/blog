@@ -1,0 +1,19 @@
+.ow-view {
+    --nav-v-margin: min(2.5vh, 30px);
+    --nav-h-margin: min(5vw, 44px);
+    --nav-bar-height: min(7vh, 64px);
+    position: relative;
+    flex: 1 0 auto;
+    overflow: hidden;
+    user-select: none;
+}
+
+.ow-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}

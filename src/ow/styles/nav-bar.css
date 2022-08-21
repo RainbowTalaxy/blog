@@ -1,0 +1,75 @@
+.ow-nav-bar {
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    top: var(--nav-v-margin);
+    left: var(--nav-h-margin);
+    right: var(--nav-h-margin);
+    height: var(--nav-bar-height);
+    z-index: 1000;
+}
+
+.ow-nav-button-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: var(--nav-bar-height);
+}
+
+.ow-nav-button-group > * + * {
+    margin-left: 6px;
+}
+
+.ow-nav-button {
+    --outline: calc(var(--nav-bar-height) * 0.05);
+    display: block;
+    height: var(--nav-bar-height);
+    width: var(--nav-bar-height);
+    border: var(--outline) solid transparent;
+}
+
+.ow-nav-button > * {
+    padding: 12% 0;
+    height: 100%;
+    width: 100%;
+}
+
+.ow-nav-button:hover {
+    border: var(--outline) solid hsla(0, 0%, 100%, 0.9);
+}
+
+.unsplash {
+    background-color: #ffc938;
+    box-shadow: 0 0 4px 1px rgba(255, 202, 56, 0.5);
+}
+
+.github {
+    background-color: #2993e1;
+    box-shadow: 0 0 4px 1px rgba(41, 148, 224, 0.502);
+}
+
+.ow-nav-user {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    background-color: rgba(52, 68, 93, 0.65);
+}
+
+.ow-nav-user-status {
+    height: 100%;
+    width: 7px;
+    background-color: #7e7e7e;
+}
+
+.ow-nav-avatar {
+    height: var(--nav-bar-height);
+    width: var(--nav-bar-height);
+    object-fit: cover;
+}
+
+.ow-nav-nickname {
+    padding: 0 10px;
+    width: clamp(100px, 15vw, 240px);
+    color: white;
+    font-size: 18px;
+}
