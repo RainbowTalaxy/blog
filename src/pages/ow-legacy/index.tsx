@@ -34,19 +34,19 @@ interface Tab {
 const TABS = [
     {
         name: '主页',
-        path: '/ow/home',
+        path: '/ow-legacy/home',
     },
     {
         name: '笔记',
-        path: '/ow/docs',
+        path: '/ow-legacy/docs',
     },
     {
         name: '博客',
-        path: '/ow/blog',
+        path: '/ow-legacy/blog',
     },
     {
         name: '画廊',
-        path: '/ow/gallery',
+        path: '/ow-legacy/gallery',
     },
 ];
 
