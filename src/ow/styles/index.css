@@ -2,18 +2,67 @@
     --nav-v-margin: min(2.5vh, 30px);
     --nav-h-margin: min(5vw, 44px);
     --nav-bar-height: min(7vh, 64px);
+    --header-font-size: min(10vw, 200px);
+    --header-top: 62px;
+    --header-left: min(7vw, 120px);
     position: relative;
     flex: 1 0 auto;
     overflow: hidden;
     user-select: none;
+    font-family: 'microsoft yahei', 'Helvetica Neue', Helvetica, Roboto, Arial,
+        sans-serif;
 }
 
 .ow-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
+    margin: 0;
+    padding: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+}
+
+@keyframes float-effect {
+    from {
+        transform: translateY(20%) skewX(-16deg);
+        opacity: 0.5;
+    }
+    to {
+        transform: translateY(0) skewX(-16deg);
+        opacity: 1;
+    }
+}
+
+.ow-header {
+    position: fixed;
+    top: var(--header-top);
+    left: var(--header-left);
+    z-index: 100;
+    font-size: var(--header-font-size);
+    line-height: 1;
+    background: linear-gradient(rgb(255, 255, 255) 40%, rgba(255, 255, 255, 0));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: 0.5s float-effect both;
+}
+
+@media screen and (max-width: 500px) {
+    .ow-view {
+        --header-top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));
+        --header-font-size: 20vw;
+    }
+}
+
+.ow-hero-ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.ow-view * {
+    scrollbar-width: none;
+}
+
+.ow-view ::-webkit-scrollbar {
+    display: none;
 }

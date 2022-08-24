@@ -1,12 +1,12 @@
 import Link from '@docusaurus/Link';
 import { useContext } from 'react';
-import { PageContext } from '../models/context';
+import { PageContext } from '../models/Context';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import '../styles/nav-bar.css';
 
 const NavBar = () => {
-    const pageState = useContext(PageContext);
+    const context = useContext(PageContext);
 
     return (
         <nav className="ow-nav-bar">
@@ -30,6 +30,7 @@ const NavBar = () => {
                     className="ow-nav-avatar"
                     src="/img/mercy.png"
                     alt="avatar"
+                    draggable={false}
                 />
                 <span className="ow-nav-nickname">TALAXY</span>
             </div>

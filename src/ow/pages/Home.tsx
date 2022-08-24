@@ -1,15 +1,18 @@
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
+import { useContext } from 'react';
+import { PageContext, Router, SceneLevel, TabState } from '../models/Context';
 import '../styles/home.css';
 
 const WEB_ATTR = '苏 ICP 备 19075978 号';
 
 const Home = () => {
     const screen = useScreen();
+    const context = useContext(PageContext);
 
     return (
         <main className="ow-home-content">
             {screen >= Screen.Large && (
-                <div className="ow-site">
+                <header className="ow-site">
                     <div className="ow-site-title">
                         Talaxy<span>'</span>s Blog
                     </div>
@@ -20,10 +23,10 @@ const Home = () => {
                     >
                         © {new Date().getFullYear()} Talaxy · {WEB_ATTR}
                     </a>
-                </div>
+                </header>
             )}
             {screen < Screen.Large ? (
-                <div className="ow-site-sm">
+                <header className="ow-site-sm">
                     <div className="ow-site-sm-title">
                         Talaxy<span>'</span>s Blog
                     </div>
@@ -34,13 +37,24 @@ const Home = () => {
                     >
                         {WEB_ATTR}
                     </a>
-                </div>
+                </header>
             ) : (
                 <div className="top-spacer" />
             )}
             <menu>
                 <li>文档</li>
                 <li>博客</li>
+                <li
+                    onClick={(e) => {
+                        context.method.push({
+                            router: Router.Links,
+                            tab: TabState.Corner,
+                            scene: SceneLevel.One,
+                        });
+                    }}
+                >
+                    收藏夹
+                </li>
                 <li>画廊</li>
             </menu>
             <div className="bottom-spacer" />

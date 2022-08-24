@@ -8,7 +8,6 @@
     left: var(--content-h-margin);
     right: var(--content-h-margin);
     bottom: 0;
-    overflow: hidden;
 }
 
 /* 标题 */
