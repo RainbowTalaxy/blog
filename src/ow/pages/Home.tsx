@@ -1,6 +1,6 @@
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import { useContext } from 'react';
-import { PageContext, Router, SceneLevel, TabState } from '../models/Context';
+import { PageContext, Router, SceneLevel, TabState } from '../models/context';
 import '../styles/home.css';
 
 const WEB_ATTR = '苏 ICP 备 19075978 号';

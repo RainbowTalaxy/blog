@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useContext, useEffect, useState } from 'react';
-import { PageContext } from '../models/Context';
+import { PageContext } from '../models/context';
 import '../styles/scene.css';
 
 const MAIN_SCENE =

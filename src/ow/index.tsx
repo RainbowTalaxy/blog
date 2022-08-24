@@ -8,7 +8,7 @@ import {
     PageState,
     SceneLevel,
     INITIAL_STATE,
-} from './models/Context';
+} from './models/context';
 import Scene from './components/Scene';
 import NavBar from './components/NavBar';
 import './styles/index.css';

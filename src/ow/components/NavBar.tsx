@@ -1,6 +1,6 @@
 import Link from '@docusaurus/Link';
 import { useContext } from 'react';
-import { PageContext } from '../models/Context';
+import { PageContext } from '../models/context';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import '../styles/nav-bar.css';

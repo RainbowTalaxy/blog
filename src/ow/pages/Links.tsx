@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
 import { LINKS_DATA } from '../contants/links';
-import { PageContext } from '../models/Context';
+import { PageContext } from '../models/context';
 import '../styles/links.css';
 
 const Links = () => {
