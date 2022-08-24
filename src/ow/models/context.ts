@@ -33,7 +33,7 @@ export interface Page {
 }
 
 export const INITIAL_STATE = {
-    router: Router.Links, 
+    router: Router.Home, 
     tab: TabState.Corner,
     scene: SceneLevel.Zero
 }

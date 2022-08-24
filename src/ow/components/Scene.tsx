@@ -11,7 +11,7 @@ const Scene = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(MAIN_SCENE).then(() => setLoading(false));
+        fetch(MAIN_SCENE, { mode: 'no-cors' }).then(() => setLoading(false));
     }, []);
 
     return (
