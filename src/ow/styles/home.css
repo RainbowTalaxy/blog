@@ -70,18 +70,20 @@
 /* 菜单 */
 
 .ow-home-content menu {
+    position: relative;
     padding: 0;
     list-style-type: none;
 }
 
 .ow-home-content menu li {
-    width: max-content;
+    position: relative;
+    width: min(100%, 420px);
     font-size: min(8vh, 72px);
     line-height: 1.2;
     font-style: italic;
     color: white;
     text-shadow: 0 0 2px black;
-    transition: transform 0.05s ease-in;
+    transition: transform 0.05s ease;
 }
 
 .ow-home-content menu li:hover {

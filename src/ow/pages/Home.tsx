@@ -1,3 +1,4 @@
+import useQuery from '@site/src/hooks/useQuery';
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import { useContext } from 'react';
 import { PageContext, Router, SceneLevel, TabState } from '../models/context';
@@ -8,6 +9,16 @@ const WEB_ATTR = '苏 ICP 备 19075978 号';
 const Home = () => {
     const screen = useScreen();
     const context = useContext(PageContext);
+
+    const query = useQuery();
+
+    if (query.get('target') === 'links') {
+        context.method.push({
+            router: Router.Links,
+            tab: TabState.Corner,
+            scene: SceneLevel.One,
+        });
+    }
 
     return (
         <main className="ow-home-content">

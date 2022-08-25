@@ -16,6 +16,7 @@ const Links = () => {
                         <li
                             key={idx}
                             className="ow-hero-li"
+                            onClick={() => window.open(item.link)}
                             // @ts-ignore
                             style={{ '--i': idx }}
                         >
