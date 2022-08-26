@@ -9,7 +9,7 @@
     border: 3px solid transparent;
     color: white;
     cursor: pointer;
-    z-index: 20;
+    z-index: 200;
 }
 
 .ow-operator-button:hover {
@@ -35,6 +35,12 @@
     -webkit-text-stroke: 0.7px black;
 }
 
+.ow-right-bottom-button {
+    position: fixed;
+    right: min(5vw, 52px);
+    bottom: min(5vw, 40px);
+}
+
 @media (pointer: coarse) {
     .ow-operator-button {
         --key-background: #ececec;
@@ -46,5 +52,27 @@
 
     .ow-operator-key {
         display: none;
+    }
+}
+
+.ow-button-confirm {
+    padding-bottom: 10px;
+    width: 174px;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    background-color: #e29932;
+    border: 3px solid transparent;
+    box-shadow: 0 0 4px 1px rgba(255, 202, 56, 0.5);
+    font-size: 32px;
+    cursor: pointer;
+    transition: transform 0.05s ease-out;
+}
+
+@media (pointer: fine) {
+    .ow-button-confirm:hover {
+        background-color: #92642a;
+        border: 3px solid white;
+        transform: scale(1.1);
     }
 }

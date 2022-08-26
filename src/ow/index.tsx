@@ -1,12 +1,10 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Home from './pages/Home';
 import {
     PageContext,
     Page,
     Router,
-    TabState,
     PageState,
-    SceneLevel,
     INITIAL_STATE,
 } from './models/context';
 import Scene from './components/Scene';
@@ -15,9 +13,14 @@ import './styles/index.css';
 import Links from './pages/Links';
 import useStack from '../hooks/useStack';
 import useKeyboard from '../hooks/useKeyboard';
+import Gallery from './pages/Gallery';
+import Alert from './components/Alert';
+
+const OW_UPDATE_KEY = 'ow-update';
 
 const Overwatch = () => {
     const { state, history } = useStack<PageState>(INITIAL_STATE);
+    const [isTipVisible, setTipVisible] = useState(false);
 
     const context = useMemo<Page>(() => {
         return {
@@ -28,12 +31,28 @@ const Overwatch = () => {
 
     useKeyboard('Escape', () => history.pop());
 
+    useEffect(() => {
+        const hasShownTip = localStorage.getItem(OW_UPDATE_KEY);
+        if (!hasShownTip) {
+            setTipVisible(true);
+        }
+    }, []);
+
     return (
         <PageContext.Provider value={context}>
             <div className="ow-view">
+                {isTipVisible && (
+                    <Alert
+                        onConfirm={() => {
+                            localStorage.setItem(OW_UPDATE_KEY, 'true');
+                            setTipVisible(false);
+                        }}
+                    />
+                )}
                 <NavBar />
                 {state.router === Router.Home && <Home />}
                 {state.router === Router.Links && <Links />}
+                {state.router === Router.Gallery && <Gallery />}
                 <Scene />
             </div>
         </PageContext.Provider>

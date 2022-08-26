@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useContext, useEffect, useState } from 'react';
-import { PageContext } from '../models/context';
+import { PageContext, SceneLevel } from '../models/context';
 import '../styles/scene.css';
 
 const MAIN_SCENE =
@@ -8,17 +8,25 @@ const MAIN_SCENE =
 
 const Scene = () => {
     const context = useContext(PageContext);
-    const [loading, setLoading] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    useEffect(() => {
-        fetch(MAIN_SCENE, { mode: 'no-cors' }).then(() => setLoading(false));
-    }, []);
+    let maskOpacity = 0;
+    switch (context.state.scene) {
+        case SceneLevel.One:
+            maskOpacity = 0.2;
+    }
 
     return (
         <div className={clsx('ow-scene', context.state.scene)}>
+            <div
+                className="ow-bg ow-bg-mask"
+                style={{ opacity: maskOpacity }}
+            />
             <img
                 className="ow-bg"
-                src={loading ? '/assets/ow/background.png' : MAIN_SCENE}
+                onLoad={() => setIsLoaded(true)}
+                style={{ opacity: isLoaded ? 1 : 0 }}
+                src={MAIN_SCENE}
                 alt="background"
             />
         </div>

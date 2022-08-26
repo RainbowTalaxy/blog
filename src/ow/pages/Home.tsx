@@ -20,6 +20,14 @@ const Home = () => {
         });
     }
 
+    if (query.get('target') === 'gallery') {
+        context.method.push({
+            router: Router.Gallery,
+            tab: TabState.Corner,
+            scene: SceneLevel.One,
+        });
+    }
+
     return (
         <main className="ow-home-content">
             {screen >= Screen.Large && (
@@ -66,7 +74,17 @@ const Home = () => {
                 >
                     收藏夹
                 </li>
-                <li>画廊</li>
+                <li
+                    onClick={(e) => {
+                        context.method.push({
+                            router: Router.Gallery,
+                            tab: TabState.Corner,
+                            scene: SceneLevel.One,
+                        });
+                    }}
+                >
+                    画廊
+                </li>
             </menu>
             <div className="bottom-spacer" />
         </main>

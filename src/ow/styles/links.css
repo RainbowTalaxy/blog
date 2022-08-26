@@ -105,9 +105,3 @@
 .ow-hero-li-desc > div {
     transform: skewX(calc(var(--li-skew) * -1));
 }
-
-.ow-right-bottom-button {
-    position: fixed;
-    right: 52px;
-    bottom: 40px;
-}
