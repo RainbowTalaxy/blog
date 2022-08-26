@@ -18,7 +18,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    padding: 18px min(7vw, 140px);
+    padding: 18px min(7vw, 140px) 48px;
 }
 
 @media screen and (max-width: 900px) {
@@ -86,6 +86,8 @@
     font-size: calc(var(--hero-height) * 0.127);
     width: 100%;
     text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     background-color: #e6e6ea;
 }
 
