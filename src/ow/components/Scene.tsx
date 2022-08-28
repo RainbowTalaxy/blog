@@ -16,6 +16,12 @@ const Scene = () => {
             maskOpacity = 0.2;
     }
 
+    useEffect(() => {
+        fetch(MAIN_SCENE, { mode: 'no-cors' }).then(() =>
+            setTimeout(() => setIsLoaded(true), 1000),
+        );
+    }, []);
+
     return (
         <div className={clsx('ow-scene', context.state.scene)}>
             <div
@@ -24,9 +30,8 @@ const Scene = () => {
             />
             <img
                 className="ow-bg"
-                onLoad={() => setIsLoaded(true)}
-                style={{ opacity: isLoaded ? 1 : 0 }}
                 src={MAIN_SCENE}
+                style={{ opacity: isLoaded ? 1 : 0 }}
                 alt="background"
             />
         </div>
