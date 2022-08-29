@@ -54,12 +54,14 @@ const Scene = () => {
                     alt="background"
                 />
             </div>
-            <OrangeButton
-                className="ow-right-bottom-button"
-                onClick={switchImage}
-            >
-                切换壁纸
-            </OrangeButton>
+            {context.state.scene === SceneLevel.Zero && (
+                <OrangeButton
+                    className="ow-right-bottom-button"
+                    onClick={switchImage}
+                >
+                    切换壁纸
+                </OrangeButton>
+            )}
         </>
     );
 };
