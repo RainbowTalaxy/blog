@@ -15,9 +15,7 @@ const OW_SCENE_IMAGE = 'ow-scene-image';
 const Scene = () => {
     const context = useContext(PageContext);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [imageIdx, setImageIdx] = useState(
-        () => Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0,
-    );
+    const [imageIdx, setImageIdx] = useState(0);
 
     let maskOpacity = 0;
     switch (context.state.scene) {
@@ -35,6 +33,11 @@ const Scene = () => {
             });
         }, 600);
     }, []);
+
+    useEffect(
+        () => setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0),
+        [],
+    );
 
     return (
         <>

@@ -1,6 +1,5 @@
 import Link from '@docusaurus/Link';
-import { useContext, useState } from 'react';
-import { PageContext } from '../models/context';
+import { useEffect, useState } from 'react';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import '../styles/nav-bar.css';
@@ -21,9 +20,11 @@ const STATUS_LIST = [
 const OW_USER_STATUS = 'ow-user-status';
 
 const NavBar = () => {
-    const [statusIdx, setStatusIdx] = useState(() => {
-        return Number(localStorage.getItem(OW_USER_STATUS)) || 0;
-    });
+    const [statusIdx, setStatusIdx] = useState<number>();
+
+    useEffect(() => {
+        setStatusIdx(Number(localStorage.getItem(OW_USER_STATUS)) || 0);
+    }, []);
 
     return (
         <nav className="ow-nav-bar">
@@ -47,14 +48,16 @@ const NavBar = () => {
                     setStatusIdx((prev) => {
                         const newIdx = (prev + 1) % STATUS_LIST.length;
                         localStorage.setItem(OW_USER_STATUS, newIdx + '');
-                        console.log(localStorage);
                         return newIdx;
                     });
                 }}
             >
                 <div
                     className="ow-nav-user-status"
-                    style={{ backgroundColor: STATUS_LIST[statusIdx] }}
+                    style={{
+                        backgroundColor:
+                            statusIdx !== undefined && STATUS_LIST[statusIdx],
+                    }}
                 />
                 <img
                     className="ow-nav-avatar"
