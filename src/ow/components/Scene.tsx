@@ -11,6 +11,7 @@ const SCENES = [
 ];
 
 const OW_SCENE_IMAGE = 'ow-scene-image';
+const OW_SCENE_ID = 'ow-scene-image';
 
 const Scene = () => {
     const context = useContext(PageContext);
@@ -34,10 +35,12 @@ const Scene = () => {
         }, 600);
     }, []);
 
-    useEffect(
-        () => setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0),
-        [],
-    );
+    useEffect(() => {
+        setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0);
+        const el = document.getElementById(OW_SCENE_ID) as HTMLImageElement;
+        el.onload = () => setIsLoaded(true);
+        el.src = SCENES[imageIdx];
+    }, []);
 
     return (
         <>
@@ -47,8 +50,8 @@ const Scene = () => {
                     style={{ opacity: maskOpacity }}
                 />
                 <img
+                    id={OW_SCENE_ID}
                     className="ow-bg"
-                    onLoad={() => setIsLoaded(true)}
                     src={SCENES[imageIdx]}
                     style={{ opacity: isLoaded ? 1 : 0 }}
                     alt="background"
