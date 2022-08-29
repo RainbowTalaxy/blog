@@ -8,7 +8,7 @@ export enum Screen {
 }
 
 const useScreen = () => {
-    const [screen, setScreen] = useState(Screen.Large);
+    const [screen, setScreen] = useState<Screen>();
 
     useEffect(() => {
         const event = throttle(() => {

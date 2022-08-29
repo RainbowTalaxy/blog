@@ -57,7 +57,7 @@ const Scene = () => {
                     alt="background"
                 />
             </div>
-            {context.state.scene === SceneLevel.Zero && (
+            {isLoaded && context.state.scene === SceneLevel.Zero && (
                 <OrangeButton
                     className="ow-right-bottom-button"
                     onClick={switchImage}
