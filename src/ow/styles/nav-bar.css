@@ -53,12 +53,12 @@
     align-items: center;
     margin-left: 10px;
     background-color: rgba(52, 68, 93, 0.65);
+    cursor: pointer;
 }
 
 .ow-nav-user-status {
     height: 100%;
     width: 7px;
-    background-color: #7cff00;
 }
 
 .ow-nav-avatar {

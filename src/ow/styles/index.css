@@ -5,6 +5,7 @@
     --header-font-size: min(10vw, 200px);
     --header-top: 62px;
     --header-left: min(7vw, 120px);
+    --button-border-radius: 2px;
     position: relative;
     flex: 1 0 auto;
     overflow: hidden;

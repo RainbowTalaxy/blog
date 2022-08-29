@@ -1,12 +1,29 @@
 import Link from '@docusaurus/Link';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { PageContext } from '../models/context';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import '../styles/nav-bar.css';
 
+enum UserStatus {
+    Online = '#7cff00',
+    Standby = '#f7cc1d',
+    Busy = '#bd1d2c',
+    Offline = '#7e7e7e',
+}
+
+const STATUS_LIST = [
+    UserStatus.Online,
+    UserStatus.Standby,
+    UserStatus.Busy,
+    UserStatus.Offline,
+];
+const OW_USER_STATUS = 'ow-user-status';
+
 const NavBar = () => {
-    const context = useContext(PageContext);
+    const [statusIdx, setStatusIdx] = useState(() => {
+        return Number(localStorage.getItem(OW_USER_STATUS)) || 0;
+    });
 
     return (
         <nav className="ow-nav-bar">
@@ -24,8 +41,21 @@ const NavBar = () => {
                     <Github />
                 </Link>
             </div>
-            <div className="ow-nav-user">
-                <div className="ow-nav-user-status" />
+            <div
+                className="ow-nav-user"
+                onClick={() => {
+                    setStatusIdx((prev) => {
+                        const newIdx = (prev + 1) % STATUS_LIST.length;
+                        localStorage.setItem(OW_USER_STATUS, newIdx + '');
+                        console.log(localStorage);
+                        return newIdx;
+                    });
+                }}
+            >
+                <div
+                    className="ow-nav-user-status"
+                    style={{ backgroundColor: STATUS_LIST[statusIdx] }}
+                />
                 <img
                     className="ow-nav-avatar"
                     src="/img/mercy.png"
