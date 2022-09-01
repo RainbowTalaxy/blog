@@ -8,6 +8,7 @@
     --button-border-radius: 2px;
     position: relative;
     flex: 1 0 auto;
+    cursor: url(/static/assets/ow/pointer.cur);
     overflow: hidden;
     user-select: none;
     font-family: 'microsoft yahei', 'Helvetica Neue', Helvetica, Roboto, Arial,
