@@ -6,7 +6,7 @@
     font-size: 20px;
     letter-spacing: 0.1em;
     background-color: rgba(213, 150, 83, 0.9);
-    cursor: pointer;
+    cursor: var(--cursor-img), pointer;
     z-index: 1200;
 }
 

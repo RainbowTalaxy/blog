@@ -26,6 +26,7 @@
     height: var(--nav-bar-height);
     width: var(--nav-bar-height);
     border: var(--outline) solid transparent;
+    cursor: var(--cursor-img), pointer;
 }
 
 .ow-nav-button > * {
@@ -53,7 +54,7 @@
     align-items: center;
     margin-left: 10px;
     background-color: rgba(52, 68, 93, 0.65);
-    cursor: pointer;
+    cursor: var(--cursor-img), pointer;
 }
 
 .ow-nav-user-status {

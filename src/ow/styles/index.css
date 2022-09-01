@@ -6,9 +6,10 @@
     --header-top: 62px;
     --header-left: min(7vw, 120px);
     --button-border-radius: 2px;
+    --cursor-img: url(/static/assets/ow/ow-cursor.png);
     position: relative;
     flex: 1 0 auto;
-    cursor: url(https://blog.talaxy.cn/assets/ow/pointer.cur);
+    cursor: var(--cursor-img), auto;
     overflow: hidden;
     user-select: none;
     font-family: 'microsoft yahei', 'Helvetica Neue', Helvetica, Roboto, Arial,

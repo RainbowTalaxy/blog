@@ -90,7 +90,7 @@
 
 @media (pointer: fine) {
     .ow-home-content menu li:hover {
-        cursor: pointer;
+        cursor: var(--cursor-img), pointer;
         transform: translateX(var(--content-h-margin));
     }
 }

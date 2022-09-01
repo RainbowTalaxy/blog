@@ -70,7 +70,7 @@
         transform: scale(1.14);
         outline: 6px solid white;
         z-index: 10;
-        cursor: pointer;
+        cursor: var(--cursor-img), pointer;
     }
 }
 

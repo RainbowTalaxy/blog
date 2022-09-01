@@ -58,7 +58,7 @@
     border: 3.5px solid #dddde3;
     border-radius: 5px;
     background-color: white;
-    cursor: pointer;
+    cursor: var(--cursor-img), pointer;
     overflow: hidden;
     transform: skewX(var(--li-skew));
     opacity: 1;

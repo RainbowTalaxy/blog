@@ -8,7 +8,7 @@
     border-radius: 4px;
     border: 3px solid transparent;
     color: white;
-    cursor: pointer;
+    cursor: var(--cursor-img), pointer;
     z-index: 200;
 }
 
@@ -65,7 +65,7 @@
     border: 3px solid transparent;
     box-shadow: 0 0 4px 1px rgba(255, 202, 56, 0.5);
     font-size: 32px;
-    cursor: pointer;
+    cursor: var(--cursor-img), pointer;
     transition: transform 0.05s ease-out;
 }
 
