@@ -2,9 +2,9 @@ export const LINKS_DATA = [
     {
         name: '哔哩哔哩',
         description: 'bilibili',
-        image: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.gBc7pn6xuHfIxzSmhzGdRAHaEK?pid=ImgDet&rs=1',
-        primary: '#fff',
-        secondary: '#00a1d6',
+        image: 'https://www.leigod.com/img/bzhan.png',
+        primary: '#b7e9ff',
+        secondary: '#00b1fd',
         link: 'https://www.bilibili.com/',
     },
     {
@@ -26,7 +26,7 @@ export const LINKS_DATA = [
     {
         name: '微博',
         description: 'weibo',
-        image: 'http://www.sinaimg.cn/blog/developer/wiki/LOGO_64x64.png',
+        image: 'https://www.leigod.com/img/weibo.png',
         primary: '#fed442',
         secondary: '#e32529',
         link: 'https://weibo.com/hot/search',
@@ -46,14 +46,6 @@ export const LINKS_DATA = [
         primary: '#1e80ff',
         secondary: '#1e61ff',
         link: 'https://juejin.cn/',
-    },
-    {
-        name: '谷歌翻译',
-        description: 'google',
-        image: 'https://ssl.gstatic.com/translate/favicon.ico',
-        primary: '#fff',
-        secondary: '#4c8bf5',
-        link: 'https://translate.google.cn/',
     },
     {
         name: 'MDN',
@@ -81,11 +73,19 @@ export const LINKS_DATA = [
     },
     {
         name: 'React',
-        description: 'reactjs',
+        description: 'meta',
         image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K',
         primary: '#20232a',
         secondary: '#50b5d1',
         link: 'https://zh-hans.reactjs.org/',
+    },
+    {
+        name: 'Next.js',
+        description: 'vercel',
+        image: 'https://camo.githubusercontent.com/f21f1fa29dfe5e1d0772b0efe2f43eca2f6dc14f2fede8d9cbef4a3a8210c91d/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67',
+        primary: '#000000',
+        secondary: '#4c4c4c',
+        link: 'https://docusaurus.io/docs',
     },
     {
         name: 'Vue',
@@ -98,14 +98,14 @@ export const LINKS_DATA = [
     {
         name: 'Tailwind',
         description: 'tailwindcss',
-        image: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tailwind-css-icon.png',
+        image: 'https://tailwindcss.com/_next/static/media/tailwindcss-logotype.ed60a6f85c663923c4d6ee9d85f359cd.svg',
         primary: '#e5f3fc',
         secondary: '#38bdf8',
         link: 'https://tailwindcss.com/docs/installation',
     },
     {
         name: 'Docusaurus',
-        description: 'facebook',
+        description: 'meta',
         image: 'https://d33wubrfki0l68.cloudfront.net/c088b7acfcf11100903c44fe44f2f2d7e0f30531/47727/img/docusaurus.svg',
         primary: '#e6f6e6',
         secondary: '#18816a',
@@ -158,6 +158,22 @@ export const LINKS_DATA = [
         primary: '#fff',
         secondary: '#0354da',
         link: 'https://cloud.tencent.com/',
+    },
+    {
+        name: '有道翻译',
+        description: 'netease',
+        image: 'https://shared.ydstatic.com/fanyi/fanyi-ad-place/online/0.0.11/images/logo_cidian.png',
+        primary: '#fc011a',
+        secondary: '#e00012',
+        link: 'https://fanyi.youdao.com/',
+    },
+    {
+        name: '谷歌翻译',
+        description: 'google',
+        image: 'https://ssl.gstatic.com/translate/favicon.ico',
+        primary: '#fff',
+        secondary: '#4c8bf5',
+        link: 'https://translate.google.cn/',
     },
     {
         name: '网易云音乐',
