@@ -40,14 +40,14 @@
 
 @keyframes skew-effect {
     from {
-        transform: skewY(11deg);
-        opacity: 0.3;
-        transform-origin: top left;
+        transform: skewY(11deg) translateX(-6vw);
+        opacity: 0.1;
+        transform-origin: left;
     }
     to {
         transform: skewY(0);
         opacity: 1;
-        transform-origin: center;
+        transform-origin: left;
     }
 }
 
