@@ -28,3 +28,12 @@
 .ow-scene-level-1 {
     transform: scale(1.25);
 }
+
+.ow-scene-level-fill {
+    transform: scale(1.1);
+}
+
+.ow-scene-main {
+    background: transparent;
+    animation: fade-in 0.4s backwards;
+}

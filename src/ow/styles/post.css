@@ -1,0 +1,68 @@
+.ow-post {
+    margin: 0 auto;
+    padding-bottom: 10vh;
+    width: min(90%, 1300px);
+    height: 100%;
+    overflow: scroll;
+    font-size: min(5vw, 20px);
+    color: #6e7182;
+}
+
+.ow-hide-h1 h1 {
+    display: none;
+}
+
+.ow-post h2 {
+    margin: 0;
+    padding: min(20vw, 156px) min(5vw, 36px) min(3vw, 12px);
+    font-size: min(9vw, 54px);
+    font-weight: normal;
+    font-style: italic;
+    color: white;
+    letter-spacing: 0.1em;
+    background: rgb(22, 42, 69);
+    background: linear-gradient(
+        90deg,
+        rgba(22, 42, 69, 0.85) 0%,
+        rgba(48, 62, 109, 0.85) 22%,
+        rgba(19, 30, 45, 0.85) 63%,
+        rgba(28, 45, 74, 0.85) 82%,
+        rgba(16, 28, 42, 0.85) 100%
+    );
+}
+
+.ow-post * + h2 {
+    margin-top: min(40vw, 180px);
+}
+
+.ow-hide-h1 h1 + h2 {
+    margin-top: 0;
+}
+
+.ow-post h2 + h3 {
+    margin-top: 0;
+}
+
+.ow-post h3 {
+    margin: 36px 0 24px;
+    padding: 5px 10px 10px;
+    border-bottom: 2px solid rgba(103, 109, 125, 0.4);
+    font-size: min(9vw, 59px);
+    font-weight: normal;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    color: #676d7d;
+}
+
+.ow-post p {
+    margin: 0 8px 5px;
+}
+
+.ow-post ul {
+    margin: 0 8px 0 min(1vw, 16px);
+    list-style-type: disc;
+}
+
+.ow-post li p {
+    margin: 0 8px 5px 0;
+}

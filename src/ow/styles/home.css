@@ -76,7 +76,7 @@
     list-style-type: none;
 }
 
-.ow-home-content menu li {
+.ow-li-primary {
     position: relative;
     padding-left: var(--content-h-margin);
     width: min(100%, 520px);
@@ -88,10 +88,27 @@
     transition: transform 0.05s ease;
 }
 
+.ow-li-secondary {
+    position: relative;
+    padding-left: var(--content-h-margin);
+    width: min(100%, 520px);
+    font-size: min(3.1vh, 29px);
+    line-height: 1.5;
+    /* font-weight: lighter; */
+    color: white;
+    text-shadow: 0 0 2px black;
+    transition: transform 0.05s ease;
+}
+
 @media (pointer: fine) {
-    .ow-home-content menu li:hover {
+    .ow-li-primary:hover {
         cursor: var(--cursor-img), pointer;
         transform: translateX(var(--content-h-margin));
+    }
+
+    .ow-li-secondary:hover {
+        cursor: var(--cursor-img), pointer;
+        transform: translateX(calc(var(--content-h-margin) * 0.5));
     }
 }
 

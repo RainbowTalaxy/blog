@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
-import { GALLERY_DATA } from '../contants/gallery';
+import { GALLERY_DATA } from '../constants/gallery';
 import { PageContext } from '../models/context';
 import '../styles/gallery.css';
 

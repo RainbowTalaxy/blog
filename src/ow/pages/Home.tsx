@@ -28,6 +28,14 @@ const Home = () => {
         });
     }
 
+    if (query.get('target') === 'patch') {
+        context.method.push({
+            router: Router.Patch,
+            tab: TabState.Corner,
+            scene: SceneLevel.Fill,
+        });
+    }
+
     return (
         <main className="ow-home-content">
             {screen >= Screen.Large && (
@@ -61,10 +69,11 @@ const Home = () => {
                 <div className="top-spacer" />
             )}
             <menu>
-                <li>文档</li>
-                <li>博客</li>
+                <li className="ow-li-primary">文档</li>
+                <li className="ow-li-primary">博客</li>
                 <li
-                    onClick={(e) => {
+                    className="ow-li-primary"
+                    onClick={() => {
                         context.method.push({
                             router: Router.Links,
                             tab: TabState.Corner,
@@ -75,7 +84,8 @@ const Home = () => {
                     收藏夹
                 </li>
                 <li
-                    onClick={(e) => {
+                    className="ow-li-primary"
+                    onClick={() => {
                         context.method.push({
                             router: Router.Gallery,
                             tab: TabState.Corner,
@@ -84,6 +94,20 @@ const Home = () => {
                     }}
                 >
                     画廊
+                </li>
+                <li className="ow-li-secondary">主播直播间</li>
+                <li className="ow-li-secondary">选项设置</li>
+                <li
+                    className="ow-li-secondary"
+                    onClick={() => {
+                        context.method.push({
+                            router: Router.Patch,
+                            tab: TabState.Corner,
+                            scene: SceneLevel.Fill,
+                        });
+                    }}
+                >
+                    更新说明
                 </li>
             </menu>
             <div className="bottom-spacer" />

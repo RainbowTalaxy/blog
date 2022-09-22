@@ -41,6 +41,23 @@
     animation: 0.5s float-effect both;
 }
 
+.ow-header-middle {
+    position: fixed;
+    top: var(--header-top);
+    left: calc(var(--header-left) * 0.5);
+    z-index: 100;
+    font-size: calc(var(--header-font-size) * 0.7);
+    line-height: 1;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.85) 10%,
+        rgba(255, 255, 255, 0)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: 0.5s float-effect both;
+}
+
 @media screen and (max-width: 500px) {
     .ow-view {
         --header-top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 export enum Router {
     Home,
@@ -6,6 +6,7 @@ export enum Router {
     Blog,
     Gallery,
     Links,
+    Patch,
 }
 
 export enum TabState {
@@ -14,8 +15,9 @@ export enum TabState {
 }
 
 export enum SceneLevel {
-    Zero,
+    Zero = 'ow-scene-level-0',
     One = 'ow-scene-level-1',
+    Fill = 'ow-scene-level-fill',
 }
 
 export interface PageState {
@@ -25,23 +27,23 @@ export interface PageState {
 }
 
 export interface Page {
-    state: PageState
+    state: PageState;
     method: {
         push: (next: PageState) => void;
         pop: () => void;
-    }
+    };
 }
 
 export const INITIAL_STATE = {
-    router: Router.Home, 
+    router: Router.Home,
     tab: TabState.Corner,
-    scene: SceneLevel.Zero
-}
+    scene: SceneLevel.Zero,
+};
 
-export const PageContext = createContext<Page>({ 
-    state: INITIAL_STATE, 
-    method: { 
-        push: () => {}, 
-        pop: () => {} 
-    } 
-})
+export const PageContext = createContext<Page>({
+    state: INITIAL_STATE,
+    method: {
+        push: () => {},
+        pop: () => {},
+    },
+});

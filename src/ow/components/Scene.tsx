@@ -10,6 +10,9 @@ const SCENES = [
     'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEGgRtksXQIKNmqU5VUGrB6J6G5.D2Dg8xmkm5lFJGZ86Ox*KDyFdsjSafFIVezETaJuV.EzZMLRDsD1Vo0eRfWY!/r',
 ];
 
+const FILL_SCENE =
+    'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcyuPStnr1Xqld4koFzDfPudb.JWLNzTTnamefruENKS.BixfigsE1w4iF64a2co1fi3Wj2PgRXaFbtCugDeXqQ!/r';
+
 const OW_SCENE_IMAGE = 'ow-scene-image';
 const OW_SCENE_ID = 'ow-scene-image';
 
@@ -19,9 +22,11 @@ const Scene = () => {
     const [imageIdx, setImageIdx] = useState(0);
 
     let maskOpacity = 0;
+    let image = SCENES[imageIdx];
     switch (context.state.scene) {
         case SceneLevel.One:
             maskOpacity = 0.2;
+            break;
     }
 
     const switchImage = useCallback(() => {
@@ -39,7 +44,7 @@ const Scene = () => {
         setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0);
         const el = document.getElementById(OW_SCENE_ID) as HTMLImageElement;
         el.onload = () => setIsLoaded(true);
-        el.src = SCENES[imageIdx];
+        el.src = image;
     }, []);
 
     return (
@@ -52,7 +57,7 @@ const Scene = () => {
                 <img
                     id={OW_SCENE_ID}
                     className="ow-bg"
-                    src={SCENES[imageIdx]}
+                    src={image}
                     style={{ opacity: isLoaded ? 1 : 0 }}
                     alt="background"
                 />
@@ -64,6 +69,20 @@ const Scene = () => {
                 >
                     切换壁纸
                 </OrangeButton>
+            )}
+            {context.state.scene === SceneLevel.Fill && (
+                <div className="ow-scene ow-scene-main">
+                    <img
+                        id={OW_SCENE_ID}
+                        className="ow-bg"
+                        src={FILL_SCENE}
+                        style={{
+                            opacity: isLoaded ? 1 : 0,
+                            zIndex: 20,
+                        }}
+                        alt="background"
+                    />
+                </div>
             )}
         </>
     );

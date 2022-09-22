@@ -10,11 +10,13 @@ import {
 import Scene from './components/Scene';
 import NavBar from './components/NavBar';
 import './styles/index.css';
+import './styles/post.css';
 import Links from './pages/Links';
 import useStack from '../hooks/useStack';
 import useKeyboard from '../hooks/useKeyboard';
 import Gallery from './pages/Gallery';
 import Alert from './components/Alert';
+import Patch from './pages/Patch';
 
 const OW_UPDATE_KEY = 'ow-update';
 
@@ -53,6 +55,7 @@ const Overwatch = () => {
                 {state.router === Router.Home && <Home />}
                 {state.router === Router.Links && <Links />}
                 {state.router === Router.Gallery && <Gallery />}
+                {state.router === Router.Patch && <Patch />}
                 <Scene />
             </div>
         </PageContext.Provider>
