@@ -18,19 +18,16 @@ const Container = styled.main`
 
 const PageContext = createContext(true);
 
-const Memo = memo(
-    ({ children }: { children: ReactNode }) => {
-        console.log('[update] memo');
+const Memo = memo(({ children }: { children: ReactNode }) => {
+    console.log('[update] memo');
 
-        return (
-            <div className="memo">
-                <h2>Memo Box.</h2>
-                {children}
-            </div>
-        );
-    },
-    () => true,
-);
+    return (
+        <div className="memo">
+            <h2>Memo Box.</h2>
+            {children}
+        </div>
+    );
+});
 
 const Consumer = () => {
     const toggle = useContext(PageContext);
