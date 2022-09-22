@@ -96,6 +96,14 @@ export const LINKS_DATA = [
         link: 'https://cn.vuejs.org/',
     },
     {
+        name: 'Vite',
+        description: 'vitejs',
+        image: 'https://cn.vitejs.dev/logo.svg',
+        primary: '#242424',
+        secondary: '#646cff',
+        link: 'https://cn.vitejs.dev/',
+    },
+    {
         name: 'Tailwind',
         description: 'tailwindcss',
         image: 'https://tailwindcss.com/_next/static/media/tailwindcss-logotype.ed60a6f85c663923c4d6ee9d85f359cd.svg',

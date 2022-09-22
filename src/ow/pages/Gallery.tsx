@@ -15,6 +15,7 @@ const Gallery = () => {
                     <ul className="ow-card-list">
                         {GALLERY_DATA.map((card) => (
                             <li
+                                key={card.title}
                                 className="ow-card-li"
                                 onClick={() => window.open(card.link)}
                             >
