@@ -1,11 +1,17 @@
 .ow-post {
     margin: 0 auto;
     padding-bottom: 10vh;
-    width: min(90%, 1300px);
+    width: min(75%, 1300px);
     height: 100%;
     overflow: scroll;
     font-size: min(5vw, 20px);
     color: #6e7182;
+}
+
+@media screen and (max-width: 900px) {
+    .ow-post {
+        width: 90%;
+    }
 }
 
 .ow-hide-h1 h1 {

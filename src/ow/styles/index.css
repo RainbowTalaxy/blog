@@ -16,6 +16,13 @@
         sans-serif;
 }
 
+@media screen and (max-width: 500px) {
+    .ow-view {
+        --header-top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));
+        --header-font-size: 20vw;
+    }
+}
+
 @keyframes float-effect {
     from {
         transform: translateY(20%) skewX(-16deg);
@@ -43,14 +50,15 @@
 
 .ow-header-middle {
     position: fixed;
-    top: var(--header-top);
+    top: calc(var(--header-top));
     left: calc(var(--header-left) * 0.5);
     z-index: 100;
     font-size: calc(var(--header-font-size) * 0.7);
-    line-height: 1;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
     background: linear-gradient(
         rgba(255, 255, 255, 0.85) 10%,
-        rgba(255, 255, 255, 0)
+        rgba(255, 255, 255, 0) 80%
     );
     background-clip: text;
     -webkit-background-clip: text;
@@ -58,11 +66,26 @@
     animation: 0.5s float-effect both;
 }
 
-@media screen and (max-width: 500px) {
-    .ow-view {
-        --header-top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));
-        --header-font-size: 20vw;
-    }
+.ow-content {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: calc(var(--header-font-size) + var(--header-top));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+}
+
+.ow-content-middle {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: calc(var(--header-font-size) * 0.92 + var(--header-top));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
 }
 
 .ow-hero-ul {
