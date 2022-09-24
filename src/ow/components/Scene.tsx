@@ -1,3 +1,4 @@
+import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import clsx from 'clsx';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { PageContext, SceneLevel } from '../models/context';
@@ -5,9 +6,18 @@ import '../styles/scene.css';
 import { OrangeButton } from './Button';
 
 const SCENES = [
-    'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqaOObb1ygfTxfj6bQWvWC6EXMACeeba4UvhVubjeBx.mXZx1FYhBNbBdEtjHLL7x7xu7JsY1Pv0ehXf49Bar6*g!/r',
-    'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEMbYQH8lkiws*5rCIaE09i82RbcEMyrS1X07XrTaaND.gDnMNvR3DA5BnDq20ctXiEpoPfiOV.r8tn6abNfeeho!/r',
-    'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEGgRtksXQIKNmqU5VUGrB6J6G5.D2Dg8xmkm5lFJGZ86Ox*KDyFdsjSafFIVezETaJuV.EzZMLRDsD1Vo0eRfWY!/r',
+    {
+        title: '青岛 鲁迅公园',
+        img: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqaOObb1ygfTxfj6bQWvWC6EXMACeeba4UvhVubjeBx.mXZx1FYhBNbBdEtjHLL7x7xu7JsY1Pv0ehXf49Bar6*g!/r',
+    },
+    {
+        title: '南京 古秦淮',
+        img: 'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEMbYQH8lkiws*5rCIaE09i82RbcEMyrS1X07XrTaaND.gDnMNvR3DA5BnDq20ctXiEpoPfiOV.r8tn6abNfeeho!/r',
+    },
+    {
+        title: '南京 栖霞山',
+        img: 'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEGgRtksXQIKNmqU5VUGrB6J6G5.D2Dg8xmkm5lFJGZ86Ox*KDyFdsjSafFIVezETaJuV.EzZMLRDsD1Vo0eRfWY!/r',
+    },
 ];
 
 const FILL_SCENE =
@@ -17,12 +27,13 @@ const OW_SCENE_IMAGE = 'ow-scene-image';
 const OW_SCENE_ID = 'ow-scene-image';
 
 const Scene = () => {
+    const screen = useScreen();
     const context = useContext(PageContext);
     const [isLoaded, setIsLoaded] = useState(false);
     const [imageIdx, setImageIdx] = useState(0);
 
     let maskOpacity = 0;
-    let image = SCENES[imageIdx];
+    let scene = SCENES[imageIdx];
     switch (context.state.scene) {
         case SceneLevel.One:
             maskOpacity = 0.2;
@@ -44,7 +55,7 @@ const Scene = () => {
         setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0);
         const el = document.getElementById(OW_SCENE_ID) as HTMLImageElement;
         el.onload = () => setIsLoaded(true);
-        el.src = image;
+        el.src = scene.img;
     }, []);
 
     return (
@@ -57,18 +68,18 @@ const Scene = () => {
                 <img
                     id={OW_SCENE_ID}
                     className="ow-bg"
-                    src={image}
+                    src={scene.img}
                     style={{ opacity: isLoaded ? 1 : 0 }}
                     alt="background"
                 />
             </div>
             {isLoaded && context.state.scene === SceneLevel.Zero && (
-                <OrangeButton
-                    className="ow-right-bottom-button"
-                    onClick={switchImage}
-                >
-                    切换壁纸
-                </OrangeButton>
+                <div className="ow-scene-desc">
+                    {screen > Screen.Small && (
+                        <div className="ow-scene-desc-title">{scene.title}</div>
+                    )}
+                    <OrangeButton onClick={switchImage}>切换壁纸</OrangeButton>
+                </div>
             )}
             {context.state.scene === SceneLevel.Fill && (
                 <div className="ow-scene ow-scene-main">
