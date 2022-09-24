@@ -7,6 +7,7 @@ export enum Router {
     Gallery,
     Links,
     Patch,
+    Todo,
 }
 
 export enum TabState {

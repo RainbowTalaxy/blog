@@ -16,7 +16,9 @@ import useStack from '../hooks/useStack';
 import useKeyboard from '../hooks/useKeyboard';
 import Gallery from './pages/Gallery';
 import Alert from './components/Alert';
-import Patch from './pages/Patch';
+import Document from './pages/Document';
+import CHANGELOG from './docs/CHANGELOG.md';
+import TODO from './docs/TODO.md';
 
 const OW_UPDATE_KEY = 'ow-update';
 
@@ -55,7 +57,12 @@ const Overwatch = () => {
                 {state.router === Router.Home && <Home />}
                 {state.router === Router.Links && <Links />}
                 {state.router === Router.Gallery && <Gallery />}
-                {state.router === Router.Patch && <Patch />}
+                {state.router === Router.Patch && (
+                    <Document title="更新说明" doc={CHANGELOG} />
+                )}
+                {state.router === Router.Todo && (
+                    <Document title="待办计划" doc={TODO} />
+                )}
                 <Scene />
             </div>
         </PageContext.Provider>

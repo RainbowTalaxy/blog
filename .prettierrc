@@ -5,7 +5,7 @@
     "singleQuote": true,
     "overrides": [
         {
-            "files": "src/ow/CHANGELOG.md",
+            "files": "src/ow/docs/*.md",
             "options": {
                 "requirePragma": true
             }

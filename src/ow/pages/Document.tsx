@@ -1,17 +1,21 @@
-import { useContext } from 'react';
-import CHANGELOG from '../CHANGELOG.md';
+import { ComponentType, useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
 import { PageContext } from '../models/context';
 
-const Patch = () => {
+interface Props {
+    title: string;
+    doc: ComponentType;
+}
+
+const Document = ({ title, doc: Doc }: Props) => {
     const context = useContext(PageContext);
 
     return (
         <>
-            <header className="ow-header-middle">更新说明</header>
+            <header className="ow-header-middle">{title}</header>
             <main className="ow-content-middle">
                 <div className="ow-post ow-hide-h1">
-                    <CHANGELOG />
+                    <Doc />
                 </div>
                 <OperatorButton
                     className="ow-right-bottom-button"
@@ -25,4 +29,4 @@ const Patch = () => {
     );
 };
 
-export default Patch;
+export default Document;

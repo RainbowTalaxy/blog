@@ -109,6 +109,18 @@ const Home = () => {
                 >
                     更新说明
                 </li>
+                <li
+                    className="ow-li-secondary"
+                    onClick={() => {
+                        context.method.push({
+                            router: Router.Todo,
+                            tab: TabState.Corner,
+                            scene: SceneLevel.Fill,
+                        });
+                    }}
+                >
+                    待办计划
+                </li>
             </menu>
             <div className="bottom-spacer" />
         </main>

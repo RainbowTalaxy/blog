@@ -8,6 +8,7 @@
     left: 0;
     right: var(--content-h-margin);
     bottom: 0;
+    overflow: scroll;
 }
 
 /* 标题 */
@@ -94,21 +95,21 @@
     width: min(100%, 520px);
     font-size: min(3.1vh, 29px);
     line-height: 1.5;
-    /* font-weight: lighter; */
     color: white;
     text-shadow: 0 0 2px black;
+    transform-origin: left;
     transition: transform 0.05s ease;
 }
 
 @media (pointer: fine) {
     .ow-li-primary:hover {
         cursor: var(--cursor-img), pointer;
-        transform: translateX(var(--content-h-margin));
+        transform: translateX(var(--content-h-margin)) scale(1.08);
     }
 
     .ow-li-secondary:hover {
         cursor: var(--cursor-img), pointer;
-        transform: translateX(calc(var(--content-h-margin) * 0.5));
+        transform: translateX(calc(var(--content-h-margin) * 0.5)) scale(1.15);
     }
 }
 
