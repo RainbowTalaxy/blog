@@ -6,39 +6,37 @@ import '../styles/home.css';
 
 const WEB_ATTR = '苏 ICP 备 19075978 号';
 
+const SETTING_TAB = [Router.Patch, Router.Todo];
+
 const Home = () => {
-    const screen = useScreen();
     const context = useContext(PageContext);
 
     const query = useQuery();
 
     if (query.get('target') === 'links') {
-        context.method.push({
+        context.history.push({
             router: Router.Links,
-            tab: TabState.Corner,
             scene: SceneLevel.One,
         });
     }
 
     if (query.get('target') === 'gallery') {
-        context.method.push({
+        context.history.push({
             router: Router.Gallery,
-            tab: TabState.Corner,
             scene: SceneLevel.One,
         });
     }
 
     if (query.get('target') === 'patch') {
-        context.method.push({
+        context.history.push({
             router: Router.Patch,
-            tab: TabState.Corner,
             scene: SceneLevel.Fill,
         });
     }
 
     return (
         <main className="ow-home-content">
-            {screen >= Screen.Large && (
+            {context.screen >= Screen.Large && (
                 <header className="ow-site">
                     <div className="ow-site-title">
                         Talaxy<span>'</span>s Blog
@@ -52,7 +50,7 @@ const Home = () => {
                     </a>
                 </header>
             )}
-            {screen < Screen.Large ? (
+            {context.screen < Screen.Large ? (
                 <header className="ow-site-sm">
                     <div className="ow-site-sm-title">
                         Talaxy<span>'</span>s Blog
@@ -69,57 +67,55 @@ const Home = () => {
                 <div className="top-spacer" />
             )}
             <menu>
-                <li className="ow-li-primary">文档</li>
-                <li className="ow-li-primary">博客</li>
+                <li className="ow-li-primary">{Router.Docs}</li>
+                <li className="ow-li-primary">{Router.Blog}</li>
                 <li
                     className="ow-li-primary"
                     onClick={() => {
-                        context.method.push({
+                        context.history.push({
                             router: Router.Links,
-                            tab: TabState.Corner,
                             scene: SceneLevel.One,
                         });
                     }}
                 >
-                    收藏夹
+                    {Router.Links}
                 </li>
                 <li
                     className="ow-li-primary"
                     onClick={() => {
-                        context.method.push({
+                        context.history.push({
                             router: Router.Gallery,
-                            tab: TabState.Corner,
                             scene: SceneLevel.One,
                         });
                     }}
                 >
-                    画廊
+                    {Router.Gallery}
                 </li>
                 <li className="ow-li-secondary">主播直播间</li>
                 <li className="ow-li-secondary">选项设置</li>
                 <li
                     className="ow-li-secondary"
                     onClick={() => {
-                        context.method.push({
+                        context.history.push({
                             router: Router.Patch,
-                            tab: TabState.Corner,
+                            tabs: SETTING_TAB,
                             scene: SceneLevel.Fill,
                         });
                     }}
                 >
-                    更新说明
+                    {Router.Patch}
                 </li>
                 <li
                     className="ow-li-secondary"
                     onClick={() => {
-                        context.method.push({
+                        context.history.push({
                             router: Router.Todo,
-                            tab: TabState.Corner,
+                            tabs: SETTING_TAB,
                             scene: SceneLevel.Fill,
                         });
                     }}
                 >
-                    版本计划
+                    {Router.Todo}
                 </li>
             </menu>
             <div className="bottom-spacer" />

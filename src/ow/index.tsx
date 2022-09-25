@@ -9,8 +9,6 @@ import {
 } from './models/context';
 import Scene from './components/Scene';
 import NavBar from './components/NavBar';
-import './styles/index.css';
-import './styles/post.css';
 import Links from './pages/Links';
 import useStack from '../hooks/useStack';
 import useKeyboard from '../hooks/useKeyboard';
@@ -19,17 +17,22 @@ import Alert from './components/Alert';
 import Document from './pages/Document';
 import CHANGELOG from './docs/CHANGELOG.md';
 import TODO from './docs/TODO.md';
+import useScreen from '../hooks/useScreen';
+import './styles/index.css';
+import './styles/post.css';
 
 const OW_UPDATE_KEY = 'ow-update';
 
 const Overwatch = () => {
     const { state, history } = useStack<PageState>(INITIAL_STATE);
+    const screen = useScreen();
     const [isTipVisible, setTipVisible] = useState(false);
 
     const context = useMemo<Page>(() => {
         return {
-            state: state,
-            method: history,
+            state,
+            screen,
+            history,
         };
     }, [state, history]);
 
@@ -58,10 +61,10 @@ const Overwatch = () => {
                 {state.router === Router.Links && <Links />}
                 {state.router === Router.Gallery && <Gallery />}
                 {state.router === Router.Patch && (
-                    <Document title="更新说明" doc={CHANGELOG} />
+                    <Document title={Router.Patch} doc={CHANGELOG} />
                 )}
                 {state.router === Router.Todo && (
-                    <Document title="版本计划" doc={TODO} />
+                    <Document title={Router.Todo} doc={TODO} />
                 )}
                 <Scene />
             </div>

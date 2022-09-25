@@ -1,13 +1,15 @@
+import { Screen } from '@site/src/hooks/useScreen';
+import useStack from '@site/src/hooks/useStack';
 import { createContext } from 'react';
 
 export enum Router {
-    Home,
-    Docs,
-    Blog,
-    Gallery,
-    Links,
-    Patch,
-    Todo,
+    Home = '主界面',
+    Docs = '文档',
+    Blog = '博客',
+    Gallery = '画廊',
+    Links = '收藏夹',
+    Patch = '更新说明',
+    Todo = '版本计划',
 }
 
 export enum TabState {
@@ -23,28 +25,27 @@ export enum SceneLevel {
 
 export interface PageState {
     router: Router;
-    tab: TabState;
+    tabs?: Router[];
     scene: SceneLevel;
 }
 
 export interface Page {
     state: PageState;
-    method: {
-        push: (next: PageState) => void;
-        pop: () => void;
-    };
+    screen: Screen;
+    history: ReturnType<typeof useStack<PageState>>['history'];
 }
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: PageState = {
     router: Router.Home,
-    tab: TabState.Corner,
     scene: SceneLevel.Zero,
 };
 
 export const PageContext = createContext<Page>({
     state: INITIAL_STATE,
-    method: {
+    screen: Screen.Medium,
+    history: {
         push: () => {},
         pop: () => {},
+        replace: () => {},
     },
 });

@@ -42,7 +42,7 @@ const Links = () => {
                 <OperatorButton
                     className="ow-right-bottom-button"
                     keyName="ESC"
-                    onClick={context.method.pop}
+                    onClick={context.history.pop}
                 >
                     返回
                 </OperatorButton>
