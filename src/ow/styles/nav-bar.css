@@ -72,17 +72,17 @@
     border: var(--outline) solid hsla(0, 0%, 100%, 0.9);
 }
 
-.unsplash {
+.ow-nav-button.unsplash {
     background-color: #ffc938;
     box-shadow: 0 0 4px 1px rgba(255, 202, 56, 0.5);
 }
 
-.github {
+.ow-nav-button.github {
     background-color: #2993e1;
     box-shadow: 0 0 4px 1px rgba(41, 148, 224, 0.502);
 }
 
-.menu {
+.ow-nav-button.menu {
     background-color: #2993e1;
     box-shadow: 0 0 4px 1px rgba(41, 148, 224, 0.502);
 }
