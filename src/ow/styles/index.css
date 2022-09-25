@@ -41,7 +41,10 @@
     z-index: 100;
     font-size: var(--header-font-size);
     line-height: 1;
-    background: linear-gradient(rgb(255, 255, 255) 40%, rgba(255, 255, 255, 0));
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.8) 40%,
+        rgba(255, 255, 255, 0)
+    );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;

@@ -61,7 +61,7 @@ const Overwatch = () => {
                     <Document title="更新说明" doc={CHANGELOG} />
                 )}
                 {state.router === Router.Todo && (
-                    <Document title="待办计划" doc={TODO} />
+                    <Document title="版本计划" doc={TODO} />
                 )}
                 <Scene />
             </div>

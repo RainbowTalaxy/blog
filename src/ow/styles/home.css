@@ -109,7 +109,7 @@
 
     .ow-li-secondary:hover {
         cursor: var(--cursor-img), pointer;
-        transform: translateX(calc(var(--content-h-margin) * 0.5)) scale(1.15);
+        transform: translateX(calc(var(--content-h-margin) * 0.08)) scale(1.15);
     }
 }
 

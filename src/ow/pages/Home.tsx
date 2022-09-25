@@ -119,7 +119,7 @@ const Home = () => {
                         });
                     }}
                 >
-                    待办计划
+                    版本计划
                 </li>
             </menu>
             <div className="bottom-spacer" />
