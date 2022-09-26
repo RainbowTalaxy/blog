@@ -66,7 +66,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    animation: 0.5s float-effect both;
+    transform: skewX(-16deg);
 }
 
 .ow-content {
@@ -89,6 +89,21 @@
     right: 0;
     bottom: 0;
     overflow: scroll;
+}
+
+.ow-main {
+    margin: 0 auto;
+    padding: 0 12px 10vh;
+    width: min(75%, 1324px);
+    height: 100%;
+    overflow: scroll;
+}
+
+@media screen and (max-width: 900px) {
+    .ow-main {
+        width: 100%;
+        padding: 0 5% 10vh;
+    }
 }
 
 .ow-view * {

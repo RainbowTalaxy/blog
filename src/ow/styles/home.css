@@ -38,11 +38,11 @@
 
 .ow-site-description {
     margin-left: 7px;
-    color: rgb(230, 230, 230);
+    color: rgba(255, 255, 255, 0.67);
 }
 
 .ow-site-description:hover {
-    color: rgb(230, 230, 230);
+    color: rgba(255, 255, 255, 1);
     text-decoration: none;
 }
 

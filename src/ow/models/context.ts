@@ -10,6 +10,7 @@ export enum Router {
     Links = '收藏夹',
     Patch = '更新说明',
     Todo = '版本计划',
+    Live = '网站链接',
 }
 
 export enum TabState {

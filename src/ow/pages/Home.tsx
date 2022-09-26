@@ -6,7 +6,7 @@ import '../styles/home.css';
 
 const WEB_ATTR = '苏 ICP 备 19075978 号';
 
-const SETTING_TAB = [Router.Patch, Router.Todo];
+const SETTING_TAB = [Router.Live, Router.Patch, Router.Todo];
 
 const Home = () => {
     const context = useContext(PageContext);
@@ -27,9 +27,10 @@ const Home = () => {
         });
     }
 
-    if (query.get('target') === 'patch') {
+    if (query.get('target') === 'live') {
         context.history.push({
-            router: Router.Patch,
+            router: Router.Live,
+            tabs: SETTING_TAB,
             scene: SceneLevel.Fill,
         });
     }
@@ -46,7 +47,7 @@ const Home = () => {
                         href="http://beian.miit.gov.cn/"
                         target="_blank"
                     >
-                        © {new Date().getFullYear()} Talaxy · {WEB_ATTR}
+                        © {new Date().getFullYear()} TALAXY · {WEB_ATTR}
                     </a>
                 </header>
             )}
@@ -91,7 +92,18 @@ const Home = () => {
                 >
                     {Router.Gallery}
                 </li>
-                <li className="ow-li-secondary">主播直播间</li>
+                <li
+                    className="ow-li-secondary"
+                    onClick={() => {
+                        context.history.push({
+                            router: Router.Live,
+                            tabs: SETTING_TAB,
+                            scene: SceneLevel.Fill,
+                        });
+                    }}
+                >
+                    {Router.Live}
+                </li>
                 <li className="ow-li-secondary">选项设置</li>
                 <li
                     className="ow-li-secondary"

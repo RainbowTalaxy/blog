@@ -3,18 +3,17 @@ import OperatorButton from '../components/OperatorButton';
 import { PageContext } from '../models/context';
 
 interface Props {
-    title: string;
     doc: ComponentType;
 }
 
-const Document = ({ title, doc: Doc }: Props) => {
+const Document = ({ doc: Doc }: Props) => {
     const context = useContext(PageContext);
 
     return (
         <>
-            <header className="ow-header-middle">{title}</header>
+            <header className="ow-header-middle">{context.state.router}</header>
             <main className="ow-content-middle">
-                <div className="ow-post ow-hide-h1">
+                <div className="ow-main ow-post ow-hide-h1">
                     <Doc />
                 </div>
                 <OperatorButton

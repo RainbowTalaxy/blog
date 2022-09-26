@@ -18,8 +18,10 @@ import Document from './pages/Document';
 import CHANGELOG from './docs/CHANGELOG.md';
 import TODO from './docs/TODO.md';
 import useScreen from '../hooks/useScreen';
+import LiveList from './pages/LiveList';
 import './styles/index.css';
 import './styles/post.css';
+import './styles/section.css';
 
 const OW_UPDATE_KEY = 'ow-update';
 
@@ -60,12 +62,9 @@ const Overwatch = () => {
                 {state.router === Router.Home && <Home />}
                 {state.router === Router.Links && <Links />}
                 {state.router === Router.Gallery && <Gallery />}
-                {state.router === Router.Patch && (
-                    <Document title={Router.Patch} doc={CHANGELOG} />
-                )}
-                {state.router === Router.Todo && (
-                    <Document title={Router.Todo} doc={TODO} />
-                )}
+                {state.router === Router.Patch && <Document doc={CHANGELOG} />}
+                {state.router === Router.Todo && <Document doc={TODO} />}
+                {state.router === Router.Live && <LiveList />}
                 <Scene />
             </div>
         </PageContext.Provider>
