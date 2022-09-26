@@ -18,6 +18,14 @@ const SCENES = [
         title: '南京 栖霞山',
         img: 'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEGgRtksXQIKNmqU5VUGrB6J6G5.D2Dg8xmkm5lFJGZ86Ox*KDyFdsjSafFIVezETaJuV.EzZMLRDsD1Vo0eRfWY!/r',
     },
+    {
+        title: '南京 玄武湖',
+        img: 'http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEJVqmSngXdMnrh97rVk*1md1PTUPuMED7hBoWQG3guvtAaPBi3Ot9xRkj6uZ7LDfZd4DkRhsnV1HyUJtB6*8wmc!/r',
+    },
+    {
+        title: '湖南省博物馆',
+        img: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E0dV59G/TmEUgtj9EK6.7V8ajmQrEJHUPpwfIojpD3NIHEz7Y1BxyRfnEghq0ppFPHG8TNbTJhN8K3VD5AGPgfiGQhEIBsEgwHuyXMkE.iGHWHOQrgY!/r',
+    },
 ];
 
 const FILL_SCENE =

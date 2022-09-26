@@ -18,7 +18,10 @@ const LiveList = () => {
                         </header>
                         <div className="ow-section-list">
                             {LIVE_DATA.map((live) => (
-                                <div className="ow-section-cell">
+                                <div
+                                    className="ow-section-cell"
+                                    onClick={() => window.open(live.link)}
+                                >
                                     {live.title}
                                 </div>
                             ))}
@@ -27,9 +30,12 @@ const LiveList = () => {
                     <section className="ow-section">
                         <header className="ow-section-header">收藏夹</header>
                         <div className="ow-section-list">
-                            {LINKS_DATA.map((live) => (
-                                <div className="ow-section-cell">
-                                    {live.name}
+                            {LINKS_DATA.map((link) => (
+                                <div
+                                    className="ow-section-cell"
+                                    onClick={() => window.open(link.link)}
+                                >
+                                    {link.name}
                                 </div>
                             ))}
                         </div>
