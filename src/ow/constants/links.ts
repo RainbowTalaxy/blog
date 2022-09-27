@@ -8,14 +8,6 @@ export const LINKS_DATA = [
         link: 'https://www.bilibili.com/',
     },
     {
-        name: 'OWL',
-        description: '守望先锋联赛',
-        image: 'https://tvax3.sinaimg.cn/crop.0.0.400.400.180/006Z6gayly8gjx1i04ftlj30b40b4t9v.jpg?KID=imgbed,tva&Expires=1661465628&ssig=xO2%2BUX6BwL',
-        primary: '#fff',
-        secondary: '#f79e16',
-        link: 'https://live.bilibili.com/76',
-    },
-    {
         name: '斗鱼',
         description: 'douyu',
         image: 'https://tvax1.sinaimg.cn/crop.65.55.288.288.180/ed639409ly8gdino1e5eyj20b40b474j.jpg?KID=imgbed,tva&Expires=1661460700&ssig=5cNhEw%2FMCQ',

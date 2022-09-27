@@ -71,7 +71,7 @@ const NavBar = () => {
                         <Spacer />
                     </>
                 )}
-                {!(state.tabs?.length && screen === Screen.Small) && (
+                {!(state.tabs?.length && screen <= Screen.Medium) && (
                     <div className="ow-nav-button-group">
                         <Link
                             className="ow-nav-button unsplash"
