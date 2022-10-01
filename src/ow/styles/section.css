@@ -28,3 +28,7 @@
         transform: scale(1.07);
     }
 }
+
+.ow-section .ow-setting-box {
+    margin-bottom: 8px;
+}

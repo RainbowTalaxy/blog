@@ -6,7 +6,7 @@ import '../styles/home.css';
 
 const WEB_ATTR = '苏 ICP 备 19075978 号';
 
-const SETTING_TAB = [Router.Live, Router.Patch, Router.Todo];
+const SETTING_TAB = [Router.Live, Router.Setting, Router.Patch, Router.Todo];
 
 const Home = () => {
     const context = useContext(PageContext);
@@ -27,9 +27,9 @@ const Home = () => {
         });
     }
 
-    if (query.get('target') === 'live') {
+    if (query.get('target') === 'setting') {
         context.history.push({
-            router: Router.Live,
+            router: Router.Setting,
             tabs: SETTING_TAB,
             scene: SceneLevel.Fill,
         });
@@ -104,7 +104,18 @@ const Home = () => {
                 >
                     {Router.Live}
                 </li>
-                <li className="ow-li-secondary">选项设置</li>
+                <li
+                    className="ow-li-secondary"
+                    onClick={() => {
+                        context.history.push({
+                            router: Router.Setting,
+                            tabs: SETTING_TAB,
+                            scene: SceneLevel.Fill,
+                        });
+                    }}
+                >
+                    选项设置
+                </li>
                 <li
                     className="ow-li-secondary"
                     onClick={() => {

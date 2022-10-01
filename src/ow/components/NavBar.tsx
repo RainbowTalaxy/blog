@@ -46,6 +46,7 @@ const NavBar = () => {
                         {screen > Screen.Small ? (
                             state.tabs.map((tab) => (
                                 <div
+                                    key={tab}
                                     className={clsx(
                                         'ow-nav-bar-tab',
                                         state.router === tab && 'active',
@@ -118,6 +119,7 @@ const NavBar = () => {
                 <div className="ow-nav-mask">
                     {state.tabs.map((tab, idx) => (
                         <div
+                            key={tab}
                             className="ow-nav-mask-menu-cell"
                             // @ts-ignore
                             style={{ '--i': idx }}

@@ -7,6 +7,7 @@
     --header-left: min(7vw, 120px);
     --button-border-radius: 2px;
     --cursor-img: url(/static/assets/ow/ow-cursor.png);
+    --icon-size: 20px;
     position: relative;
     flex: 1 0 auto;
     cursor: var(--cursor-img), auto;
@@ -116,4 +117,9 @@
 
 .ow-view ::-webkit-scrollbar {
     display: none;
+}
+
+.ow-spacer-h {
+    flex-grow: 1;
+    height: 100%;
 }

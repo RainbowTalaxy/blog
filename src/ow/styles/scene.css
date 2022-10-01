@@ -58,3 +58,15 @@
     text-shadow: 0 0 2px black;
     transition: transform 0.05s ease;
 }
+
+.ow-time {
+    position: fixed;
+    top: 4px;
+    right: 6px;
+    padding: 1.5px 6px 3.5px;
+    z-index: 100;
+    background-color: rgba(25, 28, 45, 0.5);
+    color: #b0d5e0;
+    font-size: 14px;
+    line-height: 1;
+}

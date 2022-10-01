@@ -1,9 +1,12 @@
 interface Props {
     className?: string;
+    onClick?: () => void;
 }
 
-const Spacer = ({ className }: Props) => {
-    return <div className={className} style={{ flex: '1 1 auto' }} />;
+const Spacer = ({ className, onClick }: Props) => {
+    return (
+        <div className={className} style={{ flexGrow: 1 }} onClick={onClick} />
+    );
 };
 
 export default Spacer;

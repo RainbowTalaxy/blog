@@ -11,6 +11,7 @@ export enum Router {
     Patch = '更新说明',
     Todo = '版本计划',
     Live = '网站链接',
+    Setting = '选项设置',
 }
 
 export enum TabState {
@@ -30,10 +31,19 @@ export interface PageState {
     scene: SceneLevel;
 }
 
+export interface Setting {
+    time: boolean;
+}
+
 export interface Page {
     state: PageState;
     screen: Screen;
+    setting: Setting;
     history: ReturnType<typeof useStack<PageState>>['history'];
+    setSetting: <Key extends keyof Setting>(
+        key: Key,
+        value: Setting[Key],
+    ) => void;
 }
 
 export const INITIAL_STATE: PageState = {
@@ -41,12 +51,18 @@ export const INITIAL_STATE: PageState = {
     scene: SceneLevel.Zero,
 };
 
+export const DEFAULT_SETTING: Setting = {
+    time: false,
+};
+
 export const PageContext = createContext<Page>({
     state: INITIAL_STATE,
     screen: Screen.Medium,
+    setting: DEFAULT_SETTING,
     history: {
         push: () => {},
         pop: () => {},
         replace: () => {},
     },
+    setSetting: () => {},
 });

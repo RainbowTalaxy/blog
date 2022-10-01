@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Home from './pages/Home';
 import {
     PageContext,
@@ -6,6 +6,8 @@ import {
     Router,
     PageState,
     INITIAL_STATE,
+    DEFAULT_SETTING,
+    Setting,
 } from './models/context';
 import Scene from './components/Scene';
 import NavBar from './components/NavBar';
@@ -19,21 +21,40 @@ import CHANGELOG from './docs/CHANGELOG.md';
 import TODO from './docs/TODO.md';
 import useScreen from '../hooks/useScreen';
 import LiveList from './pages/LiveList';
+import SettingPage from './pages/Setting';
+import { useLocalStorage } from 'usehooks-ts';
 import './styles/index.css';
 import './styles/post.css';
 import './styles/section.css';
 
-const OW_UPDATE_KEY = 'ow-update';
+const UPDATE_KEY = 'ow-update';
+const SETTING_KEY = 'ow-setting';
 
 const Overwatch = () => {
-    const { state, history } = useStack<PageState>(INITIAL_STATE);
     const screen = useScreen();
+    const { state, history } = useStack<PageState>(INITIAL_STATE);
     const [isTipVisible, setTipVisible] = useState(false);
+    const [setting, _setSetting] = useLocalStorage(
+        SETTING_KEY,
+        DEFAULT_SETTING,
+    );
+
+    const setSetting = useCallback(
+        <Key extends keyof Setting>(key: Key, value: Setting[Key]) => {
+            _setSetting((prev) => ({
+                ...prev,
+                [key]: value,
+            }));
+        },
+        [],
+    );
 
     const context = useMemo<Page>(() => {
         return {
             state,
             screen,
+            setting,
+            setSetting,
             history,
         };
     }, [state, history]);
@@ -41,7 +62,7 @@ const Overwatch = () => {
     useKeyboard('Escape', () => history.pop());
 
     useEffect(() => {
-        const hasShownTip = localStorage.getItem(OW_UPDATE_KEY);
+        const hasShownTip = localStorage.getItem(UPDATE_KEY);
         if (!hasShownTip) {
             setTipVisible(true);
         }
@@ -53,7 +74,7 @@ const Overwatch = () => {
                 {isTipVisible && (
                     <Alert
                         onConfirm={() => {
-                            localStorage.setItem(OW_UPDATE_KEY, 'true');
+                            localStorage.setItem(UPDATE_KEY, 'true');
                             setTipVisible(false);
                         }}
                     />
@@ -65,6 +86,7 @@ const Overwatch = () => {
                 {state.router === Router.Patch && <Document doc={CHANGELOG} />}
                 {state.router === Router.Todo && <Document doc={TODO} />}
                 {state.router === Router.Live && <LiveList />}
+                {state.router === Router.Setting && <SettingPage />}
                 <Scene />
             </div>
         </PageContext.Provider>

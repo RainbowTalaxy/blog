@@ -1,5 +1,6 @@
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { PageContext, SceneLevel } from '../models/context';
 import '../styles/scene.css';
@@ -34,11 +35,14 @@ const FILL_SCENE =
 const OW_SCENE_IMAGE = 'ow-scene-image';
 const OW_SCENE_ID = 'ow-scene-image';
 
+const getTime = () => dayjs().format('hh:mm A');
+
 const Scene = () => {
     const screen = useScreen();
     const context = useContext(PageContext);
     const [isLoaded, setIsLoaded] = useState(false);
     const [imageIdx, setImageIdx] = useState(0);
+    const [time, setTime] = useState<string>(getTime());
 
     let maskOpacity = 0;
     let scene = SCENES[imageIdx];
@@ -66,6 +70,11 @@ const Scene = () => {
         el.src = scene.img;
     }, []);
 
+    useEffect(() => {
+        const timerId = setInterval(() => setTime(getTime()), 5000);
+        return () => clearInterval(timerId);
+    }, []);
+
     return (
         <>
             <div className={clsx('ow-scene', context.state.scene)}>
@@ -81,6 +90,7 @@ const Scene = () => {
                     alt="background"
                 />
             </div>
+            {context.setting.time && <div className="ow-time">{time}</div>}
             {isLoaded && context.state.scene === SceneLevel.Zero && (
                 <div className="ow-scene-desc">
                     {screen > Screen.Small && (

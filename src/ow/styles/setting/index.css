@@ -1,0 +1,31 @@
+.ow-setting-box {
+    --setting-box-h: 42px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: var(--setting-box-h);
+    background-color: rgba(85, 92, 120, 0.6);
+    color: #dbdde5;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+}
+
+.ow-setting-v {
+    padding-bottom: 5px;
+}
+
+.ow-setting-h {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.ow-setting-label {
+    flex: 1;
+}
+
+.ow-setting-box .ow-icon {
+    position: relative;
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
