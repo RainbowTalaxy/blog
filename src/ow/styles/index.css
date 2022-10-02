@@ -19,8 +19,8 @@
 
 @media screen and (max-width: 900px) {
     .ow-view {
-        --header-top: calc(var(--nav-bar-height) + 2 * var(--nav-v-margin));
-        --header-font-size: 20vw;
+        --header-top: calc(var(--nav-bar-height) + var(--nav-v-margin));
+        --header-font-size: min(20vw, 120px);
     }
 }
 

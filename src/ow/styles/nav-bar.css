@@ -15,6 +15,7 @@
 
 .ow-nav-bar-tab {
     --tab-bottom: calc(var(--nav-bar-height) * 0.085);
+    flex-shrink: 0;
     position: relative;
     padding: calc(var(--nav-bar-height) * 0.18)
         calc(var(--nav-bar-height) * 0.4) 0;

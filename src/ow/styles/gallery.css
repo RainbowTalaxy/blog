@@ -13,13 +13,14 @@
 @media screen and (max-width: 900px) {
     .ow-card-content {
         position: fixed;
-        top: calc(var(--header-font-size) + var(--header-top));
+        top: calc(var(--header-font-size) + var(--header-top) - 5vh);
         bottom: 0;
         left: 0;
         right: 0;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
+        padding: 5vh 0 0;
         width: 100%;
         height: initial;
         overflow: scroll;
