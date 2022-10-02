@@ -9,7 +9,7 @@ const Links = () => {
 
     return (
         <>
-            <header className="ow-header">收藏夹</header>
+            <header className="ow-header">{context.state.router}</header>
             <main className="ow-content">
                 <ul className="ow-hero-ul">
                     {LINKS_DATA.map((item, idx) => (

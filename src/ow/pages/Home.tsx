@@ -20,9 +20,9 @@ const Home = () => {
         });
     }
 
-    if (query.get('target') === 'gallery') {
+    if (query.get('target') === 'docs') {
         context.history.push({
-            router: Router.Gallery,
+            router: Router.Docs,
             scene: SceneLevel.One,
         });
     }
@@ -68,7 +68,17 @@ const Home = () => {
                 <div className="top-spacer" />
             )}
             <menu>
-                <li className="ow-li-primary">{Router.Docs}</li>
+                <li
+                    className="ow-li-primary"
+                    onClick={() => {
+                        context.history.push({
+                            router: Router.Docs,
+                            scene: SceneLevel.One,
+                        });
+                    }}
+                >
+                    {Router.Docs}
+                </li>
                 <li className="ow-li-primary">{Router.Blog}</li>
                 <li
                     className="ow-li-primary"

@@ -4,7 +4,7 @@ import { createContext } from 'react';
 
 export enum Router {
     Home = '主界面',
-    Docs = '文档',
+    Docs = '笔记',
     Blog = '博客',
     Gallery = '画廊',
     Links = '收藏夹',
@@ -17,6 +17,11 @@ export enum Router {
 export enum TabState {
     Corner,
     Row,
+}
+
+export enum CursorSize {
+    Small = 'url(/assets/ow/ow-cursor-small.png)',
+    Middle = 'url(/assets/ow/ow-cursor.png)',
 }
 
 export enum SceneLevel {
@@ -33,6 +38,7 @@ export interface PageState {
 
 export interface Setting {
     time: boolean;
+    cursor: CursorSize;
 }
 
 export interface Page {
@@ -53,6 +59,7 @@ export const INITIAL_STATE: PageState = {
 
 export const DEFAULT_SETTING: Setting = {
     time: false,
+    cursor: CursorSize.Middle,
 };
 
 export const PageContext = createContext<Page>({

@@ -6,7 +6,7 @@
     --header-top: 62px;
     --header-left: min(7vw, 120px);
     --button-border-radius: 2px;
-    --cursor-img: url(/static/assets/ow/ow-cursor.png);
+    --cursor-img: url(/assets/ow/ow-cursor.png);
     --icon-size: 20px;
     position: relative;
     flex: 1 0 auto;

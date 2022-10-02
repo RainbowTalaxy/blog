@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
-import { GALLERY_DATA } from '../constants/gallery';
+import { DOCS_DATA } from '../constants/docs';
 import { PageContext } from '../models/context';
 import '../styles/gallery.css';
 
-const Gallery = () => {
+const Docs = () => {
     const context = useContext(PageContext);
 
     return (
@@ -13,13 +13,17 @@ const Gallery = () => {
             <main>
                 <div className="ow-card-content">
                     <ul className="ow-card-list">
-                        {GALLERY_DATA.map((card) => (
+                        {DOCS_DATA.map((card) => (
                             <li
                                 key={card.title}
                                 className="ow-card-li"
                                 onClick={() => window.open(card.link)}
                             >
-                                <img className="ow-card-bg" src={card.bg} />
+                                <img
+                                    className="ow-card-bg"
+                                    src={card.bg}
+                                    style={card.style}
+                                />
                                 <div className="ow-card-primary">
                                     {card.primary}
                                 </div>
@@ -45,4 +49,4 @@ const Gallery = () => {
     );
 };
 
-export default Gallery;
+export default Docs;

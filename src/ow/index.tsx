@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Home from './pages/Home';
 import {
     PageContext,
@@ -23,6 +23,7 @@ import useScreen from '../hooks/useScreen';
 import LiveList from './pages/LiveList';
 import SettingPage from './pages/Setting';
 import { useLocalStorage } from 'usehooks-ts';
+import Docs from './pages/Docs';
 import './styles/index.css';
 import './styles/post.css';
 import './styles/section.css';
@@ -38,6 +39,7 @@ const Overwatch = () => {
         SETTING_KEY,
         DEFAULT_SETTING,
     );
+    const view = useRef<HTMLDivElement>(null);
 
     const setSetting = useCallback(
         <Key extends keyof Setting>(key: Key, value: Setting[Key]) => {
@@ -68,9 +70,13 @@ const Overwatch = () => {
         }
     }, []);
 
+    useEffect(() => {
+        view.current.style.setProperty('--cursor-img', setting.cursor);
+    }, [setting.cursor]);
+
     return (
         <PageContext.Provider value={context}>
-            <div className="ow-view">
+            <div className="ow-view" ref={view}>
                 {isTipVisible && (
                     <Alert
                         onConfirm={() => {
@@ -81,6 +87,7 @@ const Overwatch = () => {
                 )}
                 <NavBar />
                 {state.router === Router.Home && <Home />}
+                {state.router === Router.Docs && <Docs />}
                 {state.router === Router.Links && <Links />}
                 {state.router === Router.Gallery && <Gallery />}
                 {state.router === Router.Patch && <Document doc={CHANGELOG} />}
