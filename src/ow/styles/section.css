@@ -1,6 +1,6 @@
 .ow-section-header {
     margin-bottom: 5px;
-    font-size: 32px;
+    font-size: min(6vw, 32px);
     color: #27344e;
 }
 
@@ -12,9 +12,9 @@
 }
 
 .ow-section-cell {
-    padding: 10px 24px;
-    height: 65px;
-    font-size: 24px;
+    padding: min(1vw, 10px) min(4vw, 24px);
+    height: min(13vw, 65px);
+    font-size: min(6vw, 24px);
     color: white;
     background-color: rgba(60, 66, 88, 0.6);
     transition: transform 0.05s;

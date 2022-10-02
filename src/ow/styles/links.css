@@ -7,7 +7,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    padding: 18px min(7vw, 140px) 48px;
+    padding: 0 min(7vw, 140px) 48px;
 }
 
 @media screen and (max-width: 900px) {

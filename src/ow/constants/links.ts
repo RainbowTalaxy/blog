@@ -2,8 +2,8 @@ export const LINKS_DATA = [
     {
         name: '哔哩哔哩',
         description: 'bilibili',
-        image: 'https://www.leigod.com/img/bzhan.png',
-        primary: '#b7e9ff',
+        image: 'https://tvax4.sinaimg.cn/crop.0.0.1024.1024.180/001UiKmJly8h0pdqge7b1j60sg0sh3z502.jpg?KID=imgbed,tva&Expires=1664702963&ssig=os%2F%2FK7%2BfIX',
+        primary: '#fff',
         secondary: '#00b1fd',
         link: 'https://www.bilibili.com/',
     },
@@ -42,7 +42,7 @@ export const LINKS_DATA = [
     {
         name: 'MDN',
         description: 'mozilla',
-        image: 'https://developer.mozilla.org/favicon-192x192.png',
+        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcift1TOEugeo6dTQHAJfrwzIRG4eOOzgf.*HTXm8ZpHHnE9Ci6nR68BvTCTYK9qVNV3XhxuZZr0hFHrZlM8ufk!/r',
         primary: '#15141a',
         secondary: '#524e66',
         link: 'https://developer.mozilla.org/zh-CN/',
@@ -50,7 +50,7 @@ export const LINKS_DATA = [
     {
         name: 'GitHub',
         description: 'github',
-        image: 'https://github.githubassets.com/apple-touch-icon-144x144.png',
+        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqVcsalJAj.tDlaBZVYKOJBwjKjwcwyR*tvvJQw8FcCY4A2W0I0*fRKsEvkHiiecet7Gak1OEjmI0yCZAJIr7sMA!/r',
         primary: '#231f20',
         secondary: '#6f6265',
         link: 'https://github.com/',
@@ -58,7 +58,7 @@ export const LINKS_DATA = [
     {
         name: 'TypeScript',
         description: 'typescriptlang',
-        image: 'https://www.typescriptlang.org/icons/icon-144x144.png?v=8944a05a8b601855de116c8a56d3b3ae',
+        image: '/logo/typescript.svg',
         primary: '#3178c6',
         secondary: '#3f9aff',
         link: 'https://www.typescriptlang.org/docs/handbook/2/basic-types.html',
@@ -66,7 +66,7 @@ export const LINKS_DATA = [
     {
         name: 'React',
         description: 'meta',
-        image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K',
+        image: '/logo/react.svg',
         primary: '#20232a',
         secondary: '#50b5d1',
         link: 'https://zh-hans.reactjs.org/',
@@ -74,15 +74,15 @@ export const LINKS_DATA = [
     {
         name: 'Next.js',
         description: 'vercel',
-        image: 'https://camo.githubusercontent.com/f21f1fa29dfe5e1d0772b0efe2f43eca2f6dc14f2fede8d9cbef4a3a8210c91d/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67',
-        primary: '#000000',
+        image: '/logo/next-js.svg',
+        primary: '#fff',
         secondary: '#4c4c4c',
         link: 'https://docusaurus.io/docs',
     },
     {
         name: 'Vue',
         description: 'vuejs',
-        image: 'https://cn.vuejs.org/logo.svg',
+        image: '/logo/vue-js.svg',
         primary: '#fff',
         secondary: '#42b883',
         link: 'https://cn.vuejs.org/',
@@ -90,7 +90,7 @@ export const LINKS_DATA = [
     {
         name: 'Vite',
         description: 'vitejs',
-        image: 'https://cn.vitejs.dev/logo.svg',
+        image: '/logo/vite-js.svg',
         primary: '#242424',
         secondary: '#646cff',
         link: 'https://cn.vitejs.dev/',
@@ -98,7 +98,7 @@ export const LINKS_DATA = [
     {
         name: 'Tailwind',
         description: 'tailwindcss',
-        image: 'https://tailwindcss.com/_next/static/media/tailwindcss-logotype.ed60a6f85c663923c4d6ee9d85f359cd.svg',
+        image: '/logo/tailwindcss.svg',
         primary: '#e5f3fc',
         secondary: '#38bdf8',
         link: 'https://tailwindcss.com/docs/installation',
@@ -106,7 +106,7 @@ export const LINKS_DATA = [
     {
         name: 'Docusaurus',
         description: 'meta',
-        image: 'https://d33wubrfki0l68.cloudfront.net/c088b7acfcf11100903c44fe44f2f2d7e0f30531/47727/img/docusaurus.svg',
+        image: '/logo/docusaurus.svg',
         primary: '#e6f6e6',
         secondary: '#18816a',
         link: 'https://docusaurus.io/docs',
@@ -122,7 +122,7 @@ export const LINKS_DATA = [
     {
         name: 'Swift',
         description: 'swift',
-        image: 'https://developer.apple.com/swift/images/swift-logo.svg',
+        image: '/logo/swift.svg',
         primary: '#f05138',
         secondary: '#65190f',
         link: 'https://www.swift.org/',
@@ -130,7 +130,7 @@ export const LINKS_DATA = [
     {
         name: 'Apple',
         description: 'apple',
-        image: 'https://developer.apple.com/assets/elements/icons/brandmark/apple-developer-brandmark.svg',
+        image: '/logo/apple-developer.svg',
         primary: '#fff',
         secondary: '#000',
         link: 'https://developer.apple.com/',
