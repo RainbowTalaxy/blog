@@ -21,16 +21,16 @@ const SCENES = [
     },
     {
         title: '南京 玄武湖',
-        img: 'http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEJVqmSngXdMnrh97rVk*1md1PTUPuMED7hBoWQG3guvtAaPBi3Ot9xRkj6uZ7LDfZd4DkRhsnV1HyUJtB6*8wmc!/r',
+        img: 'https://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEJVqmSngXdMnrh97rVk*1md1PTUPuMED7hBoWQG3guvtAaPBi3Ot9xRkj6uZ7LDfZd4DkRhsnV1HyUJtB6*8wmc!/r',
     },
     {
         title: '湖南省博物馆',
-        img: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E0dV59G/TmEUgtj9EK6.7V8ajmQrEJHUPpwfIojpD3NIHEz7Y1BxyRfnEghq0ppFPHG8TNbTJhN8K3VD5AGPgfiGQhEIBsEgwHuyXMkE.iGHWHOQrgY!/r',
+        img: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E0dV59G/TmEUgtj9EK6.7V8ajmQrEJHUPpwfIojpD3NIHEz7Y1BxyRfnEghq0ppFPHG8TNbTJhN8K3VD5AGPgfiGQhEIBsEgwHuyXMkE.iGHWHOQrgY!/r',
     },
 ];
 
 const FILL_SCENE =
-    'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcyuPStnr1Xqld4koFzDfPudb.JWLNzTTnamefruENKS.BixfigsE1w4iF64a2co1fi3Wj2PgRXaFbtCugDeXqQ!/r';
+    'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcyuPStnr1Xqld4koFzDfPudb.JWLNzTTnamefruENKS.BixfigsE1w4iF64a2co1fi3Wj2PgRXaFbtCugDeXqQ!/r';
 
 const OW_SCENE_IMAGE = 'ow-scene-image';
 const OW_SCENE_ID = 'ow-scene-image';
