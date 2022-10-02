@@ -1,15 +1,15 @@
 export const LIVE_DATA = [
     {
+        title: 'Ameng',
+        link: 'https://live.bilibili.com/12101556',
+    },
+    {
         title: '守望先锋联赛',
         link: 'https://live.bilibili.com/76',
     },
     {
         title: '挑战者系列赛',
         link: 'https://live.bilibili.com/21316976',
-    },
-    {
-        title: 'Ameng',
-        link: 'https://live.bilibili.com/12101556',
     },
     {
         title: 'Farway1987',
