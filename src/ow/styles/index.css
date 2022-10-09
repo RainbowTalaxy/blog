@@ -4,6 +4,7 @@
     --nav-bar-height: min(7vh, 64px);
     --header-font-size: min(10vw, 200px);
     --header-top: 62px;
+    --header-full-top: 62px;
     --header-left: min(7vw, 120px);
     --button-border-radius: 2px;
     --cursor-img: url(/assets/ow/ow-cursor.png);
@@ -13,13 +14,16 @@
     cursor: var(--cursor-img), auto;
     overflow: hidden;
     user-select: none;
-    font-family: 'microsoft yahei', 'Helvetica Neue', Helvetica, Roboto, Arial,
+    font-family: 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Roboto, Arial,
         sans-serif;
 }
 
 @media screen and (max-width: 900px) {
     .ow-view {
         --header-top: calc(var(--nav-bar-height) + var(--nav-v-margin));
+        --header-full-top: calc(
+            var(--nav-bar-height) + var(--nav-v-margin) * 2
+        );
         --header-font-size: min(20vw, 120px);
     }
 }
@@ -37,7 +41,7 @@
 
 .ow-header {
     position: fixed;
-    top: var(--header-top);
+    top: var(--header-full-top);
     left: var(--header-left);
     z-index: 100;
     font-size: var(--header-font-size);
@@ -54,7 +58,7 @@
 
 .ow-header-middle {
     position: fixed;
-    top: calc(var(--header-top));
+    top: var(--header-top);
     left: calc(var(--header-left) * 0.5);
     z-index: 100;
     font-size: calc(var(--header-font-size) * 0.7);
@@ -74,7 +78,7 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    top: calc(var(--header-font-size) + var(--header-top) - 2vh);
+    top: calc(var(--header-font-size) + var(--header-full-top) - 2vh);
     left: 0;
     right: 0;
     bottom: 0;

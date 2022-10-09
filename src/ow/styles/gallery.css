@@ -13,7 +13,7 @@
 @media screen and (max-width: 900px) {
     .ow-card-content {
         position: fixed;
-        top: calc(var(--header-font-size) + var(--header-top) - 5vh);
+        top: calc(var(--header-font-size) + var(--header-full-top) - 5vh);
         bottom: 0;
         left: 0;
         right: 0;
