@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { PageContext, Router, SceneLevel, TabState } from '../models/context';
 import '../styles/home.css';
 
-const WEB_ATTR = '苏 ICP 备 19075978 号';
+const WEB_ATTR = `© ${new Date().getFullYear()} TALAXY · 苏 ICP 备 19075978 号`;
 
 const SETTING_TAB = [Router.Live, Router.Setting, Router.Patch, Router.Todo];
 
@@ -47,7 +47,7 @@ const Home = () => {
                         href="http://beian.miit.gov.cn/"
                         target="_blank"
                     >
-                        © {new Date().getFullYear()} TALAXY · {WEB_ATTR}
+                        {WEB_ATTR}
                     </a>
                 </header>
             )}

@@ -27,6 +27,10 @@ const SCENES = [
         title: '湖南省博物馆',
         img: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E0dV59G/TmEUgtj9EK6.7V8ajmQrEJHUPpwfIojpD3NIHEz7Y1BxyRfnEghq0ppFPHG8TNbTJhN8K3VD5AGPgfiGQhEIBsEgwHuyXMkE.iGHWHOQrgY!/r',
     },
+    {
+        title: '守望先锋 归来',
+        img: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcw3Vr5tG1tVse1MUIM83zjN1Ds6WZGwA*VP7Epq4QJObUnvRix.i2Jj6IMQUty0mHyjvq1tPf05sXmIFRX3JuY!/r',
+    },
 ];
 
 const FILL_SCENE =
