@@ -7,7 +7,7 @@ const UA = () => {
         setUA(window.navigator.userAgent);
     }, []);
 
-    return <span>{window.navigator.userAgent}</span>;
+    return <span>{ua}</span>;
 };
 
 export default UA;
