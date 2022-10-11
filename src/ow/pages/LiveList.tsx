@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
-import { LINKS_DATA } from '../constants/links';
+import { EXTRA_LINKS, LINKS_DATA } from '../constants/links';
 import { LIVE_DATA } from '../constants/lives';
 import { PageContext } from '../models/context';
 
@@ -30,14 +30,16 @@ const LiveList = () => {
                     <section className="ow-section">
                         <header className="ow-section-header">收藏夹</header>
                         <div className="ow-section-list">
-                            {LINKS_DATA.map((link) => (
-                                <div
-                                    className="ow-section-cell"
-                                    onClick={() => window.open(link.link)}
-                                >
-                                    {link.name}
-                                </div>
-                            ))}
+                            {LINKS_DATA.concat(EXTRA_LINKS as any).map(
+                                (link) => (
+                                    <div
+                                        className="ow-section-cell"
+                                        onClick={() => window.open(link.link)}
+                                    >
+                                        {link.name}
+                                    </div>
+                                ),
+                            )}
                         </div>
                     </section>
                 </div>
