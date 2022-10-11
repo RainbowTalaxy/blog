@@ -212,7 +212,7 @@ export const LINKS_DATA = [
 export const EXTRA_LINKS = [
     {
         name: '我的 UA',
-        link: 'https://www.bestproxyreviews.com/user-agent/',
+        link: '/docs/notebook',
     },
 ];
 
