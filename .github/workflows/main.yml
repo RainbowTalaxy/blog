@@ -1,0 +1,34 @@
+name: CI/CD
+
+on:
+    push:
+        branches: ['develop']
+
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Node
+              uses: actions/setup-node@v3.5.0
+              with:
+                  node-version: 18.6.0
+
+            - name: Install
+              run: npm install
+
+            - name: Build
+              run: npm run build
+
+            - name: Deploy
+              uses: appleboy/scp-action@v0.1.3
+              with:
+                  host: blog.talaxy.cn
+                  username: ${{ secrets.USERNAME }}
+                  password: ${{ secrets.PASSWORD }}
+                  source: build
+                  target: ${{ secrets.TARGET }}
