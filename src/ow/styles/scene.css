@@ -1,0 +1,72 @@
+.ow-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    transition: transform 0.5s ease-in-out;
+    background-color: black;
+}
+
+.ow-bg {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.ow-bg-mask {
+    background-color: black;
+    z-index: 10;
+}
+
+.ow-scene-level-1 {
+    transform: scale(1.25);
+}
+
+.ow-scene-level-fill {
+    transform: scale(1.1);
+}
+
+.ow-scene-main {
+    background: transparent;
+    animation: fade-in 0.4s backwards;
+}
+
+.ow-scene-desc {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    right: min(5vw, 52px);
+    bottom: min(5vw, 40px);
+}
+
+.ow-scene-desc-title {
+    position: relative;
+    margin-bottom: 20px;
+    width: min(100%, 520px);
+    font-size: min(6vh, 54px);
+    line-height: 1.2;
+    font-style: italic;
+    color: white;
+    text-shadow: 0 0 2px black;
+    transition: transform 0.05s ease;
+}
+
+.ow-time {
+    position: fixed;
+    top: 4px;
+    right: 6px;
+    padding: 1.5px 6px 3.5px;
+    z-index: 100;
+    background-color: rgba(25, 28, 45, 0.5);
+    color: #b0d5e0;
+    font-size: 14px;
+    line-height: 1;
+}

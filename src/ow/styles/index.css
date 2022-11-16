@@ -1,0 +1,130 @@
+.ow-view {
+    --nav-v-margin: min(2.5vh, 30px);
+    --nav-h-margin: min(5vw, 44px);
+    --nav-bar-height: min(7vh, 64px);
+    --header-font-size: min(10vw, 200px);
+    --header-top: 62px;
+    --header-full-top: 62px;
+    --header-left: min(7vw, 120px);
+    --button-border-radius: 2px;
+    --cursor-img: url(/assets/ow/ow-cursor.png);
+    --icon-size: 20px;
+    position: relative;
+    flex: 1 0 auto;
+    cursor: var(--cursor-img), auto;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Roboto, Arial,
+        sans-serif;
+}
+
+@media screen and (max-width: 900px) {
+    .ow-view {
+        --header-top: calc(var(--nav-bar-height) + var(--nav-v-margin));
+        --header-full-top: calc(
+            var(--nav-bar-height) + var(--nav-v-margin) * 2
+        );
+        --header-font-size: min(20vw, 120px);
+    }
+}
+
+@keyframes float-effect {
+    from {
+        transform: translateY(20%) skewX(-16deg);
+        opacity: 0.5;
+    }
+    to {
+        transform: translateY(0) skewX(-16deg);
+        opacity: 1;
+    }
+}
+
+.ow-header {
+    position: fixed;
+    top: var(--header-full-top);
+    left: var(--header-left);
+    z-index: 100;
+    font-size: var(--header-font-size);
+    line-height: 1;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.8) 40%,
+        rgba(255, 255, 255, 0)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: 0.5s float-effect both;
+}
+
+.ow-header-middle {
+    position: fixed;
+    top: var(--header-top);
+    left: calc(var(--header-left) * 0.5);
+    z-index: 100;
+    font-size: calc(var(--header-font-size) * 0.7);
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.85) 10%,
+        rgba(255, 255, 255, 0) 80%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    transform: skewX(-16deg);
+}
+
+.ow-content {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: calc(var(--header-font-size) + var(--header-full-top) - 2vh);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 2vh;
+    overflow: scroll;
+}
+
+.ow-content-middle {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: calc(var(--header-font-size) * 0.92 + var(--header-top));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+}
+
+.ow-main {
+    margin: 0 auto;
+    padding: 0 12px 10vh;
+    width: min(75%, 1324px);
+    height: 100%;
+    overflow: scroll;
+}
+
+@media screen and (max-width: 900px) {
+    .ow-main {
+        width: 100%;
+        padding: 0 5% 10vh;
+    }
+}
+
+.ow-view * {
+    scrollbar-width: none;
+}
+
+.ow-view ul {
+    list-style-type: none;
+}
+
+.ow-view ::-webkit-scrollbar {
+    display: none;
+}
+
+.ow-spacer-h {
+    flex-grow: 1;
+    height: 100%;
+}

@@ -72,6 +72,9 @@ const config = {
                     { to: '/blog', label: '博客', position: 'left' },
                     { to: '/gallery', label: '画廊', position: 'left' },
                     {
+                        to: '/ow', label: 'Overwatch', position: 'left'
+                    },
+                    {
                         href: 'https://unsplash.com/@talaxy',
                         label: 'Unsplash',
                         position: 'right',

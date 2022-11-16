@@ -1,0 +1,79 @@
+.info {
+    --home-info-height: min(150px, 30vw);
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    overflow: hidden;
+    z-index: 400;
+}
+
+.info > * {
+    flex: 0 0 auto;
+}
+
+.topBg {
+    --home-info-height: min(150px, 30vw);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(68px + var(--button-length) + var(--home-info-height) - 18px);
+    background: linear-gradient(
+        to right,
+        rgb(63, 66, 129, 0.9),
+        rgb(66, 73, 140, 0.5),
+        rgba(50, 53, 124, 1)
+    );
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 3px 1px rgba(50, 53, 124, 0.5);
+    overflow: hidden;
+    z-index: 100;
+}
+
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.avatar {
+    margin-right: min(20px, 2vw);
+    width: var(--home-info-height);
+    height: var(--home-info-height);
+    padding: min(7px, 1.4vw);
+    background: #eeeeee;
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.5);
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+}
+
+.nickname {
+    font-size: min(72px, 14.4vw);
+    font-style: italic;
+    line-height: 1;
+    color: white;
+}
+
+.secondary {
+    margin-top: 5px;
+    font-size: min(18px, 4vw);
+    line-height: 1.5;
+    color: #ffff5f;
+    opacity: 0.8;
+}
+
+.secondary > span {
+    display: inline-block;
+    margin: 0 2px 0 min(12px, 2.4vw);
+    color: #fecd64;
+}

@@ -1,0 +1,103 @@
+.ow-card-content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    z-index: 100;
+}
+
+@media screen and (max-width: 900px) {
+    .ow-card-content {
+        position: fixed;
+        top: calc(var(--header-font-size) + var(--header-full-top) - 5vh);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 5vh 0 0;
+        width: 100%;
+        height: initial;
+        overflow: scroll;
+        z-index: 100;
+    }
+
+    .ow-card-list {
+        margin: 0 5vw;
+    }
+}
+
+.ow-card-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+@keyframes skew-effect {
+    from {
+        transform: skewY(11deg) translateX(-6vw);
+        opacity: 0.1;
+        transform-origin: left;
+    }
+    to {
+        transform: skewY(0);
+        opacity: 1;
+        transform-origin: left;
+    }
+}
+
+.ow-card-li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 9px;
+    width: min(30.1vh, 334px);
+    height: min(50vh, 550px);
+    background-color: #e3e3e7;
+    transition: transform 0.1s linear;
+    animation: 0.5s skew-effect backwards;
+}
+
+@media (pointer: fine) {
+    .ow-card-li:hover {
+        transform-origin: center;
+        transform: scale(1.14);
+        outline: 6px solid white;
+        z-index: 10;
+        cursor: var(--cursor-img), pointer;
+    }
+}
+
+.ow-card-bg {
+    position: relative;
+    width: 100%;
+    height: 52%;
+    object-fit: cover;
+}
+
+.ow-card-primary {
+    position: relative;
+    margin: 10% 0 3.6%;
+    font-size: min(1.8vh, 20px);
+    color: #27344e;
+    font-weight: bold;
+}
+
+.ow-card-title {
+    font-size: min(4.7vh, 52px);
+    font-style: italic;
+    line-height: 1.55;
+    color: #27344e;
+}
+
+.ow-card-subtitle {
+    font-size: min(1.36vh, 15px);
+    color: #5f7ba4;
+}

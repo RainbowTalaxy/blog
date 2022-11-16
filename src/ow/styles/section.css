@@ -1,0 +1,34 @@
+.ow-section-header {
+    margin-bottom: 5px;
+    font-size: min(6vw, 32px);
+    color: #27344e;
+}
+
+.ow-section-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ow-section-cell {
+    padding: min(1vw, 10px) min(4vw, 24px);
+    height: min(13vw, 65px);
+    font-size: min(6vw, 24px);
+    color: white;
+    background-color: rgba(60, 66, 88, 0.6);
+    transition: transform 0.05s;
+    transform-origin: center center;
+}
+
+@media (pointer: fine) {
+    .ow-section-cell:hover {
+        border-radius: 4px;
+        background-color: #3c475d;
+        transform: scale(1.07);
+    }
+}
+
+.ow-section .ow-setting-box {
+    margin-bottom: 8px;
+}
