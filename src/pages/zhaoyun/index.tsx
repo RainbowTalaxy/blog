@@ -150,13 +150,13 @@ export default function Home(): JSX.Element {
                             <Team>
                                 <span>A</span>
                                 {match.teams.A.players.map((player) => (
-                                    <div>{player}</div>
+                                    <div key={player}>{player}</div>
                                 ))}
                             </Team>
                             <Team>
                                 <span>B</span>
                                 {match.teams.B.players.map((player) => (
-                                    <div>{player}</div>
+                                    <div key={player}>{player}</div>
                                 ))}
                             </Team>
                             <div style={{ height: 15 }} />
