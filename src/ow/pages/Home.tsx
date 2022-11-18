@@ -91,17 +91,7 @@ const Home = () => {
                 >
                     {Router.Links}
                 </li>
-                <li
-                    className="ow-li-primary"
-                    onClick={() => {
-                        context.history.push({
-                            router: Router.Gallery,
-                            scene: SceneLevel.One,
-                        });
-                    }}
-                >
-                    {Router.Gallery}
-                </li>
+                <li className="ow-li-primary">{Router.Gallery}</li>
                 <li
                     className="ow-li-secondary"
                     onClick={() => {
