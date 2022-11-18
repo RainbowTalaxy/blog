@@ -1,6 +1,5 @@
 import { Fragment, useEffect } from 'react';
 import Layout from '@theme/Layout';
-import style from './index.module.css';
 import { RANK } from '@site/src/constants/zhaoyun/Result';
 import styled from 'styled-components';
 import clsx from 'clsx';
@@ -95,7 +94,6 @@ const Round = styled.div`
     grid-auto-flow: column;
     grid-template-rows: repeat(3, max-content);
     grid-template-columns: 60px repeat(7, 120px);
-    margin: 10px 0;
 
     .table-header {
         font-weight: bold;
