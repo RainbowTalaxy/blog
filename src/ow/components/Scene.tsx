@@ -7,33 +7,33 @@ import '../styles/scene.css';
 import { OrangeButton } from './Button';
 
 const SCENES = [
-    {
-        title: '青岛 鲁迅公园',
-        img: '',
-    },
-    {
-        title: '南京 古秦淮',
-        img: '',
-    },
+    // {
+    //     title: '青岛 鲁迅公园',
+    //     img: '',
+    // },
+    // {
+    //     title: '南京 古秦淮',
+    //     img: '',
+    // },
     {
         title: '南京 栖霞山',
-        img: '',
+        img: 'https://asset.talaxy.cn/qixia-tree.jfif',
     },
-    {
-        title: '南京 玄武湖',
-        img: '',
-    },
-    {
-        title: '湖南省博物馆',
-        img: '',
-    },
-    {
-        title: '守望先锋 归来',
-        img: '',
-    },
+    // {
+    //     title: '南京 玄武湖',
+    //     img: '',
+    // },
+    // {
+    //     title: '湖南省博物馆',
+    //     img: '',
+    // },
+    // {
+    //     title: '守望先锋 归来',
+    //     img: '',
+    // },
 ];
 
-const FILL_SCENE = '';
+const FILL_SCENE = 'https://asset.talaxy.cn/ow-menu-bg.jpg';
 
 const OW_SCENE_IMAGE = 'ow-scene-image';
 const OW_SCENE_ID = 'ow-scene-image';
@@ -67,7 +67,9 @@ const Scene = () => {
     }, []);
 
     useEffect(() => {
-        setImageIdx(Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0);
+        setImageIdx(
+            (Number(localStorage.getItem(OW_SCENE_IMAGE)) ?? 0) % SCENES.length,
+        );
         const el = document.getElementById(OW_SCENE_ID) as HTMLImageElement;
         el.onload = () => setIsLoaded(true);
         el.src = scene.img;
@@ -99,7 +101,7 @@ const Scene = () => {
                     {screen > Screen.Small && (
                         <div className="ow-scene-desc-title">{scene.title}</div>
                     )}
-                    <OrangeButton onClick={switchImage}>切换壁纸</OrangeButton>
+                    {/* <OrangeButton onClick={switchImage}>切换壁纸</OrangeButton> */}
                 </div>
             )}
             {context.state.scene === SceneLevel.Fill && (
