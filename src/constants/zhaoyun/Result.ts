@@ -32,7 +32,7 @@ export const RANK = (() => {
                 if (targetPlayer) {
                     targetPlayer.win += AWin;
                     targetPlayer.loss += BWin;
-                    targetPlayer.matchTotal += match.rounds.length;
+                    targetPlayer.matchTotal += 1;
                     targetPlayer.mapScore += AScore - BScore;
                     targetPlayer.amount += 100 * AWin;
                     targetPlayer.score += AWin - BWin;
@@ -40,7 +40,7 @@ export const RANK = (() => {
                     stat.set(player, {
                         win: AWin,
                         loss: BWin,
-                        matchTotal: match.rounds.length,
+                        matchTotal: 1,
                         mapScore: AScore - BScore,
                         amount: 100 * AWin,
                         score: AWin - BWin,
@@ -52,7 +52,7 @@ export const RANK = (() => {
                 if (targetPlayer) {
                     targetPlayer.win += BWin;
                     targetPlayer.loss += AWin;
-                    targetPlayer.matchTotal += match.rounds.length;
+                    targetPlayer.matchTotal += 1;
                     targetPlayer.mapScore += BScore - AScore;
                     targetPlayer.amount += 100 * BWin;
                     targetPlayer.score += BWin - AWin;
@@ -60,7 +60,7 @@ export const RANK = (() => {
                     stat.set(player, {
                         win: BWin,
                         loss: AWin,
-                        matchTotal: match.rounds.length,
+                        matchTotal: 1,
                         mapScore: BScore - AScore,
                         amount: 100 * BWin,
                         score: BWin - AWin,

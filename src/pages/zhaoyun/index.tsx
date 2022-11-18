@@ -22,7 +22,7 @@ const Table = styled.div`
         padding: 5px;
         font-weight: bold;
         text-align: center;
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid #e3e3e3;
     }
 
     .table-header {
@@ -55,7 +55,6 @@ const TeamCard = styled.div`
 const Team = styled.div`
     display: flex;
     align-items: center;
-    margin: 1px 0;
 
     > * {
         flex-shrink: 0;
@@ -69,14 +68,17 @@ const Team = styled.div`
         text-align: center;
         color: white;
         background-color: rgb(247, 158, 24);
+        border-bottom: 1px solid white;
     }
 
     > div {
         padding: 5px;
         width: 120px;
         text-align: center;
+        color: black;
         background-color: rgb(242, 242, 242);
         border-right: 1px solid white;
+        border-bottom: 1px solid white;
     }
 
     .first {
@@ -105,6 +107,7 @@ const Round = styled.div`
         padding: 5px;
         text-align: center;
         border-bottom: 1px solid white;
+        color: black;
         background-color: rgb(242, 242, 242);
         border-right: 1px solid white;
     }
@@ -162,6 +165,7 @@ export default function Home(): JSX.Element {
                     <li>
                         <strong>净胜分</strong> - 地图的胜负局数差。
                     </li>
+                    <li>排名并非完全正确，仅作参考</li>
                 </ul>
                 <h2>近期比赛</h2>
                 {Match.map((day) => (
