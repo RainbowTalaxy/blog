@@ -1,10 +1,12 @@
 import { Fragment, useEffect } from 'react';
 import Layout from '@theme/Layout';
-import { RANK } from '@site/src/constants/zhaoyun/Result';
+import { RANK } from '@site/src/zhaoyun/Result';
 import styled from 'styled-components';
 import clsx from 'clsx';
-import { Match } from '@site/src/constants/zhaoyun/Matchs';
+import { MATCHES } from '@site/src/zhaoyun/matches/Matches';
 import dayjs from 'dayjs';
+import RankList from '@site/src/zhaoyun/components/RankList';
+import DayInfo from '@site/src/zhaoyun/components/DayInfo';
 
 const Container = styled.div`
     margin: 0 auto;
@@ -13,151 +15,13 @@ const Container = styled.div`
     max-width: 1200px;
 `;
 
-const Table = styled.div`
-    margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr 1fr;
-
-    > div {
-        padding: 5px;
-        font-weight: bold;
-        text-align: center;
-        border-bottom: 1px solid #e3e3e3;
-    }
-
-    .table-header {
-        font-size: 20px;
-        color: white;
-        background-color: rgb(247, 158, 24);
-    }
-
-    .red {
-        color: rgb(229, 14, 71);
-    }
-
-    .green {
-        color: rgb(0, 189, 0);
-    }
-`;
-
-const DayCard = styled.div``;
-
-const MatchCard = styled.div`
-    margin-bottom: 20px;
-`;
-
-const TeamCard = styled.div`
-    margin-bottom: 15px;
-    width: 100%;
-    overflow: auto;
-`;
-
-const Team = styled.div`
-    display: flex;
-    align-items: center;
-
-    > * {
-        flex-shrink: 0;
-    }
-
-    > span {
-        display: block;
-        padding: 5px;
-        width: 60px;
-        font-weight: bold;
-        text-align: center;
-        color: white;
-        background-color: rgb(247, 158, 24);
-        border-bottom: 1px solid white;
-    }
-
-    > div {
-        padding: 5px;
-        width: 120px;
-        text-align: center;
-        color: black;
-        background-color: rgb(242, 242, 242);
-        border-right: 1px solid white;
-        border-bottom: 1px solid white;
-    }
-
-    .first {
-        font-weight: bold;
-    }
-`;
-
-const RoundCard = styled.div`
-    width: 100%;
-    overflow: auto;
-`;
-
-const Round = styled.div`
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(3, max-content);
-    grid-template-columns: 60px repeat(7, 120px);
-
-    .table-header {
-        font-weight: bold;
-        color: white;
-        background-color: rgb(247, 158, 24);
-    }
-
-    > div {
-        padding: 5px;
-        text-align: center;
-        border-bottom: 1px solid white;
-        color: black;
-        background-color: rgb(242, 242, 242);
-        border-right: 1px solid white;
-    }
-
-    .hint {
-        font-weight: bold;
-        background-color: rgb(232, 232, 232);
-    }
-
-    .map {
-        font-weight: bold;
-    }
-`;
-
 export default function Home(): JSX.Element {
     return (
         <Layout title="赵云杯">
             <Container>
                 <h1>赵云杯</h1>
                 <h2>收米榜</h2>
-                <Table>
-                    <div className="table-header">排名</div>
-                    <div className="table-header">选手</div>
-                    <div className="table-header">积分</div>
-                    <div className="table-header">胜</div>
-                    <div className="table-header">负</div>
-                    <div className="table-header">场次</div>
-                    <div className="table-header">净胜分</div>
-                    {RANK.map(([player, data], idx) => {
-                        return (
-                            <Fragment key={player}>
-                                <div>{idx + 1}</div>
-                                <div>{player}</div>
-                                <div>{data.score}</div>
-                                <div>{data.win}</div>
-                                <div>{data.loss}</div>
-                                <div>{data.matchTotal}</div>
-                                <div
-                                    className={clsx(
-                                        data.mapScore > 0 && 'green',
-                                        data.mapScore < 0 && 'red',
-                                    )}
-                                >
-                                    {data.mapScore > 0 && '+'}
-                                    {data.mapScore}
-                                </div>
-                            </Fragment>
-                        );
-                    })}
-                </Table>
+                <RankList />
                 <ul>
                     <li>
                         <strong>积分</strong> - 暂定为胜局与败局之差。
@@ -165,82 +29,11 @@ export default function Home(): JSX.Element {
                     <li>
                         <strong>净胜分</strong> - 地图的胜负局数差。
                     </li>
-                    <li>排名并非完全正确，仅作参考</li>
+                    <li>排名并非完全正确，仅作参考。</li>
                 </ul>
                 <h2>近期比赛</h2>
-                {Match.map((day) => (
-                    <DayCard key={day.date}>
-                        <h3>{dayjs(day.date).format('YYYY年MM月DD日')}</h3>
-                        {day.matchs.map((match, idx) => (
-                            <MatchCard key={idx}>
-                                <h4>第{idx + 1}局</h4>
-                                <h5>队伍</h5>
-                                <TeamCard>
-                                    <Team>
-                                        <span>A</span>
-                                        {match.teams.A.players.map(
-                                            (player, idx) => (
-                                                <div
-                                                    key={player}
-                                                    className={clsx(
-                                                        idx === 0 && 'first',
-                                                    )}
-                                                >
-                                                    {player}
-                                                </div>
-                                            ),
-                                        )}
-                                    </Team>
-                                    <Team>
-                                        <span>B</span>
-                                        {match.teams.B.players.map(
-                                            (player, idx) => (
-                                                <div
-                                                    key={player}
-                                                    className={clsx(
-                                                        idx === 0 && 'first',
-                                                    )}
-                                                >
-                                                    {player}
-                                                </div>
-                                            ),
-                                        )}
-                                    </Team>
-                                </TeamCard>
-                                <h5>对局</h5>
-                                <RoundCard>
-                                    <Round>
-                                        <div className="table-header">地图</div>
-                                        <div className="table-header">A</div>
-                                        <div className="table-header">B</div>
-                                        {match.rounds.map((round, idx) => (
-                                            <Fragment key={idx}>
-                                                <div className="map">
-                                                    {round.map}
-                                                </div>
-                                                <div
-                                                    className={clsx(
-                                                        round.A > round.B &&
-                                                            'hint',
-                                                    )}
-                                                >
-                                                    {round.A}
-                                                </div>
-                                                <div
-                                                    className={clsx(
-                                                        round.B > round.A &&
-                                                            'hint',
-                                                    )}
-                                                >
-                                                    {round.B}
-                                                </div>
-                                            </Fragment>
-                                        ))}
-                                    </Round>
-                                </RoundCard>
-                            </MatchCard>
-                        ))}
-                    </DayCard>
+                {MATCHES.map((day) => (
+                    <DayInfo day={day} />
                 ))}
             </Container>
         </Layout>

@@ -1,4 +1,4 @@
-import { Match } from './Matchs';
+import { MATCHES } from './matches/Matches';
 import { Player } from './Player';
 
 export const RANK = (() => {
@@ -13,7 +13,7 @@ export const RANK = (() => {
             amount: number;
         }
     >();
-    const days = Match;
+    const days = MATCHES;
     days.forEach((day) => {
         day.matchs.forEach((match) => {
             let AScore = 0;
