@@ -18,9 +18,7 @@ const Row = styled.div`
     padding: 10px 16px;
     border-radius: 4px;
     font-weight: bold;
-
-    .hero-label {
-    }
+    color: black;
 `;
 
 const BanPick = () => {
