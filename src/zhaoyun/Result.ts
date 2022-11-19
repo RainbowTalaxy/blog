@@ -1,3 +1,4 @@
+import { Hero } from './Hero';
 import { MATCHES } from './matches/Matches';
 import { Player } from './Player';
 
@@ -80,4 +81,38 @@ export const RANK = (() => {
         return bd.score - ad.score;
     });
     return result;
+})();
+
+export const BAN_PICK = (() => {
+    const stat = new Map<
+        Hero,
+        {
+            times: number;
+        }
+    >();
+    const days = MATCHES;
+    days.forEach((day) => {
+        day.matchs.forEach((match) => {
+            match.rounds.forEach((round) => {
+                round.ban.forEach((ban) => {
+                    const hero = stat.get(ban);
+                    if (hero) {
+                        hero.times += 1;
+                    } else {
+                        stat.set(ban, {
+                            times: 1,
+                        });
+                    }
+                });
+            });
+        });
+    });
+    const result = Array.from(stat);
+    result.sort(([ah, ad], [bh, bd]) => {
+        return bd.times - ad.times;
+    });
+    return {
+        list: result,
+        highest: result[0]?.[1].times ?? 1,
+    };
 })();

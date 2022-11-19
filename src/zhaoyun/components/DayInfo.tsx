@@ -58,8 +58,19 @@ const RoundCard = styled.div`
 const Round = styled.div`
     display: grid;
     grid-auto-flow: column;
-    grid-template-rows: repeat(3, max-content);
+    grid-template-rows: repeat(7, max-content);
     grid-template-columns: 60px repeat(7, 120px);
+
+    .ban {
+        grid-row: 4 / 8;
+    }
+
+    .ban-hero {
+        padding: 3px;
+        font-size: 12px;
+        font-weight: bold;
+        background-color: rgba(245, 188, 188, 0.5);
+    }
 
     .table-header {
         font-weight: bold;
@@ -68,6 +79,9 @@ const Round = styled.div`
     }
 
     > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 5px;
         text-align: center;
         border-bottom: 1px solid white;
@@ -94,7 +108,7 @@ interface Props {
 
 const DayInfo = ({ day }: Props) => {
     return (
-        <Container key={day.date}>
+        <Container>
             <h3>{dayjs(day.date).format('YYYY年MM月DD日')}</h3>
             {day.matchs.map((match, idx) => (
                 <MatchCard key={idx}>
@@ -130,6 +144,7 @@ const DayInfo = ({ day }: Props) => {
                             <div className="table-header">地图</div>
                             <div className="table-header">A</div>
                             <div className="table-header">B</div>
+                            <div className="table-header ban">Ban</div>
                             {match.rounds.map((round, idx) => (
                                 <Fragment key={idx}>
                                     <div className="map">{round.map}</div>
@@ -147,6 +162,11 @@ const DayInfo = ({ day }: Props) => {
                                     >
                                         {round.B}
                                     </div>
+                                    {round.ban.map((hero) => (
+                                        <div key={hero} className="ban-hero">
+                                            {hero}
+                                        </div>
+                                    ))}
                                 </Fragment>
                             ))}
                         </Round>

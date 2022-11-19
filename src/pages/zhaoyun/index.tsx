@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MATCHES } from '@site/src/zhaoyun/matches/Matches';
 import RankList from '@site/src/zhaoyun/components/RankList';
 import DayInfo from '@site/src/zhaoyun/components/DayInfo';
+import BanPick from '@site/src/zhaoyun/components/BanPick';
 
 const Container = styled.div`
     margin: 0 auto;
@@ -27,9 +28,11 @@ export default function Home(): JSX.Element {
                     </li>
                     <li>排名并非完全正确，仅作参考。</li>
                 </ul>
+                <h2>英雄 Ban 率</h2>
+                <BanPick />
                 <h2>近期比赛</h2>
                 {MATCHES.map((day) => (
-                    <DayInfo day={day} />
+                    <DayInfo key={day.date} day={day} />
                 ))}
             </Container>
         </Layout>
