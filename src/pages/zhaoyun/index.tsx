@@ -1,10 +1,6 @@
-import { Fragment, useEffect } from 'react';
 import Layout from '@theme/Layout';
-import { RANK } from '@site/src/zhaoyun/Result';
 import styled from 'styled-components';
-import clsx from 'clsx';
 import { MATCHES } from '@site/src/zhaoyun/matches/Matches';
-import dayjs from 'dayjs';
 import RankList from '@site/src/zhaoyun/components/RankList';
 import DayInfo from '@site/src/zhaoyun/components/DayInfo';
 
