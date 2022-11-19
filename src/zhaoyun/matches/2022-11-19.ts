@@ -120,6 +120,13 @@ export default {
                     ban: [Hero.Genji, Hero.Zarya, Hero.Tracer, Hero.Lucio],
                     keep: [Hero.Sojourn, Hero.Sombra],
                 },
+                {
+                    map: GameMap.Colosseo,
+                    A: 0,
+                    B: 1,
+                    ban: [Hero.Genji, Hero.Kiriko, Hero.Ana, Hero.Lucio],
+                    keep: [Hero.Sojourn, Hero.Winston],
+                },
             ],
         },
     ],
