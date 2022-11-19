@@ -63,5 +63,64 @@ export default {
                 },
             ],
         },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.JinMu,
+                        Player.Ameng,
+                        Player.Farway1987,
+                        Player.GA9A,
+                        Player.Kaneki,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.MoLanran,
+                        Player.Eileen,
+                        Player.ShowCheng,
+                        Player.Lengsa,
+                        Player.Kyo,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Oasis,
+                    A: 2,
+                    B: 1,
+                    ban: [Hero.Ana, Hero.Lucio, Hero.Sombra, Hero.Kiriko],
+                    keep: [Hero.Sojourn, Hero.WreckingBall],
+                },
+                {
+                    map: GameMap.CircuitRoyal,
+                    A: 4,
+                    B: 3,
+                    ban: [Hero.Sigma, Hero.Winston, Hero.Ana, Hero.Kiriko],
+                    keep: [Hero.Genji, Hero.Sojourn],
+                },
+                {
+                    map: GameMap.KingsRow,
+                    A: 3,
+                    B: 3,
+                    ban: [Hero.Zarya, Hero.Winston, Hero.Mei, Hero.Genji],
+                    keep: [Hero.Ana, Hero.Lucio],
+                },
+                {
+                    map: GameMap.LijiangTower,
+                    A: 1,
+                    B: 2,
+                    ban: [Hero.Sojourn, Hero.Genji, Hero.Ana, Hero.Sombra],
+                    keep: [Hero.Winston, Hero.Pharah],
+                },
+                {
+                    map: GameMap.Nepal,
+                    A: 1,
+                    B: 2,
+                    ban: [Hero.Genji, Hero.Zarya, Hero.Tracer, Hero.Lucio],
+                    keep: [Hero.Sojourn, Hero.Sombra],
+                },
+            ],
+        },
     ],
 };

@@ -6,8 +6,9 @@ export enum Player {
     GA9A = 'GA9A',
     JinMu = 'JinMu',
     Kaneki = 'Kaneki',
+    Kyo = 'Kyo',
     Lengsa = 'Lengsa',
+    MinSea = 'MinSea',
     MoLanran = 'MoLanran',
     ShowCheng = 'ShowCheng',
-    MinSea = 'MinSea',
 }
