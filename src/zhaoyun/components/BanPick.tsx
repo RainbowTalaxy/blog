@@ -36,7 +36,7 @@ const BanPick = () => {
                                 HERO_DATA[hero].color
                             }, ${HERO_DATA[hero].color}) left/${
                                 (data.times * 100) / BAN_PICK.highest
-                            }% no-repeat,#e1e7ed`,
+                            }% 100% no-repeat,#e1e7ed`,
                         }}
                     >
                         <div className="hero-label">{hero}</div>
