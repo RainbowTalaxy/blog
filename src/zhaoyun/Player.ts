@@ -9,4 +9,5 @@ export enum Player {
     Lengsa = 'Lengsa',
     MoLanran = 'MoLanran',
     ShowCheng = 'ShowCheng',
+    MinSea = 'MinSea',
 }

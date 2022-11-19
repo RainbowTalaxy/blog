@@ -21,4 +21,6 @@ export enum GameMap {
     Colosseo = '斗兽场',
     Esperanca = '埃斯佩兰萨',
     NewQueenStreet = '新皇后街',
+    TempleOfAnubis = '阿努比斯',
+    TBD = 'TBD',
 }

@@ -34,6 +34,7 @@ export enum Hero {
     Mercy = '天使',
     Moira = '莫伊拉',
     Zenyatta = '禅雅塔',
+    TBD = '',
 }
 
 export const HERO_DATA = {

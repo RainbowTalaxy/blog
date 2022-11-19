@@ -1,4 +1,5 @@
 import { Hero } from './Hero';
+import { GameMap } from './Map';
 import { MATCHES } from './matches/Matches';
 import { Player } from './Player';
 
@@ -19,21 +20,26 @@ export const RANK = (() => {
         day.matchs.forEach((match) => {
             let AScore = 0;
             let BScore = 0;
+            let tbdFlag = 1;
             match.rounds.forEach((round) => {
+                if (round.map === GameMap.TBD) {
+                    tbdFlag = 0;
+                    return;
+                }
                 if (round.A > round.B) {
                     AScore += 1;
-                } else {
+                } else if (round.B > round.A) {
                     BScore += 1;
                 }
             });
-            let AWin = AScore > BScore ? 1 : 0;
-            let BWin = AScore > BScore ? 0 : 1;
+            let AWin = AScore > BScore ? tbdFlag : 0;
+            let BWin = BScore > AScore ? tbdFlag : 0;
             match.teams.A.players.forEach((player) => {
                 const targetPlayer = stat.get(player);
                 if (targetPlayer) {
                     targetPlayer.win += AWin;
                     targetPlayer.loss += BWin;
-                    targetPlayer.matchTotal += 1;
+                    targetPlayer.matchTotal += tbdFlag;
                     targetPlayer.mapScore += AScore - BScore;
                     targetPlayer.amount += 100 * AWin;
                     targetPlayer.score += AWin - BWin;
@@ -41,7 +47,7 @@ export const RANK = (() => {
                     stat.set(player, {
                         win: AWin,
                         loss: BWin,
-                        matchTotal: 1,
+                        matchTotal: tbdFlag,
                         mapScore: AScore - BScore,
                         amount: 100 * AWin,
                         score: AWin - BWin,
@@ -53,7 +59,7 @@ export const RANK = (() => {
                 if (targetPlayer) {
                     targetPlayer.win += BWin;
                     targetPlayer.loss += AWin;
-                    targetPlayer.matchTotal += 1;
+                    targetPlayer.matchTotal += tbdFlag;
                     targetPlayer.mapScore += BScore - AScore;
                     targetPlayer.amount += 100 * BWin;
                     targetPlayer.score += BWin - AWin;
@@ -61,7 +67,7 @@ export const RANK = (() => {
                     stat.set(player, {
                         win: BWin,
                         loss: AWin,
-                        matchTotal: 1,
+                        matchTotal: tbdFlag,
                         mapScore: BScore - AScore,
                         amount: 100 * BWin,
                         score: BWin - AWin,
@@ -95,6 +101,7 @@ export const BAN_PICK = (() => {
         day.matchs.forEach((match) => {
             match.rounds.forEach((round) => {
                 round.ban.forEach((ban) => {
+                    if (!ban) return;
                     const hero = stat.get(ban);
                     if (hero) {
                         hero.times += 1;

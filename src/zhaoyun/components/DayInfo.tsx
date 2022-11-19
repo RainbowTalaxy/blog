@@ -119,7 +119,7 @@ const DayInfo = ({ day }: Props) => {
                             <span>A</span>
                             {match.teams.A.players.map((player, idx) => (
                                 <div
-                                    key={player}
+                                    key={idx}
                                     className={clsx(idx === 0 && 'first')}
                                 >
                                     {player}
@@ -130,7 +130,7 @@ const DayInfo = ({ day }: Props) => {
                             <span>B</span>
                             {match.teams.B.players.map((player, idx) => (
                                 <div
-                                    key={player}
+                                    key={idx}
                                     className={clsx(idx === 0 && 'first')}
                                 >
                                     {player}
@@ -162,8 +162,8 @@ const DayInfo = ({ day }: Props) => {
                                     >
                                         {round.B}
                                     </div>
-                                    {round.ban.map((hero) => (
-                                        <div key={hero} className="ban-hero">
+                                    {round.ban.map((hero, idx) => (
+                                        <div key={idx} className="ban-hero">
                                             {hero}
                                         </div>
                                     ))}
