@@ -4,6 +4,7 @@ export enum Player {
     Eileen = 'Eileen',
     Farway1987 = 'Farway1987',
     GA9A = 'GA9A',
+    Jimmy = 'Jimmy',
     JinMu = 'JinMu',
     Kaneki = 'Kaneki',
     Kyo = 'Kyo',
