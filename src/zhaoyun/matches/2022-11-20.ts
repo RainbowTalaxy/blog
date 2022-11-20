@@ -81,5 +81,43 @@ export default {
                 },
             ],
         },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.MoLanran,
+                        Player.ShowCheng,
+                        Player.Coldest,
+                        Player.Farway1987,
+                        Player.GA9A,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.JinMu,
+                        Player.Jimmy,
+                        Player.Lengsa,
+                        Player.Ameng,
+                        Player.Kaneki,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Busan,
+                    A: 0,
+                    B: 2,
+                    ban: [Hero.Ana, Hero.Sojourn, Hero.Zenyatta, Hero.Genji],
+                    keep: [Hero.Lucio, Hero.DoomFist],
+                },
+                {
+                    map: GameMap.Numbani,
+                    A: 0,
+                    B: 3,
+                    ban: [Hero.Winston, Hero.Genji, Hero.Sigma, Hero.Lucio],
+                    keep: [Hero.Sojourn, Hero.Ana],
+                },
+            ],
+        },
     ],
 };
