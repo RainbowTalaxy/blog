@@ -3,7 +3,7 @@ import { GameMap } from '../Map';
 import { Player } from '../Player';
 
 export default {
-    date: '2022/11/19',
+    date: '2022/11/20',
     matchs: [
         {
             teams: {
@@ -40,6 +40,44 @@ export default {
                     B: 1,
                     ban: [Hero.Sojourn, Hero.Sigma, Hero.Zenyatta, Hero.Zarya],
                     keep: [Hero.Genji, Hero.WidowMaker],
+                },
+            ],
+        },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.Kyo,
+                        Player.Eileen,
+                        Player.ShowCheng,
+                        Player.MoLanran,
+                        Player.Jimmy,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.Lengsa,
+                        Player.GA9A,
+                        Player.Ameng,
+                        Player.Kaneki,
+                        Player.Farway1987,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Oasis,
+                    A: 1,
+                    B: 2,
+                    ban: [Hero.Sojourn, Hero.Lucio, Hero.Sigma, Hero.Winston],
+                    keep: [Hero.Ana, Hero.Ashe],
+                },
+                {
+                    map: GameMap.Junkertown,
+                    A: 2,
+                    B: 3,
+                    ban: [Hero.Sigma, Hero.Sombra, Hero.Zenyatta, Hero.Lucio],
+                    keep: [Hero.WreckingBall, Hero.Sojourn],
                 },
             ],
         },
