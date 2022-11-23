@@ -20,8 +20,6 @@ const PageContext = createContext(true);
 
 const Memo = memo(
     ({ children }: { children: ReactNode }) => {
-        console.log('[update] memo');
-
         return (
             <div className="memo">
                 <h2>Memo Box.</h2>
@@ -34,7 +32,6 @@ const Memo = memo(
 
 const Consumer = () => {
     const toggle = useContext(PageContext);
-    console.log('[update] context consumer');
 
     return (
         <div className="consumer">
@@ -46,7 +43,6 @@ const Consumer = () => {
 
 const Page = () => {
     const [toggle, setToggle] = useState(true);
-    console.log('[update] page');
 
     return (
         <Container>
