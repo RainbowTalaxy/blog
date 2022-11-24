@@ -4,15 +4,103 @@ import { MATCHES } from '@site/src/zhaoyun/matches/Matches';
 import RankList from '@site/src/zhaoyun/components/RankList';
 import DayInfo from '@site/src/zhaoyun/components/DayInfo';
 import BanPick from '@site/src/zhaoyun/components/BanPick';
+import { useState, useRef, useEffect } from 'react';
+import clsx from 'clsx';
+import LeftArrow from '@site/static/svg/left-arrow.svg';
+import RightArrow from '@site/static/svg/right-arrow.svg';
 
 const Container = styled.div`
     margin: 0 auto;
     padding: 5vh 0;
     width: 90vw;
     max-width: 1200px;
+
+    @media (pointer: coarse) {
+        .day-bar {
+            padding: 0 !important;
+
+            > svg {
+                display: none !important;
+            }
+        }
+    }
+`;
+
+const DayBar = styled.div`
+    position: relative;
+    margin-bottom: 12px;
+
+    > svg {
+        position: absolute;
+        top: 50%;
+        width: 30px;
+        height: 30px;
+        padding: 7px;
+        border-radius: 50%;
+        background-color: gray;
+        display: none;
+        cursor: pointer;
+        z-index: 100;
+        transform: translateY(-50%);
+    }
+
+    > svg:first-of-type {
+        left: 0;
+    }
+
+    > svg:last-of-type {
+        right: 0;
+    }
+
+    user-select: none;
+`;
+
+const DaySelect = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: auto;
+
+    > div {
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #9f9f9f;
+    }
+
+    .active {
+        color: black;
+    }
+
+    > div + div {
+        margin-left: 32px;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    scrollbar-width: none;
 `;
 
 export default function Home(): JSX.Element {
+    const [dayIdx, setDayIdx] = useState(0);
+    const scrollBar = useRef<HTMLDivElement>();
+
+    useEffect(() => {
+        const bar = scrollBar.current;
+        if (bar.scrollWidth > bar.clientWidth) {
+            (
+                document.querySelector('.left-arrow') as HTMLElement
+            ).style.display = 'initial';
+            (
+                document.querySelector('.right-arrow') as HTMLElement
+            ).style.display = 'initial';
+            (document.querySelector('.day-bar') as HTMLElement).style.padding =
+                '0 45px';
+        }
+    }, []);
+
     return (
         <Layout title="赵云杯">
             <Container>
@@ -31,9 +119,40 @@ export default function Home(): JSX.Element {
                 <h2>英雄 Ban 率</h2>
                 <BanPick />
                 <h2>近期比赛</h2>
-                {MATCHES.map((day) => (
-                    <DayInfo key={day.date} day={day} />
-                ))}
+                <DayBar className="day-bar">
+                    <LeftArrow
+                        className="left-arrow"
+                        onClick={() => {
+                            scrollBar.current.scrollBy({
+                                top: 0,
+                                left: -150,
+                                behavior: 'smooth',
+                            });
+                        }}
+                    />
+                    <DaySelect ref={scrollBar}>
+                        {MATCHES.map((day, idx) => (
+                            <div
+                                key={day.date}
+                                className={clsx(idx === dayIdx && 'active')}
+                                onClick={() => setDayIdx(idx)}
+                            >
+                                {day.date}
+                            </div>
+                        ))}
+                    </DaySelect>
+                    <RightArrow
+                        className="right-arrow"
+                        onClick={() => {
+                            scrollBar.current.scrollBy({
+                                top: 0,
+                                left: 150,
+                                behavior: 'smooth',
+                            });
+                        }}
+                    />
+                </DayBar>
+                <DayInfo key={MATCHES[dayIdx].date} day={MATCHES[dayIdx]} />
             </Container>
         </Layout>
     );

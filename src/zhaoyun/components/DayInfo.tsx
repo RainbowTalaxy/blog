@@ -109,7 +109,6 @@ interface Props {
 const DayInfo = ({ day }: Props) => {
     return (
         <Container>
-            <h3>{dayjs(day.date).format('YYYY年MM月DD日')}</h3>
             {day.matchs.map((match, idx) => (
                 <MatchCard key={idx}>
                     <h4>第{idx + 1}局</h4>

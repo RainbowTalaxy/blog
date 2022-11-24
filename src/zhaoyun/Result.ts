@@ -13,6 +13,7 @@ export const RANK = (() => {
             loss: number;
             mapScore: number;
             amount: number;
+            rank: number;
         }
     >();
     const days = MATCHES;
@@ -51,6 +52,7 @@ export const RANK = (() => {
                         mapScore: AScore - BScore,
                         amount: 100 * AWin,
                         score: AWin - BWin,
+                        rank: 1,
                     });
                 }
             });
@@ -71,6 +73,7 @@ export const RANK = (() => {
                         mapScore: BScore - AScore,
                         amount: 100 * BWin,
                         score: BWin - AWin,
+                        rank: 1,
                     });
                 }
             });
@@ -80,11 +83,26 @@ export const RANK = (() => {
     result.sort(([ap, ad], [bp, bd]) => {
         if (ad.score === bd.score) {
             if (ad.mapScore === bd.mapScore) {
-                return 0;
+                if (ad.matchTotal === bd.matchTotal) {
+                    return 0;
+                }
+                return bd.matchTotal - ad.matchTotal;
             }
             return bd.mapScore - ad.mapScore;
         }
         return bd.score - ad.score;
+    });
+    let prevData = result[0][1];
+    result.forEach(([_, data]) => {
+        if (
+            data.score === prevData.score &&
+            data.mapScore === prevData.mapScore
+        ) {
+            data.rank = prevData.rank;
+        } else {
+            data.rank = prevData.rank + 1;
+        }
+        prevData = data;
     });
     return result;
 })();

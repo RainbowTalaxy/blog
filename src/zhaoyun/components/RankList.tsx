@@ -43,7 +43,7 @@ const RankList = () => {
             {RANK.map(([player, data], idx) => {
                 return (
                     <Fragment key={player}>
-                        <div>{idx + 1}</div>
+                        <div>{data.rank}</div>
                         <div>{player}</div>
                         <div>{data.score}</div>
                         <div>{data.win}</div>
