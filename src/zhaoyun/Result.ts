@@ -95,14 +95,14 @@ export const RANK = (() => {
         return bd.score - ad.score;
     });
     let prevData = result[0][1];
-    result.forEach(([_, data]) => {
+    result.forEach(([_, data], idx) => {
         if (
             data.score === prevData.score &&
             data.mapScore === prevData.mapScore
         ) {
             data.rank = prevData.rank;
         } else {
-            data.rank = prevData.rank + 1;
+            data.rank = idx + 1;
         }
         prevData = data;
     });

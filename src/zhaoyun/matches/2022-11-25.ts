@@ -43,5 +43,50 @@ export default {
                 },
             ],
         },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.Eileen,
+                        Player.ShowCheng,
+                        Player.Lengsa,
+                        Player.Kaneki,
+                        Player.MoLanran,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.Farway1987,
+                        Player.Diya,
+                        Player.GA9A,
+                        Player.Jimmy,
+                        Player.Ameng,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Nepal,
+                    A: 1,
+                    B: 2,
+                    ban: [Hero.DoomFist, Hero.Orisa, Hero.Kiriko, Hero.Sojourn],
+                    keep: [Hero.Ana, Hero.Lucio],
+                },
+                {
+                    map: GameMap.NewQueenStreet,
+                    A: 1,
+                    B: 0,
+                    ban: [Hero.DoomFist, Hero.Ana, Hero.Zenyatta, Hero.Orisa],
+                    keep: [Hero.Sojourn, Hero.Sigma],
+                },
+                {
+                    map: GameMap.CircuitRoyal,
+                    A: 2,
+                    B: 1,
+                    ban: [Hero.Sigma, Hero.WidowMaker, Hero.Genji, Hero.Ana],
+                    keep: [Hero.Sojourn, Hero.DoomFist],
+                },
+            ],
+        },
     ],
 };
