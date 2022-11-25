@@ -79,7 +79,9 @@ export const RANK = (() => {
             });
         });
     });
-    const result = Array.from(stat);
+    const result = Array.from(stat).filter(
+        ([player]) => player !== Player.MinSea,
+    );
     result.sort(([ap, ad], [bp, bd]) => {
         if (ad.score === bd.score) {
             if (ad.mapScore === bd.mapScore) {

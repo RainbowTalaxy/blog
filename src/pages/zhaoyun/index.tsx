@@ -109,12 +109,11 @@ export default function Home(): JSX.Element {
                 <RankList />
                 <ul>
                     <li>
-                        <strong>积分</strong> - 暂定为胜局与败局之差。
-                    </li>
-                    <li>
+                        <strong>积分</strong> - 暂定为胜局与败局之差；
                         <strong>净胜分</strong> - 地图的胜负局数差。
                     </li>
-                    <li>排名并非完全正确，仅作参考。</li>
+                    <li>应本人要求，已将 MinSea（“最小的海”）从榜中移除。</li>
+                    <li>排名仅作参考。</li>
                 </ul>
                 <h2>英雄 Ban 率</h2>
                 <BanPick />
