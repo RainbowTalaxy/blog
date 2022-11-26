@@ -3,7 +3,7 @@ import { GameMap } from '../Map';
 import { Player } from '../Player';
 
 export default {
-    date: '2022/11/19',
+    date: '',
     matchs: [
         {
             teams: {
