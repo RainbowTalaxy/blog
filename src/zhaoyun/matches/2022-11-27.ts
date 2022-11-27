@@ -48,5 +48,43 @@ export default {
                 },
             ],
         },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.Kyo,
+                        Player.Lengsa,
+                        Player.Jimmy,
+                        Player.MoLanran,
+                        Player.Eileen,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.GA9A,
+                        Player.Diya,
+                        Player.Superich,
+                        Player.Coldest,
+                        Player.ShowCheng,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Oasis,
+                    A: 0,
+                    B: 2,
+                    ban: [Hero.Kiriko, Hero.DoomFist, Hero.Genji, Hero.Winston],
+                    keep: [Hero.Lucio, Hero.Tracer],
+                },
+                {
+                    map: GameMap.CircuitRoyal,
+                    A: 2,
+                    B: 3,
+                    ban: [Hero.WidowMaker, Hero.Sigma, Hero.Baptiste, Hero.Mei],
+                    keep: [Hero.Genji, Hero.Zenyatta],
+                },
+            ],
+        },
     ],
 };

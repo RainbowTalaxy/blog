@@ -13,4 +13,5 @@ export enum Player {
     MinSea = 'MinSea',
     MoLanran = 'MoLanran',
     ShowCheng = 'ShowCheng',
+    Superich = 'Superich',
 }
