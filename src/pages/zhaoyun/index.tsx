@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import LeftArrow from '@site/static/svg/left-arrow.svg';
 import RightArrow from '@site/static/svg/right-arrow.svg';
+import LeaderRank from '@site/src/zhaoyun/components/LeaderRank';
 
 const Container = styled.div`
     margin: 0 auto;
@@ -117,6 +118,8 @@ export default function Home(): JSX.Element {
                 </ul>
                 <h2>英雄 Ban 率</h2>
                 <BanPick />
+                <h2>队长胜率</h2>
+                <LeaderRank />
                 <h2>近期比赛</h2>
                 <DayBar className="day-bar">
                     <LeftArrow

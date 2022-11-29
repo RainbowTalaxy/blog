@@ -143,3 +143,71 @@ export const BAN_PICK = (() => {
         highest: result[0]?.[1].times ?? 1,
     };
 })();
+
+export const TEAM_LEADER_RANK = (() => {
+    const stat = new Map<
+        Player,
+        {
+            win: number;
+            loss: number;
+        }
+    >();
+    const days = MATCHES;
+    days.forEach((day) => {
+        day.matchs.forEach((match) => {
+            let AScore = 0;
+            let BScore = 0;
+            let tbdFlag = 1;
+            match.rounds.forEach((round) => {
+                if (round.map === GameMap.TBD) {
+                    tbdFlag = 0;
+                    return;
+                }
+                if (round.A > round.B) {
+                    AScore += 1;
+                } else if (round.B > round.A) {
+                    BScore += 1;
+                }
+            });
+            let AWin = AScore > BScore ? tbdFlag : 0;
+            let BWin = BScore > AScore ? tbdFlag : 0;
+            const ALeader = match.teams.A.players?.[0];
+            const BLeader = match.teams.B.players?.[0];
+            if (ALeader) {
+                const targetPlayer = stat.get(ALeader);
+                if (targetPlayer) {
+                    targetPlayer.win += AWin;
+                    targetPlayer.loss += BWin;
+                } else {
+                    stat.set(ALeader, {
+                        win: AWin,
+                        loss: BWin,
+                    });
+                }
+            }
+            if (BLeader) {
+                const targetPlayer = stat.get(BLeader);
+                if (targetPlayer) {
+                    targetPlayer.win += AWin;
+                    targetPlayer.loss += BWin;
+                } else {
+                    stat.set(BLeader, {
+                        win: BWin,
+                        loss: AWin,
+                    });
+                }
+            }
+        });
+    });
+    const result = Array.from(stat);
+    result.sort(([ap, ad], [bp, bd]) => {
+        if (bd.win / (bd.win + bd.loss) === ad.win / (ad.win + ad.loss)) {
+            if (bd.win === ad.win) {
+                return ad.loss - bd.loss;
+            }
+            return bd.win - ad.win;
+        }
+        return bd.win / (bd.win + bd.loss) - ad.win / (ad.win + ad.loss);
+    });
+    return result;
+})();

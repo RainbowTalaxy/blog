@@ -73,4 +73,5 @@ export const HERO_DATA = {
     [Hero.Mercy]: { name: '天使', color: '#f5f0c0' },
     [Hero.Moira]: { name: '莫伊拉', color: '#a089e7' },
     [Hero.Zenyatta]: { name: '禅雅塔', color: '#f6ed91' },
+    [Hero.TBD]: { name: 'TBD', color: '#edc78e' },
 };
