@@ -21,8 +21,9 @@ const Docs = () => {
                             >
                                 <img
                                     className="ow-card-bg"
-                                    src={card.bg + '?mod=1'}
+                                    src={card.bg + '?mod=2'}
                                     style={card.style}
+                                    referrerPolicy="no-referrer"
                                 />
                                 <div className="ow-card-primary">
                                     {card.primary}

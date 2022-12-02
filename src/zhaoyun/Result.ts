@@ -188,8 +188,8 @@ export const TEAM_LEADER_RANK = (() => {
             if (BLeader) {
                 const targetPlayer = stat.get(BLeader);
                 if (targetPlayer) {
-                    targetPlayer.win += AWin;
-                    targetPlayer.loss += BWin;
+                    targetPlayer.win += BWin;
+                    targetPlayer.loss += AWin;
                 } else {
                     stat.set(BLeader, {
                         win: BWin,

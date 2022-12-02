@@ -69,7 +69,7 @@ const Round = styled.div`
         padding: 3px;
         font-size: 12px;
         font-weight: bold;
-        background-color: rgba(245, 188, 188, 0.5);
+        background-color: rgb(255, 211, 211);
     }
 
     .table-header {

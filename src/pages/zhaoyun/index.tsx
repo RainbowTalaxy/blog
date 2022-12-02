@@ -38,7 +38,7 @@ const DayBar = styled.div`
         height: 30px;
         padding: 7px;
         border-radius: 50%;
-        background-color: gray;
+        background-color: #9f9f9f;
         display: none;
         cursor: pointer;
         z-index: 100;
@@ -70,7 +70,7 @@ const DaySelect = styled.div`
     }
 
     .active {
-        color: black;
+        color: initial;
     }
 
     > div + div {
@@ -127,7 +127,7 @@ export default function Home(): JSX.Element {
                         onClick={() => {
                             scrollBar.current.scrollBy({
                                 top: 0,
-                                left: -150,
+                                left: -300,
                                 behavior: 'smooth',
                             });
                         }}
@@ -148,7 +148,7 @@ export default function Home(): JSX.Element {
                         onClick={() => {
                             scrollBar.current.scrollBy({
                                 top: 0,
-                                left: 150,
+                                left: 300,
                                 behavior: 'smooth',
                             });
                         }}

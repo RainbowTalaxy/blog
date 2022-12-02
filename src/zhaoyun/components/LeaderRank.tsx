@@ -4,6 +4,7 @@ import { TEAM_LEADER_RANK } from '../Result';
 import { Hero, HERO_DATA } from '../Hero';
 import Spacer from '@site/src/components/Spacer';
 import { PLAYER_DATA } from '../Player';
+import { Row } from './BanPick';
 
 const Container = styled.div`
     margin-bottom: 24px;
@@ -16,15 +17,6 @@ const Container = styled.div`
     a:hover {
         cursor: pointer;
     }
-`;
-
-const Row = styled.div`
-    display: flex;
-    margin-bottom: 7px;
-    padding: 10px 16px;
-    border-radius: 4px;
-    font-weight: bold;
-    color: black;
 `;
 
 const LeaderRank = () => {

@@ -12,13 +12,22 @@ const Container = styled.div`
     }
 `;
 
-const Row = styled.div`
+export const Row = styled.div`
     display: flex;
     margin-bottom: 7px;
     padding: 10px 16px;
     border-radius: 4px;
     font-weight: bold;
     color: black;
+    transition: all 0.05s;
+
+    @media (pointer: fine) {
+        &:hover {
+            transform: scale(1.02);
+            z-index: 10;
+            filter: brightness(1.02);
+        }
+    }
 `;
 
 const BanPick = () => {
