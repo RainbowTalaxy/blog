@@ -43,7 +43,7 @@ export default {
                 },
                 {
                     map: GameMap.KingsRow,
-                    A: 2,
+                    A: 1,
                     B: 3,
                     ban: [Hero.RoadHog, Hero.Ana, Hero.Winston, Hero.Lucio],
                     protect: [Hero.Kiriko, Hero.Zenyatta],
