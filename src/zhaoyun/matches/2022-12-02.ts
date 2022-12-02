@@ -57,7 +57,7 @@ export default {
                 },
                 {
                     map: GameMap.Oasis,
-                    A: 1,
+                    A: 2,
                     B: 0,
                     ban: [Hero.Ana, Hero.Orisa, Hero.Zenyatta, Hero.RoadHog],
                     protect: [Hero.Lucio, Hero.Winston],
