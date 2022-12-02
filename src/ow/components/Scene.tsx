@@ -92,7 +92,7 @@ const Scene = () => {
                 <img
                     id={OW_SCENE_ID}
                     className="ow-bg"
-                    src={scene.img}
+                    src={scene.img + '?mod=1'}
                     style={{ opacity: isLoaded ? 1 : 0 }}
                     alt="background"
                     referrerPolicy="no-referrer"
@@ -112,7 +112,7 @@ const Scene = () => {
                     <img
                         id={OW_SCENE_ID}
                         className="ow-bg"
-                        src={FILL_SCENE}
+                        src={FILL_SCENE + '?mod=1'}
                         style={{
                             opacity: isLoaded ? 1 : 0,
                             zIndex: 20,

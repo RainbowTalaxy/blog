@@ -50,7 +50,7 @@ export const LINKS_DATA = [
     {
         name: 'GitHub',
         description: 'github',
-        image: 'https://asset.talaxy.cn/github-icon.jfif',
+        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqVcsalJAj.tDlaBZVYKOJBwjKjwcwyR*tvvJQw8FcCY4A2W0I0*fRKsEvkHiiecet7Gak1OEjmI0yCZAJIr7sMA!/r?mod=1',
         primary: '#231f20',
         secondary: '#6f6265',
         link: 'https://github.com/',

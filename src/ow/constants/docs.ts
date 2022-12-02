@@ -39,7 +39,7 @@ export const DOCS_DATA: Array<Card> = [
         primary: 'More',
         title: '更多',
         subtitle: '浏览更多笔记',
-        bg: 'https://asset.talaxy.cn/doc-more.png',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqVVfPptUuCxDj2VYqVILlvxdnbbxEORiOf3y646zEmcHTtDVyeasbMHX1ITnI.ELG1CoD*taNcwk3C1fr42*RmA!/r',
         link: '/docs/doc-intro',
     },
 ];

@@ -26,7 +26,7 @@ const Gallery = () => {
                             >
                                 <img
                                     className="ow-card-bg"
-                                    src={card.bg}
+                                    src={card.bg + '?mod=1'}
                                     referrerPolicy="no-referrer"
                                 />
                                 <div className="ow-card-primary">

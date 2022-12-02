@@ -21,7 +21,7 @@ const Docs = () => {
                             >
                                 <img
                                     className="ow-card-bg"
-                                    src={card.bg}
+                                    src={card.bg + '?mod=1'}
                                     style={card.style}
                                 />
                                 <div className="ow-card-primary">

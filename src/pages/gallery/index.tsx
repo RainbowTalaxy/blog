@@ -81,7 +81,7 @@ export default function Home(): JSX.Element {
                                     </div>
                                 </div>
                                 <img
-                                    src={card.bg}
+                                    src={card.bg + '?mod=1'}
                                     referrerPolicy="no-referrer"
                                 />
                             </div>
