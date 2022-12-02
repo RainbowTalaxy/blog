@@ -1,10 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import Alert from '../components/Alert';
 import OperatorButton from '../components/OperatorButton';
 import { GALLERY_DATA } from '../constants/gallery';
 import { PageContext } from '../models/context';
 import '../styles/gallery.css';
 
 const Gallery = () => {
+    const [isAlertVisible, setAlertVisible] = useState(false);
     const context = useContext(PageContext);
 
     return (
@@ -17,9 +19,16 @@ const Gallery = () => {
                             <li
                                 key={card.title}
                                 className="ow-card-li"
-                                onClick={() => window.open(card.link)}
+                                onClick={() => {
+                                    // window.open(card.link)
+                                    setAlertVisible(true);
+                                }}
                             >
-                                <img className="ow-card-bg" src={card.bg} />
+                                <img
+                                    className="ow-card-bg"
+                                    src={card.bg}
+                                    referrerPolicy="no-referrer"
+                                />
                                 <div className="ow-card-primary">
                                     {card.primary}
                                 </div>
@@ -41,6 +50,13 @@ const Gallery = () => {
                     返回
                 </OperatorButton>
             </main>
+            {isAlertVisible && (
+                <Alert
+                    title="暂时关闭"
+                    description="因技术问题暂时关闭访问"
+                    onConfirm={() => setAlertVisible(false)}
+                />
+            )}
         </>
     );
 };
