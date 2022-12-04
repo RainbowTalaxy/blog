@@ -48,5 +48,43 @@ export default {
                 },
             ],
         },
+        {
+            teams: {
+                A: {
+                    players: [
+                        Player.Diya,
+                        Player.GA9A,
+                        Player.Lengsa,
+                        Player.Kaneki,
+                        Player.Pineapple,
+                    ],
+                },
+                B: {
+                    players: [
+                        Player.Jimmy,
+                        Player.JinMu,
+                        Player.Farway1987,
+                        Player.Superich,
+                        Player.Ameng,
+                    ],
+                },
+            },
+            rounds: [
+                {
+                    map: GameMap.Nepal,
+                    A: 2,
+                    B: 1,
+                    ban: [Hero.Winston, Hero.Orisa, Hero.Echo, Hero.Ana],
+                    protect: [Hero.Pharah, Hero.Kiriko],
+                },
+                {
+                    map: GameMap.Junkertown,
+                    A: 2,
+                    B: 1,
+                    ban: [Hero.Genji, Hero.Tracer, Hero.Ana, Hero.Kiriko],
+                    protect: [Hero.Sigma, Hero.Orisa],
+                },
+            ],
+        },
     ],
 };

@@ -121,7 +121,7 @@ export const BAN_PICK = (() => {
         day.matchs.forEach((match) => {
             match.rounds.forEach((round) => {
                 round.ban.forEach((ban) => {
-                    if (!ban) return;
+                    if (ban === Hero.TBD) return;
                     const hero = stat.get(ban);
                     if (hero) {
                         hero.times += 1;
