@@ -15,6 +15,7 @@ export enum Player {
     MinSea = 'MinSea',
     MoLanran = 'MoLanran',
     Nisha = 'Nisha',
+    Pineapple = 'Pineapple',
     ShowCheng = 'ShowCheng',
     Superich = 'Superich',
 }

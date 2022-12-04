@@ -169,6 +169,7 @@ export const TEAM_LEADER_RANK = (() => {
                     BScore += 1;
                 }
             });
+            if (!tbdFlag) return;
             let AWin = AScore > BScore ? tbdFlag : 0;
             let BWin = BScore > AScore ? tbdFlag : 0;
             const ALeader = match.teams.A.players?.[0];
