@@ -6,6 +6,7 @@
 -   [手写渐变](/playground/manual-gradient)
 -   [IntersectionObserver](/playground/intersection-observer)
 -   [window.requestAnimationFrame](/playground/request-animation-frame)
+-   [Sticky Scroll](/playground/sticky-scroll)
 
 ## CSS
 

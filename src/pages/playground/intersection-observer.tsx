@@ -10,6 +10,7 @@ const Container = styled.div`
 
     .${TARGET_CARD} {
         opacity: 0;
+        background-color: var(--theme-color-yellow);
         transition: all 0.5s ease;
     }
 
@@ -61,7 +62,7 @@ const Page = () => {
                 });
             },
             {
-                threshold: [0.25, 0.5, 0.75, 1],
+                threshold: [0, 0.25, 0.5, 0.75, 1],
             },
         );
         observer.observe(document.querySelector('.' + TARGET_CARD));
