@@ -85,7 +85,7 @@ const Page = () => {
                     </span>
                 ))}
             </div>
-            <h3>Child Color</h3>
+            <h3>Child color</h3>
             <div className="select-bar">
                 {colors.map((color) => (
                     <span
