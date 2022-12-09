@@ -14,6 +14,7 @@
 -   [网格自动布局](/playground/auto-placement-grid)
 -   [scroll-snap](/playground/scroll-snap-css)
 -   [带动画的背景条带](/playground/animated-background-stripe)
+-   [mix-blend-mode](/playground/mix-blend-mode)
 
 ## React
 
