@@ -60,13 +60,6 @@ export default {
                     ],
                     protect: [Hero.Kiriko, Hero.Tracer],
                 },
-                {
-                    map: GameMap.TBD,
-                    A: 0,
-                    B: 0,
-                    ban: [Hero.TBD, Hero.TBD, Hero.TBD, Hero.TBD],
-                    protect: [Hero.TBD, Hero.TBD],
-                },
             ],
         },
     ],
