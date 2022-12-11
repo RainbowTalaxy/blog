@@ -2,6 +2,7 @@ import { Hero } from './Hero';
 
 export enum Player {
     Ameng = 'Ameng',
+    Apr1ta = 'Apr1ta',
     Coldest = 'Coldest',
     Diya = 'Diya',
     Eileen = 'Eileen',
@@ -14,6 +15,7 @@ export enum Player {
     Lengsa = 'Lengsa',
     MinSea = 'MinSea',
     MoLanran = 'MoLanran',
+    Molly = 'Molly',
     Nisha = 'Nisha',
     Pineapple = 'Pineapple',
     ShowCheng = 'ShowCheng',
