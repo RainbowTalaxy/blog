@@ -15,6 +15,8 @@
 -   [scroll-snap](/playground/scroll-snap-css)
 -   [带动画的背景条带](/playground/animated-background-stripe)
 -   [mix-blend-mode](/playground/mix-blend-mode)
+-   [卡片翻动效果](/playground/flip-card)
+-   [利用 flex-basis 做栅格](/playground/flex-basis-grid)
 
 ## React
 
