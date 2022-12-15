@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "Talaxy",
+    "description": "The title in the navbar"
+  },
+  "item.label.笔记": {
+    "message": "笔记",
+    "description": "Navbar item with label 笔记"
+  },
+  "item.label.博客": {
+    "message": "博客",
+    "description": "Navbar item with label 博客"
+  },
+  "item.label.Overwatch": {
+    "message": "Overwatch",
+    "description": "Navbar item with label Overwatch"
+  },
+  "item.label.Unsplash": {
+    "message": "Unsplash",
+    "description": "Navbar item with label Unsplash"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}
