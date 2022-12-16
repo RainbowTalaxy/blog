@@ -19,6 +19,10 @@
 -   [利用 flex-basis 做栅格](/playground/flex-basis-grid)
 -   [HSL 色值参考](/playground/hsl-all-range)
 
+## HTML
+
+-   [Anchor "target" 属性](/playground/anchor-target)
+
 ## React
 
 -   [React Memo 更新](/playground/react-memo)

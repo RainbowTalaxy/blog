@@ -17,6 +17,13 @@ export enum MixBlendMode {
     Luminosity = 'luminosity',
 }
 
+export enum AnchorTarget {
+    Self = '_self',
+    Parent = '_parent',
+    Top = '_top',
+    Blank = '_blank',
+}
+
 export enum ThemeColor {
     Red = 'red',
     Orange = 'orange',
