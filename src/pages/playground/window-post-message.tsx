@@ -23,7 +23,6 @@ const Page = () => {
                     const preview = document.querySelector(
                         '.preview',
                     ) as HTMLIFrameElement;
-                    console.log(window.location);
                     preview.contentWindow.postMessage(
                         {
                             type: 'text',

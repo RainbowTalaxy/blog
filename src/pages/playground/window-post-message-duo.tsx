@@ -7,7 +7,7 @@ const Page = () => {
     const [text, setText] = useState('');
 
     useEffect(() => {
-        const callback = (event) => {
+        const callback = (event: MessageEvent) => {
             if (event.data.type === 'text') {
                 setText(event.data.data);
             }
