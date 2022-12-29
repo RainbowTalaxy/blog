@@ -6,6 +6,7 @@
 -   [手写渐变](/playground/manual-gradient)
 -   [IntersectionObserver](/playground/intersection-observer)
 -   [window.requestAnimationFrame](/playground/request-animation-frame)
+-   [window.postMessage](/playground/window-post-message)
 -   [Sticky Scroll](/playground/sticky-scroll)
 -   [写一个 Scroll bar](/playground/scroll-bar)
 -   [滚动平行效果](/playground/parallel-effect)
