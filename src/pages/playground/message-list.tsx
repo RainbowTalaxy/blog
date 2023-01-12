@@ -58,7 +58,7 @@ const Container = styled.div`
     .command-view {
         flex: 0 0;
         display: flex;
-        padding: 10px 20px calc(10 + var(--safe-area-inset-bottom));
+        padding: 10px 20px calc(10px + var(--safe-area-inset-bottom));
         box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
     }
 
