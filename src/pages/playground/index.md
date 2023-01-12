@@ -10,6 +10,7 @@
 -   [Sticky Scroll](/playground/sticky-scroll)
 -   [写一个 Scroll bar](/playground/scroll-bar)
 -   [滚动平行效果](/playground/parallel-effect)
+-   [聊天对话框 UI](/playground/message-list)
 
 ## CSS
 
