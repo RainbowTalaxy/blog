@@ -10,6 +10,9 @@ const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: 100%;
         overflow: hidden;
+
+        --safe-area-inset-bottom: constant(safe-area-inset-bottom);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
     }
 
     #__docusaurus {
@@ -55,7 +58,7 @@ const Container = styled.div`
     .command-view {
         flex: 0 0;
         display: flex;
-        padding: 10px 20px;
+        padding: 10px 20px calc(10 + var(--safe-area-inset-bottom));
         box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
     }
 
@@ -79,6 +82,7 @@ const Container = styled.div`
         outline: none;
         border-radius: 16px;
         font-size: 16px;
+        color: black;
         background-color: var(--theme-color-orange);
         cursor: pointer;
     }
