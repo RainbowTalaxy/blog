@@ -137,10 +137,6 @@ const INIT_RECORDS = Array(2)
         };
     });
 
-function getScrollBottom(element: HTMLDivElement) {
-    return element.scrollHeight - element.scrollTop - element.offsetHeight;
-}
-
 const Page = () => {
     const [records, setRecords] = useState(INIT_RECORDS);
     const [attachBottom, setAttachBottom] = useState(true);
@@ -148,7 +144,6 @@ const Page = () => {
     const page = useRef<{
         updateType?: UpdateType;
         lastScrollHeight?: number;
-        lastScrollBottom?: number;
         scrollView?: HTMLDivElement;
     }>({});
 
@@ -217,8 +212,6 @@ const Page = () => {
                                     UpdateType.ShowPrevious;
                                 page.current.lastScrollHeight =
                                     scrollView.scrollHeight;
-                                page.current.lastScrollBottom =
-                                    getScrollBottom(scrollView);
                                 setAttachBottom(false);
                                 setRecords((prev) => OLD_MESSAGES.concat(prev));
                             }}
