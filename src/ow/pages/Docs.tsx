@@ -20,10 +20,10 @@ const Docs = () => {
                                 onClick={() => window.open(card.link)}
                             >
                                 <img
-                                    className="ow-card-bg"
-                                    src={card.bg + '?mod=2'}
-                                    style={card.style}
                                     referrerPolicy="no-referrer"
+                                    className="ow-card-bg"
+                                    src={card.bg}
+                                    style={card.style}
                                 />
                                 <div className="ow-card-primary">
                                     {card.primary}

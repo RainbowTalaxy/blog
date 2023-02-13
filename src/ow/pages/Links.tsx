@@ -14,13 +14,14 @@ const Links = () => {
                 <ul className="ow-hero-ul">
                     {LINKS_DATA.map((item, idx) => (
                         <li
+                            // @ts-ignore
+                            style={{ '--i': idx }}
                             key={idx}
                             className="ow-hero-li"
                             onClick={() => window.open(item.link)}
-                            // @ts-ignore
-                            style={{ '--i': idx }}
                         >
                             <img
+                                referrerPolicy="no-referrer"
                                 className="ow-hero-li-img"
                                 src={item.image}
                                 alt={item.name}

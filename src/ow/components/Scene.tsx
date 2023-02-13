@@ -90,12 +90,12 @@ const Scene = () => {
                     style={{ opacity: maskOpacity }}
                 />
                 <img
+                    referrerPolicy="no-referrer"
                     id={OW_SCENE_ID}
                     className="ow-bg"
-                    src={scene.img + '?mod=1'}
+                    src={scene.img}
                     style={{ opacity: isLoaded ? 1 : 0 }}
                     alt="background"
-                    referrerPolicy="no-referrer"
                 />
             </div>
             {context.setting.time && <div className="ow-time">{time}</div>}
@@ -110,15 +110,15 @@ const Scene = () => {
             {context.state.scene === SceneLevel.Fill && (
                 <div className="ow-scene ow-scene-main">
                     <img
+                        referrerPolicy="no-referrer"
                         id={OW_SCENE_ID}
                         className="ow-bg"
-                        src={FILL_SCENE + '?mod=1'}
+                        src={FILL_SCENE}
                         style={{
                             opacity: isLoaded ? 1 : 0,
                             zIndex: 20,
                         }}
                         alt="background"
-                        referrerPolicy="no-referrer"
                     />
                 </div>
             )}

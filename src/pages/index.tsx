@@ -21,7 +21,7 @@ export default function Home(): JSX.Element {
             )}
             <div className={style['main-body']}>
                 <div className={style.introduction}>
-                    <img className={style.avatar} src={'img/mercy.png'} />
+                    <img className={style.avatar} src="img/mercy.png" />
                     <div className={style.info}>
                         <div className={style.title}>Chen Siwei</div>
                         <div className={style.description}>@Talaxy</div>
