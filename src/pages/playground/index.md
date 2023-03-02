@@ -29,3 +29,7 @@
 ## React
 
 -   [React Memo 更新](/playground/react-memo)
+
+## 其他
+
+-   [歌词滚动 - Github Copilot](/playground/lyric)
