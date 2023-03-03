@@ -47,29 +47,37 @@ const Page = () => {
         ) as NodeListOf<HTMLDivElement>;
         const timer = setInterval(() => {
             // check LYRIC_DATA, if lyric is in range, add 'hint' class
-            LYRIC_DATA.forEach((lyric) => {
+            const result = LYRIC_DATA.find((lyric) => {
                 const { id, srt } = lyric;
                 const [start, end] = (srt as string).split(' --> ');
                 if (
                     currentTime >= Number(start) &&
-                    currentTime <= Number(end) &&
-                    id !== currentHintId
+                    currentTime <= Number(end)
                 ) {
-                    const lyricItem = lyricItems[id];
-                    lyricItem.classList.add(styles.hint);
-                    // scroll to hint item
-                    window.scrollTo({
-                        top: lyricItem.offsetTop - 150,
-                        behavior: 'smooth',
-                    });
-                    // remove 'hint' class from last hint item
-                    if (currentHintId !== undefined) {
-                        lyricItems[currentHintId].classList.remove(styles.hint);
+                    if (id !== currentHintId) {
+                        const lyricItem = lyricItems[id];
+                        lyricItem.classList.add(styles.hint);
+                        // scroll to hint item
+                        window.scrollTo({
+                            top: lyricItem.offsetTop - 150,
+                            behavior: 'smooth',
+                        });
+                        // remove 'hint' class from last hint item
+                        if (currentHintId !== undefined) {
+                            lyricItems[currentHintId].classList.remove(
+                                styles.hint,
+                            );
+                        }
+                        currentHintId = id;
                     }
-                    currentHintId = id;
+                    return true;
                 }
             });
             currentTime += UPDATE_INTERVAL;
+            // if result is falsy, stop timer
+            if (!result) {
+                clearInterval(timer);
+            }
         }, UPDATE_INTERVAL);
         return () => {
             clearInterval(timer);
