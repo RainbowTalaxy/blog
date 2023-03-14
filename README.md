@@ -2,8 +2,8 @@
 
 ## TODO
 
--   Overwatch
+-   Overwatch 优化
 
-## OW 项目
+## Check list
 
-只用一个路由：`/ow`
+-   每年更新 [footer.json](i18n/zh-cn/docusaurus-theme-classic/footer.json) 的年份信息
