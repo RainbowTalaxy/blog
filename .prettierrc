@@ -5,7 +5,7 @@
     "singleQuote": true,
     "overrides": [
         {
-            "files": "src/ow/docs/*.md",
+            "files": ["src/ow/docs/*.md", "docs/js/dg7/*.md"],
             "options": {
                 "requirePragma": true
             }
