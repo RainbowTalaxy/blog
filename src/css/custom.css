@@ -92,6 +92,11 @@ html[data-theme='dark'] {
     display: none;
 }
 
+article,
+code {
+    font-family: 'Fira Code' !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
