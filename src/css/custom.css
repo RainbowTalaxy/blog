@@ -60,6 +60,10 @@ html[data-theme='dark'] {
     border-radius: 50%;
 }
 
+.katex-html {
+    display: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
