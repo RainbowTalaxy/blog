@@ -18,7 +18,7 @@ hide_table_of_contents: true
 
 之后，我跟老胡去了莫愁湖转了一圈。荷花都盛开了。
 
-![](http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/bqQfVz5yrrGYSXMvKr.cqeKnGXoSBhSFsVaoDq4HIwSrURMBvVjbHa2tq2WVIj.opMjmW4YaqzHRGwHYQ23wfs1bNfNqH941mjwyfo0CaRU!/r)
+<img src="http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/bqQfVz5yrrGYSXMvKr.cqeKnGXoSBhSFsVaoDq4HIwSrURMBvVjbHa2tq2WVIj.opMjmW4YaqzHRGwHYQ23wfs1bNfNqH941mjwyfo0CaRU!/r?t=1" referrerpolicy="no-referrer" />
 
 ## 6 月 13 日
 
@@ -36,7 +36,7 @@ hide_table_of_contents: true
 
 吃完我问他们晚上有没有活动，不然我就先回家了。他们都磨磨唧唧的决定不下来，找不到好玩的地方。最后我提议去玄武湖散步。结果我们晚上是从玄武门北上，一直沿着湖畔走到了南京站，大概是两三公里的路吧。走到中间的时候都抱怨我选了这么远的路。但是走到南京站面前的湖畔时，感觉又是值得了。
 
-![](http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/bqQfVz5yrrGYSXMvKr.cqfcHPhtu7i3UIMCOBESTTx9qOm1XEt1CmHDClKTc4NLDIY6I8DdVK*5u2rx.Jlfu5bOnowXTNe6G5*3Ltkbxvvk!/r)
+<img src="http://r.photo.store.qq.com/psc?/V12to3FW3aSvFz/bqQfVz5yrrGYSXMvKr.cqfcHPhtu7i3UIMCOBESTTx9qOm1XEt1CmHDClKTc4NLDIY6I8DdVK*5u2rx.Jlfu5bOnowXTNe6G5*3Ltkbxvvk!/r?t=1" referrerpolicy="no-referrer" />
 
 ## 6 月 17 日
 
@@ -48,7 +48,7 @@ hide_table_of_contents: true
 
 晚上的时候跟老胡、罗总、雷龙一起吃老北京火锅。大家都聊了聊自己的工作去向，以及租房情况。吃完又去隔壁的新百转了几圈，也没啥好转的，单纯聊聊天。差不多也是深夜了，最后离别的时候我们拍了个合影。别看每个人都开怀大笑，心里却是一个滋味。大概是今年最后一次见马哥了。
 
-![](http://r.photo.store.qq.com/psc?/V12to3FW0jLYul/bqQfVz5yrrGYSXMvKr.cqXIjfirNLBgnzVSePRUwBiEmL9LKKW0SZHNvOsnMBHm55uto9mfsfQ44csSXXxZCH*E0McgHKc2FX1ZidOpYeSE!/r)
+<img src="http://r.photo.store.qq.com/psc?/V12to3FW0jLYul/bqQfVz5yrrGYSXMvKr.cqXIjfirNLBgnzVSePRUwBiEmL9LKKW0SZHNvOsnMBHm55uto9mfsfQ44csSXXxZCH*E0McgHKc2FX1ZidOpYeSE!/r?t=1" referrerpolicy="no-referrer" />
 
 之后我就直接去了南京站了，和舍友们一同出发前往青岛。等待发车的时候我给我妈打了个电话，我还未跟家里人说我跟舍友去青岛玩的计划。老妈除了跟我叮嘱安全上的事，还聊起了九十年代末在南京住的事。
 
@@ -60,13 +60,13 @@ hide_table_of_contents: true
 
 海底世界还是挺好玩的，它场馆挺大，内容挺多，连最懒的大嫂都觉得挺有意思。其中最好玩的得属“梦幻水母宫”场馆，它同时位于“青岛水族馆”旧址，馆前还立了个蔡元培的雕像，他曾是水族馆的参建者之一。里面的各种水母在不同灯光下展现出不同姿态的美。
 
-![](http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqUr1ktl7hgxV.jlKYT4dtorS8CrDXl9VIqk0fvD495BtDcmH0dJ7IOO6zLkFxlydhR5IOWp1Vc.ADhAPilfxqm0!/r)
+<img src="http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqUr1ktl7hgxV.jlKYT4dtorS8CrDXl9VIqk0fvD495BtDcmH0dJ7IOO6zLkFxlydhR5IOWp1Vc.ADhAPilfxqm0!/r?t=1" referrerpolicy="no-referrer" />
 
 之后我们去了提前预定好的民宿。到了之后直接点了个丰盛的海鲜外卖，吃完睡上两个小时补了补觉。
 
 傍晚我们去了汇泉路。这条路是在海边的，很多情侣在这里拍婚纱照。我们吹着海风，欣赏日落。我跟大嫂还在沿路的海水浴场买了串冤种大鱿鱼，花了 15 大洋。
 
-![](http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqc9t73pu*AajBZniZyJd4AvYn3dNT9v68B.QYELMJBhtn4k8E8hgdXy3e6dEoPZzQdTdMWoJl6NvX6BHni2KWUs!/r)
+<img src="http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1YXgc2/bqQfVz5yrrGYSXMvKr.cqc9t73pu*AajBZniZyJd4AvYn3dNT9v68B.QYELMJBhtn4k8E8hgdXy3e6dEoPZzQdTdMWoJl6NvX6BHni2KWUs!/r?t=1" referrerpolicy="no-referrer" />
 
 回民宿的路上，我们打算去民宿旁的市立医院做个核酸。结果到那儿发现排了老长的队，而且只有一个窗口，于是放弃了。我们在医院旁的小便利店里一人买了一桶泡面外加一根火腿肠。
 
@@ -118,6 +118,6 @@ hide_table_of_contents: true
 
 晕车。
 
-因为我也要回我的家，所以我跟大嫂一起出门。临走前大嫂委托大仙帮他把二手卡寄去张家港。我们是去的华海 3C 的华硕店买的显卡。这次买显卡就很谨慎了，我还在旁边帮大嫂拍全程开箱视频。稍微检查了一番，最后确认买下了。因为离发车还有一段时间，我带 gusang 去了隔壁的麦当劳，点了个甜筒。我曾考虑过在这家麦当劳兼职夜班。
+因为我也要回我的家，所以我跟大嫂一起出门。临走前大嫂委托大仙帮他把二手卡寄去张家港。我们是去的华海 3C 的华硕店买的显卡。这次买显卡就很谨慎了，我还在旁边帮大嫂拍全程开箱视频。稍微检查了一番，最后确认买下了。因为离发车还有一段时间，我带大嫂去了隔壁的麦当劳，点了个甜筒。我曾考虑过在这家麦当劳兼职夜班。
 
 最后进了浮桥站，我往回家的方向，他往南站的方向。我先进的车。车门关闭，听着半岛铁盒，我眼角也湿润了。

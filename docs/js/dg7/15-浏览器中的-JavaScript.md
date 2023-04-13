@@ -694,7 +694,7 @@ Element 类上也定义了一些位置属性（基本均为 **只写** ）：
 
 无笔记，仅作了解。
 
-## \<canvas\> 与图形
+## <canvas\> 与图形
 
 无笔记，仅作了解。
 
@@ -850,7 +850,7 @@ IndexedDB 同样使用同源策略，不同域名间的数据相互隔离。
 
 ## 参考
 
-[\<script\> - MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/script)
+[<script\> - MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/script)
 
 [Element - MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Element)
 

@@ -79,6 +79,9 @@ const Overwatch = () => {
             <div className="ow-view" ref={view}>
                 {isTipVisible && (
                     <Alert
+                        title="温馨提示"
+                        description="为了获得更好的体验，请使用 Safari、Chrome 或 Chromium
+                        内核的 Edge 浏览器，并升级到最新版本！"
                         onConfirm={() => {
                             localStorage.setItem(UPDATE_KEY, 'true');
                             setTipVisible(false);

@@ -3,6 +3,8 @@ title: CSS Module 初探
 authors: RainbowTalaxy
 ---
 
+<!--truncate-->
+
 ## import CSS 文件
 
 Webpack 的 `css-loader` 允许了 CSS 文件作为导入：

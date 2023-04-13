@@ -42,7 +42,7 @@ export const LINKS_DATA = [
     {
         name: 'MDN',
         description: 'mozilla',
-        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqcift1TOEugeo6dTQHAJfrwzIRG4eOOzgf.*HTXm8ZpHHnE9Ci6nR68BvTCTYK9qVNV3XhxuZZr0hFHrZlM8ufk!/r',
+        image: 'https://developer.mozilla.org/favicon-192x192.png',
         primary: '#15141a',
         secondary: '#524e66',
         link: 'https://developer.mozilla.org/zh-CN/',
@@ -50,7 +50,7 @@ export const LINKS_DATA = [
     {
         name: 'GitHub',
         description: 'github',
-        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqVcsalJAj.tDlaBZVYKOJBwjKjwcwyR*tvvJQw8FcCY4A2W0I0*fRKsEvkHiiecet7Gak1OEjmI0yCZAJIr7sMA!/r',
+        image: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqVcsalJAj.tDlaBZVYKOJBwjKjwcwyR*tvvJQw8FcCY4A2W0I0*fRKsEvkHiiecet7Gak1OEjmI0yCZAJIr7sMA!/r?mod=1',
         primary: '#231f20',
         secondary: '#6f6265',
         link: 'https://github.com/',
