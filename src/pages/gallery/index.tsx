@@ -68,9 +68,9 @@ export default function Home(): JSX.Element {
                             <div
                                 key={card.title}
                                 className={style.card}
-                                // onClick={() =>
-                                //     (window.location.href = card.link)
-                                // }
+                                onClick={() => {
+                                    window.location.href = card.link;
+                                }}
                             >
                                 <div className={style['card-text']}>
                                     <div className={style['card-title']}>
@@ -81,8 +81,8 @@ export default function Home(): JSX.Element {
                                     </div>
                                 </div>
                                 <img
-                                    src={card.bg + '?mod=1'}
                                     referrerPolicy="no-referrer"
+                                    src={card.bg}
                                 />
                             </div>
                         ))}
