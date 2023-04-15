@@ -93,7 +93,11 @@ html[data-theme='dark'] {
 }
 
 code {
-    font-family: 'Fira Code' !important;
+    font-family: 'Fira Code Retina' !important;
+}
+
+code {
+    font-size: 90% !important;
 }
 
 code {
