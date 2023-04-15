@@ -92,9 +92,12 @@ html[data-theme='dark'] {
     display: none;
 }
 
-article,
 code {
-    font-family: 'Fira Code' !important;
+    font-family: 'Fira Code Retina' !important;
+}
+
+code {
+    font-size: 90% !important;
 }
 
 @tailwind base;
