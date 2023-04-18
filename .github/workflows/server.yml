@@ -17,4 +17,4 @@ jobs:
                   host: blog.talaxy.cn
                   username: ${{ secrets.USERNAME }}
                   password: ${{ secrets.PASSWORD }}
-                  script: ~/scripts/blog_express.sh
+                  script: sh ~/scripts/blog_express.sh
