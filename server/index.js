@@ -8,7 +8,7 @@ const fontRouter = require('./routes/font');
 app.use(cors());
 
 app.get('/hello', (req, res) => {
-    res.send('Hello, World!');
+    res.send('Hello, World');
 });
 
 app.use('/font', fontRouter);
