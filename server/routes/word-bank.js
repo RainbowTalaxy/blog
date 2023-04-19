@@ -25,6 +25,10 @@ const path = require('path');
 const booksDir = 'temp/books';
 // 错误日志的文件路径
 const errorLogPath = booksDir + '/error.log';
+// 若 booksDir 不存在，则创建
+if (!fs.existsSync(booksDir)) {
+    fs.mkdirSync(booksDir, { recursive: true });
+}
 // 若错误日志文件不存在，则创建
 if (!fs.existsSync(errorLogPath)) {
     fs.writeFileSync(errorLogPath, '');
