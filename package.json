@@ -7,6 +7,7 @@
         "start": "docusaurus start",
         "build": "docusaurus build",
         "server": "node server",
+        "test:server": "node server/__tests__",
         "proxy": "node server/proxy",
         "swizzle": "docusaurus swizzle",
         "deploy": "docusaurus deploy",

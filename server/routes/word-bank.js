@@ -19,20 +19,16 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const { mkdirp } = require('mkdirp');
 const path = require('path');
 
 // 用来存放用户上传的单词书的目录
 const booksDir = 'temp/books';
+mkdirp.sync(booksDir);
+
 // 错误日志的文件路径
 const errorLogPath = booksDir + '/error.log';
-// 若 booksDir 不存在，则创建
-if (!fs.existsSync(booksDir)) {
-    fs.mkdirSync(booksDir, { recursive: true });
-}
-// 若错误日志文件不存在，则创建
-if (!fs.existsSync(errorLogPath)) {
-    fs.writeFileSync(errorLogPath, '');
-}
+mkdirp.sync(errorLogPath);
 
 // 往错误日志文件中写入错误信息
 const logError = (error) => {
@@ -42,11 +38,9 @@ const logError = (error) => {
 
 // 给定用户 id ，返回该用户的单词书目录，如果不存在则创建
 const getUserDir = (userId) => {
-    const dir = path.join(booksDir, userId);
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-    return dir;
+    const userDir = path.join(booksDir, userId);
+    mkdirp.sync(userDir);
+    return userDir;
 };
 
 // 在指定目录下创建一个 JSON 文件，文件名为 id ，内容为 book
@@ -55,9 +49,10 @@ const updateBook = (userDir, book) => {
     // 如果文件不存在，则创建
     if (!fs.existsSync(bookPath)) {
         fs.writeFileSync(bookPath, JSON.stringify(book));
+    } else {
+        // 以覆盖的方式往 filePath 写入 book 数据
+        fs.writeFileSync(bookPath, JSON.stringify(book));
     }
-    // 以覆盖的方式往 filePath 写入 book 数据
-    fs.writeFileSync(bookPath, JSON.stringify(book));
 };
 
 // 用户上传单词书
@@ -141,73 +136,3 @@ router.get('/books/:bookId', async (req, res) => {
 module.exports = router;
 
 // 谢谢 Copilot 的帮助，这里的代码是 Copilot 自动写的，我只是稍微修改了一下
-
-// 帮我写一些 curl 的命令，用来测试一下这些 API
-
-// 这是一个 Book 的示例
-const book = {
-    id: 'some_uuid',
-    date: '2023/04/19',
-    title: 'some_title',
-    words: [
-        {
-            id: 'some_uuid',
-            date: '2023/04/19',
-            name: 'word',
-            partOfSpeech: 'n',
-            definition: '单词',
-        },
-        {
-            id: 'some_uuid',
-            date: '2023/04/19',
-            name: 'word',
-            partOfSpeech: 'n',
-            definition: '单词',
-        },
-    ],
-};
-
-// 上传单词书
-const uploadBookScript = `
-curl -X PUT \
-    http://localhost:4000/word-bank/books \
-    -H 'Content-Type: application/json' \
-    -d '{
-        "userId": "some_user_id",
-        "book": {
-            "id": "some_uuid",
-            "date": "2023/04/19",
-            "title": "some_title",
-            "words": [
-                {
-                    "id": "some_uuid",
-                    "date": "2023/04/19",
-                    "name": "word",
-                    "partOfSpeech": "n",
-                    "definition": "单词"
-                },
-                {
-                    "id": "some_uuid",
-                    "date": "2023/04/19",
-                    "name": "word",
-                    "partOfSpeech": "n",
-                    "definition": "单词"
-                }
-            ]
-        }
-    }'
-`;
-
-// 获取单词书列表
-const getBookListScript = `
-curl -X GET \
-    'http://localhost:4000/word-bank/books?userId=some_user_id' \
-    -H 'Content-Type: application/json'
-`;
-
-// 获取单词书内容
-const getBookContentScript = `
-curl -X GET \
-    'http://localhost:4000/word-bank/books/some_uuid?userId=some_user_id' \
-    -H 'Content-Type: application/json'
-`;
