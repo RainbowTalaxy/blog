@@ -5,10 +5,10 @@
  */
 
 const fs = require('fs');
-const { LOCAL_SERVER_URL, BOOKS_DIR } = require('../constants');
-const { request } = require('../utils');
+const { BOOKS_DIR } = require('../constants');
+const { request, curl } = require('./utils');
 
-const BASE_PATH = `${LOCAL_SERVER_URL}/word-bank`;
+const BASE_PATH = '/word-bank';
 
 // 定义一个单词书的测试数据
 const book = {
@@ -43,10 +43,7 @@ async function test() {
         // 咱们先测一下上传单词书
         await request(
             'Word bank - upload',
-            `curl -X PUT ${BASE_PATH}/books \
-    -H 'Content-Type: application/json' \
-    -d '${JSON.stringify(uploadData)}' \
-    `,
+            curl(`${BASE_PATH}/books`, 'PUT', uploadData),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
 
@@ -58,7 +55,7 @@ async function test() {
         // 咱们再测一下获取单词书列表
         await request(
             'Word bank - list',
-            `curl -X GET ${BASE_PATH}/books/${uploadData.userId}`,
+            curl(`${BASE_PATH}/books/${uploadData.userId}`, 'GET'),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
 
