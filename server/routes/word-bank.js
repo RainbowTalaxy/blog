@@ -141,6 +141,6 @@ router.get('/books/:userId/:bookId', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = { wordBankRouter: router };
 
 // 谢谢 Copilot 的帮助，这里的代码是 Copilot 自动写的，我只是稍微修改了一下

@@ -50,4 +50,4 @@ router.get('/compress', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = { fontRouter: router };

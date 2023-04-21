@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const { mkdirp } = require('mkdirp');
 
 const { TEMP_DIR } = require('./constants');
-const fontRouter = require('./routes/font');
-const wordBankRouter = require('./routes/word-bank');
+const { fontRouter } = require('./routes/font');
+const { wordBankRouter } = require('./routes/word-bank');
 
 // 初始化文件系统
 mkdirp.sync(TEMP_DIR);
