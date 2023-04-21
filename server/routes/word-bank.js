@@ -21,27 +21,31 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
+const { BOOKS_DIR } = require('../constants');
 
 // 用来存放用户上传的单词书的目录
-const booksDir = 'temp/books';
-mkdirp.sync(booksDir);
+mkdirp.sync(BOOKS_DIR);
 
 // 错误日志的文件路径
-const errorLogPath = booksDir + '/error.log';
+const errorLogPath = path.join(BOOKS_DIR, 'error.log');
 // 如果错误日志文件不存在，则创建
 if (!fs.existsSync(errorLogPath)) {
     fs.writeFileSync(errorLogPath, '');
 }
 
+// 用户文件夹元数据文件
+const USER_META_FILE = 'list-meta.json';
+
 // 往错误日志文件中写入错误信息
 const logError = (error) => {
+    if (!error) return;
     console.error(error);
     fs.appendFileSync(errorLogPath, error);
 };
 
 // 给定用户 id ，返回该用户的单词书目录，如果不存在则创建
 const getUserDir = (userId) => {
-    const userDir = path.join(booksDir, userId);
+    const userDir = path.join(BOOKS_DIR, userId);
     mkdirp.sync(userDir);
     return userDir;
 };
@@ -49,13 +53,7 @@ const getUserDir = (userId) => {
 // 在指定目录下创建一个 JSON 文件，文件名为 id ，内容为 book
 const updateBook = (userDir, book) => {
     const bookPath = path.join(userDir, `${book.id}.json`);
-    // 如果文件不存在，则创建
-    if (!fs.existsSync(bookPath)) {
-        fs.writeFileSync(bookPath, JSON.stringify(book));
-    } else {
-        // 以覆盖的方式往 filePath 写入 book 数据
-        fs.writeFileSync(bookPath, JSON.stringify(book));
-    }
+    fs.writeFileSync(bookPath, JSON.stringify(book));
 };
 
 // 用户上传单词书
@@ -67,6 +65,16 @@ router.put('/books', async (req, res) => {
         const userDir = getUserDir(userId);
         // 更新单词书
         updateBook(userDir, book);
+        // 读取用户文件夹元数据内容
+        const userMetaPath = path.join(userDir, USER_META_FILE);
+        let userMeta = {};
+        if (fs.existsSync(userMetaPath)) {
+            userMeta = JSON.parse(fs.readFileSync(userMetaPath));
+        }
+        // 更新用户文件夹元数据
+        userMeta[book.id] = { id: book.id, date: book.date, title: book.title };
+        // 写入用户文件夹元数据
+        fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
         // 返回成功
         res.status(200).send({
             message: 'success',
@@ -81,25 +89,22 @@ router.put('/books', async (req, res) => {
 });
 
 // 获取用户的单词书列表
-router.get('/books', async (req, res) => {
+router.get('/books/:userId', async (req, res) => {
     try {
-        // 获取请求的 query
-        const { userId } = req.query;
+        // 获取请求参数
+        const { userId } = req.params;
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
-        // 获取该目录下的所有文件名
-        const fileNames = fs.readdirSync(userDir);
-        // 过滤掉非 JSON 文件
-        const jsonFileNames = fileNames
-            .filter((fileName) => {
-                return fileName.endsWith('.json');
-            })
-            .map((fileName) => {
-                return fileName.replace('.json', '');
-            });
-        // 返回文件名列表
+        // 读取用户文件夹元数据内容
+        const userMetaPath = path.join(userDir, USER_META_FILE);
+        let userMeta = {};
+        if (fs.existsSync(userMetaPath)) {
+            userMeta = JSON.parse(fs.readFileSync(userMetaPath));
+        }
+        // 返回用户文件夹元数据
         res.status(200).send({
-            books: jsonFileNames,
+            // [id, { id, date, title }]
+            books: Object.values(userMeta),
         });
     } catch (error) {
         // 记录错误
@@ -111,12 +116,10 @@ router.get('/books', async (req, res) => {
 });
 
 // 获取单词书信息
-router.get('/books/:bookId', async (req, res) => {
+router.get('/books/:userId/:bookId', async (req, res) => {
     try {
-        // 获取请求的 query
-        const { userId } = req.query;
-        // 获取请求的 params
-        const { bookId } = req.params;
+        // 获取请求参数
+        const { userId, bookId } = req.params;
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 获取该目录下的所有文件名
@@ -127,7 +130,7 @@ router.get('/books/:bookId', async (req, res) => {
         res.status(200).send({
             book,
         });
-    } catch {
+    } catch (error) {
         // 记录错误
         logError(error);
         res.status(500).send({

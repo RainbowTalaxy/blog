@@ -24,6 +24,11 @@ app.get('/hello', (req, res) => {
     res.send('Hello');
 });
 
+// Echo 接口
+app.post('/echo', (req, res) => {
+    res.send(req.body);
+});
+
 app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 
