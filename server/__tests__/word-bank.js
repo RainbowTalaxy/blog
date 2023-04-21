@@ -33,23 +33,20 @@ const book = {
     ],
 };
 
-const uploadData = {
-    userId: 'some_user_id',
-    book,
-};
+const userId = 'test';
 
 async function test() {
     try {
         // 咱们先测一下上传单词书
         await request(
             'Word bank - upload book',
-            curl(`${BASE_PATH}/books`, 'PUT', uploadData),
+            curl(`${BASE_PATH}/books/${userId}`, 'PUT', book),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
 
                 // 读取测试数据中的 meta 文件
                 let userMeta = fs.readFileSync(
-                    `${BOOKS_DIR}/${uploadData.userId}/list-meta.json`,
+                    `${BOOKS_DIR}/${userId}/list-meta.json`,
                 );
                 userMeta = Object.values(JSON.parse(userMeta));
                 if (userMeta.length !== 1) return reject('Expect 1 book');
@@ -70,7 +67,7 @@ async function test() {
         // 咱们再测一下获取单词书列表
         await request(
             'Word bank - book list',
-            curl(`${BASE_PATH}/books/${uploadData.userId}`, 'GET'),
+            curl(`${BASE_PATH}/books/${userId}`, 'GET'),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
 
@@ -92,7 +89,7 @@ async function test() {
         // 咱们再测一下获取单词书详情
         await request(
             'Word bank - book detail',
-            curl(`${BASE_PATH}/books/${uploadData.userId}/${book.id}`, 'GET'),
+            curl(`${BASE_PATH}/books/${userId}/${book.id}`, 'GET'),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
 

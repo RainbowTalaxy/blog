@@ -28,10 +28,6 @@ mkdirp.sync(BOOKS_DIR);
 
 // 错误日志的文件路径
 const errorLogPath = path.join(BOOKS_DIR, 'error.log');
-// 如果错误日志文件不存在，则创建
-if (!fs.existsSync(errorLogPath)) {
-    fs.writeFileSync(errorLogPath, '');
-}
 
 // 用户文件夹元数据文件
 const USER_META_FILE = 'list-meta.json';
@@ -40,6 +36,10 @@ const USER_META_FILE = 'list-meta.json';
 const logError = (error) => {
     if (!error) return;
     console.error(error);
+    // 如果错误日志文件不存在，则创建
+    if (!fs.existsSync(errorLogPath)) {
+        fs.writeFileSync(errorLogPath, '');
+    }
     fs.appendFileSync(errorLogPath, error);
 };
 
@@ -57,10 +57,12 @@ const updateBook = (userDir, book) => {
 };
 
 // 用户上传单词书
-router.put('/books', async (req, res) => {
+router.put('/books/:userId', async (req, res) => {
     try {
+        // 获取 userId
+        const { userId } = req.params;
         // 获取请求的 body
-        const { userId, book } = req.body;
+        const book = req.body;
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 更新单词书
