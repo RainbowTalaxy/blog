@@ -1,4 +1,4 @@
-import Overwatch from '@site/src/ow';
+import Overwatch from '@site/src/modules/ow';
 
 const Page = () => {
     return <Overwatch />;

@@ -1,14 +1,14 @@
 import Layout from '@theme/Layout';
 import styled from 'styled-components';
-import { MATCHES } from '@site/src/zhaoyun/matches/Matches';
-import RankList from '@site/src/zhaoyun/components/RankList';
-import DayInfo from '@site/src/zhaoyun/components/DayInfo';
-import BanPick from '@site/src/zhaoyun/components/BanPick';
+import { MATCHES } from '@site/src/modules/zhaoyun/matches/Matches';
+import RankList from '@site/src/modules/zhaoyun/components/RankList';
+import DayInfo from '@site/src/modules/zhaoyun/components/DayInfo';
+import BanPick from '@site/src/modules/zhaoyun/components/BanPick';
 import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import LeftArrow from '@site/static/svg/left-arrow.svg';
 import RightArrow from '@site/static/svg/right-arrow.svg';
-import LeaderRank from '@site/src/zhaoyun/components/LeaderRank';
+import LeaderRank from '@site/src/modules/zhaoyun/components/LeaderRank';
 
 const Container = styled.div`
     margin: 0 auto;
