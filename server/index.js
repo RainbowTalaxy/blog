@@ -31,6 +31,6 @@ app.post('/echo', (req, res) => {
 app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 
-app.listen(port, () => {
+app.listen(PORT, () => {
     console.log(`Blog Express 启动，端口：${PORT}`);
 });
