@@ -1,3 +1,113 @@
+@media screen and (max-width: 850px) {
+    .sidebar {
+        display: none;
+    }
+
+    .sidebarMobile {
+        display: flex !important;
+    }
+}
+
 .container {
+    flex: 1;
     position: relative;
+    display: flex;
+}
+
+.sidebar {
+    flex-shrink: 0;
+    margin-top: calc(var(--ifm-navbar-height) * -1);
+    width: var(--doc-sidebar-width);
+    border-right: 1px solid var(--ifm-toc-border-color);
+}
+
+.sidebarMobile {
+    display: none;
+    margin-bottom: 24px;
+    width: 100%;
+    overflow: auto;
+}
+
+.sidebarMobile::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebarInner {
+    position: sticky;
+    top: 0;
+    padding: calc(var(--ifm-navbar-height) + 8px) 12px 12px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.book {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    padding: var(--ifm-menu-link-padding-vertical)
+        var(--ifm-menu-link-padding-horizontal);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    color: var(--ifm-menu-color);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.header {
+    margin: 6px 0 0;
+    padding: 0 8px;
+    font-size: 24px;
+    font-weight: var(--ifm-heading-font-weight);
+    color: var(--ifm-heading-color);
+}
+
+.book.active,
+.book:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.bookTitle {
+    font-weight: var(--ifm-font-weight-semibold);
+}
+
+.bookDate {
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.content {
+    flex: 1;
+    padding: 24px 12px 72px;
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.wordList {
+    margin: 0 auto;
+    padding: 2px 12px;
+    max-width: 600px;
+    border-radius: 0.5rem;
+    background-color: var(--theme-white);
+}
+
+.word {
+    display: flex;
+    align-items: baseline;
+    padding: 4px 4px;
+}
+
+.word + .word {
+    margin-top: 2px;
+    border-top: 1px solid var(--ifm-menu-color-background-active);
+}
+
+.wordPartOfSpeech {
+    margin: 0 4px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.5;
 }
