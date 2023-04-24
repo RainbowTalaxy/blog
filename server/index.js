@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { mkdirp } = require('mkdirp');
 
-const { TEMP_DIR } = require('./constants');
+const { TEMP_DIR, PORT } = require('./constants');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 
@@ -11,7 +11,6 @@ const { wordBankRouter } = require('./routes/word-bank');
 mkdirp.sync(TEMP_DIR);
 
 const app = express();
-const port = 4000;
 
 app.use(cors());
 // parse application/x-www-form-urlencoded
@@ -33,5 +32,5 @@ app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 
 app.listen(port, () => {
-    console.log(`Blog Express 启动，端口：${port}`);
+    console.log(`Blog Express 启动，端口：${PORT}`);
 });
