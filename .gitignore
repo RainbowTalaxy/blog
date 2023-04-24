@@ -3,6 +3,8 @@
 
 # Production
 /build
+/dist
+/temp
 
 # Generated files
 .docusaurus
@@ -18,6 +20,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+nohup.err
+nohup.out
 
 # 测试文件
 /test

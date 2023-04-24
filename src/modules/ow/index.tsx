@@ -12,14 +12,14 @@ import {
 import Scene from './components/Scene';
 import NavBar from './components/NavBar';
 import Links from './pages/Links';
-import useStack from '../hooks/useStack';
-import useKeyboard from '../hooks/useKeyboard';
+import useStack from '../../hooks/useStack';
+import useKeyboard from '../../hooks/useKeyboard';
 import Gallery from './pages/Gallery';
 import Alert from './components/Alert';
 import Document from './pages/Document';
 import CHANGELOG from './docs/CHANGELOG.md';
 import TODO from './docs/TODO.md';
-import useScreen from '../hooks/useScreen';
+import useScreen from '../../hooks/useScreen';
 import LiveList from './pages/LiveList';
 import SettingPage from './pages/Setting';
 import { useLocalStorage } from 'usehooks-ts';
