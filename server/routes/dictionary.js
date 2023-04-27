@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
             curtime,
         },
     });
-    if (data.errorCode) {
+    if (data.errorCode !== '0') {
         res.status(500).send(data);
         return;
     }
