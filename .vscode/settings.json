@@ -11,5 +11,6 @@
         "themer",
         "usehooks",
         "yari"
-    ]
+    ],
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }
