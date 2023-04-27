@@ -21,7 +21,7 @@ const WordBank = () => {
             const response = await fetch(
                 `https://blog.talaxy.cn/public-api/word-bank/books/talaxy/${bookInfo.id}`,
             );
-            const data = await response.json();
+            const data = (await response.json()) as { book: Book };
             setBook(data.book);
         } catch {}
     }, []);
@@ -31,7 +31,8 @@ const WordBank = () => {
             const response = await fetch(
                 'https://blog.talaxy.cn/public-api/word-bank/books/talaxy',
             );
-            const data = await response.json();
+            const data = (await response.json()) as { books: BookInfo[] };
+            data.books.sort((a, b) => b.date - a.date);
             setList(data.books);
             if (!book) {
                 refetchBook(data.books[0]);
