@@ -1,10 +1,12 @@
 import { Word } from '../type';
+import QueryPanel from './QueryPanel';
+
 interface Props {
     query?: (word: string) => void;
     word: Word;
 }
 
-const QueryableWord = ({ word, query }: Props) => {
+const QueryableWord = ({ word }: Props) => {
     function split(phrase: string): [number, string][] {
         const words = phrase.split(' ');
         return Array.from(words.entries());
@@ -28,9 +30,11 @@ const QueryableWord = ({ word, query }: Props) => {
                             marginRight: '5px',
                             cursor: isFadeWord(word) ? 'default' : 'pointer',
                         }}
-                        onClick={() => {
-                            if (!isFadeWord(word) && query) {
-                                query(String(word));
+                        onClick={(e) => {
+                            if (!isFadeWord(word)) {
+                                QueryPanel.lookup(String(word));
+                                // 禁止事件冒泡
+                                e.stopPropagation();
                             }
                         }}
                     >

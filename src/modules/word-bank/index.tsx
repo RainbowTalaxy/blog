@@ -5,6 +5,7 @@ import { Book, BookInfo, Word } from './type';
 import { AppleDate } from '@site/src/utils';
 import clsx from 'clsx';
 import QueryableWord from './components/QueryableWord';
+import QueryPanel from './components/QueryPanel';
 
 function decoratePardOfSpeech(word: Word) {
     if (!word.part) return;

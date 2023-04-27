@@ -82,6 +82,7 @@
 .content {
     flex: 1;
     padding: 24px 12px 72px;
+    width: 100%;
     background-color: var(--ifm-menu-color-background-active);
 }
 
@@ -104,10 +105,20 @@
     border-top: 1px solid var(--ifm-menu-color-background-active);
 }
 
+.wordName {
+    display: block;
+}
+
 .wordPartOfSpeech {
     margin: 0 4px;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-style: italic;
     font-size: 14px;
     opacity: 0.5;
+}
+
+.wordDefinition {
+    display: block;
+    font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
+        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }

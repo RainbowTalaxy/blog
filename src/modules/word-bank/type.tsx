@@ -14,3 +14,13 @@ export interface Word {
     part: string;
     def: string;
 }
+
+export interface YouDaoResponse {
+    query: string;
+    isWord: true;
+    basic?: {
+        'us-phonetic': string;
+        'uk-phonetic': string;
+        explains: string[];
+    };
+}
