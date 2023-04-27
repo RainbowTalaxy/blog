@@ -25,7 +25,6 @@ const QueryableWord = ({ word, query }: Props) => {
                         key={index}
                         style={{
                             opacity: isFadeWord(word) ? 0.5 : 1,
-                            fontSize: '18px',
                             marginRight: '5px',
                             cursor: isFadeWord(word) ? 'default' : 'pointer',
                         }}

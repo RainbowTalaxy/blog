@@ -87,7 +87,7 @@
 
 .wordList {
     margin: 0 auto;
-    padding: 2px 12px;
+    padding: 4px 12px;
     max-width: 600px;
     border-radius: 0.5rem;
     background-color: var(--theme-white);
