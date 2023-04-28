@@ -42,7 +42,7 @@ const QueryPanel = ({ word }: Props) => {
                 </div>
                 {dictInfo?.basic && (
                     <>
-                        <div className="query-pabel-phonetic">
+                        <div className="query-panel-phonetic">
                             {dictInfo.basic['us-phonetic'] && (
                                 <>
                                     <span>美</span>/

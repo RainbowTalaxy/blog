@@ -25,13 +25,13 @@
     font-weight: 600;
 }
 
-.query-pabel-phonetic {
+.query-panel-phonetic {
     padding-bottom: 2px;
     font-size: 14px;
     opacity: 0.8;
 }
 
-.query-pabel-phonetic > span {
+.query-panel-phonetic > span {
     margin-right: 10px;
     font-weight: 600;
 }
