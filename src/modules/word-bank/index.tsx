@@ -35,7 +35,7 @@ const WordBank = () => {
     const refetch = useCallback(async () => {
         try {
             const id = query.get('id');
-            if (!id || book?.id.startsWith(id)) return;
+            if (book?.id.startsWith(id)) return;
             setIsLoading(true);
             const response = await fetch(
                 'https://blog.talaxy.cn/public-api/word-bank/books/talaxy',
@@ -43,10 +43,14 @@ const WordBank = () => {
             const data = (await response.json()) as { books: BookInfo[] };
             data.books.sort((a, b) => b.date - a.date);
             setList(data.books);
-            const bookInfo = data.books.find((bookInfo) =>
-                bookInfo.id.startsWith(id),
-            );
-            if (bookInfo) refetchBook(bookInfo);
+            if (id) {
+                const bookInfo = data.books.find((bookInfo) =>
+                    bookInfo.id.startsWith(id),
+                );
+                if (bookInfo) refetchBook(bookInfo);
+            } else {
+                refetchBook(data.books[0]);
+            }
         } catch {}
     }, [book, query]);
 
