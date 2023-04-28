@@ -127,3 +127,14 @@ html[data-theme='dark'] .wordList {
     font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
         'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
+
+.currentUser {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    padding: 2px 12px;
+    border-radius: 6px;
+    color: var(--theme-black-half);
+    background-color: var(--ifm-menu-color-background-active);
+    cursor: pointer;
+}

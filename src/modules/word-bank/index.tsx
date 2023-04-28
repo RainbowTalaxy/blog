@@ -125,6 +125,7 @@ const WordBank = () => {
                     </div>
                 )}
             </div>
+            <div className={styles.currentUser}>talaxy</div>
         </div>
     );
 };
