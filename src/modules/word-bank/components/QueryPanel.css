@@ -1,8 +1,14 @@
 @media screen and (max-width: 850px) {
     .query-panel.query-panel {
-        right: 4vw;
-        bottom: calc(4vw + var(--safe-area-inset-bottom));
-        width: calc(100% - 8vw);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: initial;
+        padding: 4vw 6vw calc(12px + var(--safe-area-inset-bottom));
+        border-radius: 4vw;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }
 

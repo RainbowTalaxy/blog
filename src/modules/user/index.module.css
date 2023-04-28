@@ -24,8 +24,12 @@
 }
 
 .form button {
+    appearance: none;
     margin-top: 12px;
     padding: 3px 12px;
     outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--theme-black-half);
     font-size: 16px;
+    color: initial;
 }

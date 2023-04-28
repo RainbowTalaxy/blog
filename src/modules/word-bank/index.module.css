@@ -6,6 +6,11 @@
     .sidebarMobile {
         display: flex !important;
     }
+
+    .currentUser.currentUser {
+        background-color: var(--theme-white);
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
+    }
 }
 
 .container {
@@ -81,13 +86,13 @@
 
 .content {
     flex: 1;
-    padding: 36px 12px 96px;
+    padding: 24px 12px 120px;
     width: 100%;
     background-color: var(--ifm-menu-color-background-active);
 }
 
 .wordList {
-    margin: 0 auto;
+    margin: 24px auto;
     padding: 4px 12px;
     max-width: 600px;
     border-radius: 0.5rem;
@@ -130,8 +135,8 @@ html[data-theme='dark'] .wordList {
 
 .currentUser {
     position: fixed;
-    left: 10px;
-    bottom: 10px;
+    left: 12px;
+    bottom: calc(12px + var(--safe-area-inset-bottom) / 2);
     padding: 2px 12px;
     border-radius: 6px;
     color: var(--theme-black-half);
