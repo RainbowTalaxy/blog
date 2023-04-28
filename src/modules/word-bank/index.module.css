@@ -81,7 +81,7 @@
 
 .content {
     flex: 1;
-    padding: 24px 12px 72px;
+    padding: 36px 12px 96px;
     width: 100%;
     background-color: var(--ifm-menu-color-background-active);
 }
@@ -94,10 +94,15 @@
     background-color: var(--theme-white);
 }
 
+html[data-theme='dark'] .wordList {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .word {
     display: flex;
     align-items: baseline;
     padding: 4px 4px;
+    min-height: 36px;
 }
 
 .word + .word {
