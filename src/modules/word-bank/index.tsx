@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import QueryableWord from './components/QueryableWord';
 import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
+import { useLocalStorage } from 'usehooks-ts';
+import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 
 function decoratePardOfSpeech(word: Word) {
     if (!word.part) return;
@@ -17,14 +19,16 @@ const WordBank = () => {
     const [list, setList] = useState<BookInfo[]>([]);
     const [book, setBook] = useState<Book | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
     // 帮我监听 query 参数，参数名为 id
     const query = useQuery();
     const history = useHistory();
 
     const refetchBook = useCallback(async (bookInfo: BookInfo) => {
+        if (!user?.id) return;
         try {
             const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/books/talaxy/${bookInfo.id}`,
+                `https://blog.talaxy.cn/public-api/word-bank/books/${user.id}/${bookInfo.id}`,
             );
             const data = (await response.json()) as { book: Book };
             setBook(data.book);
@@ -33,12 +37,13 @@ const WordBank = () => {
     }, []);
 
     const refetch = useCallback(async () => {
+        if (!user?.id) return;
         try {
             const id = query.get('id');
             if (book?.id.startsWith(id)) return;
             setIsLoading(true);
             const response = await fetch(
-                'https://blog.talaxy.cn/public-api/word-bank/books/talaxy',
+                `https://blog.talaxy.cn/public-api/word-bank/books/${user.id}`,
             );
             const data = (await response.json()) as { books: BookInfo[] };
             data.books.sort((a, b) => b.date - a.date);
@@ -125,7 +130,18 @@ const WordBank = () => {
                     </div>
                 )}
             </div>
-            <div className={styles.currentUser}>talaxy</div>
+            <div
+                className={styles.currentUser}
+                onClick={() =>
+                    history.push(
+                        '/user' +
+                            '?nextUrl=' +
+                            encodeURIComponent(window.location.href),
+                    )
+                }
+            >
+                {user?.id ?? '设置信息'}
+            </div>
         </div>
     );
 };

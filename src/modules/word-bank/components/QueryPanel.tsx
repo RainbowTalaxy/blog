@@ -6,7 +6,6 @@
  * 4. 查词框后面有一个透明的蒙层，点击蒙层可以关闭查词框，但是蒙层不会阻止事件冒泡。
  */
 
-import { query } from 'express';
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { YouDaoResponse } from '../type';
@@ -22,7 +21,6 @@ const QueryPanel = ({ word }: Props) => {
     const [dictInfo, setDictInfo] = useState<YouDaoResponse>();
 
     useEffect(() => {
-        console.log(word);
         fetch(`https://blog.talaxy.cn/public-api/dictionary?word=${word}`)
             .then((res) => res.json())
             .then(setDictInfo)

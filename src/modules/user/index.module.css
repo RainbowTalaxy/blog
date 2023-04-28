@@ -1,0 +1,31 @@
+.container {
+    margin: 0 auto;
+    padding: 50px 10px;
+    width: 90vw;
+    max-width: 500px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.field > label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.field > input {
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid var(--theme-black-half);
+}
+
+.form button {
+    margin-top: 12px;
+    padding: 3px 12px;
+    outline: none;
+    font-size: 16px;
+}
