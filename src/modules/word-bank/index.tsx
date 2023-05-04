@@ -101,7 +101,9 @@ const WordBank = () => {
                                 book?.id === bookInfo.id && styles.active,
                             )}
                             key={bookInfo.id}
-                            onClick={() => refetchBook(bookInfo)}
+                            onClick={() =>
+                                history.push('?id=' + bookInfo.id.slice(0, 5))
+                            }
                         >
                             <div className={styles.bookTitle}>
                                 {bookInfo.title}

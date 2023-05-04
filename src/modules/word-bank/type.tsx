@@ -24,3 +24,11 @@ export interface YouDaoResponse {
         explains: string[];
     };
 }
+
+export interface ResourceBookMeta {
+    title: string;
+    chapters: Array<{
+        title: string;
+        resource: string;
+    }>;
+}
