@@ -128,7 +128,6 @@ async function test() {
             }),
             (response, resolve, reject) => {
                 if (response.error) return reject('Expect "success"');
-                console.log(response);
 
                 // 检查返回的数据是否正确
                 if (!response) return reject('Expect "meta"');
