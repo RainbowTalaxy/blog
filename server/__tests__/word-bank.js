@@ -119,6 +119,29 @@ async function test() {
                 resolve();
             },
         );
+
+        // 测一下获取书本资源的 meta 信息
+        await request(
+            'Word bank - literary meta',
+            curl(`${BASE_PATH}/literary`, 'GET', {
+                bookName: encodeURI('Harry Potter and The Half-Blood Prince'),
+            }),
+            (response, resolve, reject) => {
+                if (response.error) return reject('Expect "success"');
+                console.log(response);
+
+                // 检查返回的数据是否正确
+                if (!response) return reject('Expect "meta"');
+                if (!response.title) return reject('Expect book title');
+                if (!response.chapters) return reject('Expect book chapters');
+                // chapters 应当是个数组
+                if (!Array.isArray(response.chapters))
+                    return reject('Expect chapters to be an array');
+
+                // 放行
+                resolve();
+            },
+        );
     } catch {}
 }
 

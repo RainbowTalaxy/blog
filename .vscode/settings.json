@@ -10,7 +10,8 @@
         "rehype",
         "themer",
         "usehooks",
-        "yari"
+        "yari",
+        "YOUDAO"
     ],
     "typescript.tsdk": "node_modules\\typescript\\lib"
 }
