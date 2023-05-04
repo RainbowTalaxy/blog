@@ -162,9 +162,10 @@ router.get('/literary', async (req, res) => {
         const { data: bookMeta } = await axios.get(
             `${BOOKS_STATIC_URL}/${bookName}/meta.json`,
         );
-        bookMeta.chapters = bookMeta.chapters.map(
-            (chapter) => `${BOOKS_STATIC_URL}/${bookName}/${chapter}`,
-        );
+        bookMeta.chapters = bookMeta.chapters.map((chapter) => ({
+            title: chapter,
+            resource: `${BOOKS_STATIC_URL}/${bookName}/${chapter}`,
+        }));
         // 返回书籍元数据
         res.status(200).send(bookMeta);
     } catch (error) {
