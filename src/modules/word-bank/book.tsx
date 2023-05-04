@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import styles from './index.module.css';
+import bookStyles from './book.module.css';
 import { useHistory } from '@docusaurus/router';
 import { useCallback, useEffect, useState } from 'react';
 import { ResourceBookMeta } from './type';
 import useQuery from '@site/src/hooks/useQuery';
 import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
+import QueryableParagraph from './components/QueryableParagraph';
 
 const Book = () => {
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
@@ -13,6 +15,7 @@ const Book = () => {
     const history = useHistory();
 
     const [bookMeta, setBookMeta] = useState<ResourceBookMeta>();
+    const [rawText, setRawText] = useState<string[]>([]);
 
     const bookName = decodeURI(
         query.get('book') ?? 'Harry Potter and The Half-Blood Prince',
@@ -28,7 +31,7 @@ const Book = () => {
             // 根据 chapterInfo.resource 获取资源，资源是一个 txt 文件
             const response = await fetch(chapterInfo.resource);
             const data = await response.text();
-            console.log(data);
+            setRawText(data.split('\n'));
         } catch {}
     }, [targetChapter, bookMeta]);
 
@@ -105,6 +108,11 @@ const Book = () => {
                                 {chapter.title}
                             </div>
                         </div>
+                    ))}
+                </div>
+                <div className={bookStyles.chapterContent}>
+                    {rawText.map((paragraph) => (
+                        <QueryableParagraph paragraph={paragraph} />
                     ))}
                 </div>
             </div>

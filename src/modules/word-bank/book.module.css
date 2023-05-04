@@ -1,0 +1,12 @@
+.chapterContent {
+    display: flex;
+    flex-direction: column;
+    margin: 24px auto;
+    padding: 4px 12px;
+    max-width: 1000px;
+}
+
+.chapterContent > p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}

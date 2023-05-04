@@ -23,6 +23,7 @@ export interface YouDaoResponse {
         'uk-phonetic': string;
         explains: string[];
     };
+    returnPhrase?: string[];
 }
 
 export interface ResourceBookMeta {

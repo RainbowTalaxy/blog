@@ -36,7 +36,7 @@ const QueryPanel = ({ word }: Props) => {
         >
             <div className="query-panel">
                 <div className="query-panel-term">
-                    {dictInfo?.query ?? word}
+                    {dictInfo?.returnPhrase[0] ?? word}
                 </div>
                 {dictInfo?.basic && (
                     <>
