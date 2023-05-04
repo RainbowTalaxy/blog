@@ -6,11 +6,6 @@
     .sidebarMobile {
         display: flex !important;
     }
-
-    .currentUser.currentUser {
-        background-color: var(--theme-white);
-        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
-    }
 }
 
 .container {
@@ -140,6 +135,7 @@ html[data-theme='dark'] .wordList {
     padding: 2px 12px;
     border-radius: 6px;
     color: var(--theme-black-half);
-    background-color: var(--ifm-menu-color-background-active);
+    background-color: var(--theme-white);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
     cursor: pointer;
 }

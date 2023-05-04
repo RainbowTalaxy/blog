@@ -19,6 +19,19 @@ const Book = () => {
     );
     const targetChapter = decodeURI(query.get('chapter') ?? '');
 
+    const fetchResource = useCallback(async () => {
+        const chapterInfo = bookMeta?.chapters.find(
+            (chapter) => chapter.title === targetChapter,
+        );
+        if (!chapterInfo) return;
+        try {
+            // 根据 chapterInfo.resource 获取资源，资源是一个 txt 文件
+            const response = await fetch(chapterInfo.resource);
+            const data = await response.text();
+            console.log(data);
+        } catch {}
+    }, [targetChapter, bookMeta]);
+
     const refetchMeta = useCallback(async () => {
         try {
             const response = await fetch(
@@ -34,6 +47,10 @@ const Book = () => {
     useEffect(() => {
         refetchMeta();
     }, [refetchMeta]);
+
+    useEffect(() => {
+        fetchResource();
+    }, [fetchResource]);
 
     return (
         <div className={styles.container}>
@@ -51,11 +68,15 @@ const Book = () => {
                             onClick={() => {
                                 // 设置 query 来更新
                                 history.push(
-                                    `?book=${bookName}&chapter=${chapter}`,
+                                    `?book=${encodeURI(
+                                        bookName,
+                                    )}&chapter=${encodeURI(chapter.title)}`,
                                 );
                             }}
                         >
-                            <div className={styles.bookTitle}>{chapter}</div>
+                            <div className={styles.bookTitle}>
+                                {chapter.title}
+                            </div>
                             <div className={styles.spacer} />
                         </div>
                     ))}
@@ -72,13 +93,17 @@ const Book = () => {
                                     styles.active,
                             )}
                             key={chapter.title}
-                            onClick={() =>
+                            onClick={() => {
                                 history.push(
-                                    `?book=${bookName}&chapter=${chapter}`,
-                                )
-                            }
+                                    `?book=${encodeURI(
+                                        bookName,
+                                    )}&chapter=${encodeURI(chapter.title)}`,
+                                );
+                            }}
                         >
-                            <div className={styles.bookTitle}>{chapter}</div>
+                            <div className={styles.bookTitle}>
+                                {chapter.title}
+                            </div>
                         </div>
                     ))}
                 </div>
