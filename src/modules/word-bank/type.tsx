@@ -17,13 +17,14 @@ export interface Word {
 
 export interface YouDaoResponse {
     query: string;
-    isWord: true;
+    isWord: boolean;
     basic?: {
         'us-phonetic': string;
         'uk-phonetic': string;
         explains: string[];
     };
     returnPhrase?: string[];
+    translation?: string[];
 }
 
 export interface ResourceBookMeta {

@@ -36,9 +36,9 @@ const QueryPanel = ({ word }: Props) => {
         >
             <div className="query-panel">
                 <div className="query-panel-term">
-                    {dictInfo?.returnPhrase[0] ?? word}
+                    {dictInfo?.returnPhrase?.[0] ?? word}
                 </div>
-                {dictInfo?.basic && (
+                {dictInfo?.basic ? (
                     <>
                         <div className="query-panel-phonetic">
                             {dictInfo.basic['us-phonetic'] && (
@@ -81,6 +81,19 @@ const QueryPanel = ({ word }: Props) => {
                             })}
                         </div>
                     </>
+                ) : (
+                    <div className="query-panel-explains">
+                        {dictInfo?.translation?.map((translation, idx) => {
+                            return (
+                                <div
+                                    key={idx}
+                                    className="query-panel-single-explain"
+                                >
+                                    {translation}
+                                </div>
+                            );
+                        })}
+                    </div>
                 )}
             </div>
         </div>

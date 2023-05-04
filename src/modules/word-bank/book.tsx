@@ -44,8 +44,15 @@ const Book = () => {
             );
             const data = (await response.json()) as ResourceBookMeta;
             setBookMeta(data);
+            if (!targetChapter && data.chapters[0]) {
+                history.push(
+                    `?book=${encodeURI(bookName)}&chapter=${encodeURI(
+                        data.chapters[0].title,
+                    )}`,
+                );
+            }
         } catch {}
-    }, [bookName]);
+    }, [bookName, targetChapter]);
 
     useEffect(() => {
         refetchMeta();
