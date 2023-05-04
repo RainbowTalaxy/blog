@@ -164,7 +164,7 @@ router.get('/literary', async (req, res) => {
         );
         bookMeta.chapters = bookMeta.chapters.map((chapter) => ({
             title: chapter,
-            resource: `${BOOKS_STATIC_URL}/${bookName}/${chapter}`,
+            resource: `${BOOKS_STATIC_URL}/${bookName}/${chapter}.txt`,
         }));
         // 返回书籍元数据
         res.status(200).send(bookMeta);
