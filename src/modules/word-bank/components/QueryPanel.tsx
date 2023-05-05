@@ -21,7 +21,11 @@ const QueryPanel = ({ word }: Props) => {
     const [dictInfo, setDictInfo] = useState<YouDaoResponse>();
 
     useEffect(() => {
-        fetch(`https://blog.talaxy.cn/public-api/dictionary?word=${word}`)
+        fetch(
+            `https://blog.talaxy.cn/public-api/dictionary?word=${encodeURI(
+                word,
+            )}`,
+        )
             .then((res) => res.json())
             .then(setDictInfo)
             .catch(console.error);
@@ -35,7 +39,13 @@ const QueryPanel = ({ word }: Props) => {
             }}
         >
             <div className="query-panel">
-                <div className="query-panel-term">
+                <div
+                    className={
+                        dictInfo?.returnPhrase?.[0]
+                            ? 'query-panel-term'
+                            : 'query-panel-translation'
+                    }
+                >
                     {dictInfo?.returnPhrase?.[0] ?? word}
                 </div>
                 {dictInfo?.basic ? (

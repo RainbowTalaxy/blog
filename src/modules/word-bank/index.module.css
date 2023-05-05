@@ -35,7 +35,7 @@
 .sidebarInner {
     position: sticky;
     top: 0;
-    padding: calc(var(--ifm-navbar-height) + 8px) 12px 12px;
+    padding: calc(var(--ifm-navbar-height) + 8px) 12px 48px;
     max-height: 100vh;
     overflow: auto;
 }

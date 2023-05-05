@@ -32,7 +32,6 @@
 }
 
 .query-panel-phonetic {
-    padding-bottom: 2px;
     font-size: 14px;
     opacity: 0.8;
 }
@@ -43,6 +42,7 @@
 }
 
 .query-panel-explains {
+    margin-top: 2px;
     font-size: 14px;
 }
 
@@ -63,4 +63,10 @@
     font-style: italic;
     font-size: 14px;
     opacity: 0.5;
+}
+
+.query-panel-translation {
+    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 500;
 }

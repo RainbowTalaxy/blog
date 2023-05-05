@@ -18,7 +18,7 @@ const Book = () => {
     const [rawText, setRawText] = useState<string[]>([]);
 
     const bookName = decodeURI(
-        query.get('book') ?? 'Harry Potter and The Half-Blood Prince',
+        query.get('book') ?? 'Harry Potter and the Half-Blood Prince',
     );
     const targetChapter = decodeURI(query.get('chapter') ?? '');
 
@@ -118,8 +118,8 @@ const Book = () => {
                     ))}
                 </div>
                 <div className={bookStyles.chapterContent}>
-                    {rawText.map((paragraph) => (
-                        <QueryableParagraph paragraph={paragraph} />
+                    {rawText.map((paragraph, index) => (
+                        <QueryableParagraph key={index} paragraph={paragraph} />
                     ))}
                 </div>
             </div>
