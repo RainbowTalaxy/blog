@@ -33,6 +33,15 @@ app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
 
+app.use('*', (_, res) => {
+    res.status(404).send('Not Found');
+});
+
+// error handle
+app.use((err, _, res, __) => {
+    res.status(500).send('Server Error');
+});
+
 app.listen(PORT, () => {
     console.log(`Blog Express 启动，端口：${PORT}`);
 });

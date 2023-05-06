@@ -41,7 +41,7 @@ const logError = (error) => {
     if (!fs.existsSync(errorLogPath)) {
         fs.writeFileSync(errorLogPath, '');
     }
-    fs.appendFileSync(errorLogPath, error);
+    fs.appendFileSync(errorLogPath, error.toString() ?? '');
 };
 
 // 给定用户 id ，返回该用户的单词书目录，如果不存在则创建
@@ -157,7 +157,7 @@ router.get('/literary', async (req, res) => {
     try {
         // 获取书籍名，他是 query 参数
         let { bookName } = req.query;
-        bookName = decodeURI(bookName);
+        bookName = bookName;
         // 获取书籍元数据
         const { data: bookMeta } = await axios.get(
             `${BOOKS_STATIC_URL}/${bookName}/meta.json`,

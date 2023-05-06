@@ -11,7 +11,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const sha256 = require('sha256');
+const CryptoJS = require('crypto-js');
 
 const YOUDAO_SECRET = {
     appKey: '67dc9e08c2357b3a',
@@ -22,38 +22,47 @@ const YOUDAO_API = 'https://openapi.youdao.com/api';
 
 // 生成签名
 const generateSign = (q, salt, curtime) => {
+    let target = q;
     // 如果 q 的长度大于 20 ，则截取前 10 个字符和后 10 个字符
-    if (q.length > 20) {
-        q = q.substr(0, 10) + q.length + q.substr(-10);
+    if (target.length > 20) {
+        target = target.substr(0, 10) + target.length + target.substr(-10);
     }
-    return sha256(
-        `${YOUDAO_SECRET.appKey}${q}${salt}${curtime}${YOUDAO_SECRET.appSecret}`,
-    );
+    const originSign = `${YOUDAO_SECRET.appKey}${target}${salt}${curtime}${YOUDAO_SECRET.appSecret}`;
+    return CryptoJS.SHA256(originSign).toString(CryptoJS.enc.Hex);
 };
 
 // 查单词接口，通过 query 参数传 word 单词
 router.get('/', async (req, res) => {
-    const { word } = req.query;
-    const salt = Date.now();
-    const curtime = Math.round(Date.now() / 1000);
-    const sign = generateSign(word, salt, curtime);
-    const { data } = await axios.get(YOUDAO_API, {
-        params: {
-            q: word,
-            from: 'EN',
-            to: 'zh-CHS',
-            appKey: YOUDAO_SECRET.appKey,
-            salt,
-            sign,
-            signType: 'v3',
-            curtime,
-        },
-    });
-    if (data.errorCode !== '0') {
-        res.status(500).send(data);
-        return;
+    try {
+        const { word } = req.query;
+        const salt = Date.now();
+        const curtime = Math.round(Date.now() / 1000);
+        const sign = generateSign(word, salt, curtime);
+        const { data } = await axios.get(YOUDAO_API, {
+            params: {
+                q: word,
+                from: 'EN',
+                to: 'zh-CHS',
+                appKey: YOUDAO_SECRET.appKey,
+                salt,
+                sign,
+                signType: 'v3',
+                curtime,
+            },
+        });
+        if (data.errorCode !== '0') {
+            res.status(404).send({
+                error: 'Query rejected.',
+                ...data,
+            });
+            return;
+        }
+        res.send(data);
+    } catch (error) {
+        res.status(500).send({
+            error: 'An error occurred while querying the word.',
+        });
     }
-    res.send(data);
 });
 
 module.exports = { dictionaryRouter: router };

@@ -22,8 +22,11 @@ async function test() {
             },
         );
 
-        // 跑子测试
+        // word-bank 测试
         await require('./word-bank');
+
+        // dictionary 测试
+        await require('./dictionary');
     } catch {}
 }
 

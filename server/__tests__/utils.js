@@ -18,7 +18,7 @@ const request = (title, command, handler) => {
         exec(command, (error, stdout, stderr) => {
             console.log('[TEST CASE]:', title);
             if (error) {
-                console.error('FATAL ERROR:', error);
+                console.error('[FATAL ERROR]:', error);
                 return reject();
             }
             try {
@@ -39,10 +39,16 @@ const request = (title, command, handler) => {
                 },
                 (...errMsg) => {
                     console.error('ERROR:', ...errMsg);
-                    reject();
+                    reject(new Error('[TEST FAILED]'));
                 },
             );
         });
+    });
+};
+
+const customEncodeURIComponent = (str) => {
+    return encodeURIComponent(str).replace(/[!'()*]/g, (c) => {
+        return '%' + c.charCodeAt(0).toString(16);
     });
 };
 
@@ -59,7 +65,10 @@ const curl = (url, method, data) => {
         if (method === 'GET') {
             // 将 data 视为 query。将 query 拼接到 url 上
             let query = Object.entries(data)
-                .map(([key, value]) => `${key}=${value}`)
+                .map(
+                    ([key, value]) =>
+                        `${key}=${customEncodeURIComponent(value)}`,
+                )
                 .join('&');
             basicUrl += `?${query}`;
         } else {
