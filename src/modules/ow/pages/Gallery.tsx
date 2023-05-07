@@ -20,8 +20,8 @@ const Gallery = () => {
                                 key={card.title}
                                 className="ow-card-li"
                                 onClick={() => {
-                                    // window.open(card.link)
-                                    setAlertVisible(true);
+                                    window.open(card.link);
+                                    // setAlertVisible(true);
                                 }}
                             >
                                 <img
