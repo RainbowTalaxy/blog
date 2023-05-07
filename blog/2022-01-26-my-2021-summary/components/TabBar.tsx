@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface Props {
@@ -59,13 +59,16 @@ const TabBarItem = styled.div`
     border-radius: 20px;
     border: 1px solid
         var(
-            ${(props: TabBarItemsProps) => (props.isActive ? '--theme-color' : '--theme-secondary')}
+            ${(props: TabBarItemsProps) =>
+                props.isActive ? '--theme-color' : '--theme-secondary'}
         );
     background: var(--theme-white-half);
     color: var(
-        ${(props: TabBarItemsProps) => (props.isActive ? '--theme-color' : '--theme-primary')}
+        ${(props: TabBarItemsProps) =>
+            props.isActive ? '--theme-color' : '--theme-primary'}
     );
-    font-weight: ${(props: TabBarItemsProps) => (props.isActive ? 'bold' : 'normal')};
+    font-weight: ${(props: TabBarItemsProps) =>
+        props.isActive ? 'bold' : 'normal'};
 `;
 
 const TabBar = ({ items, gap = 16, activeIdx = 0, onClickItem }: Props) => {
