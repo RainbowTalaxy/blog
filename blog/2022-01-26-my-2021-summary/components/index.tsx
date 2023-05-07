@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 export const ProgressItemTitle = styled.div`
@@ -40,7 +39,13 @@ const ImageWrapper = styled.div`
     }
 `;
 
-export const Image = ({ src, className }: { src: string; className?: string }) => {
+export const Image = ({
+    src,
+    className,
+}: {
+    src: string;
+    className?: string;
+}) => {
     return (
         <ImageWrapper className={className}>
             <img referrerPolicy="no-referrer" src={src} />

@@ -99,6 +99,7 @@ const config = {
                         position: 'left',
                     },
                     { to: '/blog', label: '博客', position: 'left' },
+                    { to: '/gallery', label: '画廊', position: 'left' },
                     {
                         to: '/ow',
                         label: 'Overwatch',
