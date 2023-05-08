@@ -126,6 +126,7 @@ function getContainer() {
 
 // 唤起查词框
 QueryPanel.lookup = (word: string) => {
+    if (!word) return;
     const container = getContainer();
     // 在 container 上挂载 QueryPanel 组件
     ReactDOM.render(<QueryPanel word={word} />, container);

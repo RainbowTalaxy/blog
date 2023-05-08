@@ -11,13 +11,11 @@ export const tokenize = (text: string) => {
         const prefix = word.match(/^\W+/g)?.[0] ?? '';
         const suffix = word.match(/\W+$/g)?.[0] ?? '';
         const origin = word.replace(/^\W+/g, '').replace(/\W+$/g, '');
-        if (origin) {
-            tokens.push({
-                prefix,
-                origin,
-                suffix,
-            });
-        }
+        tokens.push({
+            prefix: origin ? prefix : '',
+            origin,
+            suffix,
+        });
     });
     return tokens;
 };
