@@ -29,7 +29,11 @@ export const sentenceSplit = (text: string) => {
         .filter((word) => word)
         .forEach((word) => {
             sentence.push(word);
-            if (word.match(/[.?!。？！]/g)) {
+            if (
+                word.match(/[.?!。？！]/g) &&
+                !word.includes('...') &&
+                sentence.length > 10
+            ) {
                 sentences.push(sentence.join(' '));
                 sentence = [];
             }
