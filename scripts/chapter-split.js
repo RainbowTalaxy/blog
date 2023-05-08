@@ -8,6 +8,8 @@ let text = fs.readFileSync(`${outputDir}/${bookName}.txt`, 'utf-8');
 
 // 去除文本中多余的空行，使只最多有一个空行
 text = text.replace(/\n{2,}/g, '\n\n');
+// 省略号修正
+text = text.replace(/\. \. \./g, '...');
 
 // 去除每行文本前后的空格
 text = text
