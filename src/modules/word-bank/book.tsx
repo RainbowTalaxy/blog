@@ -17,10 +17,10 @@ const Book = () => {
     const [bookMeta, setBookMeta] = useState<ResourceBookMeta>();
     const [rawText, setRawText] = useState<string[]>([]);
 
-    const bookName = decodeURI(
+    const bookName = decodeURIComponent(
         query.get('book') ?? 'Harry Potter and the Half-Blood Prince',
     );
-    const targetChapter = decodeURI(query.get('chapter') ?? '');
+    const targetChapter = decodeURIComponent(query.get('chapter') ?? '');
 
     const fetchResource = useCallback(async () => {
         const chapterInfo = bookMeta?.chapters.find(
@@ -38,7 +38,7 @@ const Book = () => {
     const refetchMeta = useCallback(async () => {
         try {
             const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/literary?bookName=${decodeURI(
+                `https://blog.talaxy.cn/public-api/word-bank/literary?bookName=${decodeURIComponent(
                     bookName,
                 )}`,
             );
@@ -46,7 +46,7 @@ const Book = () => {
             setBookMeta(data);
             if (!targetChapter && data.chapters[0]) {
                 history.push(
-                    `?book=${encodeURI(bookName)}&chapter=${encodeURI(
+                    `?book=${encodeURI(bookName)}&chapter=${encodeURIComponent(
                         data.chapters[0].title,
                     )}`,
                 );
@@ -105,9 +105,11 @@ const Book = () => {
                             key={chapter.title}
                             onClick={() => {
                                 history.push(
-                                    `?book=${encodeURI(
+                                    `?book=${encodeURIComponent(
                                         bookName,
-                                    )}&chapter=${encodeURI(chapter.title)}`,
+                                    )}&chapter=${encodeURIComponent(
+                                        chapter.title,
+                                    )}`,
                                 );
                             }}
                         >
@@ -118,6 +120,7 @@ const Book = () => {
                     ))}
                 </div>
                 <div className={bookStyles.chapterContent}>
+                    <h2>{targetChapter}</h2>
                     {rawText.map((paragraph, index) => (
                         <QueryableParagraph key={index} paragraph={paragraph} />
                     ))}

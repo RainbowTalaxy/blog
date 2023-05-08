@@ -27,12 +27,17 @@ export const sentenceSplit = (text: string) => {
     const sentences: string[] = [];
     const words = text.split(/\s+/g);
     let sentence = [];
-    words.forEach((word) => {
-        sentence.push(word);
-        if (word.match(/[.?!。？！]/g)) {
-            sentences.push(sentence.join(' '));
-            sentence = [];
-        }
-    });
+    words
+        .filter((word) => word)
+        .forEach((word) => {
+            sentence.push(word);
+            if (word.match(/[.?!。？！]/g)) {
+                sentences.push(sentence.join(' '));
+                sentence = [];
+            }
+        });
+    if (sentence.length) {
+        sentences.push(sentence.join(' '));
+    }
     return sentences;
 };
