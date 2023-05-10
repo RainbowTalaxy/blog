@@ -18,6 +18,13 @@ const config = {
     projectName: 'blog', // Usually your repo name.
 
     plugins: [
+        () => ({
+            name: 'tailwind-extension',
+            configurePostCss(postcssOptions) {
+                postcssOptions.plugins.push('tailwindcss', 'autoprefixer');
+                return postcssOptions;
+            },
+        }),
         [
             '@docusaurus/plugin-content-docs',
             {
