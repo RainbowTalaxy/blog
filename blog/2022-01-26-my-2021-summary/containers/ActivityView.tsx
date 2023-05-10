@@ -1,7 +1,12 @@
 import Emoji from '@site/src/components/Emoji';
-import React from 'react';
 import styled from 'styled-components';
-import { Card, ProgressItemTitle, Image, Paragraph, Quote } from '../components';
+import {
+    Card,
+    ProgressItemTitle,
+    Image,
+    Paragraph,
+    Quote,
+} from '../components';
 import ProgressView, { ProgressItem } from '../components/ProgressLine';
 
 interface Props {}
@@ -84,13 +89,17 @@ const ActivityView = ({}: Props) => {
                     <ProgressItemTitle>2021 年 7 月 19 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    <Paragraph>暑假的开头，开始了一个人在外租房独居的日子。</Paragraph>
+                    <Paragraph>
+                        暑假的开头，开始了一个人在外租房独居的日子。
+                    </Paragraph>
                 </Card>
                 <ProgressItem>
                     <ProgressItemTitle>2021 年 9 月 20 日</ProgressItemTitle>
                 </ProgressItem>
                 <Card>
-                    <Paragraph>九、十月，南京发了三波消费券。我也跟舍友聚了三次。</Paragraph>
+                    <Paragraph>
+                        九、十月，南京发了三波消费券。我也跟舍友聚了三次。
+                    </Paragraph>
                     <Quote>
                         <p>临中秋节和舍友小聚</p>
                         <p>一路在纠结怎么用南京消费券</p>

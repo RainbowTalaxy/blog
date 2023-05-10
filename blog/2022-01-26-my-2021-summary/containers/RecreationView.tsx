@@ -1,6 +1,11 @@
-import React from 'react';
 import styled from 'styled-components';
-import { Card, ProgressItemTitle, Image, Paragraph, Keyword } from '../components';
+import {
+    Card,
+    ProgressItemTitle,
+    Image,
+    Paragraph,
+    Keyword,
+} from '../components';
 import ProgressView, { ProgressItem } from '../components/ProgressLine';
 import { APPLE_MUSIC_DATA, WATCHED } from '../constant';
 
@@ -66,13 +71,17 @@ const NumberMark = styled.div`
 `;
 
 const RecreationView = ({}: Props) => {
-    const favoriteSong = APPLE_MUSIC_DATA.find((song) => song.name === 'Good Days');
+    const favoriteSong = APPLE_MUSIC_DATA.find(
+        (song) => song.name === 'Good Days',
+    );
 
     return (
         <Container>
             <ProgressView topSpace={75} bottomSpace={30}>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我最喜爱的单曲是：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我最喜爱的单曲是：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     <ListItem style={{ border: 'none', marginBottom: '0px' }}>
@@ -101,7 +110,9 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>看来这一年的听歌风格是：{'R&B'}</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年在电影院看过的电影：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年在电影院看过的电影：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     {WATCHED.films.map((film, idx) => (
@@ -110,7 +121,9 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>因为疫情，去电影院的机会也少了...</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我追过的动漫番剧：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我追过的动漫番剧：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     {WATCHED.animations.map((animation, idx) => (
@@ -119,7 +132,9 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>灵笼，国漫之光！</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我看过的电视剧：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我看过的电视剧：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     {WATCHED.TVs.map((tv, idx) => (
@@ -128,7 +143,9 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>国产质量越来越好了。</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我云过的单机游戏：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我云过的单机游戏：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Card>
                     {WATCHED.games.map((game, idx) => (
@@ -158,18 +175,27 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>每天都能看到有创意、走心的视频。</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我最喜爱的游戏依旧是：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我最喜爱的游戏依旧是：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Keyword>守望先锋</Keyword>
                 <Card>
-                    <Paragraph style={{ color: 'var(--theme-color)' }}>在这一年中：</Paragraph>
+                    <Paragraph style={{ color: 'var(--theme-color)' }}>
+                        在这一年中：
+                    </Paragraph>
                     <ListItem>
                         游戏时长最长的英雄是<Hint>艾什</Hint>
                     </ListItem>
                     <ListItem>
                         最喜欢的英雄是<Hint>艾什</Hint>
                     </ListItem>
-                    <Paragraph style={{ marginTop: '30px', color: 'var(--theme-color)' }}>
+                    <Paragraph
+                        style={{
+                            marginTop: '30px',
+                            color: 'var(--theme-color)',
+                        }}
+                    >
                         觉得自己最拿得出手的英雄：
                     </Paragraph>
                     <ListItem>
@@ -184,7 +210,9 @@ const RecreationView = ({}: Props) => {
                 </Card>
                 <CardFooter>社交游戏罢了。</CardFooter>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年我只读过一本小说：</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年我只读过一本小说：
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <Keyword>
                     动物园<span>[日] 乙一</span>

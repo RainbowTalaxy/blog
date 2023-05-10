@@ -1,0 +1,29 @@
+.chapterContent {
+    display: flex;
+    flex-direction: column;
+    margin: 24px auto;
+    padding: 4px 12px;
+    max-width: 1000px;
+}
+
+.chapterContent > p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+.word {
+    cursor: pointer;
+}
+
+.translation {
+    display: inline-block;
+    margin-right: 4px;
+    padding: 0 2px;
+    background-color: rgba(178, 178, 178, 0.4);
+    color: var(--theme-white);
+    font-size: 12px;
+    line-height: 1.4;
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Section, SECTION_ITEMS, TabBarItems } from '../constant';
 import TabBar from '../components/TabBar';

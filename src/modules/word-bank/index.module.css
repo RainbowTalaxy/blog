@@ -1,3 +1,143 @@
+@media screen and (max-width: 850px) {
+    .sidebar {
+        display: none;
+    }
+
+    .sidebarMobile {
+        display: flex !important;
+    }
+}
+
 .container {
+    flex: 1;
     position: relative;
+    display: flex;
+}
+
+.sidebar {
+    flex-shrink: 0;
+    margin-top: calc(var(--ifm-navbar-height) * -1);
+    width: var(--doc-sidebar-width);
+    border-right: 1px solid var(--ifm-toc-border-color);
+}
+
+.sidebarMobile {
+    display: none;
+    margin-bottom: 24px;
+    width: 100%;
+    overflow: auto;
+}
+
+.sidebarMobile::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebarInner {
+    position: sticky;
+    top: 0;
+    padding: calc(var(--ifm-navbar-height) + 8px) 12px 48px;
+    max-height: 100vh;
+    overflow: auto;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.book {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    padding: var(--ifm-menu-link-padding-vertical)
+        var(--ifm-menu-link-padding-horizontal);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    color: var(--ifm-menu-color);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.header {
+    margin: 6px 0 0;
+    padding: 0 8px;
+    font-size: 24px;
+    font-weight: var(--ifm-heading-font-weight);
+    color: var(--ifm-heading-color);
+}
+
+.book.active,
+.book:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.bookTitle {
+    font-weight: var(--ifm-font-weight-semibold);
+}
+
+.bookDate {
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.content {
+    flex: 1;
+    padding: 24px 12px 120px;
+    width: 100%;
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.wordList {
+    margin: 24px auto;
+    padding: 4px 12px;
+    max-width: 600px;
+    border-radius: 0.5rem;
+    background-color: var(--theme-white);
+}
+
+html[data-theme='dark'] .wordList {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.word {
+    display: flex;
+    align-items: baseline;
+    padding: 4px 4px;
+    min-height: 36px;
+}
+
+.word + .word {
+    margin-top: 2px;
+    border-top: 1px solid var(--ifm-menu-color-background-active);
+}
+
+.wordName {
+    display: block;
+}
+
+.wordPartOfSpeech {
+    margin: 0 4px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+.wordDefinition {
+    display: block;
+    font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
+        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.currentUser {
+    position: fixed;
+    left: 12px;
+    bottom: calc(12px + var(--safe-area-inset-bottom) / 2);
+    padding: 2px 12px;
+    border-radius: 6px;
+    color: var(--theme-black-half);
+    background-color: var(--theme-white);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
+    cursor: pointer;
 }

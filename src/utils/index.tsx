@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export function getCoordinates(elem) {
     var box = elem.getBoundingClientRect();
 
@@ -14,4 +16,8 @@ export function getCoordinates(elem) {
     var left = box.left + scrollLeft - clientLeft;
 
     return { top: Math.round(top), left: Math.round(left) };
+}
+
+export function AppleDate(timestamp: number) {
+    return dayjs(new Date((timestamp + 978307200) * 1000));
 }

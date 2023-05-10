@@ -1,7 +1,13 @@
 import Emoji from '@site/src/components/Emoji';
-import React from 'react';
 import styled from 'styled-components';
-import { Card, Image, Keyword, Paragraph, Primary, ProgressItemTitle } from '../components';
+import {
+    Card,
+    Image,
+    Keyword,
+    Paragraph,
+    Primary,
+    ProgressItemTitle,
+} from '../components';
 import ProgressView, { ProgressItem } from '../components/ProgressLine';
 
 interface Props {}
@@ -30,7 +36,9 @@ const TravelingView = ({}: Props) => {
         <Container>
             <ProgressView topSpace={75}>
                 <ProgressItem>
-                    <ProgressItemTitle>这一年，我在南京的许多地方...</ProgressItemTitle>
+                    <ProgressItemTitle>
+                        这一年，我在南京的许多地方...
+                    </ProgressItemTitle>
                 </ProgressItem>
                 <ProgressItem>
                     <ProgressItemTitle>2021 年 3 月 24 日</ProgressItemTitle>
@@ -72,14 +80,20 @@ const TravelingView = ({}: Props) => {
                 <Card>
                     <Paragraph>还是和朱老板一起去的，路线是这样：</Paragraph>
                     <Paragraph>
-                        <Primary>下午出发</Primary> → <Primary>元通地铁站</Primary> →{' '}
-                        <Primary>国际博览中心</Primary> → <Primary>南京眼</Primary> →{' '}
-                        <Primary>江心洲地铁站</Primary> → <Primary>浦口公园</Primary> →{' '}
-                        <Primary>南京北站</Primary> → <Primary>桥北滨江公园</Primary> →{' '}
-                        <Primary>南京长江大桥</Primary> → <Primary>回校</Primary>
+                        <Primary>下午出发</Primary> →{' '}
+                        <Primary>元通地铁站</Primary> →{' '}
+                        <Primary>国际博览中心</Primary> →{' '}
+                        <Primary>南京眼</Primary> →{' '}
+                        <Primary>江心洲地铁站</Primary> →{' '}
+                        <Primary>浦口公园</Primary> →{' '}
+                        <Primary>南京北站</Primary> →{' '}
+                        <Primary>桥北滨江公园</Primary> →{' '}
+                        <Primary>南京长江大桥</Primary> →{' '}
+                        <Primary>回校</Primary>
                     </Paragraph>
                     <Paragraph>
-                        印象深刻的还属骑车过南京长江大桥 <Emoji symbol="👍" /> 。
+                        印象深刻的还属骑车过南京长江大桥 <Emoji symbol="👍" />{' '}
+                        。
                     </Paragraph>
                     <ImageGroup>
                         <Image src="http://photonj.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEFWpnWmw5TOARYLFYZKH316bIxk4DJnA5lDhFFcV8l5IJTeQDpeePz7BgcEbu5eaH3yodiCEMfC8gZv0WBHI.54!/b&bo=QAZVCMAP0AsBORE!&rf=viewer_4" />
@@ -115,8 +129,12 @@ const TravelingView = ({}: Props) => {
                 </ProgressItem>
                 <Keyword>紫金山</Keyword>
                 <Card>
-                    <Paragraph>当时马哥从杭州回来，同老胡、朱老板聚聚。走了超长的山路。</Paragraph>
-                    <Paragraph>图一是从天文台拍的玄武湖；图二是在紫金山顶拍的。</Paragraph>
+                    <Paragraph>
+                        当时马哥从杭州回来，同老胡、朱老板聚聚。走了超长的山路。
+                    </Paragraph>
+                    <Paragraph>
+                        图一是从天文台拍的玄武湖；图二是在紫金山顶拍的。
+                    </Paragraph>
                     <ImageGroup>
                         <Image src="http://photonj.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEBgaGlwdfqP8STKjcGGgIh4d1r2PYq6d6Yv6Sik1um0uBaF6hqde8QabePYmBRzZ8rQ1SgY..2wzG0sUVy7qxl0!/b&bo=VQhABsAP0AsBKQE!&rf=viewer_4" />
                         <Image src="http://photonj.photo.store.qq.com/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEK7mvqsFLOuGDBQ79LlHsjui1GhJm8TMR.Jku6vGW*KioSP0lmZ1vfv3FLRRhym6Dk2mSuNsKsl9mN5vD0PRyoA!/b&bo=VQhABsAP0AsBGTE!&rf=viewer_4" />
@@ -127,7 +145,9 @@ const TravelingView = ({}: Props) => {
                 </ProgressItem>
                 <Keyword>红山动物园</Keyword>
                 <Card>
-                    <Paragraph>入职前一个周末去的。听说新馆开了才去的。</Paragraph>
+                    <Paragraph>
+                        入职前一个周末去的。听说新馆开了才去的。
+                    </Paragraph>
                     <ImageGroup>
                         <Image src="http://m.qpic.cn/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEOlVDgm.DDldMN2B6b0.l81IzBW5SeU4NTw2rbfgvNu7.tmKxAnnJds2*PPlYbIH*G66NzQ9.AhSI4JDwb3*o04!/b&bo=VQhABsAP0AsBORE!&rf=viewer_4" />
                         <Image src="http://m.qpic.cn/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEPhkaRjUJ3SXi*yjqzpEk5iXcoLQoi3NDvTe*nIG8u1a0Db7t6XMh8X*t2i7snjB7yOc5P09Dia9L2xqpem77co!/b&bo=VQhABsAP0AsBSWE!&rf=viewer_4" />
@@ -140,7 +160,9 @@ const TravelingView = ({}: Props) => {
                 </ProgressItem>
                 <Keyword>梅花谷、明孝陵</Keyword>
                 <Card>
-                    <Paragraph>可能是南京最冷的一天，也是最干净的一天。</Paragraph>
+                    <Paragraph>
+                        可能是南京最冷的一天，也是最干净的一天。
+                    </Paragraph>
                     <ImageGroup>
                         <Image src="http://m.qpic.cn/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEKqALGGoGBoL.a3*ifIzUncQ6h9Z6AMTymM4Dxmz1X0S5rj3YP6EwMn*Gtswo8KSTrhToomB4FniA46OlRSAWHs!/b&bo=WghABiASkA0BGYU!&rf=viewer_4" />
                         <Image src="http://m.qpic.cn/psc?/V12to3FW3aSvFz/TmEUgtj9EK6.7V8ajmQrEBRlLWNX21cMWI2aGJplz4qcGhhPycte2PfC7MJLdg9zeBD7GkqhQ5HW7eF129DRmpFssxlWDVeJudPUSqM8JhE!/b&bo=WghABiASkA0BafU!&rf=viewer_4" />

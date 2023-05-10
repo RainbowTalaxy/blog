@@ -18,6 +18,13 @@ const config = {
     projectName: 'blog', // Usually your repo name.
 
     plugins: [
+        () => ({
+            name: 'tailwind-extension',
+            configurePostCss(postcssOptions) {
+                postcssOptions.plugins.push('tailwindcss', 'autoprefixer');
+                return postcssOptions;
+            },
+        }),
         [
             '@docusaurus/plugin-content-docs',
             {
@@ -61,8 +68,6 @@ const config = {
         {
             href: 'https://blog.talaxy.cn/statics/katex/katex.min.css',
             type: 'text/css',
-            integrity:
-                'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
             crossorigin: 'anonymous',
         },
     ],
@@ -101,8 +106,9 @@ const config = {
                     },
                     {
                         href: 'https://github.com/RainbowTalaxy',
-                        label: 'GitHub',
                         position: 'right',
+                        className: 'header-github-link',
+                        'aria-label': 'GitHub repository',
                     },
                 ],
             },
