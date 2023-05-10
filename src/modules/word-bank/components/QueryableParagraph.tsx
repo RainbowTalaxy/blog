@@ -45,7 +45,7 @@ const QueryableParagraph = ({ paragraph }: Props) => {
                           </span>
                       </Fragment>
                   ))
-                : '这篇文章没有内容 >_<'}
+                : '无内容 >_<'}
         </p>
     );
 };

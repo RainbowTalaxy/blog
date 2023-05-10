@@ -1,6 +1,5 @@
 import styles from './index.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import { Book, BookInfo, Word } from './type';
 import { AppleDate } from '@site/src/utils';
 import clsx from 'clsx';
 import QueryableWord from './components/QueryableWord';
@@ -8,6 +7,8 @@ import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
 import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
+import API from '@site/src/api';
+import { Book, BookInfo, Word } from '@site/src/api/word-bank';
 
 function decoratePardOfSpeech(word: Word) {
     if (!word.part) return;
@@ -27,10 +28,7 @@ const WordBank = () => {
     const refetchBook = useCallback(async (bookInfo: BookInfo) => {
         if (!user?.id) return;
         try {
-            const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/books/${user.id}/${bookInfo.id}`,
-            );
-            const data = (await response.json()) as { book: Book };
+            const data = await API.wordBank.book(user.id, bookInfo.id);
             setBook(data.book);
             setIsLoading(false);
         } catch {}
@@ -42,10 +40,7 @@ const WordBank = () => {
             const id = query.get('id');
             if (book?.id.startsWith(id)) return;
             setIsLoading(true);
-            const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/books/${user.id}`,
-            );
-            const data = (await response.json()) as { books: BookInfo[] };
+            const data = await API.wordBank.bookList(user.id);
             data.books.sort((a, b) => b.date - a.date);
             setList(data.books);
             if (id) {

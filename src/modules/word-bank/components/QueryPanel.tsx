@@ -8,28 +8,23 @@
 
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { YouDaoResponse } from '../type';
+import API from '@site/src/api';
+import { YouDaoResponse } from '@site/src/api/dictionary';
+
 import './QueryPanel.css';
 
 const QUERY_CONTAINER_CLASSNAME = 'query-container';
 
 interface Props {
-    word: string;
+    text: string;
 }
 
-const QueryPanel = ({ word }: Props) => {
+const QueryPanel = ({ text }: Props) => {
     const [dictInfo, setDictInfo] = useState<YouDaoResponse>();
 
     useEffect(() => {
-        fetch(
-            `https://blog.talaxy.cn/public-api/dictionary?word=${encodeURI(
-                word,
-            )}`,
-        )
-            .then((res) => res.json())
-            .then(setDictInfo)
-            .catch(console.error);
-    }, [word]);
+        API.dictionary.query(text).then(setDictInfo).catch(console.error);
+    }, [text]);
 
     return (
         <div
@@ -46,7 +41,7 @@ const QueryPanel = ({ word }: Props) => {
                             : 'query-panel-translation'
                     }
                 >
-                    {dictInfo?.returnPhrase?.[0] ?? word}
+                    {dictInfo?.returnPhrase?.[0] ?? text}
                 </div>
                 {dictInfo?.basic ? (
                     <>
@@ -125,11 +120,11 @@ function getContainer() {
 }
 
 // 唤起查词框
-QueryPanel.lookup = (word: string) => {
-    if (!word) return;
+QueryPanel.lookup = (text: string) => {
+    if (!text) return;
     const container = getContainer();
     // 在 container 上挂载 QueryPanel 组件
-    ReactDOM.render(<QueryPanel word={word} />, container);
+    ReactDOM.render(<QueryPanel text={text} />, container);
 };
 
 // 关闭查词框
