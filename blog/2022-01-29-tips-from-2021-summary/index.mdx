@@ -6,7 +6,7 @@ authors: RainbowTalaxy
 
 这些技巧可能深度不够，但还是希望能对实践中的你有所帮助。
 
-<!--truncate-->
+<!-- truncate-->
 
 import { FlexDemo1, FlexDemo2 } from './containers';
 import Tabs from '@theme/Tabs';
@@ -203,7 +203,12 @@ smoothscroll.polyfill();
 
 ```jsx
 const Emoji = ({ label, symbol }) => (
-    <span className="emoji" role="img" aria-label={label || ''} aria-hidden={!label}>
+    <span
+        className="emoji"
+        role="img"
+        aria-label={label || ''}
+        aria-hidden={!label}
+    >
         {props.symbol}
     </span>
 );
