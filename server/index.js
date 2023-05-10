@@ -6,6 +6,7 @@ const { mkdirp } = require('mkdirp');
 const { TEMP_DIR, PORT } = require('./constants');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
+const { dictionaryRouter } = require('./routes/dictionary');
 
 // 初始化文件系统
 mkdirp.sync(TEMP_DIR);
@@ -30,6 +31,16 @@ app.post('/echo', (req, res) => {
 
 app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
+app.use('/dictionary', dictionaryRouter);
+
+app.use('*', (_, res) => {
+    res.status(404).send('Not Found');
+});
+
+// error handle
+app.use((err, _, res, __) => {
+    res.status(500).send('Server Error');
+});
 
 app.listen(PORT, () => {
     console.log(`Blog Express 启动，端口：${PORT}`);

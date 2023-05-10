@@ -21,7 +21,8 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { BOOKS_DIR } = require('../constants');
+const { BOOKS_DIR, STATIC_URL } = require('../constants');
+const { default: axios } = require('axios');
 
 // 用来存放用户上传的单词书的目录
 mkdirp.sync(BOOKS_DIR);
@@ -40,7 +41,7 @@ const logError = (error) => {
     if (!fs.existsSync(errorLogPath)) {
         fs.writeFileSync(errorLogPath, '');
     }
-    fs.appendFileSync(errorLogPath, error);
+    fs.appendFileSync(errorLogPath, error.toString() ?? '');
 };
 
 // 给定用户 id ，返回该用户的单词书目录，如果不存在则创建
@@ -137,6 +138,41 @@ router.get('/books/:userId/:bookId', async (req, res) => {
         logError(error);
         res.status(500).send({
             error: 'An error occurred while getting the book content.',
+        });
+    }
+});
+
+/**
+ * 新模块：书籍资源封装
+ * 服务器端有个书本资源，url 为 `https://blog.talaxy.cn/statics/books`。其中：
+ *      - 每一本书都是一个文件夹，文件夹名就是书名；
+ *      - 文件夹下有一个 `meta.json` 文件，它包含了书籍信息和每个章节的标题；
+ *      - 对于每个章节，文件夹下有个对应章节的 txt 文件，文件名即为章节标题。
+ */
+
+const BOOKS_STATIC_URL = `${STATIC_URL}/books`;
+
+// 写一个接口，它接收一个书籍名，返回书籍的元数据
+router.get('/literary', async (req, res) => {
+    try {
+        // 获取书籍名，他是 query 参数
+        let { bookName } = req.query;
+        bookName = bookName;
+        // 获取书籍元数据
+        const { data: bookMeta } = await axios.get(
+            `${BOOKS_STATIC_URL}/${bookName}/meta.json`,
+        );
+        bookMeta.chapters = bookMeta.chapters.map((chapter) => ({
+            title: chapter,
+            resource: `${BOOKS_STATIC_URL}/${bookName}/${chapter}.txt`,
+        }));
+        // 返回书籍元数据
+        res.status(200).send(bookMeta);
+    } catch (error) {
+        // 记录错误
+        logError(error);
+        res.status(500).send({
+            error: 'An error occurred while getting the literary meta.',
         });
     }
 });
