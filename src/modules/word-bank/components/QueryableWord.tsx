@@ -1,4 +1,4 @@
-import { Word } from '../type';
+import { Word } from '@site/src/api/word-bank';
 import QueryPanel from './QueryPanel';
 
 interface Props {

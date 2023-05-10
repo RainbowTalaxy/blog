@@ -3,11 +3,11 @@ import styles from './index.module.css';
 import bookStyles from './book.module.css';
 import { useHistory } from '@docusaurus/router';
 import { useCallback, useEffect, useState } from 'react';
-import { ResourceBookMeta } from './type';
 import useQuery from '@site/src/hooks/useQuery';
 import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import QueryableParagraph from './components/QueryableParagraph';
+import { ResourceBookMeta } from '@site/src/api/word-bank';
 
 const Book = () => {
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
