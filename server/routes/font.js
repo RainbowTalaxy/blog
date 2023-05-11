@@ -3,11 +3,19 @@ const router = express.Router();
 const Fontmin = require('fontmin');
 const { downloadFile } = require('../utils');
 
-router.get('/compress', async (req, res) => {
+router.post('/compress', async (req, res) => {
     try {
-        const fontName = decodeURI(req.query.fontName) ?? 'font';
-        const fontUrl = decodeURI(req.query.fontUrl);
-        const charSet = decodeURI(req.query.charSet);
+        console.log(req.body);
+        let { fontName, fontUrl, charSet } = req.body;
+        fontName = fontName ?? 'font';
+
+        if (!fontUrl) {
+            res.status(400).send({
+                error: 'fontUrl is required',
+            });
+            return;
+        }
+
         const tempDir = 'temp/fonts';
         const dest = `${tempDir}/${fontName}.ttf`;
 
