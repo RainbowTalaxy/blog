@@ -1,0 +1,17 @@
+.token {
+    padding: 3px 3px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+    background-color: var(--theme-color-lightgray);
+}
+
+.highlight {
+    background-color: var(--theme-color-red);
+}
+
+.head {
+    display: inline-block;
+    font-family: initial;
+    font-size: 12px;
+    transform: translateY(4px) scale(0.7);
+}
