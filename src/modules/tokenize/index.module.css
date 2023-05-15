@@ -1,0 +1,37 @@
+.token {
+    padding: 3px 3px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+    background-color: var(--theme-color-lightgray);
+}
+
+.highlight {
+    background-color: var(--theme-color-red);
+}
+
+.head {
+    display: inline-block;
+    font-family: initial;
+    font-size: 12px;
+    transform: translateY(4px) scale(0.7);
+}
+
+.optionBar {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.option {
+    border: none;
+    outline: none;
+    appearance: none;
+    margin: 0 3px 3px 0;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.option.active {
+    background-color: var(--theme-color-blue);
+}
