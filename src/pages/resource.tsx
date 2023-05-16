@@ -7,6 +7,8 @@ import useQuery from '../hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
 import { STATICS_URL } from '../constants/config';
 
+const BASE_URL = '/resource';
+
 const Page = () => {
     const query = useQuery();
     const history = useHistory();
@@ -22,7 +24,7 @@ const Page = () => {
             .files(dir.join('/'))
             .then((data) => setFiles(data.files))
             .catch(() => {
-                window.location.href = '/statics';
+                window.location.href = BASE_URL;
             });
     }, [path]);
 
@@ -39,7 +41,7 @@ const Page = () => {
                                     ? `?dir=${encodeURIComponent(
                                           preDir.join('/'),
                                       )}`
-                                    : '/statics'
+                                    : BASE_URL
                             }
                         >
                             ..
