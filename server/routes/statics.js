@@ -9,8 +9,8 @@ const fs = require('fs');
 const { STATIC_DIR } = require('../constants');
 
 // 获取指定目录下的所有文件
-router.get(['/:filePath', ''], (req, res) => {
-    const filePath = decodeURIComponent(req.params.filePath ?? '');
+router.get('*', (req, res) => {
+    const filePath = decodeURIComponent(req.params[0] ?? '');
     const dir = path.join(STATIC_DIR, filePath);
     // 如果路径超出了静态资源目录，就返回403
     if (!dir.startsWith(STATIC_DIR)) {
@@ -18,7 +18,6 @@ router.get(['/:filePath', ''], (req, res) => {
             error: 'Forbidden',
         });
     }
-    console.log(dir);
     fs.readdir(dir, (err, files) => {
         if (err) {
             res.status(404).send({

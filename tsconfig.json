@@ -6,9 +6,9 @@
         "jsx": "react-jsx",
         "plugins": [
             {
-                "name": "typescript-plugin-css-modules",
+                "name": "typescript-plugin-css-modules"
             }
         ]
     },
-    
+    "exclude": ["temp", "build"]
 }
