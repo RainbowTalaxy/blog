@@ -10,7 +10,7 @@ const { STATIC_DIR } = require('../constants');
 
 // 获取指定目录下的所有文件
 router.get(['/:filePath', ''], (req, res) => {
-    const { filePath = '' } = req.params;
+    const filePath = decodeURIComponent(req.params.filePath ?? '');
     const dir = path.join(STATIC_DIR, filePath);
     // 如果路径超出了静态资源目录，就返回403
     if (!dir.startsWith(STATIC_DIR)) {
