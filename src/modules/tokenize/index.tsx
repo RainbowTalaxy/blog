@@ -3,24 +3,13 @@ import data2 from './constants/sentence_2.json';
 import pageStyles from '../../pages/index.module.css';
 import styles from './index.module.css';
 import clsx from 'clsx';
-import { Fragment, useState } from 'react';
-import { Dependency } from './constants/index';
+import { Fragment, useEffect } from 'react';
+import { Dependency } from './constants/Dependency';
 import { useLocalStorage } from 'usehooks-ts';
 import { TOKENIZE_FILTER_V1 } from './constants/filters';
-
-interface Token {
-    id: number;
-    start: number;
-    end: number;
-    tag: string;
-    pos: string;
-    morph: string;
-    lemma: string;
-    dep: Dependency;
-    head: number;
-    color?: string;
-    link?: Token;
-}
+import { Token } from './types';
+import { COLORS } from './constants';
+import API from '@site/src/api';
 
 interface Sentence {
     text: string;
@@ -29,22 +18,6 @@ interface Sentence {
 }
 
 const sentences = [data1, data2] as Sentence[];
-
-// 生成 30 种不同的静态颜色，用数组
-const colors = [
-    '#ffeb3b',
-    '#ff9800',
-    '#f44336',
-    '#e91e63',
-    '#9c27b0',
-    '#673ab7',
-    '#3f51b5',
-    '#2196f3',
-    '#009688',
-    '#4caf50',
-    '#795548',
-    '#607d8b',
-].map((color) => color + '7b');
 
 const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
     tokens = tokens.slice().map((token) => ({ ...token }));
@@ -69,8 +42,8 @@ const colorToken = (tokens: Token[]) => {
     tokens.forEach((token) => {
         const head = findLinkHead(token);
         if (!head.color) {
-            head.color = colors[colorIdx];
-            colorIdx = (colorIdx + 1) % colors.length;
+            head.color = COLORS[colorIdx];
+            colorIdx = (colorIdx + 1) % COLORS.length;
         }
         token.color = head.color;
     });
@@ -83,6 +56,10 @@ const TokenizePage = () => {
         'tokenize-relations',
         TOKENIZE_FILTER_V1 as Dependency[],
     );
+
+    useEffect(() => {
+        API.azalea.hello();
+    }, []);
 
     console.log(relations.sort());
 
