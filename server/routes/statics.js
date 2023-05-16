@@ -25,8 +25,8 @@ router.get('*', (req, res) => {
             });
         } else {
             // 返回文件列表，如果是文件目录，就在文件名后面加上 '/'
-            res.send(
-                files.map((file) => {
+            res.send({
+                files: files.map((file) => {
                     const filePath = path.join(dir, file);
                     const stat = fs.statSync(filePath);
                     return {
@@ -34,7 +34,7 @@ router.get('*', (req, res) => {
                         isDir: stat.isDirectory(),
                     };
                 }),
-            );
+            });
         }
     });
 });
