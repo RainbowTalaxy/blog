@@ -58,7 +58,7 @@ const TokenizePage = () => {
     );
 
     useEffect(() => {
-        API.azalea.hello();
+        API.azalea.sentence('Hello world.');
     }, []);
 
     console.log(relations.sort());
