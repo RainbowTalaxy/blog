@@ -11,7 +11,9 @@ const TEMP_DIR = path.join(__dirname, '..', TEMP_DIR_NAME);
 
 const STATIC_DIR_NAME = 'statics';
 
-const STATIC_URL = path.join(SERVER_URL, STATIC_DIR_NAME);
+const STATIC_URL = [SERVER_URL, STATIC_DIR_NAME].join('/');
+
+console.log(STATIC_URL);
 
 const SERVER_STATIC_DIR = path.join('/home', 'ubuntu', STATIC_DIR_NAME);
 const DEV_STATIC_DIR = path.join(__dirname, '..', 'static');
