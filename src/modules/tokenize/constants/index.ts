@@ -1,47 +1,15 @@
-export enum Dependency {
-    acl = 'acl', // Clausal modifier of noun
-    acomp = 'acomp', // Adjectival complement
-    advcl = 'advcl', // Adverbial clause modifier
-    advmod = 'advmod', // Adverbial modifier
-    agent = 'agent', // Agent
-    amod = 'amod', // Adjectival modifier
-    appos = 'appos', // Appositional modifier
-    attr = 'attr', // Attribute
-    aux = 'aux', // Auxiliary
-    auxpass = 'auxpass', // Auxiliary (passive)
-    case = 'case', // Case marker
-    cc = 'cc', // Coordinating conjunction
-    ccomp = 'ccomp', // Clausal complement
-    compound = 'compound', // Compound modifier
-    conj = 'conj', // Conjunct
-    csubj = 'csubj', // Clausal subject
-    csubjpass = 'csubjpass', // Clausal subject (passive)
-    dative = 'dative', // Dative
-    dep = 'dep', // Unclassified dependent
-    det = 'det', // Determiner
-    dobj = 'dobj', // Direct Object
-    expl = 'expl', // Expletive
-    intj = 'intj', // Interjection
-    mark = 'mark', // Marker
-    meta = 'meta', // Meta modifier
-    neg = 'neg', // Negation modifier
-    nounmod = 'nounmod', // Modifier of nominal
-    npmod = 'npmod', // Noun phrase as adverbial modifier
-    nsubj = 'nsubj', // Nominal subject
-    nsubjpass = 'nsubjpass', // Nominal subject (passive)
-    nummod = 'nummod', // Number modifier
-    oprd = 'oprd', // Object predicate
-    parataxis = 'parataxis', // Parataxis
-    pcomp = 'pcomp', // Complement of preposition
-    pobj = 'pobj', // Object of preposition
-    poss = 'poss', // Possession modifier
-    preconj = 'preconj', // Pre-correlative conjunction
-    predet = 'predet', // Pre-determiner
-    prep = 'prep', // Prepositional modifier
-    prt = 'prt', // Particle
-    punct = 'punct', // Punctuation
-    quantmod = 'quantmod', // Modifier of quantifier
-    relcl = 'relcl', // Relative clause modifier
-    root = 'root', // Root
-    xcomp = 'xcomp', // Open clausal complement
-}
+// 生成 30 种不同的静态颜色，用数组
+export const COLORS = [
+    '#ffeb3b',
+    '#ff9800',
+    '#f44336',
+    '#e91e63',
+    '#9c27b0',
+    '#673ab7',
+    '#3f51b5',
+    '#2196f3',
+    '#009688',
+    '#4caf50',
+    '#795548',
+    '#607d8b',
+].map((color) => color + '7b');
