@@ -71,22 +71,29 @@ const SentenceParser = ({ sentence, relations }: Props) => {
             <p>{text}</p>
             <p className={styles.sentence}>
                 {linked.map((token) => {
+                    let borderColor = 'transparent';
+                    const isHead = activeTokenHead?.id === token.id;
+                    const isActive = activeToken?.id === token.id;
+                    if (isHead) {
+                        borderColor = 'red';
+                    } else if (isActive) {
+                        borderColor = 'gray';
+                    }
                     return (
                         <span
                             key={token.id}
                             className={clsx(styles.token)}
                             style={{
-                                backgroundColor: token.color,
-                                borderBottom:
-                                    activeTokenHead?.id === token.id
-                                        ? '2px solid red'
-                                        : `2px solid transparent`,
+                                backgroundColor: token.color + '7b',
+                                borderBottom: `2px solid ${borderColor}`,
                             }}
                             onMouseOver={() => setActiveToken(token)}
                             onMouseOut={() => setActiveToken(null)}
                         >
-                            <span className={styles.head}>{token.id}</span>
                             {text.slice(token.start, token.end)}
+                            <span className={styles.head}>
+                                {isHead ? 'Head' : token.id}
+                            </span>
                         </span>
                     );
                 })}
@@ -97,7 +104,10 @@ const SentenceParser = ({ sentence, relations }: Props) => {
                         「{text.slice(activeToken.start, activeToken.end)}」
                     </strong>{' '}
                     <span>{activeToken.lemma}</span>{' '}
-                    <span>{activeToken.pos}</span>{' '}
+                    <span>
+                        <strong>词性：</strong>
+                        {activeToken.pos}
+                    </span>{' '}
                     <span>
                         <strong>依存关系：</strong>
                         {activeToken.dep}
