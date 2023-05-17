@@ -5,6 +5,10 @@
     background-color: var(--theme-color-lightgray);
 }
 
+.sentence {
+    word-break: break-all;
+}
+
 .highlight {
     background-color: var(--theme-color-red);
 }
@@ -17,9 +21,14 @@
 }
 
 .optionBar {
+    position: sticky;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 16px;
+    top: 60px;
+    padding: 16px 0;
+    margin: -16px 0 16px;
+    background-color: var(--theme-white-half);
+    z-index: 5;
 }
 
 .option {
@@ -34,4 +43,8 @@
 
 .option.active {
     background-color: var(--theme-color-blue);
+}
+
+.option.other {
+    background-color: var(--theme-color-yellow);
 }
