@@ -1,11 +1,11 @@
+import { Dependency } from './Dependency';
+
 export const TOKENIZE_FILTER_V1 = [
     'acl',
     'acomp',
     'advcl',
     'agent',
     'appos',
-    'attr',
-    'auxpass',
     'cc',
     'conj',
     'csubj',
@@ -15,11 +15,8 @@ export const TOKENIZE_FILTER_V1 = [
     'expl',
     'intj',
     'meta',
-    'neg',
     'nounmod',
     'npmod',
-    'nsubjpass',
-    'nummod',
     'oprd',
     'parataxis',
     'pcomp',
@@ -31,4 +28,4 @@ export const TOKENIZE_FILTER_V1 = [
     'relcl',
     'root',
     'xcomp',
-];
+] as Dependency[];
