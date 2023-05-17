@@ -1,6 +1,6 @@
 import API from '@site/src/api';
 import { SentenceData } from '@site/src/api/azalea';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.css';
 import { Token } from './types';
 import { Dependency } from './constants/Dependency';
@@ -16,7 +16,7 @@ const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
     tokens.forEach((token) => {
         if (breakRel.includes(token.dep)) return;
         const { id, head } = token;
-        if (head && head !== id) {
+        if (head !== id) {
             token.link = tokens[head];
         }
     });
@@ -58,12 +58,17 @@ const SentenceParser = ({ sentence, relations }: Props) => {
         API.azalea.sentence(sentence).then(({ data }) => setData(data));
     }, [sentence]);
 
+    const linked = useMemo(() => {
+        if (!data) return [];
+        const { tokens } = data;
+        const linked = linkToken(tokens, relations);
+        colorToken(linked);
+        return linked;
+    }, [data, relations]);
+
     if (!data) return null;
 
     const { text, tokens } = data;
-    const linked = linkToken(tokens, relations);
-    colorToken(linked);
-
     const activeTokenHead = activeToken ? tokens[activeToken.head] : null;
 
     return (
