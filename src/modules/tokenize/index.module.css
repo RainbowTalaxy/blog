@@ -12,10 +12,10 @@
     padding: 6px 10px;
     border-radius: 6px;
     background-color: var(--theme-color-lightgray);
+}
 
-    > span {
-        margin-right: 6px;
-    }
+.tokenInfo > span {
+    margin-right: 12px;
 }
 
 .sentence {
@@ -34,8 +34,7 @@
     left: 50%;
     font-family: initial;
     font-size: 12px;
-    opacity: 0.2;
-    transform: scale(0.7);
+    opacity: 0.3;
     word-break: keep-all;
     transform: translate(-50%, -14px) scale(0.7);
 }

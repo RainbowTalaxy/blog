@@ -12,7 +12,7 @@ export const COLORS = [
     '#4caf50',
     '#795548',
     '#607d8b',
-].map((color) => color + '7b');
+];
 
 export const SENTENCES = [
     'The Conservatives\' planning reform explicitly gives rural development priority over conservation, even authorizing "off-plan" building where local people might object.',
