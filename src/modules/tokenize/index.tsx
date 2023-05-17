@@ -3,16 +3,18 @@ import styles from './index.module.css';
 import clsx from 'clsx';
 import { Dependency } from './constants/Dependency';
 import { useLocalStorage } from 'usehooks-ts';
-import { TOKENIZE_FILTER_V1 } from './constants/filters';
+import { TOKENIZE_FILTER_V2 } from './constants/filters';
 import { SENTENCES } from './constants';
 import SentenceParser from './SentenceParser';
 
 const RELATIONS = Object.values(Dependency);
 
+const FILTER = TOKENIZE_FILTER_V2;
+
 const TokenizePage = () => {
     const [relations, setRelations] = useLocalStorage(
         'tokenize-relations',
-        TOKENIZE_FILTER_V1,
+        FILTER,
     );
 
     return (
@@ -44,7 +46,7 @@ const TokenizePage = () => {
                 <button
                     className={clsx(styles.option, styles.other)}
                     onClick={() => {
-                        setRelations(TOKENIZE_FILTER_V1);
+                        setRelations(FILTER);
                     }}
                 >
                     重置

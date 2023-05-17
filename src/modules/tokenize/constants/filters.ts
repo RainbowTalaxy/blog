@@ -29,3 +29,11 @@ export const TOKENIZE_FILTER_V1 = [
     'root',
     'xcomp',
 ] as Dependency[];
+
+export const TOKENIZE_FILTER_V2 = [
+    'advcl',
+    'cc',
+    'conj',
+    'prep',
+    'relcl',
+] as Dependency[];
