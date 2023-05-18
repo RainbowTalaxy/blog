@@ -1,3 +1,5 @@
+// 文档：https://github.com/explosion/spaCy/blob/master/spacy/glossary.py
+
 export enum Dependency {
     acl = 'acl', // Clausal modifier of noun
     acomp = 'acomp', // Adjectival complement
@@ -12,6 +14,8 @@ export enum Dependency {
     case = 'case', // Case marker
     cc = 'cc', // Coordinating conjunction
     ccomp = 'ccomp', // Clausal complement
+    clf = 'clf', // Classifier
+    complm = 'complm', // Complementizer
     compound = 'compound', // Compound modifier
     conj = 'conj', // Conjunct
     csubj = 'csubj', // Clausal subject
@@ -19,29 +23,52 @@ export enum Dependency {
     dative = 'dative', // Dative
     dep = 'dep', // Unclassified dependent
     det = 'det', // Determiner
+    discourse = 'discourse', // Discourse element
+    dislocated = 'dislocated', // Dislocated relation
     dobj = 'dobj', // Direct Object
     expl = 'expl', // Expletive
+    fixed = 'fixed', // Fixed multiword expression
+    flat = 'flat', // Flat multiword expression
+    goeswith = 'goeswith', // Goes with (part of a word in a text not well edited)
+    hmod = 'hmod', // Modifier in hyphenation
+    hyph = 'hyph', // Hyphen
+    infmod = 'infmod', // Infinitival modifier
     intj = 'intj', // Interjection
+    iobj = 'iobj', // Indirect object
+    list = 'list', // List
     mark = 'mark', // Marker
     meta = 'meta', // Meta modifier
     neg = 'neg', // Negation modifier
-    nounmod = 'nounmod', // Modifier of nominal
-    npmod = 'npmod', // Noun phrase as adverbial modifier
+    nmod = 'nmod', // Modifier of nominal
+    nn = 'nn', // Noun compound modifier
+    npadvmod = 'npadvmod', // Noun phrase as adverbial modifier
     nsubj = 'nsubj', // Nominal subject
     nsubjpass = 'nsubjpass', // Nominal subject (passive)
-    nummod = 'nummod', // Number modifier
+    nounmod = 'nounmod', // Modifier of nominal
+    npmod = 'npmod', // Noun phrase as adverbial modifier
+    num = 'num', // Numeric modifier
+    number = 'number', // Number compound modifier
+    nummod = 'nummod', // Numeric modifier
     oprd = 'oprd', // Object predicate
+    obj = 'obj', // Object
+    obl = 'obl', // Oblique nominal
+    orphan = 'orphan', // Orphan
     parataxis = 'parataxis', // Parataxis
+    partmod = 'partmod', // Participial modifier
     pcomp = 'pcomp', // Complement of preposition
     pobj = 'pobj', // Object of preposition
     poss = 'poss', // Possession modifier
+    possessive = 'possessive', // Possessive modifier
     preconj = 'preconj', // Pre-correlative conjunction
-    predet = 'predet', // Pre-determiner
     prep = 'prep', // Prepositional modifier
     prt = 'prt', // Particle
     punct = 'punct', // Punctuation
     quantmod = 'quantmod', // Modifier of quantifier
+    rcmod = 'rcmod', // Relative clause modifier
     relcl = 'relcl', // Relative clause modifier
+    reparandum = 'reparandum', // Overridden disfluency
     root = 'root', // Root
+    ROOT = 'ROOT', // Root
+    vocative = 'vocative', // Vocative
     xcomp = 'xcomp', // Open clausal complement
 }
