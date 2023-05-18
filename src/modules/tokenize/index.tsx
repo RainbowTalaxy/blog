@@ -6,8 +6,10 @@ import { TOKENIZE_FILTER_V2 } from './constants/filters';
 import { SENTENCES } from './constants';
 import SentenceParser from './SentenceParser';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
+import { CodeEffect, CodeEffectInfo } from './utils/codeEffect';
 
 const RELATIONS = Object.values(Dependency);
+const CODE_EFFECTS = Object.values(CodeEffect);
 
 const FILTER = TOKENIZE_FILTER_V2;
 
@@ -17,10 +19,15 @@ const TokenizePage = () => {
         FILTER,
     );
 
+    const [codeEffects, setCodeEffects] = useLocalStorage(
+        'tokenize-code-effects',
+        CODE_EFFECTS,
+    );
+
     return (
         <ContentWithSidebar
             title="句子解析"
-            sidebarWidth={440}
+            sidebarWidth={400}
             sidebar={
                 <>
                     <span>依存关系断裂</span>
@@ -69,6 +76,40 @@ const TokenizePage = () => {
                             打印/复制
                         </button>
                     </div>
+                    <span>代码加工</span>
+                    <div className={styles.optionBar}>
+                        {CODE_EFFECTS.map((effect) => {
+                            const isActive = codeEffects.includes(effect);
+                            return (
+                                <button
+                                    key={effect}
+                                    className={clsx(
+                                        styles.option,
+                                        isActive && styles.active,
+                                    )}
+                                    onClick={() =>
+                                        setCodeEffects(
+                                            isActive
+                                                ? codeEffects.filter(
+                                                      (e) => e !== effect,
+                                                  )
+                                                : [...codeEffects, effect],
+                                        )
+                                    }
+                                >
+                                    {CodeEffectInfo[effect]}
+                                </button>
+                            );
+                        })}
+                        <button
+                            className={clsx(styles.option, styles.other)}
+                            onClick={() => {
+                                setCodeEffects(CODE_EFFECTS);
+                            }}
+                        >
+                            重置
+                        </button>
+                    </div>
                 </>
             }
         >
@@ -78,6 +119,7 @@ const TokenizePage = () => {
                         key={index}
                         sentence={sentence}
                         relations={relations}
+                        codeEffects={codeEffects}
                     />
                 ))}
             </div>
