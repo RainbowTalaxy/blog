@@ -102,32 +102,32 @@ const SentenceParser = ({ sentence, relations }: Props) => {
                         </span>
                     );
                 })}
-            </p>
-            {activeToken && (
-                <p className={styles.tokenInfo}>
-                    <strong>
-                        「{text.slice(activeToken.start, activeToken.end)}」
-                    </strong>{' '}
-                    <span>{activeToken.lemma}</span>{' '}
-                    <span>
-                        <strong>词性：</strong>
-                        {activeToken.pos}
-                    </span>{' '}
-                    <span>
-                        <strong>依存关系：</strong>
-                        {activeToken.dep}
-                    </span>{' '}
-                    {activeTokenHead && (
+                {activeToken && (
+                    <div className={styles.tokenInfo}>
+                        <strong>
+                            「{text.slice(activeToken.start, activeToken.end)}」
+                        </strong>{' '}
+                        <span>{activeToken.lemma}</span>{' '}
                         <span>
-                            <strong>前继：</strong>
-                            {text.slice(
-                                activeTokenHead.start,
-                                activeTokenHead.end,
-                            )}
-                        </span>
-                    )}
-                </p>
-            )}
+                            <strong>词性：</strong>
+                            {activeToken.pos}
+                        </span>{' '}
+                        <span>
+                            <strong>依存关系：</strong>
+                            {activeToken.dep}
+                        </span>{' '}
+                        {activeTokenHead && (
+                            <span>
+                                <strong>前继：</strong>
+                                {text.slice(
+                                    activeTokenHead.start,
+                                    activeTokenHead.end,
+                                )}
+                            </span>
+                        )}
+                    </div>
+                )}
+            </p>
         </Fragment>
     );
 };
