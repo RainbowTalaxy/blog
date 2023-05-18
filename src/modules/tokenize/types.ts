@@ -12,4 +12,5 @@ export interface Token {
     head: number;
     color?: string;
     link?: Token;
+    leg?: Token;
 }

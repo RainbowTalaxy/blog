@@ -6,6 +6,7 @@ import { Token } from './types';
 import { Dependency } from './constants/Dependency';
 import { COLORS } from './constants';
 import clsx from 'clsx';
+import { CodeEffect, codeEffect } from './utils/codeEffect';
 
 const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
     // 清除旧的 link
@@ -24,6 +25,7 @@ const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
 };
 
 const findLinkHead = (token: Token) => {
+    if (token.leg) return token.leg;
     if (!token.link) return token;
     return findLinkHead(token.link);
 };
@@ -48,9 +50,10 @@ const colorToken = (tokens: Token[]) => {
 interface Props {
     sentence: string;
     relations: Dependency[];
+    codeEffects: CodeEffect[];
 }
 
-const SentenceParser = ({ sentence, relations }: Props) => {
+const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
     const [activeToken, setActiveToken] = useState<Token>(null);
     const [data, setData] = useState<SentenceData>(null);
 
@@ -62,6 +65,7 @@ const SentenceParser = ({ sentence, relations }: Props) => {
         if (!data) return [];
         const { tokens } = data;
         const linked = linkToken(tokens, relations);
+        codeEffect(linked, codeEffects);
         colorToken(linked);
         return linked;
     }, [data, relations]);
