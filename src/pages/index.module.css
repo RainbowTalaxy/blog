@@ -9,7 +9,7 @@
 
 .custom-page {
     margin: 0 auto;
-    padding: 32px 12px;
+    padding: 32px max(16px, 5vw);
     width: 100%;
     max-width: 1000px;
 }

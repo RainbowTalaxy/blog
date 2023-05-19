@@ -27,6 +27,9 @@ async function test() {
 
         // dictionary 测试
         await require('./dictionary');
+
+        // statics 测试
+        await require('./statics');
     } catch {}
 }
 

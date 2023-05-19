@@ -4,8 +4,6 @@
  * 使用 curl 命令测试接口
  */
 
-const fs = require('fs');
-const { BOOKS_DIR } = require('../constants');
 const { request, curl } = require('./utils');
 
 const BASE_PATH = '/dictionary';
