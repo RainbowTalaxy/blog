@@ -25,7 +25,7 @@ const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
 };
 
 const findLinkHead = (token: Token) => {
-    if (token.leg) return token.leg;
+    if (token.leg) return findLinkHead(token.leg);
     if (!token.link) return token;
     return findLinkHead(token.link);
 };
@@ -93,7 +93,7 @@ const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
                             key={token.id}
                             className={clsx(styles.token)}
                             style={{
-                                backgroundColor: token.color + '7b',
+                                backgroundColor: token.color + '64',
                                 borderBottom: `2px solid ${borderColor}`,
                             }}
                             onMouseOver={() => setActiveToken(token)}

@@ -32,7 +32,6 @@ export const TOKENIZE_FILTER_V1 = [
 
 export const TOKENIZE_FILTER_V2 = [
     'advcl',
-    'cc',
     'conj',
     'prep',
     'relcl',
