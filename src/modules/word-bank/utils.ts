@@ -63,5 +63,6 @@ export const sentenceSplit = (text: string) => {
             limited.push(sentence);
         }
     });
+    console.log(limited);
     return limited;
 };

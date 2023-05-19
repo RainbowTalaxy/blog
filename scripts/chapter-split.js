@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const outputDir = '/Users/talaxy/Downloads';
-const bookName = 'The-Midnight-Library';
+const bookName = 'The-Little-Prince';
 
 // 读取文件
 let text = fs.readFileSync(`${outputDir}/${bookName}.txt`, 'utf-8');
@@ -25,9 +25,15 @@ console.log(bookTitle);
 const chapters = [];
 bookContent.forEach((line) => {
     if (line.startsWith('CHAPTER')) {
-        console.log(line);
+        let chapterTitle = '';
+        if (line === 'CHAPTER END') {
+            chapterTitle = 'End';
+        } else {
+            chapterTitle = line.replace(/CHAPTER (.*)/, 'Chapter $1');
+        }
+        console.log(chapterTitle);
         chapters.push({
-            title: line.replace(/CHAPTER: (.*)/, '$1'),
+            title: chapterTitle,
             content: [],
         });
     } else {
