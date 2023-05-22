@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Dependency } from './constants/Dependency';
 import { useLocalStorage } from 'usehooks-ts';
 import { TOKENIZE_FILTER_V2 } from './constants/filters';
-import { SENTENCES } from './constants';
+import { REFERENCES, SENTENCES } from './constants';
 import SentenceParser from './SentenceParser';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
 import { CodeEffect, CodeEffectInfo } from './utils/codeEffect';
@@ -109,6 +109,14 @@ const TokenizePage = () => {
                         >
                             重置
                         </button>
+                    </div>
+                    <span>参考文档</span>
+                    <div className={styles.list}>
+                        {REFERENCES.map((reference) => (
+                            <li key={reference.name}>
+                                <a href={reference.url}>{reference.name}</a>
+                            </li>
+                        ))}
                     </div>
                 </>
             }

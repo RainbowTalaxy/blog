@@ -26,3 +26,22 @@ export const SENTENCES = [
     'But it did so while holding its nose at the ethics of his conduct, which included accepting gifts such as a Rolex watch and a Ferrari Automobile from a company seeking access to government.',
     'They could still invalidate Fourth Amendment protections when facing severe, urgent circumstances, and they could take reasonable measures to ensure that phone data are not erased or altered while a warrant is pending.',
 ];
+
+export const REFERENCES = [
+    {
+        name: '词性 Tag 说明',
+        url: 'https://github.com/explosion/spaCy/blob/master/spacy/glossary.py#L23',
+    },
+    {
+        name: '依存关系说明',
+        url: 'https://github.com/explosion/spaCy/blob/master/spacy/glossary.py#L23',
+    },
+    {
+        name: 'spaCy 模型参数',
+        url: 'https://spacy.io/models/en#en_core_web_lg',
+    },
+    {
+        name: '词法与依存关系树 - 谷歌云',
+        url: 'https://cloud.google.com/natural-language/docs/morphology?hl=zh-cn',
+    },
+];
