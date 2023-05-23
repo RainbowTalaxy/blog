@@ -2,7 +2,7 @@ import styles from './index.module.css';
 import clsx from 'clsx';
 import { Dependency } from './constants/Dependency';
 import { useLocalStorage } from 'usehooks-ts';
-import { TOKENIZE_FILTER_V2, TOKENIZE_FILTER_V3 } from './constants/filters';
+import { TOKENIZE_FILTER_V3 } from './constants/filters';
 import { REFERENCES, SENTENCES } from './constants';
 import SentenceParser from './SentenceParser';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';

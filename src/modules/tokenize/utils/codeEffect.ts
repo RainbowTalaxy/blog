@@ -11,7 +11,7 @@ export enum CodeEffect {
 export const CodeEffectInfo: { [key in CodeEffect]: string } = {
     [CodeEffect.ConjHandle]: '连词合并',
     [CodeEffect.CcompFilter]: '从句补充断裂',
-    [CodeEffect.SpanCombine]: '短句合并（实验）',
+    [CodeEffect.SpanCombine]: '短句合并(实验)',
 };
 
 const CONJ_POS_FILTER = [POS.VERB];
