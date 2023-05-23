@@ -2,7 +2,7 @@ import styles from './index.module.css';
 import clsx from 'clsx';
 import { Dependency } from './constants/Dependency';
 import { useLocalStorage } from 'usehooks-ts';
-import { TOKENIZE_FILTER_V2 } from './constants/filters';
+import { TOKENIZE_FILTER_V2, TOKENIZE_FILTER_V3 } from './constants/filters';
 import { REFERENCES, SENTENCES } from './constants';
 import SentenceParser from './SentenceParser';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
@@ -11,26 +11,33 @@ import { CodeEffect, CodeEffectInfo } from './utils/codeEffect';
 const RELATIONS = Object.values(Dependency);
 const CODE_EFFECTS = Object.values(CodeEffect);
 
-const FILTER = TOKENIZE_FILTER_V2;
+const FILTER = TOKENIZE_FILTER_V3;
+
+const VERSION = 'v1.2.0';
 
 const TokenizePage = () => {
     const [relations, setRelations] = useLocalStorage(
         'tokenize-relations',
-        FILTER,
+        FILTER.relations,
     );
 
     const [codeEffects, setCodeEffects] = useLocalStorage(
         'tokenize-code-effects',
-        CODE_EFFECTS,
+        FILTER.codeEffects,
     );
 
     return (
         <ContentWithSidebar
-            title="句子解析"
+            title={
+                <>
+                    句子解析<span className={styles.version}> - {VERSION}</span>
+                </>
+            }
             sidebarWidth={400}
             sidebar={
                 <>
                     <span>依存关系断裂</span>
+                    <p>指定一些依存关系，通过断开关系来断句</p>
                     <div className={styles.optionBar}>
                         {RELATIONS.map((relation) => {
                             const isActive = relations.includes(relation);
@@ -58,7 +65,7 @@ const TokenizePage = () => {
                         <button
                             className={clsx(styles.option, styles.other)}
                             onClick={() => {
-                                setRelations(FILTER);
+                                setRelations(FILTER.relations);
                             }}
                         >
                             重置
@@ -77,6 +84,7 @@ const TokenizePage = () => {
                         </button>
                     </div>
                     <span>代码加工</span>
+                    <p>一些由代码直接实现的断句规则</p>
                     <div className={styles.optionBar}>
                         {CODE_EFFECTS.map((effect) => {
                             const isActive = codeEffects.includes(effect);
@@ -104,7 +112,7 @@ const TokenizePage = () => {
                         <button
                             className={clsx(styles.option, styles.other)}
                             onClick={() => {
-                                setCodeEffects(CODE_EFFECTS);
+                                setCodeEffects(FILTER.codeEffects);
                             }}
                         >
                             重置

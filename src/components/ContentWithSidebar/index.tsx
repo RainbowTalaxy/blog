@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import styles from './index.module.css';
 
 interface Props {
-    title?: string;
+    title?: ReactNode;
     sidebar: ReactNode;
     children: ReactNode;
     sidebarWidth?: number;

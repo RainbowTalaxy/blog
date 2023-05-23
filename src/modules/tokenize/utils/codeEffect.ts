@@ -1,4 +1,3 @@
-import { findLinkHead } from '.';
 import { Dependency } from '../constants/Dependency';
 import { POS } from '../constants/POS';
 import { Token } from '../types';
@@ -12,7 +11,7 @@ export enum CodeEffect {
 export const CodeEffectInfo: { [key in CodeEffect]: string } = {
     [CodeEffect.ConjHandle]: '连词合并',
     [CodeEffect.CcompFilter]: '从句补充断裂',
-    [CodeEffect.SpanCombine]: '合并短句（测试中）',
+    [CodeEffect.SpanCombine]: '短句合并（实验）',
 };
 
 const CONJ_POS_FILTER = [POS.VERB];

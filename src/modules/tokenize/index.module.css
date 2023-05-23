@@ -87,3 +87,8 @@
 .list a {
     text-decoration: underline;
 }
+
+.version {
+    font-size: 16px;
+    color: var(--theme-black-half);
+}
