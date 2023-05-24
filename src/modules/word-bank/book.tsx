@@ -8,6 +8,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import QueryableParagraph from './components/QueryableParagraph';
 import { ResourceBookMeta } from '@site/src/api/word-bank';
+import API from '@site/src/api';
 
 const Book = () => {
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
@@ -18,7 +19,7 @@ const Book = () => {
     const [rawText, setRawText] = useState<string[]>([]);
 
     const bookName = decodeURIComponent(
-        query.get('book') ?? 'Harry Potter and the Half-Blood Prince',
+        query.get('book') ?? 'The Midnight Library',
     );
     const targetChapter = decodeURIComponent(query.get('chapter') ?? '');
 
@@ -37,12 +38,7 @@ const Book = () => {
 
     const refetchMeta = useCallback(async () => {
         try {
-            const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/literary?bookName=${decodeURIComponent(
-                    bookName,
-                )}`,
-            );
-            const data = (await response.json()) as ResourceBookMeta;
+            const data = await API.wordBank.literary(bookName);
             setBookMeta(data);
             if (!targetChapter && data.chapters[0]) {
                 history.push(

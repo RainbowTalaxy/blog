@@ -34,6 +34,12 @@ const WordBankAPI = {
         fetch(`${SERVER_API}/word-bank/books/${userId}/${bookId}`).then((res) =>
             res.json(),
         ) as Promise<{ book: Book }>,
+    literary: (bookName) =>
+        fetch(
+            `${SERVER_API}/word-bank/literary?bookName=${encodeURIComponent(
+                bookName,
+            )}`,
+        ).then((res) => res.json()) as Promise<ResourceBookMeta>,
 };
 
 export default WordBankAPI;
