@@ -30,8 +30,7 @@ const Book = () => {
         if (!chapterInfo) return;
         try {
             // 根据 chapterInfo.resource 获取资源，资源是一个 txt 文件
-            const response = await fetch(chapterInfo.resource);
-            const data = (await response.text()).trim();
+            const data = (await API.text(chapterInfo.resource)).trim();
             setRawText(data.split('\n'));
         } catch {}
     }, [targetChapter, bookMeta]);
