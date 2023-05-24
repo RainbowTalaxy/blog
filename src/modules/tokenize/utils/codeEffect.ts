@@ -1,3 +1,4 @@
+import { flattenTokenHead } from '.';
 import { Dependency } from '../constants/Dependency';
 import { POS } from '../constants/POS';
 import { Token } from '../types';
@@ -68,6 +69,7 @@ const calcSpans = (tokens: Token[]) => {
 
 // 若相邻的 span 都小于 minLength，则合并为一个 span。合并方式为将后一个 span 的 head 指向前一个 span 的 head
 const spanCombine = (tokens: Token[], minLength: number) => {
+    flattenTokenHead(tokens);
     const spans = calcSpans(tokens);
     console.log(spans);
     let preLength = 0;
@@ -86,13 +88,15 @@ const spanCombine = (tokens: Token[], minLength: number) => {
                 preSpans.push(span);
                 return;
             }
-            const son = spans.find((s) => s.head === span.root);
+            const son = preSpans.find((s) => s.head === span.root);
             if (son) {
                 tokens[son.root].link = tokens[span.root];
                 preLength += span.count;
                 preSpans.push(span);
                 return;
             }
+            preLength = span.count;
+            preSpans = [span];
         }
     });
 };

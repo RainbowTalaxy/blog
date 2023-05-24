@@ -27,7 +27,6 @@ const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
         console.log(sentence);
         const { tokens } = data;
         const linked = linkToken(tokens, relations);
-        flattenTokenHead(linked);
         codeEffect(linked, codeEffects);
         colorToken(linked);
         return linked;
