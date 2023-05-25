@@ -21,8 +21,10 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { BOOKS_DIR, STATIC_URL } = require('../constants');
+const { Dir, Statics } = require('../constants');
 const { default: axios } = require('axios');
+
+const BOOKS_DIR = Dir.storage.books;
 
 // 用来存放用户上传的单词书的目录
 mkdirp.sync(BOOKS_DIR);
@@ -150,14 +152,13 @@ router.get('/books/:userId/:bookId', async (req, res) => {
  *      - 对于每个章节，文件夹下有个对应章节的 txt 文件，文件名即为章节标题。
  */
 
-const BOOKS_STATIC_URL = `${STATIC_URL}/books`;
+const BOOKS_STATIC_URL = `${Statics}/books`;
 
 // 写一个接口，它接收一个书籍名，返回书籍的元数据
 router.get('/literary', async (req, res) => {
     try {
         // 获取书籍名，他是 query 参数
         let { bookName } = req.query;
-        bookName = bookName;
         // 获取书籍元数据
         const { data: bookMeta } = await axios.get(
             `${BOOKS_STATIC_URL}/${bookName}/meta.json`,

@@ -6,14 +6,14 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
-const { STATIC_DIR } = require('../constants');
+const { Dir } = require('../constants');
 
 // 获取指定目录下的所有文件
 router.get('*', (req, res) => {
     const filePath = decodeURIComponent(req.params[0] ?? '');
-    const dir = path.join(STATIC_DIR, filePath);
+    const dir = path.join(Dir.static, filePath);
     // 如果路径超出了静态资源目录，就返回403
-    if (!dir.startsWith(STATIC_DIR)) {
+    if (!dir.startsWith(Dir.static)) {
         res.status(403).send({
             error: 'Forbidden',
         });

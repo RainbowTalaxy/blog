@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { LOCAL_SERVER_URL } = require('../constants');
+const { Server } = require('../constants');
 
 const cmd = (command) => {
     return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ const customEncodeURIComponent = (str) => {
  */
 const curl = (url, method, data) => {
     let basicCmd = `curl -X ${method} -H 'Content-Type: application/json'`;
-    let basicUrl = `${LOCAL_SERVER_URL}${url}`;
+    let basicUrl = `${Server}${url}`;
     if (data) {
         if (method === 'GET') {
             // 将 data 视为 query。将 query 拼接到 url 上

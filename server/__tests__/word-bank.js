@@ -5,10 +5,11 @@
  */
 
 const fs = require('fs');
-const { BOOKS_DIR } = require('../constants');
+const { Dir } = require('../constants');
 const { request, curl } = require('./utils');
 
 const BASE_PATH = '/word-bank';
+const BOOKS_DIR = Dir.storage.books;
 
 // 定义一个单词书的测试数据
 const book = {
