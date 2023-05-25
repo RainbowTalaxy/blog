@@ -1,4 +1,5 @@
 import { SERVER_API } from '../constants/config';
+import { rocket } from './utils';
 
 export interface Word {
     id: string;
@@ -27,19 +28,17 @@ export interface ResourceBookMeta {
 
 const WordBankAPI = {
     bookList: (userId: string) =>
-        fetch(`${SERVER_API}/word-bank/books/${userId}`).then((res) =>
-            res.json(),
-        ) as Promise<{ books: BookInfo[] }>,
+        rocket.get<{ books: BookInfo[] }>(
+            `${SERVER_API}/word-bank/books/${userId}`,
+        ),
     book: (userId: string, bookId: string) =>
-        fetch(`${SERVER_API}/word-bank/books/${userId}/${bookId}`).then((res) =>
-            res.json(),
-        ) as Promise<{ book: Book }>,
-    literary: (bookName) =>
-        fetch(
-            `${SERVER_API}/word-bank/literary?bookName=${encodeURIComponent(
-                bookName,
-            )}`,
-        ).then((res) => res.json()) as Promise<ResourceBookMeta>,
+        rocket.get<{ book: Book }>(
+            `${SERVER_API}/word-bank/books/${userId}/${bookId}`,
+        ),
+    literary: (bookName: string) =>
+        rocket.get<ResourceBookMeta>(`${SERVER_API}/word-bank/literary`, {
+            bookName,
+        }),
 };
 
 export default WordBankAPI;

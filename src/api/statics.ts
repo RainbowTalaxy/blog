@@ -1,4 +1,5 @@
 import { SERVER_API } from '../constants/config';
+import { rocket } from './utils';
 
 export interface FileData {
     name: string;
@@ -7,9 +8,9 @@ export interface FileData {
 
 const StaticsAPI = {
     files: (path = '') =>
-        fetch(`${SERVER_API}/statics/${decodeURIComponent(path)}`).then((res) =>
-            res.json(),
-        ) as Promise<{ files: FileData[] }>,
+        rocket.get<{
+            files: FileData[];
+        }>(`${SERVER_API}/statics/${decodeURIComponent(path)}`),
 };
 
 export default StaticsAPI;

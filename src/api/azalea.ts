@@ -1,5 +1,6 @@
 import { AZALEA_URL } from '../constants/config';
 import { Token } from '../modules/tokenize/types';
+import { rocket } from './utils';
 
 export interface SentenceData {
     text: string;
@@ -8,14 +9,8 @@ export interface SentenceData {
 }
 
 const AzaleaAPI = {
-    hello: () =>
-        fetch(`${AZALEA_URL}`, {
-            mode: 'no-cors',
-        }).then((res) => res.text()),
     sentence: (text: string) =>
-        fetch(`${AZALEA_URL}/sentence?text=${encodeURIComponent(text)}`).then(
-            (res) => res.json(),
-        ) as Promise<{ data: SentenceData }>,
+        rocket.get<{ data: SentenceData }>(`${AZALEA_URL}/sentence`, { text }),
 };
 
 export default AzaleaAPI;

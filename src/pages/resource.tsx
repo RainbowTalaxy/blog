@@ -4,14 +4,12 @@ import { FileData } from '../api/statics';
 import styles from './index.module.css';
 import Layout from '@theme/Layout';
 import useQuery from '../hooks/useQuery';
-import { useHistory } from '@docusaurus/router';
 import { STATICS_URL } from '../constants/config';
 
 const BASE_URL = '/resource';
 
 const Page = () => {
     const query = useQuery();
-    const history = useHistory();
 
     const path = decodeURIComponent(query.get('dir') ?? '');
     const dir = path.split('/').filter((item) => item !== '');
@@ -48,9 +46,8 @@ const Page = () => {
                         </a>
                     </li>
                     {files?.map((file) => {
-                        const targetUrl = encodeURIComponent(
-                            path + '/' + file.name,
-                        );
+                        const targetUrl = path + '/' + file.name;
+                        console.log(targetUrl);
                         return (
                             <li key={file.name}>
                                 {file.isDir ? (
@@ -60,7 +57,7 @@ const Page = () => {
                                 ) : (
                                     <a
                                         target="_blank"
-                                        href={`${STATICS_URL}/${targetUrl}`}
+                                        href={`${STATICS_URL}${targetUrl}`}
                                     >
                                         {file.name}
                                     </a>
