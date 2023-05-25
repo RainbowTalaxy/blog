@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
-const { Dir } = require('../constants');
+const { Dir } = require('../config');
 
 // 获取指定目录下的所有文件
 router.get('*', (req, res) => {

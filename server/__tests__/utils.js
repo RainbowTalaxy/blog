@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { Server } = require('../constants');
+const { Server } = require('../config');
 
 const cmd = (command) => {
     return new Promise((resolve, reject) => {

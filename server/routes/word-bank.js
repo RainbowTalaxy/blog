@@ -21,7 +21,7 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { Dir, Statics } = require('../constants');
+const { Dir, Statics } = require('../config');
 const { default: axios } = require('axios');
 
 const BOOKS_DIR = Dir.storage.books;

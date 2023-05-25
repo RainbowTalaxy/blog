@@ -3,14 +3,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { mkdirp } = require('mkdirp');
 
-const { Dir, PORT } = require('./constants');
+const { Dir, PORT } = require('./config');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
-
-// 初始化文件系统
-mkdirp.sync(Dir.temp);
 
 const app = express();
 

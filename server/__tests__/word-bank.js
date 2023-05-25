@@ -5,7 +5,7 @@
  */
 
 const fs = require('fs');
-const { Dir } = require('../constants');
+const { Dir } = require('../config');
 const { request, curl } = require('./utils');
 
 const BASE_PATH = '/word-bank';
