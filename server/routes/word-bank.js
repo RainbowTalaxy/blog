@@ -21,8 +21,9 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { Dir, Statics } = require('../config');
+const { Dir, Statics, APIKey } = require('../config');
 const { default: axios } = require('axios');
+const { authority } = require('../middlewares');
 
 const BOOKS_DIR = Dir.storage.books;
 
@@ -60,7 +61,7 @@ const updateBook = (userDir, book) => {
 };
 
 // 用户上传单词书
-router.put('/books/:userId', async (req, res) => {
+router.put('/books/:userId', authority(APIKey.file), async (req, res) => {
     try {
         // 获取 userId
         const { userId } = req.params;

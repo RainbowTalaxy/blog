@@ -5,7 +5,7 @@
  */
 
 const fs = require('fs');
-const { Dir } = require('../config');
+const { Dir, APIKey } = require('../config');
 const { request, curl } = require('./utils');
 
 const BASE_PATH = '/word-bank';
@@ -39,8 +39,20 @@ const userId = 'test';
 async function test() {
     // 咱们先测一下上传单词书
     await request(
-        'Word bank - upload book',
+        'Word bank - upload book (unauthorized)',
         curl(`${BASE_PATH}/books/${userId}`, 'PUT', book),
+        (response, resolve, reject) => {
+            if (response.error) return resolve();
+            reject('Expect "success"');
+        },
+    );
+
+    // 咱们先测一下上传单词书
+    await request(
+        'Word bank - upload book',
+        curl(`${BASE_PATH}/books/${userId}`, 'PUT', book, {
+            [APIKey.file]: 'talaxy',
+        }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 

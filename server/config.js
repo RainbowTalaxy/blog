@@ -30,6 +30,10 @@ const LOCAL_DIR = {
     },
 };
 
+const APIKey = {
+    file: 'fileApiKey',
+};
+
 if (process.env.NODE_ENV === 'production') {
     mkdirp.sync(SERVER_DIR.temp);
     mkdirp.sync(SERVER_DIR.static);
@@ -39,7 +43,7 @@ if (process.env.NODE_ENV === 'production') {
         fs.writeFileSync(
             SERVER_DIR.storage.whitelist,
             JSON.stringify({
-                fileApiKeys: [],
+                [APIKey.file]: [],
             }),
         );
     }
@@ -57,4 +61,5 @@ module.exports = {
     Server,
     Statics,
     Dir,
+    APIKey,
 };

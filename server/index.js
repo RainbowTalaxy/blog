@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { mkdirp } = require('mkdirp');
 
-const { Dir, PORT } = require('./config');
+const { PORT } = require('./config');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
@@ -12,6 +12,7 @@ const { staticsRouter } = require('./routes/statics');
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json

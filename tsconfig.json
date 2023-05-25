@@ -10,5 +10,5 @@
             }
         ]
     },
-    "exclude": ["temp", "build"]
+    "exclude": ["temp", "build", "server"]
 }

@@ -31,6 +31,19 @@ async function downloadFile(url, localPath) {
     });
 }
 
+const readJSON = (filePath) => {
+    if (!fs.existsSync(filePath)) {
+        return null;
+    }
+    const content = fs.readFileSync(filePath);
+    try {
+        return JSON.parse(content);
+    } catch {
+        return null;
+    }
+};
+
 module.exports = {
     downloadFile,
+    readJSON,
 };

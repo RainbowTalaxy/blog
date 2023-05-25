@@ -58,7 +58,7 @@ const customEncodeURIComponent = (str) => {
  * 2. 仅生成一个字符串，即 curl 命令
  * 3. curl 使用的 RESTFul API 风格
  */
-const curl = (url, method, data) => {
+const curl = (url, method, data, cookie) => {
     let basicCmd = `curl -X ${method} -H 'Content-Type: application/json'`;
     let basicUrl = `${Server}${url}`;
     if (data) {
@@ -75,6 +75,13 @@ const curl = (url, method, data) => {
             // 将 data 视为 body。将 body 作为参数传递给 curl
             basicCmd += ` -d '${JSON.stringify(data)}'`;
         }
+    }
+    if (cookie) {
+        // 将 cookie 对象转为 string
+        let cookieStr = Object.entries(cookie)
+            .map(([key, value]) => `${key}=${value}`)
+            .join(';');
+        basicCmd += ` -H 'Cookie: ${cookieStr}'`;
     }
     return `${basicCmd} ${basicUrl}`;
 };
