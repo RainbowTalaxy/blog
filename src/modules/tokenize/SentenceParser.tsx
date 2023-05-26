@@ -4,48 +4,9 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.css';
 import { Token } from './types';
 import { Dependency } from './constants/Dependency';
-import { COLORS } from './constants';
 import clsx from 'clsx';
 import { CodeEffect, codeEffect } from './utils/codeEffect';
-
-const linkToken = (tokens: Token[], breakRel: Dependency[]) => {
-    // 清除旧的 link
-    tokens.forEach((token) => {
-        delete token.link;
-    });
-    tokens = tokens.slice().map((token) => ({ ...token }));
-    tokens.forEach((token) => {
-        if (breakRel.includes(token.dep)) return;
-        const { id, head } = token;
-        if (head !== id) {
-            token.link = tokens[head];
-        }
-    });
-    return tokens;
-};
-
-const findLinkHead = (token: Token) => {
-    if (token.leg) return findLinkHead(token.leg);
-    if (!token.link) return token;
-    return findLinkHead(token.link);
-};
-
-// 给 token 上色，对于同一条链路上的 token，使用相同的颜色
-const colorToken = (tokens: Token[]) => {
-    // 清除旧的 color
-    tokens.forEach((token) => {
-        delete token.color;
-    });
-    let colorIdx = 0;
-    tokens.forEach((token) => {
-        const head = findLinkHead(token);
-        if (!head.color) {
-            head.color = COLORS[colorIdx];
-            colorIdx = (colorIdx + 1) % COLORS.length;
-        }
-        token.color = head.color;
-    });
-};
+import { colorToken, flattenTokenHead, linkToken } from './utils';
 
 interface Props {
     sentence: string;
@@ -63,12 +24,13 @@ const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
 
     const linked = useMemo(() => {
         if (!data) return [];
+        console.log(sentence);
         const { tokens } = data;
         const linked = linkToken(tokens, relations);
         codeEffect(linked, codeEffects);
         colorToken(linked);
         return linked;
-    }, [data, relations]);
+    }, [data, relations, codeEffects]);
 
     if (!data) return null;
 
@@ -78,7 +40,7 @@ const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
     return (
         <Fragment>
             <p>{text}</p>
-            <p className={styles.sentence}>
+            <div className={styles.sentence}>
                 {linked.map((token) => {
                     let borderColor = 'transparent';
                     const isHead = activeTokenHead?.id === token.id;
@@ -131,7 +93,7 @@ const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
                         )}
                     </div>
                 )}
-            </p>
+            </div>
         </Fragment>
     );
 };

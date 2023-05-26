@@ -40,6 +40,13 @@
     color: var(--ifm-menu-color-active);
 }
 
+.sidebarInner > p {
+    margin: 0 0;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--theme-black-half);
+}
+
 .content {
     flex: 1;
     padding: 24px 12px 120px;
