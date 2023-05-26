@@ -1,6 +1,13 @@
-enum APIKey {
+export enum APIKey {
     file = 'fileApiKey',
 }
+
+const getKey = (key: APIKey) => {
+    const userData = localStorage.getItem('user');
+    if (!userData) return '';
+    const user = JSON.parse(userData);
+    return user?.[key] ?? '';
+};
 
 export const rocket = {
     async get<Data>(url: string, query?: any) {
@@ -10,12 +17,26 @@ export const rocket = {
         const result: Data = await res.json();
         return result;
     },
-    async post<Data>(url: string, data: any, key: APIKey) {
+    async post<Data>(url: string, data: any, key?: APIKey) {
         const res = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
-                Cookie: `${key}=${localStorage.getItem(key)}`,
+                Authorization: key && `${key}=${getKey(key)}`,
+            },
+            body: JSON.stringify(data || {}),
+        });
+        const result: Data = await res.json();
+        return result;
+    },
+    async put<Data>(url: string, data: any, key?: APIKey) {
+        const res = await fetch(url, {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: key && `${key}=${getKey(key)}`,
             },
             body: JSON.stringify(data || {}),
         });

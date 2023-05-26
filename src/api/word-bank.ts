@@ -1,5 +1,5 @@
 import { SERVER_API } from '../constants/config';
-import { rocket } from './utils';
+import { APIKey, rocket } from './utils';
 
 export interface Word {
     id: string;
@@ -39,6 +39,12 @@ const WordBankAPI = {
         rocket.get<ResourceBookMeta>(`${SERVER_API}/word-bank/literary`, {
             bookName,
         }),
+    uploadBook: (userId: string, book: Book) =>
+        rocket.put(
+            `${SERVER_API}/word-bank/books/${userId}`,
+            book,
+            APIKey.file,
+        ),
 };
 
 export default WordBankAPI;

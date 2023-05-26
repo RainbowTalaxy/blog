@@ -107,24 +107,40 @@ const WordBank = () => {
                     ))}
                 </div>
                 {book && (
-                    <div className={styles.wordList}>
-                        {book.words?.map((word) => (
-                            <div className={styles.word} key={word.id}>
-                                <div className={styles.wordName}>
-                                    {!isLoading && (
-                                        <QueryableWord word={word} />
-                                    )}
+                    <>
+                        <div className={styles.wordList}>
+                            {book.words?.map((word) => (
+                                <div className={styles.word} key={word.id}>
+                                    <div className={styles.wordName}>
+                                        {!isLoading && (
+                                            <QueryableWord word={word} />
+                                        )}
+                                    </div>
+                                    <div className={styles.spacer} />
+                                    <div className={styles.wordPartOfSpeech}>
+                                        {!isLoading &&
+                                            decoratePardOfSpeech(word)}
+                                    </div>
+                                    <div className={styles.wordDefinition}>
+                                        {!isLoading && word.def}
+                                    </div>
                                 </div>
-                                <div className={styles.spacer} />
-                                <div className={styles.wordPartOfSpeech}>
-                                    {!isLoading && decoratePardOfSpeech(word)}
-                                </div>
-                                <div className={styles.wordDefinition}>
-                                    {!isLoading && word.def}
-                                </div>
+                            ))}
+                        </div>
+                        <div className={styles.wordList}>
+                            <div className={styles.word}>
+                                <a
+                                    onClick={() =>
+                                        user?.id &&
+                                        book &&
+                                        API.wordBank.uploadBook(user.id, book)
+                                    }
+                                >
+                                    保存
+                                </a>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    </>
                 )}
             </div>
             <div
