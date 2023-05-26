@@ -13,7 +13,7 @@ const CODE_EFFECTS = Object.values(CodeEffect);
 
 const FILTER = TOKENIZE_FILTER_V3;
 
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.3.0';
 
 const TokenizePage = () => {
     const [relations, setRelations] = useLocalStorage(
