@@ -67,6 +67,11 @@ router.put('/books/:userId', authority(APIKey.file), async (req, res) => {
         const { userId } = req.params;
         // 获取请求的 body
         const book = req.body;
+        if (!book.id) {
+            return res.status(400).send({
+                error: 'The book id is required.',
+            });
+        }
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 更新单词书
