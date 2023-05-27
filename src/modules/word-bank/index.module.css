@@ -12,10 +12,22 @@
     flex: 1;
     position: relative;
     display: flex;
+    --default-font: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
+        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 .container a {
     cursor: pointer;
+}
+
+.container input,
+.container input:focus {
+    padding: 0;
+    outline: none;
+    border: none;
+    font-size: initial;
+    font-weight: initial;
+    font-family: var(--default-font);
 }
 
 .sidebar {
@@ -94,7 +106,7 @@
 
 .wordList {
     margin: 24px auto;
-    padding: 4px 12px;
+    padding: 2px 12px 4px;
     max-width: 600px;
     border-radius: 0.5rem;
     background-color: var(--theme-white);
@@ -107,7 +119,8 @@ html[data-theme='dark'] .wordList {
 .word {
     display: flex;
     align-items: baseline;
-    padding: 4px 4px;
+    padding: 2px 4px 0;
+    line-height: 34px;
     min-height: 36px;
 }
 
@@ -118,20 +131,32 @@ html[data-theme='dark'] .wordList {
 
 .wordName {
     display: block;
+    font-family: var(--default-font);
+    min-width: 60px !important;
+}
+
+.input {
+    min-height: 34px;
+    min-width: 10px;
+    white-space: nowrap;
 }
 
 .wordPartOfSpeech {
     margin: 0 4px;
+    padding-left: 5px;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-style: italic;
     font-size: 14px;
     opacity: 0.5;
 }
 
+.wordPartOfSpeech::after {
+    content: '.';
+}
+
 .wordDefinition {
     display: block;
-    font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
-        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-family: var(--default-font);
 }
 
 .currentUser {

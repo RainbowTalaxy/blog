@@ -1,25 +1,22 @@
 import styles from './index.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import { AppleDate } from '@site/src/utils';
+import { convertToAppleDate } from '@site/src/utils';
 import clsx from 'clsx';
-import QueryableWord from './components/QueryableWord';
 import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
 import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import API from '@site/src/api';
-import { Book, BookInfo, Word } from '@site/src/api/word-bank';
-
-function decoratePardOfSpeech(word: Word) {
-    if (!word.part) return;
-    if (word.part.endsWith('.')) return word.part;
-    return word.part + '.';
-}
+import { Book, BookInfo } from '@site/src/api/word-bank';
+import WordLine from './components/WordLine';
+import useEditData from './hooks/useEditData';
 
 const WordBank = () => {
     const [list, setList] = useState<BookInfo[]>([]);
     const [book, setBook] = useState<Book | null>(null);
+    const { editData, addEmptyWord, reset } = useEditData(book);
     const [isLoading, setIsLoading] = useState(false);
+    const [isEditing, setIsEditing] = useState(true);
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
     // 帮我监听 query 参数，参数名为 id
     const query = useQuery();
@@ -30,6 +27,7 @@ const WordBank = () => {
         try {
             const data = await API.wordBank.book(user.id, bookInfo.id);
             setBook(data.book);
+            setIsEditing(false);
             setIsLoading(false);
         } catch {}
     }, []);
@@ -80,7 +78,9 @@ const WordBank = () => {
                             </div>
                             <div className={styles.spacer} />
                             <div className={styles.bookDate}>
-                                {AppleDate(bookInfo.date).format('YYYY/MM/DD')}
+                                {convertToAppleDate(bookInfo.date).format(
+                                    'YYYY/MM/DD',
+                                )}
                             </div>
                         </div>
                     ))}
@@ -106,40 +106,59 @@ const WordBank = () => {
                         </div>
                     ))}
                 </div>
-                {book && (
+                {book && editData && (
                     <>
                         <div className={styles.wordList}>
-                            {book.words?.map((word) => (
-                                <div className={styles.word} key={word.id}>
-                                    <div className={styles.wordName}>
-                                        {!isLoading && (
-                                            <QueryableWord word={word} />
-                                        )}
-                                    </div>
-                                    <div className={styles.spacer} />
-                                    <div className={styles.wordPartOfSpeech}>
-                                        {!isLoading &&
-                                            decoratePardOfSpeech(word)}
-                                    </div>
-                                    <div className={styles.wordDefinition}>
-                                        {!isLoading && word.def}
-                                    </div>
-                                </div>
+                            {editData.words?.map((word) => (
+                                <WordLine
+                                    key={word.id}
+                                    word={word}
+                                    isLoading={isLoading}
+                                    isEditing={isEditing}
+                                />
                             ))}
+                            {isEditing && (
+                                <div className={styles.word}>
+                                    <a onClick={() => addEmptyWord()}>
+                                        添加单词
+                                    </a>
+                                </div>
+                            )}
                         </div>
-                        <div className={styles.wordList}>
-                            <div className={styles.word}>
-                                <a
-                                    onClick={() =>
-                                        user?.id &&
-                                        book &&
-                                        API.wordBank.uploadBook(user.id, book)
-                                    }
-                                >
-                                    保存
-                                </a>
+                        {user?.id && (
+                            <div className={styles.wordList}>
+                                <div className={styles.word}>
+                                    <a
+                                        onClick={() => {
+                                            if (isEditing) {
+                                                API.wordBank.uploadBook(
+                                                    user.id,
+                                                    editData,
+                                                );
+                                                setBook(editData);
+                                                setIsEditing(false);
+                                            } else {
+                                                setIsEditing(true);
+                                            }
+                                        }}
+                                    >
+                                        {isEditing ? '保存' : '编辑'}
+                                    </a>
+                                </div>
+                                {isEditing && (
+                                    <div className={styles.word}>
+                                        <a
+                                            onClick={() => {
+                                                reset();
+                                                setIsEditing(false);
+                                            }}
+                                        >
+                                            取消
+                                        </a>
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        )}
                     </>
                 )}
             </div>

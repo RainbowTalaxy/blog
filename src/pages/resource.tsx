@@ -47,7 +47,6 @@ const Page = () => {
                     </li>
                     {files?.map((file) => {
                         const targetUrl = path + '/' + file.name;
-                        console.log(targetUrl);
                         return (
                             <li key={file.name}>
                                 {file.isDir ? (
