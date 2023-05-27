@@ -115,6 +115,7 @@ const WordBank = () => {
                                     word={word}
                                     isLoading={isLoading}
                                     isEditing={isEditing}
+                                    onReturn={() => addEmptyWord()}
                                 />
                             ))}
                             {isEditing && (
@@ -129,9 +130,9 @@ const WordBank = () => {
                             <div className={styles.wordList}>
                                 <div className={styles.word}>
                                     <a
-                                        onClick={() => {
+                                        onClick={async () => {
                                             if (isEditing) {
-                                                API.wordBank.uploadBook(
+                                                await API.wordBank.uploadBook(
                                                     user.id,
                                                     editData,
                                                 );

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { SERVER_API } from '../constants/config';
 import { APIKey, rocket } from './utils';
 
@@ -39,12 +40,15 @@ const WordBankAPI = {
         rocket.get<ResourceBookMeta>(`${SERVER_API}/word-bank/literary`, {
             bookName,
         }),
-    uploadBook: (userId: string, book: Book) =>
-        rocket.put(
+    uploadBook: async (userId: string, book: Book) => {
+        // 去除 book.words 中 name 为空的单词
+        book.words = book.words.filter((word) => word.name);
+        await rocket.put(
             `${SERVER_API}/word-bank/books/${userId}`,
             book,
             APIKey.file,
-        ),
+        );
+    },
 };
 
 export default WordBankAPI;
