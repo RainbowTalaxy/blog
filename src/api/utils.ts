@@ -1,12 +1,12 @@
+import { getUser } from '../utils/user';
+
 export enum APIKey {
     file = 'fileApiKey',
 }
 
 const getKey = (key: APIKey) => {
-    const userData = localStorage.getItem('user');
-    if (!userData) return '';
-    const user = JSON.parse(userData);
-    return user?.[key] ?? '';
+    const user = getUser();
+    return user[key] ?? '';
 };
 
 export const rocket = {

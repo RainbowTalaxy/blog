@@ -159,7 +159,7 @@ html[data-theme='dark'] .wordList {
     font-family: var(--default-font);
 }
 
-.currentUser {
+/* .currentUser {
     position: fixed;
     left: 12px;
     bottom: calc(12px + var(--safe-area-inset-bottom) / 2);
@@ -169,4 +169,4 @@ html[data-theme='dark'] .wordList {
     background-color: var(--theme-white);
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
     cursor: pointer;
-}
+} */

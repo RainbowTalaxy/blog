@@ -121,18 +121,6 @@ const Book = () => {
                     ))}
                 </div>
             </div>
-            <div
-                className={styles.currentUser}
-                onClick={() =>
-                    history.push(
-                        '/user' +
-                            '?nextUrl=' +
-                            encodeURIComponent(window.location.href),
-                    )
-                }
-            >
-                {user?.id ?? '设置信息'}
-            </div>
         </div>
     );
 };

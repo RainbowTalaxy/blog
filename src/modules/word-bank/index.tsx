@@ -10,6 +10,8 @@ import API from '@site/src/api';
 import { Book, BookInfo } from '@site/src/api/word-bank';
 import WordLine from './components/WordLine';
 import useEditData from './hooks/useEditData';
+import useUserEntry from '@site/src/hooks/useUserEntry';
+import { setUser } from '@site/src/utils/user';
 
 const WordBank = () => {
     const [list, setList] = useState<BookInfo[]>([]);
@@ -55,6 +57,8 @@ const WordBank = () => {
     useEffect(() => {
         refetch();
     }, [query.get('id')]);
+
+    useUserEntry();
 
     return (
         <div className={styles.container}>
@@ -162,18 +166,13 @@ const WordBank = () => {
                         )}
                     </>
                 )}
-            </div>
-            <div
-                className={styles.currentUser}
-                onClick={() =>
-                    history.push(
-                        '/user' +
-                            '?nextUrl=' +
-                            encodeURIComponent(window.location.href),
-                    )
-                }
-            >
-                {user?.id ?? '设置信息'}
+                {!user.id && (
+                    <div className={styles.wordList}>
+                        <div className={styles.word}>
+                            <a onClick={() => setUser()}>设置用户</a>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
