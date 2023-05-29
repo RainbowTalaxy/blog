@@ -1,5 +1,5 @@
 import styles from './index.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppleDate, convertToAppleDate, uuid } from '@site/src/utils';
 import clsx from 'clsx';
 import useQuery from '@site/src/hooks/useQuery';
@@ -8,12 +8,13 @@ import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import API from '@site/src/api';
 import { Book, BookInfo } from '@site/src/api/word-bank';
-import WordLine from './components/WordLine';
+import WordLine, { EditableSpan } from './components/WordLine';
 import useEditData from './hooks/useEditData';
 import useUserEntry from '@site/src/hooks/useUserEntry';
 import { setUser } from '@site/src/utils/user';
 
 const WordBank = () => {
+    const titleRef = useRef<HTMLHeadingElement>(null);
     const [list, setList] = useState<BookInfo[]>([]);
     const [book, setBook] = useState<Book | null>(null);
     const { editData, addEmptyWord, reset } = useEditData(book);
@@ -37,7 +38,6 @@ const WordBank = () => {
     const refetch = useCallback(async () => {
         if (!user?.id) return;
         try {
-            setIsEditing(false);
             setIsLoading(true);
             const data = await API.wordBank.bookList(user.id);
             data.books.sort((a, b) => b.date - a.date);
@@ -105,7 +105,7 @@ const WordBank = () => {
                             }}
                         >
                             <div className={styles.bookTitle}>
-                                {bookInfo.title ?? '无标题'}
+                                {bookInfo.title || '无标题'}
                             </div>
                             <div className={styles.spacer} />
                             {bookInfo.date && (
@@ -134,73 +134,90 @@ const WordBank = () => {
                             }
                         >
                             <div className={styles.bookTitle}>
-                                {bookInfo.title}
+                                {bookInfo.title || '无标题'}
                             </div>
                         </div>
                     ))}
                 </div>
-                {book && editData && (
-                    <>
-                        <div className={styles.wordList}>
-                            {editData.words?.map((word) => (
-                                <WordLine
-                                    key={word.id}
-                                    word={word}
-                                    isLoading={isLoading}
-                                    isEditing={isEditing}
-                                    onReturn={() => addEmptyWord()}
-                                />
-                            ))}
-                            {isEditing && (
-                                <div className={styles.word}>
-                                    <a onClick={() => addEmptyWord()}>
-                                        添加单词
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                        {user?.id && (
-                            <div className={styles.wordList}>
-                                <div className={styles.word}>
-                                    <a
-                                        onClick={async () => {
-                                            if (isEditing) {
-                                                await API.wordBank.uploadBook(
-                                                    user.id,
-                                                    editData,
-                                                );
-                                                refetch();
-                                            } else {
-                                                setIsEditing(true);
-                                            }
+                <article className={styles.pageContent}>
+                    {book && editData && (
+                        <>
+                            <h1>
+                                {isEditing ? (
+                                    <EditableSpan
+                                        eleRef={titleRef}
+                                        text={editData.title}
+                                        placeholder="单词书名"
+                                        onChange={(str) => {
+                                            editData.title = str;
                                         }}
-                                    >
-                                        {isEditing ? '保存' : '编辑'}
-                                    </a>
-                                </div>
-                                {isEditing && editData.words.length > 0 && (
+                                        onEnter={() => titleRef.current?.blur()}
+                                    />
+                                ) : (
+                                    editData.title || '无标题'
+                                )}
+                            </h1>
+                            <div className={styles.wordList}>
+                                {editData.words?.map((word) => (
+                                    <WordLine
+                                        key={word.id}
+                                        word={word}
+                                        isLoading={isLoading}
+                                        isEditing={isEditing}
+                                        onReturn={() => addEmptyWord()}
+                                    />
+                                ))}
+                                {isEditing && (
                                     <div className={styles.word}>
-                                        <a
-                                            onClick={() => {
-                                                reset();
-                                                setIsEditing(false);
-                                            }}
-                                        >
-                                            取消
+                                        <a onClick={() => addEmptyWord()}>
+                                            添加单词
                                         </a>
                                     </div>
                                 )}
                             </div>
-                        )}
-                    </>
-                )}
-                {!user.id && (
-                    <div className={styles.wordList}>
-                        <div className={styles.word}>
-                            <a onClick={() => setUser()}>设置用户</a>
+                            {user?.id && (
+                                <div className={styles.wordList}>
+                                    <div className={styles.word}>
+                                        <a
+                                            onClick={async () => {
+                                                if (isEditing) {
+                                                    await API.wordBank.uploadBook(
+                                                        user.id,
+                                                        editData,
+                                                    );
+                                                    refetch();
+                                                } else {
+                                                    setIsEditing(true);
+                                                }
+                                            }}
+                                        >
+                                            {isEditing ? '保存' : '编辑'}
+                                        </a>
+                                    </div>
+                                    {isEditing && editData.words.length > 0 && (
+                                        <div className={styles.word}>
+                                            <a
+                                                onClick={() => {
+                                                    reset();
+                                                    setIsEditing(false);
+                                                }}
+                                            >
+                                                取消
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    )}
+                    {!user.id && (
+                        <div className={styles.wordList}>
+                            <div className={styles.word}>
+                                <a onClick={() => setUser()}>设置用户</a>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </article>
             </div>
         </div>
     );

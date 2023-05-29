@@ -4,36 +4,77 @@ import QueryableWord from './QueryableWord';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 
-const EditableSpan = ({
+export const EditableSpan = ({
     className,
     onChange,
     text,
+    rightAlign = false,
+    placeholder,
     eleRef,
     onEnter,
 }: {
     className?: string;
     eleRef?: React.RefObject<HTMLSpanElement>;
     text: string;
+    rightAlign?: boolean;
+    placeholder?: string;
     onChange: (text: string) => void;
     onEnter?: () => void;
 }) => {
+    const placeholderRef = useRef<HTMLSpanElement>(null);
+
     return (
-        <span
-            ref={eleRef}
-            className={clsx(styles.input, className)}
-            contentEditable
-            suppressContentEditableWarning
-            onInput={(e) => {
-                const text = e.currentTarget.innerText;
-                if (text.includes('\n')) {
-                    e.currentTarget.innerText = text.replace(/\n/g, '');
-                    e.currentTarget.blur();
-                    onEnter?.();
-                }
-                onChange(e.currentTarget.innerText || '');
-            }}
-        >
-            {text}
+        <span className={clsx(styles.inputBox, className)}>
+            {rightAlign && (
+                <span
+                    ref={placeholderRef}
+                    className={clsx(
+                        styles.inputPlaceholder,
+                        text && styles.hide,
+                    )}
+                    onClick={() => {
+                        eleRef?.current?.focus();
+                    }}
+                >
+                    {placeholder}
+                </span>
+            )}
+            <span
+                ref={eleRef}
+                className={clsx(styles.input)}
+                contentEditable
+                suppressContentEditableWarning
+                onInput={(e) => {
+                    const text = e.currentTarget.innerText;
+                    if (text.includes('\n')) {
+                        e.currentTarget.innerText = text.replace(/\n/g, '');
+                        e.currentTarget.blur();
+                        onEnter?.();
+                    }
+                    if (!e.currentTarget.innerText) {
+                        placeholderRef.current?.classList.remove(styles.hide);
+                    } else {
+                        placeholderRef.current?.classList.add(styles.hide);
+                    }
+                    onChange(e.currentTarget.innerText || '');
+                }}
+            >
+                {text}
+            </span>
+            {!rightAlign && (
+                <span
+                    ref={placeholderRef}
+                    className={clsx(
+                        styles.inputPlaceholder,
+                        text && styles.hide,
+                    )}
+                    onClick={() => {
+                        eleRef?.current?.focus();
+                    }}
+                >
+                    {placeholder}
+                </span>
+            )}
         </span>
     );
 };
@@ -64,6 +105,7 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
                         eleRef={nameRef}
                         className={styles.wordName}
                         text={word.name}
+                        placeholder="单词"
                         onChange={(str) => {
                             word.name = str;
                         }}
@@ -75,32 +117,57 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
                     </div>
                 ))}
 
-            <div className={styles.spacer} />
+            <div
+                className={styles.spacer}
+                onClick={() => {
+                    if (isEditing) {
+                        const selection = window.getSelection();
+                        const range = document.createRange();
+                        selection.removeAllRanges();
+                        range.selectNodeContents(nameRef.current!);
+                        range.collapse(false);
+                        selection.addRange(range);
+                        nameRef.current?.focus();
+                    }
+                }}
+            />
             {!isLoading &&
                 (isEditing ? (
-                    <EditableSpan
-                        eleRef={partRef}
-                        className={styles.wordPartOfSpeech}
-                        text={word.part}
-                        onChange={(str) => {
-                            word.part = str;
-                        }}
-                        onEnter={() => defRef.current?.focus()}
-                    />
+                    <>
+                        <EditableSpan
+                            eleRef={partRef}
+                            className={styles.wordPartOfSpeech}
+                            text={word.part}
+                            placeholder="词性"
+                            rightAlign
+                            onChange={(str) => {
+                                word.part = str;
+                            }}
+                            onEnter={() => defRef.current?.focus()}
+                        />
+                        <div className={styles.wordPartOfSpeechDot}>
+                            <span>.</span>
+                        </div>
+                    </>
                 ) : (
                     word.part && (
-                        <div className={styles.wordPartOfSpeech}>
-                            <span>{word.part}</span>
-                        </div>
+                        <>
+                            <div className={styles.wordPartOfSpeech}>
+                                <span>{word.part}</span>
+                            </div>
+                            <div className={styles.wordPartOfSpeechDot}>
+                                <span>.</span>
+                            </div>
+                        </>
                     )
                 ))}
-
             {!isLoading &&
                 (isEditing ? (
                     <EditableSpan
                         eleRef={defRef}
                         className={styles.wordDefinition}
                         text={word.def}
+                        placeholder="释义"
                         onChange={(str) => {
                             word.def = str;
                         }}
