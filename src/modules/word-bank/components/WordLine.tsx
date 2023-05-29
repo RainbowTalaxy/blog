@@ -88,9 +88,11 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
                         onEnter={() => defRef.current?.focus()}
                     />
                 ) : (
-                    <div className={styles.wordPartOfSpeech}>
-                        <span>{word.part}</span>
-                    </div>
+                    word.part && (
+                        <div className={styles.wordPartOfSpeech}>
+                            <span>{word.part}</span>
+                        </div>
+                    )
                 ))}
 
             {!isLoading &&

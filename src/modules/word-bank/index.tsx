@@ -1,6 +1,6 @@
 import styles from './index.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import { convertToAppleDate } from '@site/src/utils';
+import { AppleDate, convertToAppleDate, uuid } from '@site/src/utils';
 import clsx from 'clsx';
 import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
@@ -18,7 +18,7 @@ const WordBank = () => {
     const [book, setBook] = useState<Book | null>(null);
     const { editData, addEmptyWord, reset } = useEditData(book);
     const [isLoading, setIsLoading] = useState(false);
-    const [isEditing, setIsEditing] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
     // 帮我监听 query 参数，参数名为 id
     const query = useQuery();
@@ -29,7 +29,7 @@ const WordBank = () => {
         try {
             const data = await API.wordBank.book(user.id, bookInfo.id);
             setBook(data.book);
-            setIsEditing(false);
+            setIsEditing(data.book.words.length === 0);
             setIsLoading(false);
         } catch {}
     }, []);
@@ -37,26 +37,30 @@ const WordBank = () => {
     const refetch = useCallback(async () => {
         if (!user?.id) return;
         try {
-            const id = query.get('id');
-            if (book?.id.startsWith(id)) return;
+            setIsEditing(false);
             setIsLoading(true);
             const data = await API.wordBank.bookList(user.id);
             data.books.sort((a, b) => b.date - a.date);
             setList(data.books);
-            if (id) {
-                const bookInfo = data.books.find((bookInfo) =>
-                    bookInfo.id.startsWith(id),
-                );
-                if (bookInfo) refetchBook(bookInfo);
-            } else {
-                refetchBook(data.books[0]);
-            }
         } catch {}
-    }, [book, query]);
+    }, [query, user]);
+
+    useEffect(() => {
+        if (!list) return;
+        const id = query.get('id');
+        if (id) {
+            const bookInfo = list.find((bookInfo) =>
+                bookInfo.id.startsWith(id),
+            );
+            if (bookInfo) refetchBook(bookInfo);
+        } else {
+            refetchBook(list[0]);
+        }
+    }, [query.get('id'), list]);
 
     useEffect(() => {
         refetch();
-    }, [query.get('id')]);
+    }, []);
 
     useUserEntry();
 
@@ -64,7 +68,30 @@ const WordBank = () => {
         <div className={styles.container}>
             <div className={styles.sidebar}>
                 <div className={styles.sidebarInner}>
-                    <div className={styles.header}>WordBank</div>
+                    <div className={styles.header}>
+                        <span>WordBank</span>
+                        <div className={styles.spacer} />
+                        {user?.id && (
+                            <span
+                                className={styles.headerButton}
+                                onClick={async () => {
+                                    try {
+                                        await API.wordBank.uploadBook(user.id, {
+                                            id: uuid(),
+                                            title: '新单词书',
+                                            date: AppleDate(),
+                                            words: [],
+                                        });
+                                        history.push('?');
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }}
+                            >
+                                新建
+                            </span>
+                        )}
+                    </div>
                     {list.map((bookInfo) => (
                         <div
                             className={clsx(
@@ -78,14 +105,16 @@ const WordBank = () => {
                             }}
                         >
                             <div className={styles.bookTitle}>
-                                {bookInfo.title}
+                                {bookInfo.title ?? '无标题'}
                             </div>
                             <div className={styles.spacer} />
-                            <div className={styles.bookDate}>
-                                {convertToAppleDate(bookInfo.date).format(
-                                    'YYYY/MM/DD',
-                                )}
-                            </div>
+                            {bookInfo.date && (
+                                <div className={styles.bookDate}>
+                                    {convertToAppleDate(bookInfo.date).format(
+                                        'YYYY/MM/DD',
+                                    )}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -140,8 +169,7 @@ const WordBank = () => {
                                                     user.id,
                                                     editData,
                                                 );
-                                                setBook(editData);
-                                                setIsEditing(false);
+                                                refetch();
                                             } else {
                                                 setIsEditing(true);
                                             }
@@ -150,7 +178,7 @@ const WordBank = () => {
                                         {isEditing ? '保存' : '编辑'}
                                     </a>
                                 </div>
-                                {isEditing && (
+                                {isEditing && editData.words.length > 0 && (
                                     <div className={styles.word}>
                                         <a
                                             onClick={() => {
