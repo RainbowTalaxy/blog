@@ -50,6 +50,13 @@ const WordBankAPI = {
             APIKey.file,
         );
     },
+    removeBook: async (userId: string, bookId: string) => {
+        await rocket.delete(
+            `${SERVER_API}/word-bank/books/${userId}/${bookId}`,
+            undefined,
+            APIKey.file,
+        );
+    },
 };
 
 export default WordBankAPI;

@@ -43,4 +43,17 @@ export const rocket = {
         const result: Data = await res.json();
         return result;
     },
+    async delete<Data>(url: string, data: any, key?: APIKey) {
+        const res = await fetch(url, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: key && `${key}=${getKey(key)}`,
+            },
+            body: JSON.stringify(data || {}),
+        });
+        const result: Data = await res.json();
+        return result;
+    },
 };

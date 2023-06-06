@@ -202,3 +202,11 @@ html[data-theme='dark'] .wordList {
     margin-left: 4px;
     font-family: var(--default-font);
 }
+
+.warning {
+    color: #d84f4f;
+}
+
+.warning:hover {
+    color: red;
+}

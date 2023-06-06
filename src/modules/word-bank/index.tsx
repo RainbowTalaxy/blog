@@ -201,40 +201,70 @@ const WordBank = () => {
                                 )}
                             </div>
                             {user?.id && (
-                                <div
-                                    className={styles.wordList}
-                                    style={{ marginBottom: !isEditing && 72 }}
-                                >
-                                    <div className={styles.word}>
-                                        <a
-                                            onClick={async () => {
-                                                if (isEditing) {
-                                                    await API.wordBank.uploadBook(
-                                                        user.id,
-                                                        editData,
-                                                    );
-                                                    refetch();
-                                                } else {
-                                                    setIsEditing(true);
-                                                }
-                                            }}
-                                        >
-                                            {isEditing ? '保存' : '编辑'}
-                                        </a>
-                                    </div>
-                                    {isEditing && editData.words.length > 0 && (
+                                <>
+                                    <div
+                                        className={styles.wordList}
+                                        style={{
+                                            marginBottom: !isEditing && 72,
+                                        }}
+                                    >
                                         <div className={styles.word}>
                                             <a
-                                                onClick={() => {
-                                                    reset();
-                                                    setIsEditing(false);
+                                                onClick={async () => {
+                                                    if (isEditing) {
+                                                        await API.wordBank.uploadBook(
+                                                            user.id,
+                                                            editData,
+                                                        );
+                                                        refetch();
+                                                    } else {
+                                                        setIsEditing(true);
+                                                    }
                                                 }}
                                             >
-                                                取消
+                                                {isEditing ? '保存' : '编辑'}
                                             </a>
                                         </div>
-                                    )}
-                                </div>
+                                        {isEditing ? (
+                                            editData.words.length > 0 && (
+                                                <div className={styles.word}>
+                                                    <a
+                                                        onClick={() => {
+                                                            reset();
+                                                            setIsEditing(false);
+                                                        }}
+                                                    >
+                                                        取消
+                                                    </a>
+                                                </div>
+                                            )
+                                        ) : (
+                                            <div className={styles.word}>
+                                                <a
+                                                    className={styles.warning}
+                                                    onClick={async () => {
+                                                        try {
+                                                            const result =
+                                                                confirm(
+                                                                    `确定删除《${book.title}》？`,
+                                                                );
+                                                            if (!result) return;
+                                                            await API.wordBank.removeBook(
+                                                                user.id,
+                                                                book.id,
+                                                            );
+                                                            refetch();
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
+                                                    }}
+                                                >
+                                                    删除
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
                             )}
                         </>
                     )}
