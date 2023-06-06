@@ -26,15 +26,18 @@ const WordBank = () => {
     const query = useQuery();
     const history = useHistory();
 
-    const refetchBook = useCallback(async (bookInfo: BookInfo) => {
-        if (!user?.id) return;
-        try {
-            const data = await API.wordBank.book(user.id, bookInfo.id);
-            setBook(data.book);
-            setIsEditing(data.book.words.length === 0);
-            setIsLoading(false);
-        } catch {}
-    }, []);
+    const refetchBook = useCallback(
+        async (bookInfo: BookInfo) => {
+            if (!user?.id) return;
+            try {
+                const data = await API.wordBank.book(user.id, bookInfo.id);
+                setBook(data.book);
+                setIsEditing(data.book.words.length === 0);
+                setIsLoading(false);
+            } catch {}
+        },
+        [user],
+    );
 
     const refetch = useCallback(async () => {
         if (!user?.id) return;
@@ -44,7 +47,7 @@ const WordBank = () => {
             data.books.sort((a, b) => b.date - a.date);
             setList(data.books);
         } catch {}
-    }, [query, user]);
+    }, [user]);
 
     useEffect(() => {
         if (!list) return;
@@ -57,7 +60,7 @@ const WordBank = () => {
         } else {
             refetchBook(list[0]);
         }
-    }, [query.get('id'), list]);
+    }, [list, query.get('id')]);
 
     useEffect(() => {
         refetch();
@@ -84,7 +87,8 @@ const WordBank = () => {
                                             words: [],
                                             description: '',
                                         });
-                                        history.push('?');
+                                        setBook(null);
+                                        refetch();
                                     } catch (e) {
                                         console.log(e);
                                     }
@@ -103,7 +107,9 @@ const WordBank = () => {
                             key={bookInfo.id}
                             onClick={() => {
                                 // 设置 query 来更新
-                                history.push('?id=' + bookInfo.id.slice(0, 5));
+                                history.replace(
+                                    '?id=' + bookInfo.id.slice(0, 5),
+                                );
                             }}
                         >
                             <div className={styles.bookTitle}>
@@ -132,7 +138,9 @@ const WordBank = () => {
                             )}
                             key={bookInfo.id}
                             onClick={() =>
-                                history.push('?id=' + bookInfo.id.slice(0, 5))
+                                history.replace(
+                                    '?id=' + bookInfo.id.slice(0, 5),
+                                )
                             }
                         >
                             <div className={styles.bookTitle}>
