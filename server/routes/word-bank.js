@@ -150,6 +150,43 @@ router.get('/books/:userId/:bookId', async (req, res) => {
     }
 });
 
+// 删除单词书
+router.delete(
+    '/books/:userId/:bookId',
+    authority(APIKey.file),
+    async (req, res) => {
+        try {
+            // 获取请求参数
+            const { userId, bookId } = req.params;
+            // 获取用户的单词书目录
+            const userDir = getUserDir(userId);
+            // 删除该目录下的所有文件
+            const bookPath = path.join(userDir, `${bookId}.json`);
+            fs.unlinkSync(bookPath);
+            // 读取用户文件夹元数据内容
+            const userMetaPath = path.join(userDir, USER_META_FILE);
+            let userMeta = {};
+            if (fs.existsSync(userMetaPath)) {
+                userMeta = JSON.parse(fs.readFileSync(userMetaPath));
+            }
+            // 删除用户文件夹元数据
+            delete userMeta[bookId];
+            // 写入用户文件夹元数据
+            fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
+            // 返回成功
+            res.status(200).send({
+                message: 'success',
+            });
+        } catch (error) {
+            // 记录错误
+            logError(error);
+            res.status(500).send({
+                error: 'An error occurred while deleting the book.',
+            });
+        }
+    },
+);
+
 /**
  * 新模块：书籍资源封装
  * 服务器端有个书本资源，url 为 `https://blog.talaxy.cn/statics/books`。其中：

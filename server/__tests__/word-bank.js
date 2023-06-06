@@ -37,7 +37,7 @@ const book = {
 const userId = 'test';
 
 async function test() {
-    // 咱们先测一下上传单词书
+    // 咱们先测一下上传单词书（未授权）
     await request(
         'Word bank - upload book (unauthorized)',
         curl(`${BASE_PATH}/books/${userId}`, 'PUT', book),
@@ -124,6 +124,27 @@ async function test() {
                 if (word.def !== response.book.words[index].def)
                     return reject('Wrong word def');
             });
+
+            // 放行
+            resolve();
+        },
+    );
+
+    // 咱们再测一下删除单词书
+    await request(
+        'Word bank - delete book',
+        curl(`${BASE_PATH}/books/${userId}/${book.id}`, 'DELETE', null, {
+            [APIKey.file]: 'talaxy',
+        }),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            // 读取测试数据中的 meta 文件
+            let userMeta = fs.readFileSync(
+                `${BOOKS_DIR}/${userId}/list-meta.json`,
+            );
+            userMeta = Object.values(JSON.parse(userMeta));
+            if (userMeta.length !== 0) return reject('Expect 0 book');
 
             // 放行
             resolve();
