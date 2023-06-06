@@ -176,7 +176,10 @@ const WordBank = () => {
                                 )}
                             </div>
                             {user?.id && (
-                                <div className={styles.wordList}>
+                                <div
+                                    className={styles.wordList}
+                                    style={{ marginBottom: !isEditing && 72 }}
+                                >
                                     <div className={styles.word}>
                                         <a
                                             onClick={async () => {

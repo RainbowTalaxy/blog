@@ -118,6 +118,10 @@
     max-width: 600px;
 }
 
+.pageContent > h1 {
+    margin-left: 8px;
+}
+
 .wordListTitle {
     font-size: 24px;
 }
@@ -146,7 +150,8 @@ html[data-theme='dark'] .wordList {
 }
 
 .wordName {
-    font-family: var(--default-font);
+    font-family: SourceSerifPro;
+    font-size: 17px;
 }
 
 .inputBox {
