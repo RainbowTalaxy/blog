@@ -15,9 +15,10 @@ export interface Book {
     title: string;
     date: number;
     words: Word[];
+    description?: string;
 }
 
-export type BookInfo = Omit<Book, 'words'>;
+export type BookInfo = Omit<Book, 'words' | 'description'>;
 
 export interface ResourceBookMeta {
     title: string;

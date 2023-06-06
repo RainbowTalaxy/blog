@@ -118,8 +118,9 @@
     max-width: 600px;
 }
 
-.pageContent > h1 {
-    margin-left: 8px;
+.pageContent > h1,
+.pageContent > p {
+    margin-left: 6px;
 }
 
 .wordListTitle {
@@ -157,6 +158,7 @@ html[data-theme='dark'] .wordList {
 .inputBox {
     display: block;
     height: 100%;
+    cursor: text;
 }
 
 .input {

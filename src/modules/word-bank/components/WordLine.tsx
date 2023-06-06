@@ -24,7 +24,10 @@ export const EditableSpan = ({
     const placeholderRef = useRef<HTMLSpanElement>(null);
 
     return (
-        <span className={clsx(styles.inputBox, className)}>
+        <span
+            className={clsx(styles.inputBox, className)}
+            onClick={() => eleRef?.current?.focus()}
+        >
             {rightAlign && (
                 <span
                     ref={placeholderRef}

@@ -14,7 +14,8 @@ import useUserEntry from '@site/src/hooks/useUserEntry';
 import { setUser } from '@site/src/utils/user';
 
 const WordBank = () => {
-    const titleRef = useRef<HTMLHeadingElement>(null);
+    const titleRef = useRef<HTMLSpanElement>(null);
+    const descRef = useRef<HTMLSpanElement>(null);
     const [list, setList] = useState<BookInfo[]>([]);
     const [book, setBook] = useState<Book | null>(null);
     const { editData, addEmptyWord, reset } = useEditData(book);
@@ -81,6 +82,7 @@ const WordBank = () => {
                                             title: '新单词书',
                                             date: AppleDate(),
                                             words: [],
+                                            description: '',
                                         });
                                         history.push('?');
                                     } catch (e) {
@@ -147,7 +149,7 @@ const WordBank = () => {
                                     <EditableSpan
                                         eleRef={titleRef}
                                         text={editData.title}
-                                        placeholder="单词书名"
+                                        placeholder="标题"
                                         onChange={(str) => {
                                             editData.title = str;
                                         }}
@@ -157,6 +159,21 @@ const WordBank = () => {
                                     editData.title || '无标题'
                                 )}
                             </h1>
+                            {isEditing ? (
+                                <p>
+                                    <EditableSpan
+                                        eleRef={descRef}
+                                        text={editData.description ?? ''}
+                                        placeholder="描述"
+                                        onChange={(str) => {
+                                            editData.description = str;
+                                        }}
+                                        onEnter={() => descRef.current?.blur()}
+                                    />
+                                </p>
+                            ) : (
+                                <p>{editData.description}</p>
+                            )}
                             <div className={styles.wordList}>
                                 {editData.words?.map((word) => (
                                     <WordLine
