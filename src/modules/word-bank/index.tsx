@@ -12,6 +12,7 @@ import WordLine, { EditableSpan } from './components/WordLine';
 import useEditData from './hooks/useEditData';
 import useUserEntry from '@site/src/hooks/useUserEntry';
 import { setUser } from '@site/src/utils/user';
+import ActionItem from './components/ActionItem';
 
 const WordBank = () => {
     const titleRef = useRef<HTMLSpanElement>(null);
@@ -193,11 +194,9 @@ const WordBank = () => {
                                     />
                                 ))}
                                 {isEditing && (
-                                    <div className={styles.word}>
-                                        <a onClick={() => addEmptyWord()}>
-                                            添加单词
-                                        </a>
-                                    </div>
+                                    <ActionItem onClick={() => addEmptyWord()}>
+                                        添加单词
+                                    </ActionItem>
                                 )}
                             </div>
                             {user?.id && (
@@ -208,60 +207,53 @@ const WordBank = () => {
                                             marginBottom: !isEditing && 72,
                                         }}
                                     >
-                                        <div className={styles.word}>
-                                            <a
+                                        <ActionItem
+                                            onClick={async () => {
+                                                if (isEditing) {
+                                                    await API.wordBank.uploadBook(
+                                                        user.id,
+                                                        editData,
+                                                    );
+                                                    refetch();
+                                                } else {
+                                                    setIsEditing(true);
+                                                }
+                                            }}
+                                        >
+                                            {isEditing ? '保存' : '编辑'}
+                                        </ActionItem>
+                                        {isEditing ? (
+                                            editData.words.length > 0 && (
+                                                <ActionItem
+                                                    onClick={() => {
+                                                        reset();
+                                                        setIsEditing(false);
+                                                    }}
+                                                >
+                                                    取消
+                                                </ActionItem>
+                                            )
+                                        ) : (
+                                            <ActionItem
+                                                className={styles.warning}
                                                 onClick={async () => {
-                                                    if (isEditing) {
-                                                        await API.wordBank.uploadBook(
+                                                    try {
+                                                        const result = confirm(
+                                                            `确定删除《${book.title}》？`,
+                                                        );
+                                                        if (!result) return;
+                                                        await API.wordBank.removeBook(
                                                             user.id,
-                                                            editData,
+                                                            book.id,
                                                         );
                                                         refetch();
-                                                    } else {
-                                                        setIsEditing(true);
+                                                    } catch (e) {
+                                                        console.log(e);
                                                     }
                                                 }}
                                             >
-                                                {isEditing ? '保存' : '编辑'}
-                                            </a>
-                                        </div>
-                                        {isEditing ? (
-                                            editData.words.length > 0 && (
-                                                <div className={styles.word}>
-                                                    <a
-                                                        onClick={() => {
-                                                            reset();
-                                                            setIsEditing(false);
-                                                        }}
-                                                    >
-                                                        取消
-                                                    </a>
-                                                </div>
-                                            )
-                                        ) : (
-                                            <div className={styles.word}>
-                                                <a
-                                                    className={styles.warning}
-                                                    onClick={async () => {
-                                                        try {
-                                                            const result =
-                                                                confirm(
-                                                                    `确定删除《${book.title}》？`,
-                                                                );
-                                                            if (!result) return;
-                                                            await API.wordBank.removeBook(
-                                                                user.id,
-                                                                book.id,
-                                                            );
-                                                            refetch();
-                                                        } catch (e) {
-                                                            console.log(e);
-                                                        }
-                                                    }}
-                                                >
-                                                    删除
-                                                </a>
-                                            </div>
+                                                删除
+                                            </ActionItem>
                                         )}
                                     </div>
                                 </>
@@ -270,9 +262,9 @@ const WordBank = () => {
                     )}
                     {!user.id && (
                         <div className={styles.wordList}>
-                            <div className={styles.word}>
-                                <a onClick={() => setUser()}>设置用户</a>
-                            </div>
+                            <ActionItem onClick={() => setUser()}>
+                                设置用户
+                            </ActionItem>
                         </div>
                     )}
                 </article>
