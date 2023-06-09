@@ -2,6 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { mkdirp } = require('mkdirp');
+const { v4: uuid } = require('uuid');
 
 async function downloadFile(url, localPath) {
     mkdirp.sync(path.dirname(localPath));
@@ -46,4 +47,5 @@ const readJSON = (filePath) => {
 module.exports = {
     downloadFile,
     readJSON,
+    uuid,
 };
