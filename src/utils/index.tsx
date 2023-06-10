@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { v4 as uuidV4 } from 'uuid';
 
 export function getCoordinates(elem) {
     var box = elem.getBoundingClientRect();
@@ -18,6 +19,14 @@ export function getCoordinates(elem) {
     return { top: Math.round(top), left: Math.round(left) };
 }
 
-export function AppleDate(timestamp: number) {
+export function convertToAppleDate(timestamp: number) {
     return dayjs(new Date((timestamp + 978307200) * 1000));
+}
+
+export function AppleDate() {
+    return (Date.now() - 978307200000) / 1000;
+}
+
+export function uuid() {
+    return uuidV4();
 }

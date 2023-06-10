@@ -1,4 +1,5 @@
 import { SERVER_API } from '../constants/config';
+import { rocket } from './utils';
 
 export interface YouDaoResponse {
     query: string;
@@ -14,9 +15,9 @@ export interface YouDaoResponse {
 
 const DictionaryAPI = {
     query: (text: string) =>
-        fetch(`${SERVER_API}/dictionary?word=${encodeURIComponent(text)}`).then(
-            (res) => res.json(),
-        ) as Promise<YouDaoResponse>,
+        rocket.get<YouDaoResponse>(
+            `${SERVER_API}/dictionary?word=${encodeURIComponent(text)}`,
+        ),
 };
 
 export default DictionaryAPI;

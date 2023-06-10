@@ -8,6 +8,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import QueryableParagraph from './components/QueryableParagraph';
 import { ResourceBookMeta } from '@site/src/api/word-bank';
+import API from '@site/src/api';
 
 const Book = () => {
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
@@ -18,7 +19,7 @@ const Book = () => {
     const [rawText, setRawText] = useState<string[]>([]);
 
     const bookName = decodeURIComponent(
-        query.get('book') ?? 'Harry Potter and the Half-Blood Prince',
+        query.get('book') ?? 'The Midnight Library',
     );
     const targetChapter = decodeURIComponent(query.get('chapter') ?? '');
 
@@ -29,20 +30,14 @@ const Book = () => {
         if (!chapterInfo) return;
         try {
             // 根据 chapterInfo.resource 获取资源，资源是一个 txt 文件
-            const response = await fetch(chapterInfo.resource);
-            const data = (await response.text()).trim();
+            const data = (await API.text(chapterInfo.resource)).trim();
             setRawText(data.split('\n'));
         } catch {}
     }, [targetChapter, bookMeta]);
 
     const refetchMeta = useCallback(async () => {
         try {
-            const response = await fetch(
-                `https://blog.talaxy.cn/public-api/word-bank/literary?bookName=${decodeURIComponent(
-                    bookName,
-                )}`,
-            );
-            const data = (await response.json()) as ResourceBookMeta;
+            const data = await API.wordBank.literary(bookName);
             setBookMeta(data);
             if (!targetChapter && data.chapters[0]) {
                 history.push(
@@ -125,18 +120,6 @@ const Book = () => {
                         <QueryableParagraph key={index} paragraph={paragraph} />
                     ))}
                 </div>
-            </div>
-            <div
-                className={styles.currentUser}
-                onClick={() =>
-                    history.push(
-                        '/user' +
-                            '?nextUrl=' +
-                            encodeURIComponent(window.location.href),
-                    )
-                }
-            >
-                {user?.id ?? '设置信息'}
             </div>
         </div>
     );

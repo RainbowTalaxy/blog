@@ -12,6 +12,22 @@
     flex: 1;
     position: relative;
     display: flex;
+    --default-font: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
+        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.container a {
+    cursor: pointer;
+}
+
+.container input,
+.container input:focus {
+    padding: 0;
+    outline: none;
+    border: none;
+    font-size: initial;
+    font-weight: initial;
+    font-family: var(--default-font);
 }
 
 .sidebar {
@@ -59,11 +75,20 @@
 }
 
 .header {
+    display: flex;
+    align-items: center;
     margin: 6px 0 0;
     padding: 0 8px;
     font-size: 24px;
     font-weight: var(--ifm-heading-font-weight);
     color: var(--ifm-heading-color);
+}
+
+.headerButton {
+    font-size: 14px;
+    color: var(--ifm-menu-color-active);
+    cursor: pointer;
+    font-weight: initial;
 }
 
 .book.active,
@@ -88,10 +113,23 @@
     background-color: var(--ifm-menu-color-background-active);
 }
 
-.wordList {
-    margin: 24px auto;
-    padding: 4px 12px;
+.pageContent {
+    margin: 12px auto 24px;
     max-width: 600px;
+}
+
+.pageContent > h1,
+.pageContent > p {
+    margin-left: 6px;
+}
+
+.wordListTitle {
+    font-size: 24px;
+}
+
+.wordList {
+    margin: 24px 0;
+    padding: 2px 12px 4px;
     border-radius: 0.5rem;
     background-color: var(--theme-white);
 }
@@ -102,8 +140,8 @@ html[data-theme='dark'] .wordList {
 
 .word {
     display: flex;
-    align-items: baseline;
-    padding: 4px 4px;
+    padding: 2px 4px 0;
+    line-height: 34px;
     min-height: 36px;
 }
 
@@ -113,31 +151,62 @@ html[data-theme='dark'] .wordList {
 }
 
 .wordName {
-    display: block;
+    font-family: SourceSerifPro;
+    font-size: 17px;
 }
 
-.wordPartOfSpeech {
-    margin: 0 4px;
+.inputBox {
+    display: block;
+    height: 100%;
+    cursor: text;
+}
+
+.input {
+    display: inline-block;
+    min-height: 34px;
+    min-width: 1px;
+    white-space: nowrap;
+}
+
+.inputPlaceholder {
+    color: lightgray;
+    font-style: initial;
+    font-family: var(--default-font);
+    user-select: none;
+    cursor: text;
+}
+
+.hide {
+    display: none;
+}
+
+.wordPartOfSpeech,
+.wordPartOfSpeechDot {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-style: italic;
     font-size: 14px;
+    text-align: end;
     opacity: 0.5;
+}
+
+.wordPartOfSpeech {
+    margin-left: 4px;
+}
+
+.wordPartOfSpeechDot {
+    user-select: none;
 }
 
 .wordDefinition {
     display: block;
-    font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial,
-        'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    margin-left: 4px;
+    font-family: var(--default-font);
 }
 
-.currentUser {
-    position: fixed;
-    left: 12px;
-    bottom: calc(12px + var(--safe-area-inset-bottom) / 2);
-    padding: 2px 12px;
-    border-radius: 6px;
-    color: var(--theme-black-half);
-    background-color: var(--theme-white);
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
-    cursor: pointer;
+.warning {
+    color: #d84f4f;
+}
+
+.warning:hover {
+    color: red;
 }

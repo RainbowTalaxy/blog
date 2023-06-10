@@ -7,10 +7,12 @@ const FORM_CONFIG = [
     {
         attr: 'id',
         name: 'ID',
+        type: 'text',
     },
     {
         attr: 'fileApiKey',
         name: '文件 API Key',
+        type: 'password',
     },
 ];
 
@@ -29,7 +31,7 @@ const User = () => {
                     <div className={styles.field} key={config.attr}>
                         <label htmlFor={config.attr}>{config.name}</label>
                         <input
-                            type="text"
+                            type={config.type}
                             name={config.attr}
                             id={config.attr}
                             defaultValue={userInfo[config.attr]}

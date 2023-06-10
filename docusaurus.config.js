@@ -103,6 +103,7 @@ const config = {
                         href: 'https://unsplash.com/@talaxy',
                         label: 'Unsplash',
                         position: 'right',
+                        className: 'header-unsplash-link',
                     },
                     {
                         href: 'https://github.com/RainbowTalaxy',
