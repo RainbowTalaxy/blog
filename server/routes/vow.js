@@ -36,12 +36,16 @@
  *
  * ## 接口
  *
- * - 查看项目
- * - 创建项目
- * - 创建任务
+ * - 查看项目列表 GET /:userId
+ * - 创建项目    POST /:userId/project
+ * - 查看项目    GET /:userId/project/:projectId
+ * - 修改项目    PUT /:userId/project/:projectId
+ * - 查看周期列表 GET /:userId/project/:projectId/cycle
+ * - 创建周期    POST /:userId/project/:projectId/cycle
  * - 查看任务
- * - 创建周期
- * - 查看周期
+ * - 创建任务
+ * - 修改任务
+ * - 删除任务
  *
  * 下面开始写 API 吧！
  */
@@ -83,8 +87,10 @@ const FileHandler = {
         );
         fs.writeFileSync(firstCycleTasksPath, JSON.stringify({ tasks: [] }));
     },
-    // TODO:
-    checkProjectExist: (projectId) => {},
+    getProjectPath: (projectId) => {
+        const projectDir = path.join(Dir.storage.projects, `${projectId}`);
+        return fs.existsSync(projectDir) ? projectDir : null;
+    },
 };
 
 // 查看项目列表
@@ -103,15 +109,10 @@ router.get('/:userId', async (req, res) => {
 // 创建项目
 router.post('/:userId/project', async (req, res) => {
     const { userId } = req.params;
-    if (!userId) {
-        return res.status(400).send({
-            error: 'userId is required',
-        });
-    }
     const { name } = req.body;
-    if (!name) {
+    if (!userId || !name) {
         return res.status(400).send({
-            error: 'name is required',
+            error: 'userId/name is required',
         });
     }
     const project = {
@@ -140,11 +141,10 @@ router.post('/:userId/project', async (req, res) => {
 // 获取项目信息
 router.get('/:userId/project/:projectId', async (req, res) => {
     const { userId, projectId } = req.params;
-    if (!userId) {
-        return res.status(400).send('userId is required');
-    }
-    if (!projectId) {
-        return res.status(400).send('projectId is required');
+    if (!userId || !projectId) {
+        return res.status(400).send({
+            error: 'userId/projectId is required',
+        });
     }
     try {
         const list = FileHandler.readList();
@@ -166,14 +166,9 @@ router.get('/:userId/project/:projectId', async (req, res) => {
 // 修改项目基本信息
 router.put('/:userId/project/:projectId', async (req, res) => {
     const { userId, projectId } = req.params;
-    if (!userId) {
+    if (!userId || !projectId) {
         return res.status(400).send({
-            error: 'userId is required',
-        });
-    }
-    if (!projectId) {
-        return res.status(400).send({
-            error: 'projectId is required',
+            error: 'userId/projectId is required',
         });
     }
     try {
@@ -201,25 +196,17 @@ router.put('/:userId/project/:projectId', async (req, res) => {
 // 获取项目的周期列表
 router.get('/:userId/project/:projectId/cycle', async (req, res) => {
     const { userId, projectId } = req.params;
-    if (!userId) {
+    if (!userId || !projectId) {
         return res.status(400).send({
-            error: 'userId is required',
-        });
-    }
-    if (!projectId) {
-        return res.status(400).send({
-            error: 'projectId is required',
+            error: 'userId/projectId is required',
         });
     }
     try {
-        const list = FileHandler.readList();
-        const project = list.find((project) => project.id === projectId);
-        const projectDir = path.join(Dir.storage.projects, `${projectId}`);
-        if (!fs.existsSync(projectDir)) {
+        const projectDir = FileHandler.getProjectPath(projectId);
+        if (!projectDir)
             return res.status(404).send({
                 error: 'project not found',
             });
-        }
         const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
         const cycles = JSON.parse(fs.readFileSync(cyclesPath));
         return res.send(cycles);
@@ -237,27 +224,21 @@ router.get('/:userId/project/:projectId/cycle', async (req, res) => {
 router.post('/:userId/project/:projectId/cycle', async (req, res) => {
     const { userId, projectId } = req.params;
     // 前置校验
-    if (!userId) {
+    if (!userId || !projectId) {
         return res.status(400).send({
-            error: 'userId is required',
-        });
-    }
-    if (!projectId) {
-        return res.status(400).send({
-            error: 'projectId is required',
+            error: 'userId/projectId is required',
         });
     }
     try {
-        const list = FileHandler.readList();
-        const project = list.find((project) => project.id === projectId);
-        if (!project) {
+        const projectDir = FileHandler.getProjectPath(projectId);
+        if (!projectDir) {
             return res.status(404).send({
                 error: 'project not found',
             });
         }
-        const projectDir = path.join(Dir.storage.projects, `${projectId}`);
         const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
         const cycles = JSON.parse(fs.readFileSync(cyclesPath, 'utf8'));
+        // 降序排列，最新的周期在最前面
         const lastCycle = cycles[0];
         const cycle = {
             id: uuid(),
@@ -274,6 +255,32 @@ router.post('/:userId/project/:projectId/cycle', async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to create cycle.',
+        });
+    }
+});
+
+// 获取周期的任务信息
+router.get('/:userId/project/:projectId/cycle/:cycleId', async (req, res) => {
+    const { userId, projectId, cycleId } = req.params;
+    // 前置校验
+    if (!userId || !projectId || !cycleId) {
+        return res.status(400).send({
+            error: 'userId/projectId/cycleId is required',
+        });
+    }
+    try {
+        const projectDir = FileHandler.getProjectPath(projectId);
+        if (!projectDir)
+            return res.status(404).send({
+                error: 'project not found',
+            });
+        const cycleTasksPath = path.join(projectDir, `${cycleId}.json`);
+        const cycleTasks = JSON.parse(fs.readFileSync(cycleTasksPath));
+        return res.send(cycleTasks);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get cycle tasks.',
         });
     }
 });
