@@ -1,0 +1,57 @@
+.container {
+    margin: 0 auto;
+    padding: 36px 16px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 24px;
+    margin: 24px 0;
+}
+
+.projectCard {
+    padding: 16px 24px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+}
+
+.projectCard:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.projectName {
+    font-size: 24px;
+}
+
+.projectOwner {
+    color: var(--theme-color);
+}
+
+.projectDate {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input {
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid var(--theme-black-half);
+}
+
+.formButton {
+    appearance: none;
+    margin-top: 12px;
+    padding: 3px 12px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid var(--theme-black-half);
+    font-size: 16px;
+    color: initial;
+}

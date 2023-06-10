@@ -2,6 +2,7 @@ import AzaleaAPI from './azalea';
 import DictionaryAPI from './dictionary';
 import StaticsAPI from './statics';
 import { rocket } from './utils';
+import WeaverAPI from './weaver';
 import WordBankAPI from './word-bank';
 
 const API = {
@@ -13,6 +14,7 @@ const API = {
     dictionary: DictionaryAPI,
     statics: StaticsAPI,
     azalea: AzaleaAPI,
+    weaver: WeaverAPI,
 };
 
 export default API;
