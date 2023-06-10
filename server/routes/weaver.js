@@ -51,6 +51,7 @@
  */
 
 const express = require('express');
+const path = require('path');
 const { Dir } = require('../config');
 const { uuid } = require('../utils');
 const { mkdirp } = require('mkdirp');
@@ -284,3 +285,5 @@ router.get('/:userId/project/:projectId/cycle/:cycleId', async (req, res) => {
         });
     }
 });
+
+module.exports = { weaverRouter: router };
