@@ -40,6 +40,10 @@ const Dir = {
     ...(process.env.NODE_ENV === 'production' ? SERVER_DIR : LOCAL_DIR),
 };
 
+if (fs.existsSync(Dir.temp)) {
+    fs.rmSync(Dir.temp, { recursive: true });
+}
+
 mkdirp.sync(Dir.temp);
 mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.books);

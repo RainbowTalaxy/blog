@@ -36,7 +36,7 @@
  *
  * ## 接口
  *
- * - 查看项目列表 GET /:userId
+ * - 查看项目列表 GET /:userId/projects
  * - 创建项目    POST /:userId/project
  * - 查看项目    GET /:userId/project/:projectId
  * - 修改项目    PUT /:userId/project/:projectId
@@ -51,6 +51,7 @@
  */
 
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const { Dir } = require('../config');
 const { uuid } = require('../utils');
@@ -64,8 +65,11 @@ const DEFAULT_CYCLE_DURATION = 7 * 24 * 60 * 60 * 1000;
 
 const FileHandler = {
     readList: () => {
-        const list = fs.readFileSync(LIST_PATH, 'utf8');
-        return JSON.parse(list);
+        if (fs.existsSync(LIST_PATH)) {
+            return JSON.parse(fs.readFileSync(LIST_PATH));
+        } else {
+            return [];
+        }
     },
     writeList: (list) => {
         fs.writeFileSync(LIST_PATH, JSON.stringify(list));
@@ -73,7 +77,7 @@ const FileHandler = {
     initProject: (projectId) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
         mkdirp.sync(projectDir);
-        const timestamp = new Date();
+        const timestamp = Date.now();
         const firstCycle = {
             id: uuid(),
             idx: 0,
@@ -95,7 +99,7 @@ const FileHandler = {
 };
 
 // 查看项目列表
-router.get('/:userId', async (req, res) => {
+router.get('/:userId/projects', async (req, res) => {
     const { userId } = req.params;
     if (!userId) {
         return res.status(400).send({
@@ -121,7 +125,7 @@ router.post('/:userId/project', async (req, res) => {
         id: uuid(),
         name,
         owner: userId,
-        createdAt: new Date(),
+        createdAt: Date.now(),
     };
     try {
         // 初始化项目文件，并自动添加第一个周期

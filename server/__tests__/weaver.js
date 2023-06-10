@@ -13,7 +13,6 @@ const PROJECTS_DIR = Dir.storage.projects;
 
 // 定义一个项目的测试数据
 const project = {
-    id: 'some_uuid',
     name: 'some_name',
 };
 
@@ -31,8 +30,27 @@ async function test() {
             let list = fs.readFileSync(`${PROJECTS_DIR}/list.json`, 'utf-8');
             list = JSON.parse(list);
 
-            if (!list.some((item) => item.id === project.id)) {
+            if (!list.some((item) => item.name === project.name)) {
                 return reject('Expect project created');
+            }
+
+            resolve();
+        },
+    );
+
+    // 测试一下查看项目列表
+    await request(
+        'Weaver - list projects',
+        curl(`${BASE_PATH}/${userId}/projects`, 'GET'),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            // 读取测试数据中的 meta 文件
+            let list = fs.readFileSync(`${PROJECTS_DIR}/list.json`, 'utf-8');
+            list = JSON.parse(list);
+
+            if (list.length === 0) {
+                return reject('Expect project list');
             }
 
             resolve();
