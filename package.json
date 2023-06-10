@@ -7,6 +7,7 @@
         "start": "docusaurus start",
         "build": "docusaurus build",
         "server": "NODE_ENV=development node server",
+        "server:w": "SET NODE_ENV=development & node server",
         "server:prod": "NODE_ENV=production node server",
         "test:server": "node server/__tests__",
         "proxy": "node server/proxy",
