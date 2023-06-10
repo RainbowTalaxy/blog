@@ -21,8 +21,11 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { BOOKS_DIR, STATIC_URL } = require('../constants');
+const { Dir, Statics, APIKey } = require('../config');
 const { default: axios } = require('axios');
+const { authority } = require('../middlewares');
+
+const BOOKS_DIR = Dir.storage.books;
 
 // 用来存放用户上传的单词书的目录
 mkdirp.sync(BOOKS_DIR);
@@ -58,12 +61,17 @@ const updateBook = (userDir, book) => {
 };
 
 // 用户上传单词书
-router.put('/books/:userId', async (req, res) => {
+router.put('/books/:userId', authority(APIKey.file), async (req, res) => {
     try {
         // 获取 userId
         const { userId } = req.params;
         // 获取请求的 body
         const book = req.body;
+        if (!book.id) {
+            return res.status(400).send({
+                error: 'The book id is required.',
+            });
+        }
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 更新单词书
@@ -142,6 +150,43 @@ router.get('/books/:userId/:bookId', async (req, res) => {
     }
 });
 
+// 删除单词书
+router.delete(
+    '/books/:userId/:bookId',
+    authority(APIKey.file),
+    async (req, res) => {
+        try {
+            // 获取请求参数
+            const { userId, bookId } = req.params;
+            // 获取用户的单词书目录
+            const userDir = getUserDir(userId);
+            // 删除该目录下的所有文件
+            const bookPath = path.join(userDir, `${bookId}.json`);
+            fs.unlinkSync(bookPath);
+            // 读取用户文件夹元数据内容
+            const userMetaPath = path.join(userDir, USER_META_FILE);
+            let userMeta = {};
+            if (fs.existsSync(userMetaPath)) {
+                userMeta = JSON.parse(fs.readFileSync(userMetaPath));
+            }
+            // 删除用户文件夹元数据
+            delete userMeta[bookId];
+            // 写入用户文件夹元数据
+            fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
+            // 返回成功
+            res.status(200).send({
+                message: 'success',
+            });
+        } catch (error) {
+            // 记录错误
+            logError(error);
+            res.status(500).send({
+                error: 'An error occurred while deleting the book.',
+            });
+        }
+    },
+);
+
 /**
  * 新模块：书籍资源封装
  * 服务器端有个书本资源，url 为 `https://blog.talaxy.cn/statics/books`。其中：
@@ -150,14 +195,13 @@ router.get('/books/:userId/:bookId', async (req, res) => {
  *      - 对于每个章节，文件夹下有个对应章节的 txt 文件，文件名即为章节标题。
  */
 
-const BOOKS_STATIC_URL = `${STATIC_URL}/books`;
+const BOOKS_STATIC_URL = `${Statics}/books`;
 
 // 写一个接口，它接收一个书籍名，返回书籍的元数据
 router.get('/literary', async (req, res) => {
     try {
         // 获取书籍名，他是 query 参数
         let { bookName } = req.query;
-        bookName = bookName;
         // 获取书籍元数据
         const { data: bookMeta } = await axios.get(
             `${BOOKS_STATIC_URL}/${bookName}/meta.json`,

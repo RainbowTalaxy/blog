@@ -36,4 +36,4 @@ async function test() {
     } catch {}
 }
 
-test();
+module.exports = test;

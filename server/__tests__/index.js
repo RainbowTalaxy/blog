@@ -4,33 +4,44 @@
  * 我打算简单地跑 curl 命令，然后检查返回值
  */
 
+const fs = require('fs');
 const { request, cmd, curl } = require('./utils');
+const wordBank = require('./word-bank');
+const dictionary = require('./dictionary');
+const statics = require('./statics');
+const weaver = require('./weaver');
 
 async function test() {
     try {
         // 清除 temp 目录的内容
-        await cmd('rm -rf temp/*');
+        fs.rmSync('./temp/', { recursive: true });
+        fs.mkdirSync('./temp/');
 
         // 咱们先测一下 echo 接口
         await request(
             'Echo',
             curl('/echo', 'POST', { data: 'hello' }),
             (response, resolve, reject) => {
-                if (response?.data !== 'hello') return reject('Expect "hello');
+                if (response?.data !== 'hello') return reject('Expect "hello"');
                 // 放行
                 resolve();
             },
         );
 
         // word-bank 测试
-        await require('./word-bank');
+        await wordBank();
 
         // dictionary 测试
-        await require('./dictionary');
+        await dictionary();
 
         // statics 测试
-        await require('./statics');
-    } catch {}
+        await statics();
+
+        // weaver 测试
+        // await weaver();
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 test();

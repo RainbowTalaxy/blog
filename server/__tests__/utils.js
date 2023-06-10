@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { LOCAL_SERVER_URL } = require('../constants');
+const { Server } = require('../config');
 
 const cmd = (command) => {
     return new Promise((resolve, reject) => {
@@ -58,9 +58,9 @@ const customEncodeURIComponent = (str) => {
  * 2. 仅生成一个字符串，即 curl 命令
  * 3. curl 使用的 RESTFul API 风格
  */
-const curl = (url, method, data) => {
+const curl = (url, method, data, authorization) => {
     let basicCmd = `curl -X ${method} -H 'Content-Type: application/json'`;
-    let basicUrl = `${LOCAL_SERVER_URL}${url}`;
+    let basicUrl = `${Server}${url}`;
     if (data) {
         if (method === 'GET') {
             // 将 data 视为 query。将 query 拼接到 url 上
@@ -75,6 +75,13 @@ const curl = (url, method, data) => {
             // 将 data 视为 body。将 body 作为参数传递给 curl
             basicCmd += ` -d '${JSON.stringify(data)}'`;
         }
+    }
+    if (authorization) {
+        // 将 cookie 对象转为 string
+        let authorizationStr = Object.entries(authorization)
+            .map(([key, value]) => `${key}=${value}`)
+            .join(';');
+        basicCmd += ` -H 'Authorization: ${authorizationStr}'`;
     }
     return `${basicCmd} ${basicUrl}`;
 };

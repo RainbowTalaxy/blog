@@ -1,20 +1,19 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { mkdirp } = require('mkdirp');
 
-const { TEMP_DIR, PORT } = require('./constants');
+const { PORT } = require('./config');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
-
-// 初始化文件系统
-mkdirp.sync(TEMP_DIR);
+const { weaverRouter } = require('./routes/weaver');
 
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -34,6 +33,7 @@ app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
 app.use('/statics', staticsRouter);
+app.use('/weaver', weaverRouter);
 
 app.use('*', (_, res) => {
     res.status(404).send('Not Found');
