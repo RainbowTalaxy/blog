@@ -1,8 +1,9 @@
 .container {
     margin: 0 auto;
-    padding: 36px 16px;
+    padding: 36px 8vw 72px;
     width: 100%;
     max-width: 1000px;
+    height: 100%;
 }
 
 .grid {
@@ -20,6 +21,7 @@
     transform: scale(1);
 }
 
+.formButton:hover,
 .projectCard:hover {
     background-color: rgba(0, 0, 0, 0.02);
     transition: background-color 0.2s ease-in-out;
@@ -40,18 +42,23 @@
 
 .input {
     padding: 8px 10px;
+    width: 100%;
+    max-width: 300px;
     font-size: 16px;
     border-radius: 6px;
-    border: 1px solid var(--theme-black-half);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .formButton {
     appearance: none;
-    margin-top: 12px;
+    margin-top: 16px;
     padding: 3px 12px;
     outline: none;
+    border: none;
     border-radius: 5px;
-    border: 1px solid var(--theme-black-half);
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     font-size: 16px;
     color: initial;
+    cursor: pointer;
 }

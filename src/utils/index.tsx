@@ -27,6 +27,17 @@ export function AppleDate() {
     return (Date.now() - 978307200000) / 1000;
 }
 
+export function isBetween(start: number, end: number) {
+    const today = dayjs();
+    const startDay = dayjs(start);
+    const endDay = dayjs(end).add(-1, 'day');
+    const isAfterStart =
+        today.isAfter(startDay, 'day') || today.isSame(startDay, 'day');
+    const isBeforeEnd =
+        today.isBefore(endDay, 'day') || today.isSame(endDay, 'day');
+    return isAfterStart && isBeforeEnd;
+}
+
 export function uuid() {
     return uuidV4();
 }

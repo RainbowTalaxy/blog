@@ -38,6 +38,7 @@
     padding: 0 8px;
     font-weight: var(--ifm-heading-font-weight);
     color: var(--ifm-menu-color-active);
+    cursor: default;
 }
 
 .sidebarInner > p {

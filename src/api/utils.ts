@@ -17,7 +17,7 @@ export const rocket = {
         const result: Data = await res.json();
         return result;
     },
-    async post<Data>(url: string, data: any, key?: APIKey) {
+    async post<Data>(url: string, data?: any, key?: APIKey) {
         const res = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
@@ -30,7 +30,7 @@ export const rocket = {
         const result: Data = await res.json();
         return result;
     },
-    async put<Data>(url: string, data: any, key?: APIKey) {
+    async put<Data>(url: string, data?: any, key?: APIKey) {
         const res = await fetch(url, {
             method: 'PUT',
             credentials: 'same-origin',
@@ -43,7 +43,7 @@ export const rocket = {
         const result: Data = await res.json();
         return result;
     },
-    async delete<Data>(url: string, data: any, key?: APIKey) {
+    async delete<Data>(url: string, data?: any, key?: APIKey) {
         const res = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',

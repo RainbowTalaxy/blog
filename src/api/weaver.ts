@@ -8,6 +8,13 @@ export interface ProjectInfo {
     createdAt: number;
 }
 
+export interface CycleInfo {
+    id: string;
+    idx: number;
+    start: number;
+    end: number;
+}
+
 const WeaverAPI = {
     projects: (userId: string) =>
         rocket.get<ProjectInfo[]>(`${SERVER_API}/weaver/${userId}/projects`),
@@ -15,6 +22,14 @@ const WeaverAPI = {
         rocket.post<{ id: string }>(`${SERVER_API}/weaver/${userId}/project`, {
             name,
         }),
+    cycles: (userId: string, projectId: string) =>
+        rocket.get<CycleInfo[]>(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle`,
+        ),
+    addCycle: (userId: string, projectId: string) =>
+        rocket.post<CycleInfo>(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle`,
+        ),
 };
 
 export default WeaverAPI;
