@@ -246,12 +246,21 @@ router.post('/:userId/project/:projectId/cycle', async (req, res) => {
         const cycles = JSON.parse(fs.readFileSync(cyclesPath, 'utf8'));
         // 降序排列，最新的周期在最前面
         const lastCycle = cycles[0];
-        const cycle = {
+        const now = Date.now();
+        let cycle = {
             id: uuid(),
             idx: lastCycle.idx + 1,
-            start: lastCycle.end,
-            end: req.body.end || lastCycle.end + DEFAULT_CYCLE_DURATION,
         };
+        if (lastCycle.end > now) {
+            cycle.start = lastCycle.end;
+            cycle.end = req.body.end || lastCycle.end + DEFAULT_CYCLE_DURATION;
+        } else {
+            const rounds = Math.floor(
+                (now - lastCycle.start) / DEFAULT_CYCLE_DURATION,
+            );
+            cycle.start = lastCycle.start + rounds * DEFAULT_CYCLE_DURATION;
+            cycle.end = req.body.end || cycle.start + DEFAULT_CYCLE_DURATION;
+        }
         cycles.unshift(cycle);
         fs.writeFileSync(cyclesPath, JSON.stringify(cycles));
         const cycleTasksPath = path.join(projectDir, `${cycle.id}.json`);
