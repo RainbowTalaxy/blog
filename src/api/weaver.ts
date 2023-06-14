@@ -24,7 +24,7 @@ const WeaverAPI = {
         }),
     cycles: (userId: string, projectId: string) =>
         rocket.get<CycleInfo[]>(
-            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle`,
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycles`,
         ),
     addCycle: (userId: string, projectId: string) =>
         rocket.post<CycleInfo>(
