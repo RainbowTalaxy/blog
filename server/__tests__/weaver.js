@@ -18,8 +18,6 @@ const project = {
 
 const userId = 'test';
 
-let cycle;
-
 async function test() {
     // 测试一下创建项目
     await request(
@@ -85,6 +83,8 @@ async function test() {
         },
     );
 
+    let cycle;
+
     // 测试一下获取周期信息
     await request(
         'Weaver - get project cycles',
@@ -98,12 +98,16 @@ async function test() {
         },
     );
 
+    let newCycle;
+
     // 测试一下创建周期
     await request(
         'Weaver - create cycle',
         curl(`${BASE_PATH}/${userId}/project/${project.id}/cycle`, 'POST'),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
+
+            newCycle = response;
 
             resolve();
         },
@@ -115,6 +119,75 @@ async function test() {
         curl(
             `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}`,
             'GET',
+        ),
+        (response, resolve, reject) => {
+            if (response.error)
+                return reject('Expect "success"', response.error);
+
+            resolve();
+        },
+    );
+
+    let task = {
+        name: 'some_name',
+        description: 'some_description',
+        priority: 1,
+        status: 1,
+    };
+
+    // 创建任务
+    await request(
+        'Weaver - create task',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task`,
+            'POST',
+        ),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            task = response;
+
+            resolve();
+        },
+    );
+
+    // 修改任务
+    await request(
+        'Weaver - modify task',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
+            'PUT',
+            { status: 2 },
+        ),
+        (response, resolve, reject) => {
+            if (response.error)
+                return reject('Expect "success"', response.error);
+
+            resolve();
+        },
+    );
+
+    // 移动任务周期
+    await request(
+        'Weaver - move task',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
+            'PUT',
+            { cycleId: newCycle.id },
+        ),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
+
+    // 删除任务
+    await request(
+        'Weaver - delete task',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
+            'DELETE',
         ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
