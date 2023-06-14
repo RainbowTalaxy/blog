@@ -18,6 +18,8 @@ const project = {
 
 const userId = 'test';
 
+let cycle;
+
 async function test() {
     // 测试一下创建项目
     await request(
@@ -52,6 +54,70 @@ async function test() {
             if (list.length === 0) {
                 return reject('Expect project list');
             }
+
+            project.id = list[0].id;
+
+            resolve();
+        },
+    );
+
+    // 测试一下查看项目
+    await request(
+        'Weaver - get project',
+        curl(`${BASE_PATH}/${userId}/project/${project.id}`, 'GET'),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
+
+    // 测试一下修改项目信息
+    await request(
+        'Weaver - modify project',
+        curl(`${BASE_PATH}/${userId}/project/${project.id}`, 'PUT', {
+            name: 'another_name',
+        }),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
+
+    // 测试一下获取周期信息
+    await request(
+        'Weaver - get project cycles',
+        curl(`${BASE_PATH}/${userId}/project/${project.id}/cycles`, 'GET'),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            cycle = response[0];
+
+            resolve();
+        },
+    );
+
+    // 测试一下创建周期
+    await request(
+        'Weaver - create cycle',
+        curl(`${BASE_PATH}/${userId}/project/${project.id}/cycle`, 'POST'),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
+
+    // 测试一下获取周期信息
+    await request(
+        'Weaver - get cycle',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}`,
+            'GET',
+        ),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
 
             resolve();
         },

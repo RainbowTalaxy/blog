@@ -36,12 +36,13 @@
  *
  * ## 接口
  *
- * - 查看项目列表 GET /:userId/projects
- * - 创建项目    POST /:userId/project
- * - 查看项目    GET /:userId/project/:projectId
- * - 修改项目    PUT /:userId/project/:projectId
- * - 查看周期列表 GET /:userId/project/:projectId/cycle
- * - 创建周期    POST /:userId/project/:projectId/cycle
+ * - 查看项目列表   GET  /:userId/projects
+ * - 创建项目      POST /:userId/project
+ * - 查看项目      GET  /:userId/project/:projectId
+ * - 修改项目      PUT  /:userId/project/:projectId
+ * - 查看周期列表   GET  /:userId/project/:projectId/cycles
+ * - 创建周期      POST /:userId/project/:projectId/cycle
+ * - 获取周期信息   GET  /:userId/project/:projectId/cycle/:cycleId
  * - 查看任务
  * - 创建任务
  * - 修改任务
@@ -178,7 +179,7 @@ router.put('/:userId/project/:projectId', async (req, res) => {
     }
     try {
         const list = FileHandler.readList();
-        const project = list.find((project) => project.id === projectId);
+        let project = list.find((project) => project.id === projectId);
         if (!project) {
             return res.status(404).send({
                 error: 'project not found',
@@ -199,7 +200,7 @@ router.put('/:userId/project/:projectId', async (req, res) => {
 });
 
 // 获取项目的周期列表
-router.get('/:userId/project/:projectId/cycle', async (req, res) => {
+router.get('/:userId/project/:projectId/cycles', async (req, res) => {
     const { userId, projectId } = req.params;
     if (!userId || !projectId) {
         return res.status(400).send({
