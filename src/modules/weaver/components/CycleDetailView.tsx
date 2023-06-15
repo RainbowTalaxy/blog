@@ -75,24 +75,26 @@ const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
                             {TASK_STATUS_NAMES[status]}
                             <span>{tasks[status].length}</span>
                         </div>
-                        <div className={styles.taskList}>
-                            {tasks[status].map((task) => (
-                                <div
-                                    key={task.id}
-                                    className={clsx(
-                                        styles.taskCard,
-                                        commonStyles.card,
-                                    )}
-                                >
-                                    <div className={styles.taskName}>
-                                        {task.name}
+                        {tasks[status].length > 0 && (
+                            <div className={styles.taskList}>
+                                {tasks[status].map((task) => (
+                                    <div
+                                        key={task.id}
+                                        className={clsx(
+                                            styles.taskCard,
+                                            commonStyles.card,
+                                        )}
+                                    >
+                                        <div className={styles.taskName}>
+                                            {task.name}
+                                        </div>
+                                        <div className={styles.taskExecutor}>
+                                            执行者：{task.executor}
+                                        </div>
                                     </div>
-                                    <div className={styles.taskExecutor}>
-                                        执行者：{task.executor}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                         <div
                             className={clsx(styles.taskAdd, commonStyles.card)}
                             onClick={async () => {
