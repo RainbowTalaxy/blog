@@ -1,5 +1,20 @@
 import { useRef } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    #__docusaurus {
+        width: 100%;
+        height: 100%;
+    }
+`;
 
 const Container = styled.div`
     flex: 1;
@@ -18,19 +33,16 @@ const Page = () => {
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
     const boundRef = useRef<DOMRect | null>(null);
     const prevPointRef = useRef<{ x: number; y: number } | null>(null);
-    const isDrawingRef = useRef(false);
 
     return (
         <Container>
+            <GlobalStyle />
             <canvas
                 ref={canvasRef}
-                width="500"
-                height="500"
-                onMouseDown={(e) => {
-                    isDrawingRef.current = true;
-                }}
-                onMouseMove={(e) => {
-                    if (!isDrawingRef.current) return;
+                width="300"
+                height="400"
+                onTouchMove={(e) => {
+                    e.preventDefault();
                     if (!canvasRef.current) return;
                     if (!ctxRef.current) {
                         ctxRef.current = canvasRef.current.getContext('2d');
@@ -42,8 +54,8 @@ const Page = () => {
                     }
                     const ctx = ctxRef.current;
                     const point = {
-                        x: e.clientX - boundRef.current.left,
-                        y: e.clientY - boundRef.current.top,
+                        x: e.touches[0].clientX - boundRef.current.left,
+                        y: e.touches[0].clientY - boundRef.current.top,
                     };
                     console.log(point);
                     ctx.beginPath();
@@ -59,12 +71,10 @@ const Page = () => {
                     }
                     prevPointRef.current = point;
                 }}
-                onMouseUp={(e) => {
-                    isDrawingRef.current = false;
+                onTouchEnd={(e) => {
                     prevPointRef.current = null;
                 }}
-                onMouseLeave={(e) => {
-                    isDrawingRef.current = false;
+                onTouchCancel={(e) => {
                     prevPointRef.current = null;
                 }}
             ></canvas>
