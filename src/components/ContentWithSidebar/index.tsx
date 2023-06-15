@@ -16,7 +16,7 @@ const ContentWithSidebar = ({
     sidebarWidth,
 }: Props) => {
     return (
-        <div className={styles.container}>
+        <div className={clsx(styles.container, 'sidebar-container')}>
             <div className={styles.sidebar} style={{ width: sidebarWidth }}>
                 <div className={styles.sidebarInner}>
                     {title && <div className={styles.header}>{title}</div>}

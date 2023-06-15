@@ -21,7 +21,7 @@ const Weaver = () => {
     const refetch = useCallback(() => {
         if (!user.id) return;
         API.weaver.projects(user.id).then((data) => setList(data));
-    }, []);
+    }, [user]);
 
     useUserEntry();
 

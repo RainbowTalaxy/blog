@@ -2,7 +2,8 @@
     position: relative;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     user-select: none;
 }
 
@@ -11,6 +12,8 @@
     align-items: flex-start;
     padding: 24px;
     height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .categoryColumn {
@@ -19,6 +22,7 @@
     display: flex;
     flex-direction: column;
     width: 240px;
+    max-height: 100%;
 }
 
 .categoryName {
@@ -44,14 +48,18 @@
 
 .taskAdd {
     flex: 0 0;
+    margin: 12px 0 0 0;
     padding: 2px;
     font-size: 20px;
     text-align: center;
 }
 
 .taskCard {
-    margin-bottom: 8px;
-    padding: 16px 20px;
+    padding: 20px 24px;
+}
+
+.taskCard + .taskCard {
+    margin-top: 12px;
 }
 
 .taskName {

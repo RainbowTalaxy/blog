@@ -60,11 +60,11 @@ const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
         } catch (error) {
             console.log(error);
         }
-    }, [cycleInfo]);
+    }, [cycleInfo, project, user]);
 
     useEffect(() => {
         refetch();
-    }, []);
+    }, [user, project, cycleInfo]);
 
     return (
         <div className={styles.container}>

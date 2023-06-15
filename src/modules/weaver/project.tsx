@@ -24,7 +24,6 @@ const ProjectView = ({ project, user }: Props) => {
     const [targetCycle, setCycle] = useState<CycleInfo>();
 
     const cycleId = query.get('cycle');
-    const cycle = cycles?.find((cycle) => cycle.id === cycleId);
 
     const refetchCycle = useCallback(async () => {
         if (!project.id || !user.id) return;
@@ -38,10 +37,11 @@ const ProjectView = ({ project, user }: Props) => {
 
     useEffect(() => {
         refetchCycle();
-    }, []);
+    }, [project, user]);
 
     useEffect(() => {
         if (!cycles) return;
+        const cycle = cycles?.find((cycle) => cycle.id === cycleId);
         if (cycle) {
             setCycle(cycle);
         } else {
@@ -116,11 +116,11 @@ const ProjectView = ({ project, user }: Props) => {
                     </>
                 }
             >
-                {cycle && (
+                {targetCycle && (
                     <CycleDetailView
                         user={user}
                         project={project}
-                        cycleInfo={cycle}
+                        cycleInfo={targetCycle}
                     />
                 )}
             </ContentWithSidebar>
