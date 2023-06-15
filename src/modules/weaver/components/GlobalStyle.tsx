@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     .sidebar-content {
         padding: 0;
         height: 100%;
+        overflow: hidden;
     }
 
     footer {

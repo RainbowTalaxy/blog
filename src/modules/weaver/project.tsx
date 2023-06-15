@@ -10,6 +10,7 @@ import { isBetween } from '@site/src/utils';
 import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
 import GlobalStyle from './components/GlobalStyle';
+import CycleDetailView from './components/CycleDetailView';
 
 interface Props {
     project: ProjectInfo;
@@ -23,8 +24,10 @@ const ProjectView = ({ project, user }: Props) => {
     const [targetCycle, setCycle] = useState<CycleInfo>();
 
     const cycleId = query.get('cycle');
+    const cycle = cycles?.find((cycle) => cycle.id === cycleId);
 
     const refetchCycle = useCallback(async () => {
+        if (!project.id || !user.id) return;
         try {
             const cycles = await API.weaver.cycles(user.id, project.id);
             setCycles(cycles);
@@ -39,7 +42,6 @@ const ProjectView = ({ project, user }: Props) => {
 
     useEffect(() => {
         if (!cycles) return;
-        const cycle = cycles.find((cycle) => cycle.id === cycleId);
         if (cycle) {
             setCycle(cycle);
         } else {
@@ -114,7 +116,13 @@ const ProjectView = ({ project, user }: Props) => {
                     </>
                 }
             >
-                {project.id}
+                {cycle && (
+                    <CycleDetailView
+                        user={user}
+                        project={project}
+                        cycleInfo={cycle}
+                    />
+                )}
             </ContentWithSidebar>
         </>
     );

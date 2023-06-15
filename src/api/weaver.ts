@@ -15,6 +15,27 @@ export interface CycleInfo {
     end: number;
 }
 
+export interface Task {
+    id: string;
+    name: string;
+    description: string;
+    priority: number;
+    status: string;
+    executor: string;
+}
+
+interface TaskProps {
+    name?: string;
+    description?: string;
+    priority?: number;
+    status?: number;
+    executor?: string;
+}
+
+export interface CycleDetail {
+    tasks: Task[];
+}
+
 const WeaverAPI = {
     projects: (userId: string) =>
         rocket.get<ProjectInfo[]>(`${SERVER_API}/weaver/${userId}/projects`),
@@ -29,6 +50,33 @@ const WeaverAPI = {
     addCycle: (userId: string, projectId: string) =>
         rocket.post<CycleInfo>(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle`,
+        ),
+    cycleDetail: (userId: string, projectId: string, cycleId: string) =>
+        rocket.get<CycleDetail>(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}`,
+        ),
+    addTask: (
+        userId: string,
+        projectId: string,
+        cycleId: string,
+        task: Omit<TaskProps, 'name'> & {
+            name: string;
+        },
+    ) =>
+        rocket.post(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task`,
+            task,
+        ),
+    updateTask: (
+        userId: string,
+        projectId: string,
+        cycleId: string,
+        taskId: string,
+        task: TaskProps,
+    ) =>
+        rocket.put(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task/${taskId}`,
+            task,
         ),
 };
 

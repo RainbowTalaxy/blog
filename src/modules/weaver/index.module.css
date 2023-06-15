@@ -62,3 +62,18 @@
     color: initial;
     cursor: pointer;
 }
+
+.card {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: 1px solid var(--ifm-menu-color-background-active);
+    color: var(--ifm-menu-color);
+    background-color: var(--theme-white);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.card:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}

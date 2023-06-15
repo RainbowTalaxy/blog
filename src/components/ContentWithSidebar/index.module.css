@@ -50,6 +50,7 @@
 
 .content {
     flex: 1;
+    position: relative;
     padding: 24px 12px 120px;
     width: 100%;
     background-color: var(--ifm-menu-color-background-active);
