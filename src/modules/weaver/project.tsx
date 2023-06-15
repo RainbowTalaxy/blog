@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { isBetween } from '@site/src/utils';
 import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
+import GlobalStyle from './components/GlobalStyle';
 
 interface Props {
     project: ProjectInfo;
@@ -52,62 +53,70 @@ const ProjectView = ({ project, user }: Props) => {
     }, [cycleId, cycles]);
 
     return (
-        <ContentWithSidebar
-            title={
-                <div
-                    className={styles.header}
-                    onClick={() => history.push('?')}
-                >
-                    Weaver
-                </div>
-            }
-            sidebar={
-                <>
-                    <span>{project.name}</span>
+        <>
+            <GlobalStyle />
+            <ContentWithSidebar
+                title={
                     <div
-                        className={styles.cycleNew}
-                        onClick={async () => {
-                            if (!project.id || !user.id) return;
-                            try {
-                                await API.weaver.addCycle(user.id, project.id);
-                                refetchCycle();
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }}
+                        className={styles.header}
+                        onClick={() => history.push('?')}
                     >
-                        + 新建周期
+                        Weaver
                     </div>
-                    {cycles?.map((cycle) => (
+                }
+                sidebar={
+                    <>
+                        <span>{project.name}</span>
                         <div
-                            key={cycle.id}
-                            className={clsx(
-                                styles.cycle,
-                                cycle.id === targetCycle?.id && styles.active,
-                            )}
-                            onClick={() => {
-                                if (user.id && project.id && cycle.id)
-                                    history.push(
-                                        `?project=${project.id}&cycle=${cycle.id}`,
+                            className={styles.cycleNew}
+                            onClick={async () => {
+                                if (!project.id || !user.id) return;
+                                try {
+                                    await API.weaver.addCycle(
+                                        user.id,
+                                        project.id,
                                     );
+                                    refetchCycle();
+                                } catch (error) {
+                                    console.log(error);
+                                }
                             }}
                         >
-                            <div className={styles.cycleName}>
-                                第 {cycle.idx + 1} 周
-                            </div>
-                            <div className={styles.cycleDate}>
-                                {dayjs(cycle.start).format('YYYY年M月D日')} -{' '}
-                                {dayjs(cycle.end)
-                                    .add(-1, 'day')
-                                    .format('YYYY年M月D日')}
-                            </div>
+                            + 新建周期
                         </div>
-                    ))}
-                </>
-            }
-        >
-            {project.id}
-        </ContentWithSidebar>
+                        {cycles?.map((cycle) => (
+                            <div
+                                key={cycle.id}
+                                className={clsx(
+                                    styles.cycle,
+                                    cycle.id === targetCycle?.id &&
+                                        styles.active,
+                                )}
+                                onClick={() => {
+                                    if (user.id && project.id && cycle.id)
+                                        history.push(
+                                            `?project=${project.id}&cycle=${cycle.id}`,
+                                        );
+                                }}
+                            >
+                                <div className={styles.cycleName}>
+                                    第 {cycle.idx + 1} 周
+                                </div>
+                                <div className={styles.cycleDate}>
+                                    {dayjs(cycle.start).format('YYYY年M月D日')}{' '}
+                                    -{' '}
+                                    {dayjs(cycle.end)
+                                        .add(-1, 'day')
+                                        .format('YYYY年M月D日')}
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                }
+            >
+                {project.id}
+            </ContentWithSidebar>
+        </>
     );
 };
 

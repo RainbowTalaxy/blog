@@ -9,7 +9,6 @@ import styles from './index.module.css';
 import useQuery from '@site/src/hooks/useQuery';
 import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
-import { render } from 'react-dom';
 
 const Weaver = () => {
     const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import styles from './index.module.css';
+import clsx from 'clsx';
 
 interface Props {
     title?: ReactNode;
@@ -22,7 +23,9 @@ const ContentWithSidebar = ({
                     {sidebar}
                 </div>
             </div>
-            <div className={styles.content}>{children}</div>
+            <div className={clsx(styles.content, 'sidebar-content')}>
+                {children}
+            </div>
         </div>
     );
 };
