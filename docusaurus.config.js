@@ -70,6 +70,11 @@ const config = {
             type: 'text/css',
             crossorigin: 'anonymous',
         },
+        {
+            href: 'https://blog.talaxy.cn/statics/firacode/fira_code.css',
+            type: 'text/css',
+            crossorigin: 'anonymous',
+        },
     ],
 
     i18n: {
@@ -94,6 +99,7 @@ const config = {
                         position: 'left',
                     },
                     { to: '/blog', label: '博客', position: 'left' },
+                    { to: '/gallery', label: '画廊', position: 'left' },
                     {
                         to: '/ow',
                         label: 'Overwatch',

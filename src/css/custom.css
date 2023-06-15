@@ -93,8 +93,12 @@ html[data-theme='dark'] {
     border-radius: 50%;
 }
 
-.katex-html {
-    display: none;
+code {
+    font-family: 'Fira Code' !important;
+}
+
+code {
+    font-size: 90% !important;
 }
 
 @tailwind base;

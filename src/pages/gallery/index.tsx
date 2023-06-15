@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import style from './index.module.css';
@@ -6,6 +6,8 @@ import { GALLERY_CARDS } from '../../constants/gallery';
 import LeftArrow from '@site/static/svg/left-arrow.svg';
 import RightArrow from '@site/static/svg/right-arrow.svg';
 import { throttle } from 'lodash';
+
+import smoothscroll from 'smoothscroll-polyfill';
 
 const getValue = (s: string) => {
     return parseFloat(s) || 0;
@@ -33,12 +35,15 @@ export default function Home(): JSX.Element {
             });
             const handleFloat = plus ? Math.ceil : Math.floor;
             setScroll(
-                handleFloat(targetEle.scrollLeft + offsetX + (plus ? 10 : -10)),
+                handleFloat(
+                    targetEle.scrollLeft + offsetX + (plus ? 100 : -100),
+                ),
             );
         }, 600);
     }, []);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        smoothscroll.polyfill();
         const targetEle = document.getElementsByClassName(
             style['card-list'],
         )[0];
