@@ -121,6 +121,7 @@ const ProjectView = ({ project, user }: Props) => {
                         user={user}
                         project={project}
                         cycleInfo={targetCycle}
+                        cycles={cycles}
                     />
                 )}
             </ContentWithSidebar>

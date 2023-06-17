@@ -20,11 +20,11 @@ export interface Task {
     name: string;
     description: string;
     priority: number;
-    status: string;
+    status: number;
     executor: string;
 }
 
-interface TaskProps {
+export interface TaskProps {
     name?: string;
     description?: string;
     priority?: number;
@@ -77,6 +77,19 @@ const WeaverAPI = {
         rocket.put(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task/${taskId}`,
             task,
+        ),
+    changeTaskCycle: (
+        userId: string,
+        projectId: string,
+        cycleId: string,
+        taskId: string,
+        targetCycleId: string,
+    ) =>
+        rocket.put(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task/${taskId}/move`,
+            {
+                cycleId: targetCycleId,
+            },
         ),
 };
 

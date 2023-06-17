@@ -6,34 +6,30 @@ import {
 } from '@site/src/api/weaver';
 import commonStyles from '../index.module.css';
 import styles from './cycle.module.css';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
 import { UserInfo } from '@site/src/constants/user';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
+import TaskForm from './TaskForm';
+import { TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 
 interface Props {
     user: UserInfo;
     project: ProjectInfo;
     cycleInfo: CycleInfo;
+    cycles: CycleInfo[];
 }
 
-const TASK_STATUSES = [
-    TaskStatus.Todo,
-    TaskStatus.Doing,
-    TaskStatus.Testing,
-    TaskStatus.Done,
-];
-
-const TASK_STATUS_NAMES = {
-    [TaskStatus.Todo]: '待处理',
-    [TaskStatus.Doing]: '进行中',
-    [TaskStatus.Testing]: '测试中',
-    [TaskStatus.Done]: '已完成',
-};
-
-const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
+const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
     const [detail, setDetail] = useState<CycleDetail>();
+    const [isFormVisible, setFormVisible] = useState(false);
+    const [targetTask, setTargetTask] = useState<Task>();
+    const context = useRef<{
+        user: UserInfo;
+        project: ProjectInfo;
+        cycleInfo: CycleInfo;
+    }>();
 
     const tasks = useMemo(() => {
         const result: { [key in TaskStatus]: Task[] } = {
@@ -64,6 +60,11 @@ const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
 
     useEffect(() => {
         refetch();
+        context.current = {
+            user,
+            project,
+            cycleInfo,
+        };
     }, [user, project, cycleInfo]);
 
     return (
@@ -84,6 +85,10 @@ const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
                                             styles.taskCard,
                                             commonStyles.card,
                                         )}
+                                        onClick={() => {
+                                            setTargetTask(task);
+                                            setFormVisible(true);
+                                        }}
                                     >
                                         <div className={styles.taskName}>
                                             {task.name}
@@ -95,32 +100,80 @@ const CycleDetailView = ({ user, project, cycleInfo }: Props) => {
                                 ))}
                             </div>
                         )}
-                        <div
-                            className={clsx(styles.taskAdd, commonStyles.card)}
-                            onClick={async () => {
-                                try {
-                                    await API.weaver.addTask(
-                                        user.id,
-                                        project.id,
-                                        cycleInfo.id,
-                                        {
-                                            name: 'New Task',
-                                            description: 'Some Description',
-                                            status,
-                                            executor: user.id,
-                                        },
-                                    );
-                                    refetch();
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                            }}
-                        >
-                            +
-                        </div>
+                        {status === TaskStatus.Todo && (
+                            <div
+                                className={clsx(
+                                    styles.taskAdd,
+                                    commonStyles.card,
+                                )}
+                                onClick={async () => {
+                                    setTargetTask(undefined);
+                                    setFormVisible(true);
+                                }}
+                            >
+                                +
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
+            {isFormVisible && (
+                <TaskForm
+                    task={targetTask}
+                    context={context.current}
+                    moveCycle={async (cycleId) => {
+                        if (!targetTask) return false;
+                        try {
+                            await API.weaver.changeTaskCycle(
+                                user.id,
+                                project.id,
+                                cycleInfo.id,
+                                targetTask.id,
+                                cycleId,
+                            );
+                            return true;
+                        } catch (error) {
+                            console.log(error);
+                            return false;
+                        }
+                    }}
+                    cycles={cycles}
+                    update={async (props) => {
+                        try {
+                            if (targetTask) {
+                                await API.weaver.updateTask(
+                                    user.id,
+                                    project.id,
+                                    cycleInfo.id,
+                                    targetTask.id,
+                                    props,
+                                );
+                                return true;
+                            } else {
+                                if (!props.name) return false;
+                                await API.weaver.addTask(
+                                    user.id,
+                                    project.id,
+                                    cycleInfo.id,
+                                    {
+                                        ...props,
+                                        name: props.name,
+                                        status: TaskStatus.Todo,
+                                    },
+                                );
+                                return true;
+                            }
+                        } catch (error) {
+                            console.log(error);
+                            return false;
+                        }
+                    }}
+                    onClose={async (success) => {
+                        if (success) await refetch();
+                        setFormVisible(false);
+                    }}
+                />
+            )}
         </div>
     );
 };

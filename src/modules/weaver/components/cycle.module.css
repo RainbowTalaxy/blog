@@ -36,7 +36,7 @@
     margin-left: 8px;
     font-size: 14px;
     font-weight: normal;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--theme-black-half);
 }
 
 .taskList {
@@ -71,5 +71,6 @@
 .taskExecutor {
     margin: 0 0 4px 0;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--theme-black);
+    opacity: 0.4;
 }
