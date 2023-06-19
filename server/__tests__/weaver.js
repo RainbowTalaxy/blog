@@ -195,6 +195,22 @@ async function test() {
             resolve();
         },
     );
+
+    // 删除项目
+    await request(
+        'Weaver - delete project',
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}`,
+            'DELETE',
+            {},
+            { [APIKey.file]: 'talaxy' },
+        ),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
 }
 
 module.exports = test;

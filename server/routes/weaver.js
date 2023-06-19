@@ -49,6 +49,7 @@
  * - 创建项目      POST /:userId/project
  * - 查看项目      GET  /:userId/project/:projectId
  * - 修改项目      PUT  /:userId/project/:projectId
+ * - 删除项目      DELETE /:userId/project/:projectId
  * - 查看周期列表   GET  /:userId/project/:projectId/cycles
  * - 创建周期      POST /:userId/project/:projectId/cycle
  * - 获取周期信息   GET  /:userId/project/:projectId/cycle/:cycleId
@@ -63,9 +64,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { Dir } = require('../config');
+const { Dir, APIKey } = require('../config');
 const { uuid } = require('../utils');
 const { mkdirp } = require('mkdirp');
+const { authority } = require('../middlewares');
 const router = express.Router();
 
 const LIST_PATH = path.join(Dir.storage.projects, 'list.json');
@@ -83,6 +85,12 @@ const FileHandler = {
     },
     writeList: (list) => {
         fs.writeFileSync(LIST_PATH, JSON.stringify(list));
+    },
+    removeProjectDir: (projectId) => {
+        const projectDir = path.join(Dir.storage.projects, `${projectId}`);
+        if (fs.existsSync(projectDir)) {
+            fs.rmSync(projectDir, { recursive: true });
+        }
     },
     initProject: (projectId) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
@@ -194,7 +202,9 @@ router.put('/:userId/project/:projectId', async (req, res) => {
     }
     try {
         const list = FileHandler.readList();
-        const projectIdx = list.find((project) => project.id === projectId);
+        const projectIdx = list.findIndex(
+            (project) => project.id === projectId,
+        );
         if (projectIdx === -1) {
             return res.status(404).send({
                 error: 'project not found',
@@ -214,6 +224,41 @@ router.put('/:userId/project/:projectId', async (req, res) => {
         });
     }
 });
+
+// 删除项目
+router.delete(
+    '/:userId/project/:projectId',
+    authority(APIKey.file),
+    async (req, res) => {
+        const { userId, projectId } = req.params;
+        if (!userId || !projectId) {
+            return res.status(400).send({
+                error: 'userId/projectId is required',
+            });
+        }
+        try {
+            const list = FileHandler.readList();
+            const projectIdx = list.findIndex(
+                (project) => project.id === projectId,
+            );
+            if (projectIdx === -1) {
+                return res.status(404).send({
+                    error: 'project not found',
+                });
+            }
+            const project = list[projectIdx];
+            FileHandler.removeProjectDir(projectId);
+            list.splice(projectIdx, 1);
+            FileHandler.writeList(list);
+            return res.send(project);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send({
+                error: 'Failed to delete project.',
+            });
+        }
+    },
+);
 
 // 获取项目的周期列表
 router.get('/:userId/project/:projectId/cycles', async (req, res) => {
