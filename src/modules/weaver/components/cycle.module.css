@@ -21,7 +21,7 @@
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    width: 240px;
+    width: 250px;
     max-height: 100%;
 }
 
@@ -43,7 +43,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-bottom: 12px;
+    margin: 0 -12px 12px;
+    padding: 0 12px;
     overflow: auto;
 }
 
@@ -55,7 +56,8 @@
 }
 
 .taskCard {
-    padding: 20px 24px;
+    position: relative;
+    padding: 20px 20px 20px 28px;
 }
 
 .taskCard + .taskCard {
@@ -73,4 +75,14 @@
     font-size: 14px;
     color: var(--theme-black);
     opacity: 0.4;
+}
+
+.taskCardIndicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0.25em 0 0 0.25em;
+    background-color: var(--theme-primary);
 }

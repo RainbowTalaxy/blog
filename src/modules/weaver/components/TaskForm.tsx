@@ -61,6 +61,28 @@ const TaskForm = ({
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{task ? '任务详情' : '新建任务'}</h2>
+                {task && (
+                    <div className={styles.formItem}>
+                        <label>状态：</label>
+                        <div className={styles.priorityOptions}>
+                            {TASK_STATUSES.map((s) => (
+                                <div
+                                    key={s}
+                                    className={clsx(
+                                        styles.priority,
+                                        s === status && styles.selected,
+                                    )}
+                                    style={{
+                                        background: `var(--theme-color-gray)`,
+                                    }}
+                                    onClick={() => setStatus(s)}
+                                >
+                                    {TASK_STATUS_NAMES[s]}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className={styles.formItem}>
                     <label>
                         <span>*</span>标题：
@@ -70,26 +92,6 @@ const TaskForm = ({
                 <div className={styles.formItem}>
                     <label>描述：</label>
                     <textarea ref={descriptionRef} />
-                </div>
-                <div className={styles.formItem}>
-                    <label>状态：</label>
-                    <div className={styles.priorityOptions}>
-                        {TASK_STATUSES.map((s) => (
-                            <div
-                                key={s}
-                                className={clsx(
-                                    styles.priority,
-                                    s === status && styles.selected,
-                                )}
-                                style={{
-                                    background: `var(--theme-color-gray)`,
-                                }}
-                                onClick={() => setStatus(s)}
-                            >
-                                {TASK_STATUS_NAMES[s]}
-                            </div>
-                        ))}
-                    </div>
                 </div>
                 <div className={styles.formItem}>
                     <label>优先级：</label>

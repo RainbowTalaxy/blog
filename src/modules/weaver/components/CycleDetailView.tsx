@@ -12,7 +12,11 @@ import { UserInfo } from '@site/src/constants/user';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
 import TaskForm from './TaskForm';
-import { TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
+import {
+    TASK_PRIORITY_COLORS,
+    TASK_STATUSES,
+    TASK_STATUS_NAMES,
+} from '../constants';
 
 interface Props {
     user: UserInfo;
@@ -90,6 +94,16 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                                             setFormVisible(true);
                                         }}
                                     >
+                                        <div
+                                            className={styles.taskCardIndicator}
+                                            style={{
+                                                background: `var(--theme-color-${
+                                                    TASK_PRIORITY_COLORS[
+                                                        task.priority
+                                                    ]
+                                                })`,
+                                            }}
+                                        />
                                         <div className={styles.taskName}>
                                             {task.name}
                                         </div>

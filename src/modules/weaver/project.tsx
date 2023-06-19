@@ -96,7 +96,7 @@ const ProjectView = ({ project, user }: Props) => {
                                 )}
                                 onClick={() => {
                                     if (user.id && project.id && cycle.id)
-                                        history.push(
+                                        history.replace(
                                             `?project=${project.id}&cycle=${cycle.id}`,
                                         );
                                 }}

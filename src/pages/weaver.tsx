@@ -3,7 +3,7 @@ import Weaver from '../modules/weaver';
 
 const Page = () => {
     return (
-        <Layout>
+        <Layout title="Weaver">
             <Weaver />
         </Layout>
     );
