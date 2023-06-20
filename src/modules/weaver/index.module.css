@@ -52,11 +52,11 @@
 .formButton {
     appearance: none;
     margin-top: 16px;
-    padding: 3px 12px;
+    padding: 6px 14px;
     outline: none;
     border: none;
     border-radius: 5px;
-    background: none;
+    background: var(--ifm-navbar-background-color);
     border: 1px solid rgba(0, 0, 0, 0.2);
     font-size: 16px;
     color: initial;
@@ -76,4 +76,18 @@
 .card:hover {
     color: var(--ifm-menu-color-active);
     background-color: var(--ifm-menu-color-background-active);
+}
+
+.projectDelete {
+    display: none;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    color: red;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.projectCard:hover .projectDelete {
+    display: block;
 }

@@ -70,7 +70,7 @@ const ProjectView = ({ project, user }: Props) => {
                     <>
                         <span>{project.name}</span>
                         <div
-                            className={styles.cycleNew}
+                            className={styles.cycleOption}
                             onClick={async () => {
                                 if (!project.id || !user.id) return;
                                 try {

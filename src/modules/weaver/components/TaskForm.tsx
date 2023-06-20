@@ -28,6 +28,7 @@ interface Props {
         priority?: Priority;
         status: TaskStatus;
     }) => Promise<boolean>;
+    remove: (taskId: string) => Promise<boolean>;
     onClose: (success?: boolean) => Promise<void>;
 }
 
@@ -37,6 +38,7 @@ const TaskForm = ({
     cycles,
     update,
     moveCycle,
+    remove,
     onClose,
 }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
@@ -154,6 +156,22 @@ const TaskForm = ({
                         提交
                     </button>
                     <button onClick={() => onClose()}>取消</button>
+                    {task && (
+                        <button
+                            className={styles.danger}
+                            onClick={async () => {
+                                const result = confirm(
+                                    `确定删除任务 ${task.name} ？`,
+                                );
+                                if (!result) return;
+                                const deleteResult = await remove(task.id);
+                                if (!deleteResult) return alert('删除失败');
+                                await onClose(true);
+                            }}
+                        >
+                            删除
+                        </button>
+                    )}
                 </div>
             </div>
             <div className={styles.mask} onClick={() => onClose()} />

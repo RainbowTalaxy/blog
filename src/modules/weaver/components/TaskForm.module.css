@@ -104,11 +104,11 @@
     font-size: 16px;
     color: var(--ifm-menu-color-active);
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .formItem > button:hover {
     background-color: rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease-in-out;
 }
 
 .formItem > button.primary {
@@ -117,7 +117,16 @@
     border: 1px solid var(--ifm-menu-color-active);
 }
 
+.formItem > button.danger {
+    background-color: rgb(255, 0, 0, 0.7);
+    color: white;
+    border: 1px solid rgb(255, 0, 0, 0.7);
+}
+
 .formItem > button.primary:hover {
     background-color: var(--ifm-menu-color);
-    transition: background-color 0.3s ease-in-out;
+}
+
+.formItem > button.danger:hover {
+    background-color: rgb(255, 0, 0, 0.9);
 }

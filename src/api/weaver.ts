@@ -1,5 +1,5 @@
 import { SERVER_API } from '../constants/config';
-import { rocket } from './utils';
+import { APIKey, rocket } from './utils';
 
 export interface ProjectInfo {
     id: string;
@@ -40,9 +40,19 @@ const WeaverAPI = {
     projects: (userId: string) =>
         rocket.get<ProjectInfo[]>(`${SERVER_API}/weaver/${userId}/projects`),
     createProject: (userId: string, name: string) =>
-        rocket.post<{ id: string }>(`${SERVER_API}/weaver/${userId}/project`, {
-            name,
-        }),
+        rocket.post<{ id: string }>(
+            `${SERVER_API}/weaver/${userId}/project`,
+            {
+                name,
+            },
+            APIKey.file,
+        ),
+    deleteProject: (userId: string, projectId: string) =>
+        rocket.delete(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}`,
+            {},
+            APIKey.file,
+        ),
     cycles: (userId: string, projectId: string) =>
         rocket.get<CycleInfo[]>(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycles`,
@@ -50,6 +60,8 @@ const WeaverAPI = {
     addCycle: (userId: string, projectId: string) =>
         rocket.post<CycleInfo>(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle`,
+            {},
+            APIKey.file,
         ),
     cycleDetail: (userId: string, projectId: string, cycleId: string) =>
         rocket.get<CycleDetail>(
@@ -66,6 +78,7 @@ const WeaverAPI = {
         rocket.post(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task`,
             task,
+            APIKey.file,
         ),
     updateTask: (
         userId: string,
@@ -77,6 +90,7 @@ const WeaverAPI = {
         rocket.put(
             `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task/${taskId}`,
             task,
+            APIKey.file,
         ),
     changeTaskCycle: (
         userId: string,
@@ -90,6 +104,18 @@ const WeaverAPI = {
             {
                 cycleId: targetCycleId,
             },
+            APIKey.file,
+        ),
+    deleteTask: (
+        userId: string,
+        projectId: string,
+        cycleId: string,
+        taskId: string,
+    ) =>
+        rocket.delete(
+            `${SERVER_API}/weaver/${userId}/project/${projectId}/cycle/${cycleId}/task/${taskId}`,
+            {},
+            APIKey.file,
         ),
 };
 

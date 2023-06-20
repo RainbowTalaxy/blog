@@ -182,6 +182,21 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                             return false;
                         }
                     }}
+                    remove={async () => {
+                        if (!targetTask) return false;
+                        try {
+                            await API.weaver.deleteTask(
+                                user.id,
+                                project.id,
+                                cycleInfo.id,
+                                targetTask.id,
+                            );
+                            return true;
+                        } catch (error) {
+                            console.log(error);
+                            return false;
+                        }
+                    }}
                     onClose={async (success) => {
                         if (success) await refetch();
                         setFormVisible(false);

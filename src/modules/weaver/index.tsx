@@ -55,6 +55,28 @@ const Weaver = () => {
                             创建时间：
                             {dayjs(project.createdAt).format('YYYY年M月D日')}
                         </div>
+                        <div
+                            className={styles.projectDelete}
+                            onClick={async (e) => {
+                                e.stopPropagation();
+                                const result = confirm(
+                                    `确定删除“${project.name}”？`,
+                                );
+                                if (result) {
+                                    try {
+                                        await API.weaver.deleteProject(
+                                            user.id,
+                                            project.id,
+                                        );
+                                        refetch();
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }
+                            }}
+                        >
+                            删除
+                        </div>
                     </div>
                 ))}
             </div>
