@@ -193,37 +193,41 @@ router.get('/:userId/project/:projectId', async (req, res) => {
 });
 
 // 修改项目基本信息
-router.put('/:userId/project/:projectId', async (req, res) => {
-    const { userId, projectId } = req.params;
-    if (!userId || !projectId) {
-        return res.status(400).send({
-            error: 'userId/projectId is required',
-        });
-    }
-    try {
-        const list = FileHandler.readList();
-        const projectIdx = list.findIndex(
-            (project) => project.id === projectId,
-        );
-        if (projectIdx === -1) {
-            return res.status(404).send({
-                error: 'project not found',
+router.put(
+    '/:userId/project/:projectId',
+    authority(APIKey.file),
+    async (req, res) => {
+        const { userId, projectId } = req.params;
+        if (!userId || !projectId) {
+            return res.status(400).send({
+                error: 'userId/projectId is required',
             });
         }
-        const project = {
-            ...list[projectIdx],
-            ...req.body,
-        };
-        list[projectIdx] = project;
-        FileHandler.writeList(list);
-        return res.send(project);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to update project.',
-        });
-    }
-});
+        try {
+            const list = FileHandler.readList();
+            const projectIdx = list.findIndex(
+                (project) => project.id === projectId,
+            );
+            if (projectIdx === -1) {
+                return res.status(404).send({
+                    error: 'project not found',
+                });
+            }
+            const project = {
+                ...list[projectIdx],
+                ...req.body,
+            };
+            list[projectIdx] = project;
+            FileHandler.writeList(list);
+            return res.send(project);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send({
+                error: 'Failed to update project.',
+            });
+        }
+    },
+);
 
 // 删除项目
 router.delete(
@@ -288,52 +292,58 @@ router.get('/:userId/project/:projectId/cycles', async (req, res) => {
 // 新建项目的周期，细节如下：
 // 周期的 idx 为上一个周期的 idx + 1
 // 周期的开始时间为上一个周期的结束时间，结束时间可以由用户指定，如果用户没有指定，则默认为开始时间 + 7 天
-router.post('/:userId/project/:projectId/cycle', async (req, res) => {
-    const { userId, projectId } = req.params;
-    // 前置校验
-    if (!userId || !projectId) {
-        return res.status(400).send({
-            error: 'userId/projectId is required',
-        });
-    }
-    try {
-        const projectDir = FileHandler.getProjectPath(projectId);
-        if (!projectDir) {
-            return res.status(404).send({
-                error: 'project not found',
+router.post(
+    '/:userId/project/:projectId/cycle',
+    authority(APIKey.file),
+    async (req, res) => {
+        const { userId, projectId } = req.params;
+        // 前置校验
+        if (!userId || !projectId) {
+            return res.status(400).send({
+                error: 'userId/projectId is required',
             });
         }
-        const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
-        const cycles = JSON.parse(fs.readFileSync(cyclesPath, 'utf8'));
-        // 降序排列，最新的周期在最前面
-        const lastCycle = cycles[0];
-        const now = Date.now();
-        let cycle = {
-            id: uuid(),
-            idx: lastCycle.idx + 1,
-        };
-        if (lastCycle.end > now) {
-            cycle.start = lastCycle.end;
-            cycle.end = req.body.end || lastCycle.end + DEFAULT_CYCLE_DURATION;
-        } else {
-            const rounds = Math.floor(
-                (now - lastCycle.start) / DEFAULT_CYCLE_DURATION,
-            );
-            cycle.start = lastCycle.start + rounds * DEFAULT_CYCLE_DURATION;
-            cycle.end = req.body.end || cycle.start + DEFAULT_CYCLE_DURATION;
+        try {
+            const projectDir = FileHandler.getProjectPath(projectId);
+            if (!projectDir) {
+                return res.status(404).send({
+                    error: 'project not found',
+                });
+            }
+            const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
+            const cycles = JSON.parse(fs.readFileSync(cyclesPath, 'utf8'));
+            // 降序排列，最新的周期在最前面
+            const lastCycle = cycles[0];
+            const now = Date.now();
+            let cycle = {
+                id: uuid(),
+                idx: lastCycle.idx + 1,
+            };
+            if (lastCycle.end > now) {
+                cycle.start = lastCycle.end;
+                cycle.end =
+                    req.body.end || lastCycle.end + DEFAULT_CYCLE_DURATION;
+            } else {
+                const rounds = Math.floor(
+                    (now - lastCycle.start) / DEFAULT_CYCLE_DURATION,
+                );
+                cycle.start = lastCycle.start + rounds * DEFAULT_CYCLE_DURATION;
+                cycle.end =
+                    req.body.end || cycle.start + DEFAULT_CYCLE_DURATION;
+            }
+            cycles.unshift(cycle);
+            fs.writeFileSync(cyclesPath, JSON.stringify(cycles));
+            const cycleTasksPath = path.join(projectDir, `${cycle.id}.json`);
+            fs.writeFileSync(cycleTasksPath, JSON.stringify({ tasks: [] }));
+            return res.send(cycle);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send({
+                error: 'Failed to create cycle.',
+            });
         }
-        cycles.unshift(cycle);
-        fs.writeFileSync(cyclesPath, JSON.stringify(cycles));
-        const cycleTasksPath = path.join(projectDir, `${cycle.id}.json`);
-        fs.writeFileSync(cycleTasksPath, JSON.stringify({ tasks: [] }));
-        return res.send(cycle);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to create cycle.',
-        });
-    }
-});
+    },
+);
 
 // 获取周期信息
 router.get('/:userId/project/:projectId/cycle/:cycleId', async (req, res) => {
@@ -363,6 +373,7 @@ router.get('/:userId/project/:projectId/cycle/:cycleId', async (req, res) => {
 // 新建任务
 router.post(
     '/:userId/project/:projectId/cycle/:cycleId/task',
+    authority(APIKey.file),
     async (req, res) => {
         const { userId, projectId, cycleId } = req.params;
         // 前置校验
@@ -402,6 +413,7 @@ router.post(
 // 修改任务
 router.put(
     '/:userId/project/:projectId/cycle/:cycleId/task/:taskId',
+    authority(APIKey.file),
     async (req, res) => {
         const { userId, projectId, cycleId, taskId } = req.params;
         // 前置校验
@@ -442,6 +454,7 @@ router.put(
 // 移动任务所在周期，body 中的 cycleId 为目标周期的 id
 router.put(
     '/:userId/project/:projectId/cycle/:cycleId/task/:taskId/move',
+    authority(APIKey.file),
     async (req, res) => {
         const { userId, projectId, cycleId, taskId } = req.params;
         // 前置校验
@@ -486,6 +499,7 @@ router.put(
 // 删除任务
 router.delete(
     '/:userId/project/:projectId/cycle/:cycleId/task/:taskId',
+    authority(APIKey.file),
     async (req, res) => {
         const { userId, projectId, cycleId, taskId } = req.params;
         // 前置校验

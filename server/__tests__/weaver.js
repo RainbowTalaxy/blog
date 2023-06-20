@@ -22,7 +22,9 @@ async function test() {
     // 测试一下创建项目
     await request(
         'Weaver - create project',
-        curl(`${BASE_PATH}/${userId}/project`, 'POST', project),
+        curl(`${BASE_PATH}/${userId}/project`, 'POST', project, {
+            [APIKey.file]: 'talaxy',
+        }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -73,9 +75,14 @@ async function test() {
     // 测试一下修改项目信息
     await request(
         'Weaver - modify project',
-        curl(`${BASE_PATH}/${userId}/project/${project.id}`, 'PUT', {
-            name: 'another_name',
-        }),
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}`,
+            'PUT',
+            {
+                name: 'another_name',
+            },
+            { [APIKey.file]: 'talaxy' },
+        ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -103,7 +110,12 @@ async function test() {
     // 测试一下创建周期
     await request(
         'Weaver - create cycle',
-        curl(`${BASE_PATH}/${userId}/project/${project.id}/cycle`, 'POST'),
+        curl(
+            `${BASE_PATH}/${userId}/project/${project.id}/cycle`,
+            'POST',
+            {},
+            { [APIKey.file]: 'talaxy' },
+        ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -141,6 +153,8 @@ async function test() {
         curl(
             `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task`,
             'POST',
+            task,
+            { [APIKey.file]: 'talaxy' },
         ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
@@ -158,6 +172,7 @@ async function test() {
             `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
             'PUT',
             { status: 2 },
+            { [APIKey.file]: 'talaxy' },
         ),
         (response, resolve, reject) => {
             if (response.error)
@@ -174,6 +189,7 @@ async function test() {
             `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
             'PUT',
             { cycleId: newCycle.id },
+            { [APIKey.file]: 'talaxy' },
         ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
@@ -188,6 +204,8 @@ async function test() {
         curl(
             `${BASE_PATH}/${userId}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
             'DELETE',
+            {},
+            { [APIKey.file]: 'talaxy' },
         ),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
