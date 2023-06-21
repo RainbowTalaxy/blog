@@ -21,7 +21,7 @@ async function test() {
 
     // 用管理员身份生成一个 token
     await request(
-        'User - generate token',
+        'User - generate token (admin)',
         curl(`${BASE_PATH}/token`, 'POST', { id: userId }, admin),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
@@ -34,12 +34,16 @@ async function test() {
 
     const userKey = 'test';
 
+    const user = {
+        ...generateToken,
+        key: userKey,
+    };
+
     // 用户使用假的 token 登记信息
     await request(
-        'User - register',
+        'User - register (fake)',
         curl(`${BASE_PATH}/register`, 'POST', {
-            ...generateToken,
-            key: userKey,
+            ...user,
             token: uuid(),
         }),
         (response, resolve, reject) => {
@@ -52,10 +56,7 @@ async function test() {
     // 用户使用 token 登记信息
     await request(
         'User - register',
-        curl(`${BASE_PATH}/register`, 'POST', {
-            ...generateToken,
-            key: userKey,
-        }),
+        curl(`${BASE_PATH}/register`, 'POST', user),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -63,9 +64,31 @@ async function test() {
         },
     );
 
+    // 列出用户信息（管理员）
+    await request(
+        'User - list (admin)',
+        curl(`${BASE_PATH}/list`, 'GET', {}, admin),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            resolve();
+        },
+    );
+
+    // 列出用户信息（非管理员）
+    await request(
+        'User - list (user)',
+        curl(`${BASE_PATH}/list`, 'GET', {}, user),
+        (response, resolve, reject) => {
+            if (!response.error) return reject('Expect "error"');
+
+            resolve();
+        },
+    );
+
     // 用户身份生成 token
     await request(
-        'User - generate token',
+        'User - generate token (user)',
         curl(
             `${BASE_PATH}/token`,
             'POST',

@@ -55,7 +55,23 @@ router.post('/register', async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(400).send({
+        res.status(500).send({
+            error: error.message,
+        });
+    }
+});
+
+// 列出所有用户
+router.get('/list', login, async (req, res) => {
+    try {
+        if (!req.isAdmin)
+            return res.status(403).send({
+                error: 'Unauthorized',
+            });
+        res.send(User.config);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
             error: error.message,
         });
     }
