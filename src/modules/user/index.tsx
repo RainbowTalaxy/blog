@@ -10,8 +10,13 @@ const FORM_CONFIG = [
         type: 'text',
     },
     {
+        attr: 'key',
+        name: 'API Key',
+        type: 'password',
+    },
+    {
         attr: 'fileApiKey',
-        name: '文件 API Key',
+        name: '文件 API Key（即将弃用）',
         type: 'password',
     },
 ];
