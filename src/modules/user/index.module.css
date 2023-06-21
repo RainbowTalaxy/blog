@@ -12,6 +12,7 @@
 }
 
 .field > label {
+    margin-bottom: 4px;
     font-size: 18px;
     font-weight: 600;
 }
@@ -25,11 +26,12 @@
 
 .form button {
     appearance: none;
-    margin-top: 12px;
-    padding: 3px 12px;
+    margin: 12px 12px 24px 0;
+    padding: 6px 14px;
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--theme-black-half);
     font-size: 16px;
     color: initial;
+    cursor: pointer;
 }

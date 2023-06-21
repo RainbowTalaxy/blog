@@ -1,10 +1,10 @@
 import Layout from '@theme/Layout';
-import User from '@site/src/modules/user';
+import UserPage from '@site/src/modules/user';
 
 const Page = () => {
     return (
         <Layout title="用户权限">
-            <User />
+            <UserPage />
         </Layout>
     );
 };
