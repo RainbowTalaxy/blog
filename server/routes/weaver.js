@@ -318,6 +318,7 @@ router.post(
             let cycle = {
                 id: uuid(),
                 idx: lastCycle.idx + 1,
+                createdAt: now,
             };
             if (lastCycle.end > now) {
                 cycle.start = lastCycle.end;
@@ -391,6 +392,7 @@ router.post(
             const cycle = JSON.parse(fs.readFileSync(cyclePath));
             const task = {
                 id: uuid(),
+                createdAt: Date.now(),
                 name: '',
                 description: '',
                 priority: 0,
