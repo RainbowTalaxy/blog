@@ -111,13 +111,15 @@ const User = {
         if (id.length < 4 && key.length < 4) {
             throw new Error('id or key is too short');
         }
-        if (this.config.users.some((user) => user.id === id)) {
-            throw new Error('user already exists');
+        const idx = this.config.users.findIndex((user) => user.id === id);
+        if (idx === -1) {
+            this.config.users.push({
+                id,
+                key,
+            });
+        } else {
+            this.config.users[idx].key = key;
         }
-        this.config.users.push({
-            id,
-            key,
-        });
         fs.writeFileSync(
             Dir.storage.user,
             prettier.format(JSON.stringify(this.config), {
