@@ -1,6 +1,7 @@
 import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
 import { User } from './config';
+import useUser from '@site/src/hooks/useUser';
 
 const FORM_CONFIG = [
     {
@@ -26,8 +27,9 @@ const FORM_CONFIG = [
 const UserPage = () => {
     const query = useQuery();
     const nextUrl = query.get('nextUrl');
+    const userInfo = useUser();
 
-    const userInfo = User.config;
+    if (!userInfo) return null;
 
     return (
         <div className={styles.container}>
