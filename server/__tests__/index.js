@@ -5,7 +5,8 @@
  */
 
 const fs = require('fs');
-const { request, cmd, curl } = require('./utils');
+const { request, curl } = require('./utils');
+const user = require('./user');
 const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
@@ -23,6 +24,9 @@ async function test() {
                 resolve();
             },
         );
+
+        // user 测试
+        await user();
 
         // word-bank 测试
         await wordBank();
