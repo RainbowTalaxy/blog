@@ -1,27 +1,35 @@
 import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
-import { useLocalStorage } from 'usehooks-ts';
-import { DEFAULT_USER_INFO, UserInfo } from '@site/src/constants/user';
+import { User } from './config';
+import useUser from '@site/src/hooks/useUser';
 
 const FORM_CONFIG = [
     {
         attr: 'id',
         name: 'ID',
         type: 'text',
+        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+    },
+    {
+        attr: 'key',
+        name: 'API Key',
+        type: 'password',
+        placeholder: '该 Key 需向管理员申请，且由个人保管',
     },
     {
         attr: 'fileApiKey',
-        name: '文件 API Key',
+        name: '文件 API Key（即将弃用）',
         type: 'password',
+        placeholder: '该 Key 需向管理员申请',
     },
 ];
 
-const User = () => {
+const UserPage = () => {
     const query = useQuery();
     const nextUrl = query.get('nextUrl');
-    const [userInfo, setUserInfo] = useLocalStorage<UserInfo>('user', {
-        ...DEFAULT_USER_INFO,
-    });
+    const userInfo = useUser();
+
+    if (!userInfo) return null;
 
     return (
         <div className={styles.container}>
@@ -35,6 +43,7 @@ const User = () => {
                             name={config.attr}
                             id={config.attr}
                             defaultValue={userInfo[config.attr]}
+                            placeholder={config.placeholder}
                             onChange={(e) => {
                                 userInfo[config.attr] = e.target.value;
                             }}
@@ -43,7 +52,7 @@ const User = () => {
                 ))}
                 <button
                     onClick={() => {
-                        setUserInfo({ ...userInfo });
+                        User.config = userInfo;
                         if (nextUrl) window.location.href = nextUrl;
                     }}
                 >
@@ -54,4 +63,4 @@ const User = () => {
     );
 };
 
-export default User;
+export default UserPage;
