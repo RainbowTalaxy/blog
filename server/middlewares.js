@@ -1,4 +1,4 @@
-const { Dir } = require('./config');
+const { Dir, User } = require('./config');
 const { readJSON } = require('./utils');
 
 function parseKeyValueString(str) {
@@ -22,15 +22,30 @@ const authority = (key) => {
         const authorization = req.headers.authorization;
         const keys = parseKeyValueString(authorization);
         if (keys?.[key] && config?.[key].includes(keys[key])) {
-            next();
-        } else {
-            res.status(401).send({
-                error: 'Unauthorized',
-            });
+            return next();
         }
+        res.status(401).send({
+            error: 'Unauthorized',
+        });
     };
+};
+
+// 帮我写一个中间件，用来校验用户 id 和 key 是否匹配
+const login = (req, res, next) => {
+    const authorization = req.headers.authorization;
+    const keys = parseKeyValueString(authorization);
+    if (User.validate(keys.id, keys.key)) {
+        if (User.isAdmin(keys.id)) {
+            req.isAdmin = true;
+        }
+        return next();
+    }
+    res.status(401).send({
+        error: 'Unauthorized',
+    });
 };
 
 module.exports = {
     authority,
+    login,
 };

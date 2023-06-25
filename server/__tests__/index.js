@@ -5,7 +5,8 @@
  */
 
 const fs = require('fs');
-const { request, cmd, curl } = require('./utils');
+const { request, curl } = require('./utils');
+const user = require('./user');
 const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
@@ -13,10 +14,6 @@ const weaver = require('./weaver');
 
 async function test() {
     try {
-        // 清除 temp 目录的内容
-        fs.rmSync('./temp/', { recursive: true });
-        fs.mkdirSync('./temp/');
-
         // 咱们先测一下 echo 接口
         await request(
             'Echo',
@@ -28,6 +25,9 @@ async function test() {
             },
         );
 
+        // user 测试
+        await user();
+
         // word-bank 测试
         await wordBank();
 
@@ -38,7 +38,7 @@ async function test() {
         await statics();
 
         // weaver 测试
-        // await weaver();
+        await weaver();
     } catch (error) {
         console.log(error);
     }

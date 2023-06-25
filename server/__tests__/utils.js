@@ -29,6 +29,7 @@ const request = (title, command, handler) => {
                 }
             } catch (e) {
                 console.error('ERROR: INVALID RESPONSE -', e);
+                console.error('RESPONSE:', stdout);
                 return reject();
             }
             handler(

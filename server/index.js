@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const { PORT } = require('./config');
+const { userRouter } = require('./routes/user');
 const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
@@ -29,6 +30,7 @@ app.post('/echo', (req, res) => {
     res.send(req.body);
 });
 
+app.use('/user', userRouter);
 app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
@@ -40,7 +42,8 @@ app.use('*', (_, res) => {
 });
 
 // error handle
-app.use((err, _, res, __) => {
+app.use((error, _, res, __) => {
+    console.log(error);
     res.status(500).send('Server Error');
 });
 
