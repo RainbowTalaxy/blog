@@ -28,6 +28,7 @@
     border: 1px solid var(--ifm-menu-color-background-active);
     color: var(--ifm-menu-color);
     background-color: var(--theme-white);
+    box-shadow: 0 0 5px var(--theme-black-shadow);
     z-index: 10;
 }
 
@@ -100,7 +101,7 @@
     border: none;
     border-radius: 5px;
     background: none;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--theme-primary);
     font-size: 16px;
     color: var(--ifm-menu-color-active);
     cursor: pointer;
@@ -124,7 +125,7 @@
 }
 
 .formItem > button.primary:hover {
-    background-color: var(--ifm-menu-color);
+    background-color: var(--theme-primary);
 }
 
 .formItem > button.danger:hover {
