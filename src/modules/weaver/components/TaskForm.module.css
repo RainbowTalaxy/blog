@@ -89,6 +89,10 @@
     cursor: pointer;
 }
 
+.priority:hover {
+    opacity: 0.5;
+}
+
 .priority.selected {
     opacity: 1;
 }
@@ -104,6 +108,10 @@
     background-color: var(--theme-color-gray);
     opacity: 0.2;
     cursor: pointer;
+}
+
+.progress:hover {
+    opacity: 0.5;
 }
 
 .progress.selected {

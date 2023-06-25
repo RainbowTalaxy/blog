@@ -86,3 +86,10 @@
     border-radius: 0.25em 0 0 0.25em;
     background-color: var(--theme-primary);
 }
+
+.taskProgress {
+    margin: 8px 0 0;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+}

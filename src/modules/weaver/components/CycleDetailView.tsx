@@ -107,9 +107,25 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                                         <div className={styles.taskName}>
                                             {task.name}
                                         </div>
+
                                         <div className={styles.taskExecutor}>
                                             执行者：{task.executor}
                                         </div>
+                                        {status !== TaskStatus.Todo &&
+                                            task.progress && (
+                                                <div
+                                                    className={
+                                                        styles.taskProgress
+                                                    }
+                                                    style={{
+                                                        background: `linear-gradient(90deg, #c3dda7 ${
+                                                            task.progress ?? 0
+                                                        }%, rgba(0, 0, 0, 0.04) ${
+                                                            task.progress ?? 0
+                                                        }%)`,
+                                                    }}
+                                                />
+                                            )}
                                     </div>
                                 ))}
                             </div>
