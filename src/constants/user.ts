@@ -4,6 +4,6 @@ export interface UserInfo {
 }
 
 export const DEFAULT_USER_INFO: UserInfo = {
-    id: 'talaxy',
+    id: 'guest',
     fileApiKey: '',
 };

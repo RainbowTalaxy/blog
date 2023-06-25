@@ -1,0 +1,46 @@
+.header {
+    cursor: pointer;
+}
+
+.cycle,
+.cycleOption {
+    flex-shrink: 0;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: 1px solid var(--ifm-menu-color-background-active);
+    color: var(--ifm-menu-color);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.cycle {
+    padding: 12px 24px;
+}
+
+.cycleOption {
+    padding: var(--ifm-menu-link-padding-vertical)
+        var(--ifm-menu-link-padding-horizontal);
+    text-align: center;
+}
+
+.header:hover {
+    color: var(--ifm-menu-color-active);
+}
+
+.cycle.active,
+.cycle:hover,
+.cycleOption:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.cycleName {
+    font-size: 20px;
+    font-weight: var(--ifm-font-weight-semibold);
+}
+
+.cycleDate {
+    font-size: 14px;
+    opacity: 0.6;
+}

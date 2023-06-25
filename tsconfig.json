@@ -3,12 +3,7 @@
     "extends": "@tsconfig/docusaurus/tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
-        "jsx": "react-jsx",
-        "plugins": [
-            {
-                "name": "typescript-plugin-css-modules"
-            }
-        ]
+        "jsx": "react-jsx"
     },
     "exclude": ["temp", "build", "server"]
 }

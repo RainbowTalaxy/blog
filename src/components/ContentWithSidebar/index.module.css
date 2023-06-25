@@ -38,6 +38,7 @@
     padding: 0 8px;
     font-weight: var(--ifm-heading-font-weight);
     color: var(--ifm-menu-color-active);
+    cursor: default;
 }
 
 .sidebarInner > p {
@@ -49,6 +50,7 @@
 
 .content {
     flex: 1;
+    position: relative;
     padding: 24px 12px 120px;
     width: 100%;
     background-color: var(--ifm-menu-color-background-active);

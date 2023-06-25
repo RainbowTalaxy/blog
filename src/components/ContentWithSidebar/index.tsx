@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import styles from './index.module.css';
+import clsx from 'clsx';
 
 interface Props {
     title?: ReactNode;
@@ -15,14 +16,16 @@ const ContentWithSidebar = ({
     sidebarWidth,
 }: Props) => {
     return (
-        <div className={styles.container}>
+        <div className={clsx(styles.container, 'sidebar-container')}>
             <div className={styles.sidebar} style={{ width: sidebarWidth }}>
                 <div className={styles.sidebarInner}>
                     {title && <div className={styles.header}>{title}</div>}
                     {sidebar}
                 </div>
             </div>
-            <div className={styles.content}>{children}</div>
+            <div className={clsx(styles.content, 'sidebar-content')}>
+                {children}
+            </div>
         </div>
     );
 };

@@ -1,0 +1,93 @@
+.container {
+    margin: 0 auto;
+    padding: 36px 8vw 72px;
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 24px;
+    margin: 24px 0;
+}
+
+.projectCard {
+    padding: 16px 24px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+}
+
+.formButton:hover,
+.projectCard:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.projectName {
+    font-size: 24px;
+}
+
+.projectOwner {
+    color: var(--theme-color);
+}
+
+.projectDate {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input {
+    padding: 8px 10px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.formButton {
+    appearance: none;
+    margin-top: 16px;
+    padding: 6px 14px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background: var(--ifm-navbar-background-color);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    color: initial;
+    cursor: pointer;
+}
+
+.card {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: 1px solid var(--ifm-menu-color-background-active);
+    color: var(--ifm-menu-color);
+    background-color: var(--theme-page-background);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.card:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.projectDelete {
+    display: none;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    color: red;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.projectCard:hover .projectDelete {
+    display: block;
+}
