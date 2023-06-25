@@ -104,7 +104,7 @@
 }
 
 .progress {
-    flex-grow: 6;
+    flex-grow: 3;
     height: 16px;
     background-color: var(--theme-color-gray);
     opacity: 0.2;
