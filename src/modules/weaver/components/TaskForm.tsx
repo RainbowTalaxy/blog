@@ -96,7 +96,7 @@ const TaskForm = ({
                 )}
                 {task && status !== TaskStatus.Todo && (
                     <div className={styles.formItem}>
-                        <label style={{ margin: 0 }}>进度：</label>
+                        <label style={{ margin: '-4px 0' }}>进度：</label>
                         <div className={styles.progressOptions}>
                             {PROGRESS_STOPS.map((p) => (
                                 <div

@@ -99,12 +99,13 @@
 
 .progressOptions {
     display: flex;
+    margin: 3px 0;
     width: 100%;
 }
 
 .progress {
-    flex-grow: 5;
-    height: 30px;
+    flex-grow: 6;
+    height: 16px;
     background-color: var(--theme-color-gray);
     opacity: 0.2;
     cursor: pointer;
