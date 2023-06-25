@@ -22,6 +22,7 @@ export interface Task {
     priority: number;
     status: number;
     executor: string;
+    progress?: number;
 }
 
 export interface TaskProps {
@@ -30,6 +31,7 @@ export interface TaskProps {
     priority?: number;
     status?: number;
     executor?: string;
+    progress?: number;
 }
 
 export interface CycleDetail {

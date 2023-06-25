@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { UserInfo } from '@site/src/constants/user';
 import { Priority, TaskStatus } from '../types';
 import {
+    PROGRESS_STOPS,
     TASK_PRIORITIES,
     TASK_PRIORITY_COLORS,
     TASK_STATUSES,
     TASK_STATUS_NAMES,
 } from '../constants';
 import clsx from 'clsx';
-import API from '@site/src/api';
 
 interface Props {
     task?: Task;
@@ -27,6 +27,7 @@ interface Props {
         description?: string;
         priority?: Priority;
         status: TaskStatus;
+        progress?: number;
     }) => Promise<boolean>;
     remove: (taskId: string) => Promise<boolean>;
     onClose: (success?: boolean) => Promise<void>;
@@ -45,6 +46,7 @@ const TaskForm = ({
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.Todo);
     const [priority, setPriority] = useState<Priority>(Priority.One);
+    const [progress, setProgress] = useState<number>(0);
     const cycleRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
@@ -53,6 +55,7 @@ const TaskForm = ({
             descriptionRef.current!.value = task.description;
             setStatus(task.status as TaskStatus);
             setPriority(task.priority);
+            setProgress(task.progress ?? 0);
             cycleRef.current!.value = context.cycleInfo.id;
         }
     }, [task, context, cycles]);
@@ -87,6 +90,23 @@ const TaskForm = ({
                                 >
                                     {TASK_STATUS_NAMES[s]}
                                 </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {task && status !== TaskStatus.Todo && (
+                    <div className={styles.formItem}>
+                        <label style={{ margin: 0 }}>进度：</label>
+                        <div className={styles.progressOptions}>
+                            {PROGRESS_STOPS.map((p) => (
+                                <div
+                                    key={p}
+                                    className={clsx(
+                                        styles.progress,
+                                        p <= progress && styles.selected,
+                                    )}
+                                    onClick={() => setProgress(p)}
+                                ></div>
                             ))}
                         </div>
                     </div>
@@ -139,6 +159,7 @@ const TaskForm = ({
                                 description: descriptionRef.current!.value,
                                 status,
                                 priority,
+                                progress,
                             });
                             if (!result) return alert('提交失败');
                             if (

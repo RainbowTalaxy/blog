@@ -21,7 +21,7 @@
 }
 
 .form {
-    padding: 36px;
+    padding: 32px;
     width: 90vw;
     max-width: 600px;
     border-radius: 0.25rem;
@@ -91,6 +91,35 @@
 
 .priority.selected {
     opacity: 1;
+}
+
+.progressOptions {
+    display: flex;
+    width: 100%;
+}
+
+.progress {
+    flex-grow: 5;
+    height: 30px;
+    background-color: var(--theme-color-gray);
+    opacity: 0.2;
+    cursor: pointer;
+}
+
+.progress.selected {
+    background-color: var(--theme-color-green);
+    opacity: 1;
+}
+
+.progress:first-of-type {
+    flex-grow: 1;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.progress:last-of-type {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 .formItem > button {
