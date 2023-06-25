@@ -11,6 +11,8 @@
 -   [写一个 Scroll bar](/playground/scroll-bar)
 -   [滚动平行效果](/playground/parallel-effect)
 -   [聊天对话框 UI](/playground/message-list)
+-   [Canvas 画图](/playground/sketch)
+-   [Canvas 画图（触控）](playground/sketch-mobile)
 
 ## CSS
 
