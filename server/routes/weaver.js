@@ -15,6 +15,7 @@
  *   + 创建时间 createdAt
  * - 周期 Cycle
  *   + 周期 ID id
+ *   + 创建时间 createdAt
  *   + 索引 idx
  *   + 开始时间 start
  *   + 结束时间 end
@@ -22,9 +23,11 @@
  *   + 任务列表 tasks
  * - 任务 Task
  *   + 任务 ID id
+ *   + 创建时间 createdAt
  *   + 任务名称 name
  *   + 任务描述 description
  *   + 优先级 priority
+ *   + 进度 progress
  *   + 任务状态 status
  *   + 执行人 executor
  *
@@ -98,6 +101,7 @@ const FileHandler = {
         const timestamp = Date.now();
         const firstCycle = {
             id: uuid(),
+            createdAt: timestamp,
             idx: 0,
             start: timestamp,
             end: timestamp + DEFAULT_CYCLE_DURATION,
@@ -398,6 +402,7 @@ router.post(
                 priority: 0,
                 status: 0,
                 executor: userId,
+                progress: 0,
                 ...req.body,
             };
             cycle.tasks.push(task);
