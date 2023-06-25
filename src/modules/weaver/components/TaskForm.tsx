@@ -63,6 +63,12 @@ const TaskForm = ({
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{task ? '任务详情' : '新建任务'}</h2>
+                <div className={styles.formItem}>
+                    <label>
+                        <span>*</span>标题：
+                    </label>
+                    <input ref={nameRef} type="text" />
+                </div>
                 {task && (
                     <div className={styles.formItem}>
                         <label>状态：</label>
@@ -85,12 +91,6 @@ const TaskForm = ({
                         </div>
                     </div>
                 )}
-                <div className={styles.formItem}>
-                    <label>
-                        <span>*</span>标题：
-                    </label>
-                    <input ref={nameRef} type="text" />
-                </div>
                 <div className={styles.formItem}>
                     <label>描述：</label>
                     <textarea ref={descriptionRef} />
@@ -153,7 +153,7 @@ const TaskForm = ({
                             await onClose(true);
                         }}
                     >
-                        提交
+                        {task ? '保存' : '创建'}
                     </button>
                     <button onClick={() => onClose()}>取消</button>
                     {task && (

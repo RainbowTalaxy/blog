@@ -72,7 +72,10 @@ const ProjectView = ({ project, user }: Props) => {
                         <div
                             className={styles.cycleOption}
                             onClick={async () => {
-                                if (!project.id || !user.id) return;
+                                const asked = confirm('确定新建周期吗？');
+                                if (!asked) return;
+                                if (!project.id || !user.id)
+                                    return alert('用户 ID 或项目 ID 不得为空');
                                 try {
                                     await API.weaver.addCycle(
                                         user.id,
