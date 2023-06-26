@@ -67,7 +67,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { Dir, APIKey } = require('../config');
+const { Dir } = require('../config');
 const { uuid } = require('../utils');
 const { mkdirp } = require('mkdirp');
 const { login } = require('../middlewares');
