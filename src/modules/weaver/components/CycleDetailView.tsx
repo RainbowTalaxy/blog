@@ -104,7 +104,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
                                             执行者：{task.executor}
                                         </div>
                                         {status !== TaskStatus.Todo &&
-                                            task.progress && (
+                                            (task.progress ?? 0) !== 0 && (
                                                 <div
                                                     className={
                                                         styles.taskProgress
