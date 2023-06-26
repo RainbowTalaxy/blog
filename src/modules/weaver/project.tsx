@@ -2,7 +2,6 @@ import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
 import styles from './project.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import API from '@site/src/api';
-import { UserInfo } from '@site/src/constants/user';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
 import useQuery from '@site/src/hooks/useQuery';
 import dayjs from 'dayjs';
@@ -14,10 +13,9 @@ import CycleDetailView from './components/CycleDetailView';
 
 interface Props {
     project: ProjectInfo;
-    user: UserInfo;
 }
 
-const ProjectView = ({ project, user }: Props) => {
+const ProjectView = ({ project }: Props) => {
     const query = useQuery();
     const history = useHistory();
     const [cycles, setCycles] = useState<CycleInfo[]>();
@@ -26,18 +24,18 @@ const ProjectView = ({ project, user }: Props) => {
     const cycleId = query.get('cycle');
 
     const refetchCycle = useCallback(async () => {
-        if (!project.id || !user.id) return;
+        if (!project.id) return;
         try {
-            const cycles = await API.weaver.cycles(user.id, project.id);
+            const cycles = await API.weaver.cycles(project.id);
             setCycles(cycles);
         } catch (error) {
             console.log(error);
         }
-    }, [project, user]);
+    }, [project]);
 
     useEffect(() => {
         refetchCycle();
-    }, [project, user]);
+    }, [project]);
 
     useEffect(() => {
         if (!cycles) return;
@@ -74,13 +72,10 @@ const ProjectView = ({ project, user }: Props) => {
                             onClick={async () => {
                                 const asked = confirm('确定新建周期吗？');
                                 if (!asked) return;
-                                if (!project.id || !user.id)
+                                if (!project.id)
                                     return alert('用户 ID 或项目 ID 不得为空');
                                 try {
-                                    await API.weaver.addCycle(
-                                        user.id,
-                                        project.id,
-                                    );
+                                    await API.weaver.addCycle(project.id);
                                     refetchCycle();
                                 } catch (error) {
                                     console.log(error);
@@ -98,7 +93,7 @@ const ProjectView = ({ project, user }: Props) => {
                                         styles.active,
                                 )}
                                 onClick={() => {
-                                    if (user.id && project.id && cycle.id)
+                                    if (project.id && cycle.id)
                                         history.replace(
                                             `?project=${project.id}&cycle=${cycle.id}`,
                                         );
@@ -121,7 +116,6 @@ const ProjectView = ({ project, user }: Props) => {
             >
                 {targetCycle && (
                     <CycleDetailView
-                        user={user}
                         project={project}
                         cycleInfo={targetCycle}
                         cycles={cycles}

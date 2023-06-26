@@ -2,7 +2,6 @@ import { createPortal } from 'react-dom';
 import styles from './TaskForm.module.css';
 import { CycleInfo, ProjectInfo, Task } from '@site/src/api/weaver';
 import { useEffect, useRef, useState } from 'react';
-import { UserInfo } from '@site/src/constants/user';
 import { Priority, TaskStatus } from '../types';
 import {
     PROGRESS_STOPS,
@@ -16,7 +15,6 @@ import clsx from 'clsx';
 interface Props {
     task?: Task;
     context: {
-        user: UserInfo;
         project: ProjectInfo;
         cycleInfo: CycleInfo;
     };

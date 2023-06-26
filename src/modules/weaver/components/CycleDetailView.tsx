@@ -8,7 +8,6 @@ import commonStyles from '../index.module.css';
 import styles from './cycle.module.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
-import { UserInfo } from '@site/src/constants/user';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
 import TaskForm from './TaskForm';
@@ -19,18 +18,16 @@ import {
 } from '../constants';
 
 interface Props {
-    user: UserInfo;
     project: ProjectInfo;
     cycleInfo: CycleInfo;
     cycles: CycleInfo[];
 }
 
-const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
+const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
     const [detail, setDetail] = useState<CycleDetail>();
     const [isFormVisible, setFormVisible] = useState(false);
     const [targetTask, setTargetTask] = useState<Task>();
     const context = useRef<{
-        user: UserInfo;
         project: ProjectInfo;
         cycleInfo: CycleInfo;
     }>();
@@ -49,27 +46,22 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
     }, [detail]);
 
     const refetch = useCallback(async () => {
-        if (!user.id || !project.id || !cycleInfo.id) return;
+        if (!project.id || !cycleInfo.id) return;
         try {
-            const data = await API.weaver.cycleDetail(
-                user.id,
-                project.id,
-                cycleInfo.id,
-            );
+            const data = await API.weaver.cycleDetail(project.id, cycleInfo.id);
             setDetail(data);
         } catch (error) {
             console.log(error);
         }
-    }, [cycleInfo, project, user]);
+    }, [cycleInfo, project]);
 
     useEffect(() => {
         refetch();
         context.current = {
-            user,
             project,
             cycleInfo,
         };
-    }, [user, project, cycleInfo]);
+    }, [project, cycleInfo]);
 
     return (
         <div className={styles.container}>
@@ -155,7 +147,6 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                         if (!targetTask) return false;
                         try {
                             await API.weaver.changeTaskCycle(
-                                user.id,
                                 project.id,
                                 cycleInfo.id,
                                 targetTask.id,
@@ -172,7 +163,6 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                         try {
                             if (targetTask) {
                                 await API.weaver.updateTask(
-                                    user.id,
                                     project.id,
                                     cycleInfo.id,
                                     targetTask.id,
@@ -182,7 +172,6 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                             } else {
                                 if (!props.name) return false;
                                 await API.weaver.addTask(
-                                    user.id,
                                     project.id,
                                     cycleInfo.id,
                                     {
@@ -202,7 +191,6 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
                         if (!targetTask) return false;
                         try {
                             await API.weaver.deleteTask(
-                                user.id,
                                 project.id,
                                 cycleInfo.id,
                                 targetTask.id,
