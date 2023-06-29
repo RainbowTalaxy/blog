@@ -119,6 +119,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
                         onDrop={async (e) => {
                             e.preventDefault();
                             const taskId = e.dataTransfer.getData('text/plain');
+                            if (tasks[status].find((task) => task.id === taskId)) return;
                             try {
                                 await API.weaver.updateTask(projectId, cycleId, taskId, {
                                     status,
