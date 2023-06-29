@@ -67,75 +67,117 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
         <div className={styles.container}>
             <div className={styles.taskPanel}>
                 {TASK_STATUSES.map((status) => (
-                    <div key={status} className={styles.categoryColumn}>
-                        <div className={styles.categoryName}>
-                            {TASK_STATUS_NAMES[status]}
-                            <span>{tasks[status].length}</span>
-                        </div>
-                        {tasks[status].length > 0 && (
-                            <div className={styles.taskList}>
-                                {tasks[status].map((task) => (
-                                    <div
-                                        key={task.id}
-                                        className={clsx(
-                                            styles.taskCard,
-                                            commonStyles.card,
-                                        )}
-                                        onClick={() => {
-                                            setTargetTask(task);
-                                            setFormVisible(true);
-                                        }}
-                                    >
+                    <div
+                        key={status}
+                        className={styles.categoryColumn}
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                        }}
+                        onDrop={async (e) => {
+                            e.preventDefault();
+                            const taskId = e.dataTransfer.getData('text/plain');
+                            try {
+                                await API.weaver.updateTask(
+                                    project.id,
+                                    cycleInfo.id,
+                                    taskId,
+                                    {
+                                        status,
+                                    },
+                                );
+                                refetch();
+                            } catch (error) {
+                                console.log(error);
+                                window.alert('移动失败');
+                            }
+                        }}
+                    >
+                        <div className={styles.categoryContent}>
+                            <div className={styles.categoryName}>
+                                {TASK_STATUS_NAMES[status]}
+                                <span>{tasks[status].length}</span>
+                            </div>
+                            {tasks[status].length > 0 && (
+                                <div className={styles.taskList}>
+                                    {tasks[status].map((task) => (
                                         <div
-                                            className={styles.taskCardIndicator}
-                                            style={{
-                                                background: `var(--theme-color-${
-                                                    TASK_PRIORITY_COLORS[
-                                                        task.priority
-                                                    ]
-                                                })`,
-                                            }}
-                                        />
-                                        <div className={styles.taskName}>
-                                            {task.name}
-                                        </div>
-
-                                        <div className={styles.taskExecutor}>
-                                            执行者：{task.executor}
-                                        </div>
-                                        {status !== TaskStatus.Todo &&
-                                            (task.progress ?? 0) !== 0 && (
-                                                <div
-                                                    className={
-                                                        styles.taskProgress
-                                                    }
-                                                    style={{
-                                                        background: `linear-gradient(90deg, #c3dda7 ${
-                                                            task.progress ?? 0
-                                                        }%, rgba(0, 0, 0, 0.04) ${
-                                                            task.progress ?? 0
-                                                        }%)`,
-                                                    }}
-                                                />
+                                            key={task.id}
+                                            className={clsx(
+                                                styles.taskCard,
+                                                commonStyles.card,
                                             )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {status === TaskStatus.Todo && (
-                            <div
-                                className={clsx(
-                                    styles.taskAdd,
-                                    commonStyles.card,
-                                )}
-                                onClick={async () => {
-                                    setTargetTask(undefined);
-                                    setFormVisible(true);
-                                }}
-                            >
-                                +
-                            </div>
-                        )}
+                                            onClick={() => {
+                                                setTargetTask(task);
+                                                setFormVisible(true);
+                                            }}
+                                            draggable
+                                            onDragStart={(e) => {
+                                                e.dataTransfer.setData(
+                                                    'text/plain',
+                                                    task.id,
+                                                );
+                                                e.dataTransfer.effectAllowed =
+                                                    'move';
+                                            }}
+                                        >
+                                            <div
+                                                className={
+                                                    styles.taskCardIndicator
+                                                }
+                                                style={{
+                                                    background: `var(--theme-color-${
+                                                        TASK_PRIORITY_COLORS[
+                                                            task.priority
+                                                        ]
+                                                    })`,
+                                                }}
+                                            />
+                                            <div className={styles.taskName}>
+                                                {task.name}
+                                            </div>
+
+                                            <div
+                                                className={styles.taskExecutor}
+                                            >
+                                                执行者：{task.executor}
+                                            </div>
+                                            {status !== TaskStatus.Todo &&
+                                                (task.progress ?? 0) !== 0 && (
+                                                    <div
+                                                        className={
+                                                            styles.taskProgress
+                                                        }
+                                                        style={{
+                                                            background: `linear-gradient(90deg, #c3dda7 ${
+                                                                task.progress ??
+                                                                0
+                                                            }%, rgba(0, 0, 0, 0.04) ${
+                                                                task.progress ??
+                                                                0
+                                                            }%)`,
+                                                        }}
+                                                    />
+                                                )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {status === TaskStatus.Todo && (
+                                <div
+                                    className={clsx(
+                                        styles.taskAdd,
+                                        commonStyles.card,
+                                    )}
+                                    onClick={async () => {
+                                        setTargetTask(undefined);
+                                        setFormVisible(true);
+                                    }}
+                                >
+                                    +
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>

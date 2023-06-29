@@ -19,10 +19,13 @@
 .categoryColumn {
     margin-right: 36px;
     flex-shrink: 0;
+    width: 264px;
+    height: 100%;
+}
+
+.categoryContent {
     display: flex;
     flex-direction: column;
-    width: 264px;
-    max-height: 100%;
 }
 
 .categoryName {
