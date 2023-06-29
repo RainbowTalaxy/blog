@@ -21,5 +21,13 @@
         "yari",
         "YOUDAO"
     ],
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "VSCodeCounter.exclude": [
+        "**/.gitignore",
+        "**/.vscode/**",
+        "**/node_modules/**",
+        ".docusaurus/**",
+        "build/**",
+        "temp/**"
+    ]
 }

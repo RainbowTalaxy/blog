@@ -26,3 +26,6 @@ nohup.out
 
 # 测试文件
 /test
+
+# vscode 插件
+.VSCodeCounter
