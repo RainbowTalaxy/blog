@@ -57,10 +57,7 @@ const ProjectView = ({ project }: Props) => {
             <GlobalStyle />
             <ContentWithSidebar
                 title={
-                    <div
-                        className={styles.header}
-                        onClick={() => history.push('?')}
-                    >
+                    <div className={styles.header} onClick={() => history.push('?')}>
                         Weaver
                     </div>
                 }
@@ -72,8 +69,7 @@ const ProjectView = ({ project }: Props) => {
                             onClick={async () => {
                                 const asked = confirm('确定新建周期吗？');
                                 if (!asked) return;
-                                if (!project.id)
-                                    return alert('用户 ID 或项目 ID 不得为空');
+                                if (!project.id) return alert('用户 ID 或项目 ID 不得为空');
                                 try {
                                     await API.weaver.addCycle(project.id);
                                     refetchCycle();
@@ -87,40 +83,23 @@ const ProjectView = ({ project }: Props) => {
                         {cycles?.map((cycle) => (
                             <div
                                 key={cycle.id}
-                                className={clsx(
-                                    styles.cycle,
-                                    cycle.id === targetCycle?.id &&
-                                        styles.active,
-                                )}
+                                className={clsx(styles.cycle, cycle.id === targetCycle?.id && styles.active)}
                                 onClick={() => {
                                     if (project.id && cycle.id)
-                                        history.replace(
-                                            `?project=${project.id}&cycle=${cycle.id}`,
-                                        );
+                                        history.replace(`?project=${project.id}&cycle=${cycle.id}`);
                                 }}
                             >
-                                <div className={styles.cycleName}>
-                                    第 {cycle.idx + 1} 周
-                                </div>
+                                <div className={styles.cycleName}>第 {cycle.idx + 1} 周</div>
                                 <div className={styles.cycleDate}>
-                                    {dayjs(cycle.start).format('YYYY年M月D日')}{' '}
-                                    -{' '}
-                                    {dayjs(cycle.end)
-                                        .add(-1, 'day')
-                                        .format('YYYY年M月D日')}
+                                    {dayjs(cycle.start).format('YYYY年M月D日')} -{' '}
+                                    {dayjs(cycle.end).add(-1, 'day').format('YYYY年M月D日')}
                                 </div>
                             </div>
                         ))}
                     </>
                 }
             >
-                {targetCycle && (
-                    <CycleDetailView
-                        project={project}
-                        cycleInfo={targetCycle}
-                        cycles={cycles}
-                    />
-                )}
+                {targetCycle && <CycleDetailView project={project} cycleInfo={targetCycle} cycles={cycles} />}
             </ContentWithSidebar>
         </>
     );

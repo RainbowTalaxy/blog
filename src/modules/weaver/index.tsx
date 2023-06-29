@@ -45,34 +45,23 @@ const Weaver = () => {
                                 key={project.id}
                                 className={styles.projectCard}
                                 onClick={() => {
-                                    if (user.id && project.id)
-                                        history.push(`?project=${project.id}`);
+                                    if (user.id && project.id) history.push(`?project=${project.id}`);
                                 }}
                             >
-                                <div className={styles.projectName}>
-                                    {project.name}
-                                </div>
-                                <div className={styles.projectOwner}>
-                                    所有者：{project.owner}
-                                </div>
+                                <div className={styles.projectName}>{project.name}</div>
+                                <div className={styles.projectOwner}>所有者：{project.owner}</div>
                                 <div className={styles.projectDate}>
                                     创建时间：
-                                    {dayjs(project.createdAt).format(
-                                        'YYYY年M月D日',
-                                    )}
+                                    {dayjs(project.createdAt).format('YYYY年M月D日')}
                                 </div>
                                 <div
                                     className={styles.projectDelete}
                                     onClick={async (e) => {
                                         e.stopPropagation();
-                                        const result = confirm(
-                                            `确定删除“${project.name}”？`,
-                                        );
+                                        const result = confirm(`确定删除“${project.name}”？`);
                                         if (result) {
                                             try {
-                                                await API.weaver.deleteProject(
-                                                    project.id,
-                                                );
+                                                await API.weaver.deleteProject(project.id);
                                                 refetch();
                                             } catch (error) {
                                                 console.log(error);
@@ -98,20 +87,13 @@ const Weaver = () => {
                             });
                         }}
                     >
-                        <input
-                            className={styles.input}
-                            name="name"
-                            placeholder="项目名称"
-                        />
+                        <input className={styles.input} name="name" placeholder="项目名称" />
                         <br />
                         <button className={styles.formButton}>提交</button>
                     </form>
                 </>
             ) : (
-                <button
-                    className={styles.formButton}
-                    onClick={() => Path.toUserConfig()}
-                >
+                <button className={styles.formButton} onClick={() => Path.toUserConfig()}>
                     请先登录
                 </button>
             )}

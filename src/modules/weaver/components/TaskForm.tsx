@@ -1,15 +1,9 @@
 import { createPortal } from 'react-dom';
 import styles from './TaskForm.module.css';
-import { CycleInfo, ProjectInfo, Task } from '@site/src/api/weaver';
+import { CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import { useEffect, useRef, useState } from 'react';
 import { Priority, TaskStatus } from '../types';
-import {
-    PROGRESS_STOPS,
-    TASK_PRIORITIES,
-    TASK_PRIORITY_COLORS,
-    TASK_STATUSES,
-    TASK_STATUS_NAMES,
-} from '../constants';
+import { PROGRESS_STOPS, TASK_PRIORITIES, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import clsx from 'clsx';
 
 interface Props {
@@ -20,26 +14,12 @@ interface Props {
     };
     cycles: CycleInfo[];
     moveCycle: (cycleId: string) => Promise<boolean>;
-    update: (props: {
-        name?: string;
-        description?: string;
-        priority?: Priority;
-        status: TaskStatus;
-        progress?: number;
-    }) => Promise<boolean>;
+    update: (props: TaskProps) => Promise<boolean>;
     remove: (taskId: string) => Promise<boolean>;
     onClose: (success?: boolean) => Promise<void>;
 }
 
-const TaskForm = ({
-    task,
-    context,
-    cycles,
-    update,
-    moveCycle,
-    remove,
-    onClose,
-}: Props) => {
+const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.Todo);
@@ -77,10 +57,7 @@ const TaskForm = ({
                             {TASK_STATUSES.map((s) => (
                                 <div
                                     key={s}
-                                    className={clsx(
-                                        styles.priority,
-                                        s === status && styles.selected,
-                                    )}
+                                    className={clsx(styles.priority, s === status && styles.selected)}
                                     style={{
                                         background: `var(--theme-color-gray)`,
                                     }}
@@ -99,10 +76,7 @@ const TaskForm = ({
                             {PROGRESS_STOPS.map((p) => (
                                 <div
                                     key={p}
-                                    className={clsx(
-                                        styles.progress,
-                                        p <= progress && styles.selected,
-                                    )}
+                                    className={clsx(styles.progress, p <= progress && styles.selected)}
                                     onClick={() => setProgress(p)}
                                 ></div>
                             ))}
@@ -119,10 +93,7 @@ const TaskForm = ({
                         {TASK_PRIORITIES.map((p) => (
                             <div
                                 key={p}
-                                className={clsx(
-                                    styles.priority,
-                                    p === priority && styles.selected,
-                                )}
+                                className={clsx(styles.priority, p === priority && styles.selected)}
                                 style={{
                                     background: `var(--theme-color-${TASK_PRIORITY_COLORS[p]})`,
                                 }}
@@ -150,8 +121,7 @@ const TaskForm = ({
                     <button
                         className={styles.primary}
                         onClick={async () => {
-                            if (!nameRef.current?.value)
-                                return alert('请输入标题');
+                            if (!nameRef.current?.value) return alert('请输入标题');
                             const result = await update({
                                 name: nameRef.current!.value,
                                 description: descriptionRef.current!.value,
@@ -160,13 +130,8 @@ const TaskForm = ({
                                 progress,
                             });
                             if (!result) return alert('提交失败');
-                            if (
-                                task &&
-                                context.cycleInfo.id !== cycleRef.current!.value
-                            ) {
-                                const cycleResult = await moveCycle(
-                                    cycleRef.current!.value,
-                                );
+                            if (task && context.cycleInfo.id !== cycleRef.current!.value) {
+                                const cycleResult = await moveCycle(cycleRef.current!.value);
                                 if (!cycleResult) return alert('周期修改失败');
                             }
                             await onClose(true);
@@ -179,9 +144,7 @@ const TaskForm = ({
                         <button
                             className={styles.danger}
                             onClick={async () => {
-                                const result = confirm(
-                                    `确定删除任务 ${task.name} ？`,
-                                );
+                                const result = confirm(`确定删除任务 ${task.name} ？`);
                                 if (!result) return;
                                 const deleteResult = await remove(task.id);
                                 if (!deleteResult) return alert('删除失败');
