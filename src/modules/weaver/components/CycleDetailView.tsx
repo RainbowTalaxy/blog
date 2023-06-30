@@ -73,10 +73,10 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
     );
 
     const handleMoveTaskCycle = useCallback(
-        async (cycleId: string) => {
+        async (newCycleId: string) => {
             if (!targetTask.current) return false;
             try {
-                await API.weaver.changeTaskCycle(projectId, cycleId, targetTask.current.id, cycleId);
+                await API.weaver.changeTaskCycle(projectId, cycleId, targetTask.current.id, newCycleId);
                 return true;
             } catch (error) {
                 console.log(error);
