@@ -35,6 +35,7 @@ const login = (req, res, next) => {
     const authorization = req.headers.authorization;
     const keys = parseKeyValueString(authorization);
     if (User.validate(keys.id, keys.key)) {
+        req.userId = keys.id;
         if (User.isAdmin(keys.id)) {
             req.isAdmin = true;
         }

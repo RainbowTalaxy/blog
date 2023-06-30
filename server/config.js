@@ -108,9 +108,6 @@ const User = {
         return this.config.admin.includes(id);
     },
     register(id, key) {
-        if (id.length < 4 && key.length < 4) {
-            throw new Error('id or key is too short');
-        }
         const idx = this.config.users.findIndex((user) => user.id === id);
         if (idx === -1) {
             this.config.users.push({

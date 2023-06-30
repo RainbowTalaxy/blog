@@ -44,6 +44,11 @@ router.post('/register', async (req, res) => {
         return res.status(400).send({
             error: 'id and key are required',
         });
+    if (key.length < 4) {
+        return res.status(400).send({
+            error: 'key is too short',
+        });
+    }
     if (!User.digestToken(id, token))
         return res.status(403).send({
             error: 'Unauthorized',
@@ -68,7 +73,11 @@ router.get('/list', login, async (req, res) => {
             return res.status(403).send({
                 error: 'Unauthorized',
             });
-        res.send(User.config);
+        const config = User.config;
+        res.send({
+            ...config,
+            users: config.users.map((user) => user.id),
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send({
