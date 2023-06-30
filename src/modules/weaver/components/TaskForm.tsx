@@ -1,50 +1,30 @@
 import { createPortal } from 'react-dom';
 import styles from './TaskForm.module.css';
-import { CycleInfo, ProjectInfo, Task } from '@site/src/api/weaver';
+import { CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import { useEffect, useRef, useState } from 'react';
-import { UserInfo } from '@site/src/constants/user';
 import { Priority, TaskStatus } from '../types';
-import {
-    TASK_PRIORITIES,
-    TASK_PRIORITY_COLORS,
-    TASK_STATUSES,
-    TASK_STATUS_NAMES,
-} from '../constants';
+import { PROGRESS_STOPS, TASK_PRIORITIES, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import clsx from 'clsx';
-import API from '@site/src/api';
 
 interface Props {
     task?: Task;
     context: {
-        user: UserInfo;
         project: ProjectInfo;
         cycleInfo: CycleInfo;
     };
     cycles: CycleInfo[];
     moveCycle: (cycleId: string) => Promise<boolean>;
-    update: (props: {
-        name?: string;
-        description?: string;
-        priority?: Priority;
-        status: TaskStatus;
-    }) => Promise<boolean>;
+    update: (props: TaskProps) => Promise<boolean>;
     remove: (taskId: string) => Promise<boolean>;
     onClose: (success?: boolean) => Promise<void>;
 }
 
-const TaskForm = ({
-    task,
-    context,
-    cycles,
-    update,
-    moveCycle,
-    remove,
-    onClose,
-}: Props) => {
+const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.Todo);
     const [priority, setPriority] = useState<Priority>(Priority.One);
+    const [progress, setProgress] = useState<number>(0);
     const cycleRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
@@ -53,6 +33,7 @@ const TaskForm = ({
             descriptionRef.current!.value = task.description;
             setStatus(task.status as TaskStatus);
             setPriority(task.priority);
+            setProgress(task.progress ?? 0);
             cycleRef.current!.value = context.cycleInfo.id;
         }
     }, [task, context, cycles]);
@@ -63,6 +44,12 @@ const TaskForm = ({
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{task ? '任务详情' : '新建任务'}</h2>
+                <div className={styles.formItem}>
+                    <label>
+                        <span>*</span>标题：
+                    </label>
+                    <input ref={nameRef} type="text" />
+                </div>
                 {task && (
                     <div className={styles.formItem}>
                         <label>状态：</label>
@@ -70,10 +57,7 @@ const TaskForm = ({
                             {TASK_STATUSES.map((s) => (
                                 <div
                                     key={s}
-                                    className={clsx(
-                                        styles.priority,
-                                        s === status && styles.selected,
-                                    )}
+                                    className={clsx(styles.priority, s === status && styles.selected)}
                                     style={{
                                         background: `var(--theme-color-gray)`,
                                     }}
@@ -85,12 +69,20 @@ const TaskForm = ({
                         </div>
                     </div>
                 )}
-                <div className={styles.formItem}>
-                    <label>
-                        <span>*</span>标题：
-                    </label>
-                    <input ref={nameRef} type="text" />
-                </div>
+                {task && status !== TaskStatus.Todo && (
+                    <div className={styles.formItem}>
+                        <label style={{ margin: '-4px 0' }}>进度：</label>
+                        <div className={styles.progressOptions}>
+                            {PROGRESS_STOPS.map((p) => (
+                                <div
+                                    key={p}
+                                    className={clsx(styles.progress, p <= progress && styles.selected)}
+                                    onClick={() => setProgress(p)}
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className={styles.formItem}>
                     <label>描述：</label>
                     <textarea ref={descriptionRef} />
@@ -101,10 +93,7 @@ const TaskForm = ({
                         {TASK_PRIORITIES.map((p) => (
                             <div
                                 key={p}
-                                className={clsx(
-                                    styles.priority,
-                                    p === priority && styles.selected,
-                                )}
+                                className={clsx(styles.priority, p === priority && styles.selected)}
                                 style={{
                                     background: `var(--theme-color-${TASK_PRIORITY_COLORS[p]})`,
                                 }}
@@ -132,37 +121,30 @@ const TaskForm = ({
                     <button
                         className={styles.primary}
                         onClick={async () => {
-                            if (!nameRef.current?.value)
-                                return alert('请输入标题');
+                            if (!nameRef.current?.value) return alert('请输入标题');
                             const result = await update({
                                 name: nameRef.current!.value,
                                 description: descriptionRef.current!.value,
                                 status,
                                 priority,
+                                progress,
                             });
                             if (!result) return alert('提交失败');
-                            if (
-                                task &&
-                                context.cycleInfo.id !== cycleRef.current!.value
-                            ) {
-                                const cycleResult = await moveCycle(
-                                    cycleRef.current!.value,
-                                );
+                            if (task && context.cycleInfo.id !== cycleRef.current!.value) {
+                                const cycleResult = await moveCycle(cycleRef.current!.value);
                                 if (!cycleResult) return alert('周期修改失败');
                             }
                             await onClose(true);
                         }}
                     >
-                        提交
+                        {task ? '保存' : '创建'}
                     </button>
                     <button onClick={() => onClose()}>取消</button>
                     {task && (
                         <button
                             className={styles.danger}
                             onClick={async () => {
-                                const result = confirm(
-                                    `确定删除任务 ${task.name} ？`,
-                                );
+                                const result = confirm(`确定删除任务 ${task.name} ？`);
                                 if (!result) return;
                                 const deleteResult = await remove(task.id);
                                 if (!deleteResult) return alert('删除失败');

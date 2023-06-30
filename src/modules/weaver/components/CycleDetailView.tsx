@@ -1,39 +1,30 @@
-import {
-    CycleDetail,
-    CycleInfo,
-    ProjectInfo,
-    Task,
-} from '@site/src/api/weaver';
+import { CycleDetail, CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import commonStyles from '../index.module.css';
 import styles from './cycle.module.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
-import { UserInfo } from '@site/src/constants/user';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
 import TaskForm from './TaskForm';
-import {
-    TASK_PRIORITY_COLORS,
-    TASK_STATUSES,
-    TASK_STATUS_NAMES,
-} from '../constants';
+import { TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 
 interface Props {
-    user: UserInfo;
     project: ProjectInfo;
     cycleInfo: CycleInfo;
     cycles: CycleInfo[];
 }
 
-const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
+const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
     const [detail, setDetail] = useState<CycleDetail>();
     const [isFormVisible, setFormVisible] = useState(false);
-    const [targetTask, setTargetTask] = useState<Task>();
+    const targetTask = useRef<Task>();
     const context = useRef<{
-        user: UserInfo;
         project: ProjectInfo;
         cycleInfo: CycleInfo;
     }>();
+
+    const projectId = project.id;
+    const cycleId = cycleInfo.id;
 
     const tasks = useMemo(() => {
         const result: { [key in TaskStatus]: Task[] } = {
@@ -49,154 +40,166 @@ const CycleDetailView = ({ user, project, cycleInfo, cycles }: Props) => {
     }, [detail]);
 
     const refetch = useCallback(async () => {
-        if (!user.id || !project.id || !cycleInfo.id) return;
+        if (!projectId || !cycleId) return;
         try {
-            const data = await API.weaver.cycleDetail(
-                user.id,
-                project.id,
-                cycleInfo.id,
-            );
+            const data = await API.weaver.cycleDetail(projectId, cycleId);
             setDetail(data);
         } catch (error) {
             console.log(error);
         }
-    }, [cycleInfo, project, user]);
+    }, [cycleId, projectId]);
+
+    const handleUpdateTask = useCallback(
+        async (taskProps: TaskProps) => {
+            try {
+                if (targetTask.current) {
+                    await API.weaver.updateTask(projectId, cycleId, targetTask.current.id, taskProps);
+                    return true;
+                } else {
+                    if (!taskProps.name) return false;
+                    await API.weaver.addTask(projectId, cycleId, {
+                        ...taskProps,
+                        name: taskProps.name,
+                        status: TaskStatus.Todo,
+                    });
+                    return true;
+                }
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+        },
+        [cycleId, projectId],
+    );
+
+    const handleMoveTaskCycle = useCallback(
+        async (newCycleId: string) => {
+            if (!targetTask.current) return false;
+            try {
+                await API.weaver.changeTaskCycle(projectId, cycleId, targetTask.current.id, newCycleId);
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+        },
+        [projectId, cycleId],
+    );
+
+    const handleDeleteTask = useCallback(async () => {
+        if (!targetTask.current) return false;
+        try {
+            await API.weaver.deleteTask(projectId, cycleId, targetTask.current.id);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }, [projectId, cycleId]);
 
     useEffect(() => {
         refetch();
         context.current = {
-            user,
             project,
             cycleInfo,
         };
-    }, [user, project, cycleInfo]);
+    }, [project, cycleInfo]);
 
     return (
         <div className={styles.container}>
             <div className={styles.taskPanel}>
                 {TASK_STATUSES.map((status) => (
-                    <div key={status} className={styles.categoryColumn}>
-                        <div className={styles.categoryName}>
-                            {TASK_STATUS_NAMES[status]}
-                            <span>{tasks[status].length}</span>
-                        </div>
-                        {tasks[status].length > 0 && (
-                            <div className={styles.taskList}>
-                                {tasks[status].map((task) => (
-                                    <div
-                                        key={task.id}
-                                        className={clsx(
-                                            styles.taskCard,
-                                            commonStyles.card,
-                                        )}
-                                        onClick={() => {
-                                            setTargetTask(task);
-                                            setFormVisible(true);
-                                        }}
-                                    >
+                    <div
+                        key={status}
+                        className={styles.categoryColumn}
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                        }}
+                        onDrop={async (e) => {
+                            e.preventDefault();
+                            const taskId = e.dataTransfer.getData('text/plain');
+                            if (tasks[status].find((task) => task.id === taskId)) return;
+                            try {
+                                await API.weaver.updateTask(projectId, cycleId, taskId, {
+                                    status,
+                                });
+                                refetch();
+                            } catch (error) {
+                                console.log(error);
+                                window.alert('移动失败');
+                            }
+                        }}
+                    >
+                        <div className={styles.categoryContent}>
+                            <div className={styles.categoryName}>
+                                {TASK_STATUS_NAMES[status]}
+                                <span>{tasks[status].length}</span>
+                            </div>
+                            {tasks[status].length > 0 && (
+                                <div className={styles.taskList}>
+                                    {tasks[status].map((task) => (
                                         <div
-                                            className={styles.taskCardIndicator}
-                                            style={{
-                                                background: `var(--theme-color-${
-                                                    TASK_PRIORITY_COLORS[
-                                                        task.priority
-                                                    ]
-                                                })`,
+                                            key={task.id}
+                                            className={clsx(styles.taskCard, commonStyles.card)}
+                                            onClick={() => {
+                                                targetTask.current = task;
+                                                setFormVisible(true);
                                             }}
-                                        />
-                                        <div className={styles.taskName}>
-                                            {task.name}
+                                            draggable
+                                            onDragStart={(e) => {
+                                                e.dataTransfer.setData('text/plain', task.id);
+                                                e.dataTransfer.effectAllowed = 'move';
+                                            }}
+                                        >
+                                            <div
+                                                className={styles.taskCardIndicator}
+                                                style={{
+                                                    background: `var(--theme-color-${
+                                                        TASK_PRIORITY_COLORS[task.priority]
+                                                    })`,
+                                                }}
+                                            />
+                                            <div className={styles.taskName}>{task.name}</div>
+
+                                            <div className={styles.taskExecutor}>执行者：{task.executor}</div>
+                                            {status !== TaskStatus.Todo && (task.progress ?? 0) !== 0 && (
+                                                <div
+                                                    className={styles.taskProgress}
+                                                    style={{
+                                                        background: `linear-gradient(90deg, #c3dda7 ${
+                                                            task.progress ?? 0
+                                                        }%, rgba(0, 0, 0, 0.04) ${task.progress ?? 0}%)`,
+                                                    }}
+                                                />
+                                            )}
                                         </div>
-                                        <div className={styles.taskExecutor}>
-                                            执行者：{task.executor}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {status === TaskStatus.Todo && (
-                            <div
-                                className={clsx(
-                                    styles.taskAdd,
-                                    commonStyles.card,
-                                )}
-                                onClick={async () => {
-                                    setTargetTask(undefined);
-                                    setFormVisible(true);
-                                }}
-                            >
-                                +
-                            </div>
-                        )}
+                                    ))}
+                                </div>
+                            )}
+                            {status === TaskStatus.Todo && (
+                                <div
+                                    className={clsx(styles.taskAdd, commonStyles.card)}
+                                    onClick={async () => {
+                                        targetTask.current = undefined;
+                                        setFormVisible(true);
+                                    }}
+                                >
+                                    +
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
             {isFormVisible && (
                 <TaskForm
-                    task={targetTask}
+                    task={targetTask.current}
                     context={context.current}
-                    moveCycle={async (cycleId) => {
-                        if (!targetTask) return false;
-                        try {
-                            await API.weaver.changeTaskCycle(
-                                user.id,
-                                project.id,
-                                cycleInfo.id,
-                                targetTask.id,
-                                cycleId,
-                            );
-                            return true;
-                        } catch (error) {
-                            console.log(error);
-                            return false;
-                        }
-                    }}
                     cycles={cycles}
-                    update={async (props) => {
-                        try {
-                            if (targetTask) {
-                                await API.weaver.updateTask(
-                                    user.id,
-                                    project.id,
-                                    cycleInfo.id,
-                                    targetTask.id,
-                                    props,
-                                );
-                                return true;
-                            } else {
-                                if (!props.name) return false;
-                                await API.weaver.addTask(
-                                    user.id,
-                                    project.id,
-                                    cycleInfo.id,
-                                    {
-                                        ...props,
-                                        name: props.name,
-                                        status: TaskStatus.Todo,
-                                    },
-                                );
-                                return true;
-                            }
-                        } catch (error) {
-                            console.log(error);
-                            return false;
-                        }
-                    }}
-                    remove={async () => {
-                        if (!targetTask) return false;
-                        try {
-                            await API.weaver.deleteTask(
-                                user.id,
-                                project.id,
-                                cycleInfo.id,
-                                targetTask.id,
-                            );
-                            return true;
-                        } catch (error) {
-                            console.log(error);
-                            return false;
-                        }
-                    }}
+                    update={handleUpdateTask}
+                    moveCycle={handleMoveTaskCycle}
+                    remove={handleDeleteTask}
                     onClose={async (success) => {
                         if (success) await refetch();
                         setFormVisible(false);

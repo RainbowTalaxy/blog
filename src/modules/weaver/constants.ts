@@ -21,3 +21,5 @@ export const TASK_STATUS_NAMES = {
     [TaskStatus.Testing]: '测试中',
     [TaskStatus.Done]: '已完成',
 };
+
+export const PROGRESS_STOPS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];

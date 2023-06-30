@@ -15,7 +15,7 @@
 -   [WordBank v1.0.0](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3.0](https://blog.talaxy.cn/playground/tokenize)
--   [Weaver v1.0.0](https://blog.talaxy.cn/weaver)
+-   [Weaver v1.1.0](https://blog.talaxy.cn/weaver)
 
 ### 工具
 

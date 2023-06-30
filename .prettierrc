@@ -9,6 +9,12 @@
             "options": {
                 "requirePragma": true
             }
+        },
+        {
+            "files": ["src/modules/weaver/**/*.tsx"],
+            "options": {
+                "printWidth": 120
+            }
         }
     ]
 }

@@ -2,6 +2,7 @@ import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
 import { User } from './config';
 import useUser from '@site/src/hooks/useUser';
+import { useEffect } from 'react';
 
 const FORM_CONFIG = [
     {
@@ -29,7 +30,16 @@ const UserPage = () => {
     const nextUrl = query.get('nextUrl');
     const userInfo = useUser();
 
+    useEffect(() => {
+        document.querySelector<HTMLInputElement>('#id')!.value = userInfo.id;
+        document.querySelector<HTMLInputElement>('#key')!.value = userInfo.key;
+        document.querySelector<HTMLInputElement>('#fileApiKey')!.value =
+            userInfo.fileApiKey;
+    }, [userInfo]);
+
     if (!userInfo) return null;
+
+    console.log(userInfo);
 
     return (
         <div className={styles.container}>
@@ -42,7 +52,6 @@ const UserPage = () => {
                             type={config.type}
                             name={config.attr}
                             id={config.attr}
-                            defaultValue={userInfo[config.attr]}
                             placeholder={config.placeholder}
                             onChange={(e) => {
                                 userInfo[config.attr] = e.target.value;

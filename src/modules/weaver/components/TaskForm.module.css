@@ -21,13 +21,14 @@
 }
 
 .form {
-    padding: 36px;
+    padding: 32px;
     width: 90vw;
     max-width: 600px;
     border-radius: 0.25rem;
     border: 1px solid var(--ifm-menu-color-background-active);
     color: var(--ifm-menu-color);
     background-color: var(--theme-white);
+    box-shadow: 0 0 5px var(--theme-black-shadow);
     z-index: 10;
 }
 
@@ -88,8 +89,46 @@
     cursor: pointer;
 }
 
+.priority:hover {
+    opacity: 0.5;
+}
+
 .priority.selected {
     opacity: 1;
+}
+
+.progressOptions {
+    display: flex;
+    margin: 3px 0;
+    width: 100%;
+}
+
+.progress {
+    flex-grow: 3;
+    height: 16px;
+    background-color: var(--theme-color-gray);
+    opacity: 0.2;
+    cursor: pointer;
+}
+
+.progress:hover {
+    opacity: 0.5;
+}
+
+.progress.selected {
+    background-color: var(--theme-color-green);
+    opacity: 1;
+}
+
+.progress:first-of-type {
+    flex-grow: 1;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.progress:last-of-type {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 .formItem > button {
@@ -100,7 +139,7 @@
     border: none;
     border-radius: 5px;
     background: none;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--theme-primary);
     font-size: 16px;
     color: var(--ifm-menu-color-active);
     cursor: pointer;
@@ -124,7 +163,7 @@
 }
 
 .formItem > button.primary:hover {
-    background-color: var(--ifm-menu-color);
+    background-color: var(--theme-primary);
 }
 
 .formItem > button.danger:hover {

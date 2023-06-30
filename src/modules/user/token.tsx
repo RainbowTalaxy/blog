@@ -35,7 +35,6 @@ const TokenGenerate = () => {
                             type={config.type}
                             name={config.attr}
                             id={config.attr}
-                            defaultValue={form.current[config.attr]}
                             placeholder={config.placeholder}
                             onChange={(e) => {
                                 form.current[config.attr] = e.target.value;
