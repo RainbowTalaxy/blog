@@ -47,10 +47,7 @@
     --safe-area-inset-bottom: constant(safe-area-inset-bottom);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
 
-    --ifm-font-family-base: 'PingFang SC', system-ui, -apple-system, Segoe UI,
-        Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
-        'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol';
+    --ifm-font-family-base: Helvetica, Arial, sans-serif, Noto Sans, 'PingFang SC', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,  BlinkMacSystemFont, 'Segoe UI', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 .docusaurus-highlight-code-line {
@@ -100,10 +97,14 @@ html[data-theme='dark'] {
 
 code {
     font-family: 'Fira Code' !important;
+    font-size: 90% !important;
+    border: none;
+    color: var(--ifm-color-primary);
+    background: none;
 }
 
-code {
-    font-size: 90% !important;
+blockquote {
+    color: var(--ifm-color-gray-600);
 }
 
 @tailwind base;
