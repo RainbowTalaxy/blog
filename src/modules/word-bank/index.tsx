@@ -54,9 +54,7 @@ const WordBank = () => {
         if (!list) return;
         const id = query.get('id');
         if (id) {
-            const bookInfo = list.find((bookInfo) =>
-                bookInfo.id.startsWith(id),
-            );
+            const bookInfo = list.find((bookInfo) => bookInfo.id.startsWith(id));
             if (bookInfo) refetchBook(bookInfo);
         } else {
             refetchBook(list[0]);
@@ -101,27 +99,18 @@ const WordBank = () => {
                     </div>
                     {list.map((bookInfo) => (
                         <div
-                            className={clsx(
-                                styles.book,
-                                book?.id === bookInfo.id && styles.active,
-                            )}
+                            className={clsx(styles.book, book?.id === bookInfo.id && styles.active)}
                             key={bookInfo.id}
                             onClick={() => {
                                 // 设置 query 来更新
-                                history.replace(
-                                    '?id=' + bookInfo.id.slice(0, 5),
-                                );
+                                history.replace('?id=' + bookInfo.id);
                             }}
                         >
-                            <div className={styles.bookTitle}>
-                                {bookInfo.title || '无标题'}
-                            </div>
+                            <div className={styles.bookTitle}>{bookInfo.title || '无标题'}</div>
                             <div className={styles.spacer} />
                             {bookInfo.date && (
                                 <div className={styles.bookDate}>
-                                    {convertToAppleDate(bookInfo.date).format(
-                                        'YYYY/MM/DD',
-                                    )}
+                                    {convertToAppleDate(bookInfo.date).format('YYYY/MM/DD')}
                                 </div>
                             )}
                         </div>
@@ -133,20 +122,11 @@ const WordBank = () => {
                 <div className={styles.sidebarMobile}>
                     {list.map((bookInfo) => (
                         <div
-                            className={clsx(
-                                styles.book,
-                                book?.id === bookInfo.id && styles.active,
-                            )}
+                            className={clsx(styles.book, book?.id === bookInfo.id && styles.active)}
                             key={bookInfo.id}
-                            onClick={() =>
-                                history.replace(
-                                    '?id=' + bookInfo.id.slice(0, 5),
-                                )
-                            }
+                            onClick={() => history.replace('?id=' + bookInfo.id)}
                         >
-                            <div className={styles.bookTitle}>
-                                {bookInfo.title || '无标题'}
-                            </div>
+                            <div className={styles.bookTitle}>{bookInfo.title || '无标题'}</div>
                         </div>
                     ))}
                 </div>
@@ -156,6 +136,7 @@ const WordBank = () => {
                             <h1>
                                 {isEditing ? (
                                     <EditableSpan
+                                        tabIndex={2}
                                         eleRef={titleRef}
                                         text={editData.title}
                                         placeholder="标题"
@@ -171,6 +152,7 @@ const WordBank = () => {
                             {isEditing ? (
                                 <p>
                                     <EditableSpan
+                                        tabIndex={3}
                                         eleRef={descRef}
                                         text={editData.description ?? ''}
                                         placeholder="描述"
@@ -184,21 +166,29 @@ const WordBank = () => {
                                 <p>{editData.description}</p>
                             )}
                             <div className={styles.wordList}>
-                                {editData.words?.map((word) => (
+                                {editData.words.map((word, idx) => (
                                     <WordLine
                                         key={word.id}
+                                        index={idx + 1}
                                         word={word}
                                         isLoading={isLoading}
                                         isEditing={isEditing}
-                                        onReturn={() => addEmptyWord()}
+                                        onReturn={() => {
+                                            if (idx === editData.words.length - 1) {
+                                                document.documentElement.scrollTo({
+                                                    top: window.__docusaurus.scrollHeight,
+                                                    behavior: 'smooth',
+                                                });
+                                                addEmptyWord();
+                                            }
+                                        }}
                                     />
                                 ))}
-                                {isEditing && (
-                                    <ActionItem onClick={() => addEmptyWord()}>
-                                        添加单词
-                                    </ActionItem>
-                                )}
+                                {isEditing && <ActionItem onClick={() => addEmptyWord()}>添加单词</ActionItem>}
                             </div>
+                            {!isEditing && (
+                                <span className={styles.wordCount}>共计 {editData.words.length} 个词条</span>
+                            )}
                             {user?.id && (
                                 <>
                                     <div
@@ -210,10 +200,7 @@ const WordBank = () => {
                                         <ActionItem
                                             onClick={async () => {
                                                 if (isEditing) {
-                                                    await API.wordBank.uploadBook(
-                                                        user.id,
-                                                        editData,
-                                                    );
+                                                    await API.wordBank.uploadBook(user.id, editData);
                                                     refetch();
                                                 } else {
                                                     setIsEditing(true);
@@ -238,14 +225,9 @@ const WordBank = () => {
                                                 className={styles.warning}
                                                 onClick={async () => {
                                                     try {
-                                                        const result = confirm(
-                                                            `确定删除《${book.title}》？`,
-                                                        );
+                                                        const result = confirm(`确定删除《${book.title}》？`);
                                                         if (!result) return;
-                                                        await API.wordBank.removeBook(
-                                                            user.id,
-                                                            book.id,
-                                                        );
+                                                        await API.wordBank.removeBook(user.id, book.id);
                                                         refetch();
                                                     } catch (e) {
                                                         console.log(e);
@@ -262,9 +244,7 @@ const WordBank = () => {
                     )}
                     {!user.id && (
                         <div className={styles.wordList}>
-                            <ActionItem onClick={() => setUser()}>
-                                设置用户
-                            </ActionItem>
+                            <ActionItem onClick={() => setUser()}>设置用户</ActionItem>
                         </div>
                     )}
                 </article>

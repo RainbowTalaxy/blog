@@ -27,3 +27,11 @@
     cursor: pointer;
     user-select: none;
 }
+
+.inlineTranslation {
+    display: none;
+}
+
+.wordLine:hover .inlineTranslation {
+    display: inline-block;
+}
