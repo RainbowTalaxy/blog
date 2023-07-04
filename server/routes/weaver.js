@@ -80,9 +80,9 @@ const DEFAULT_CYCLE_DURATION = 7 * 24 * 60 * 60 * 1000;
 
 const TaskStatus = {
     Todo: 0,
-    Doing: 1,
-    Testing: 2,
-    Done: 3,
+    Done: 1,
+    Doing: 2,
+    Testing: 3,
 };
 
 const FileHandler = {
