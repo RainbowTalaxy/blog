@@ -28,7 +28,7 @@
     user-select: none;
 }
 
-.inlineTranslation {
+span.inlineTranslation {
     display: none;
 }
 
