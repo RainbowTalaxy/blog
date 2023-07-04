@@ -17,7 +17,7 @@ export const EditableSpan = ({
 }: {
     className?: string;
     tabIndex: number;
-    eleRef?: React.RefObject<HTMLSpanElement>;
+    eleRef: React.RefObject<HTMLSpanElement>;
     text: string;
     rightAlign?: boolean;
     placeholder?: string;
@@ -101,6 +101,8 @@ interface Props {
 
 const WordLine = ({ index, word, isLoading, isEditing, onReturn }: Props) => {
     const nameRef = useRef<HTMLDivElement>(null);
+    const partRef = useRef<HTMLDivElement>(null);
+    const defRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (isEditing && word.name === '') {
@@ -146,6 +148,7 @@ const WordLine = ({ index, word, isLoading, isEditing, onReturn }: Props) => {
                 (isEditing ? (
                     <>
                         <EditableSpan
+                            eleRef={partRef}
                             className={styles.wordPartOfSpeech}
                             tabIndex={index * 3 + 2}
                             text={word.part}
@@ -174,6 +177,7 @@ const WordLine = ({ index, word, isLoading, isEditing, onReturn }: Props) => {
             {!isLoading &&
                 (isEditing ? (
                     <EditableSpan
+                        eleRef={defRef}
                         className={styles.wordDefinition}
                         tabIndex={index * 3 + 3}
                         text={word.def}
