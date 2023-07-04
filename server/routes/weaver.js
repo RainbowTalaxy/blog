@@ -78,6 +78,13 @@ const CYCLE_LIST_NAME = 'cycles.json';
 
 const DEFAULT_CYCLE_DURATION = 7 * 24 * 60 * 60 * 1000;
 
+const TaskStatus = {
+    Todo: 0,
+    Doing: 1,
+    Testing: 2,
+    Done: 3,
+};
+
 const FileHandler = {
     readList: () => {
         if (fs.existsSync(LIST_PATH)) {
@@ -367,6 +374,13 @@ router.get('/project/:projectId/cycle/:cycleId', login, async (req, res) => {
     }
 });
 
+const DEFAULT_PROGRESS = {
+    [TaskStatus.Todo]: 0,
+    [TaskStatus.Doing]: 0,
+    [TaskStatus.Testing]: 100,
+    [TaskStatus.Done]: 100,
+};
+
 // 新建任务
 router.post(
     '/project/:projectId/cycle/:cycleId/task',
@@ -393,11 +407,14 @@ router.post(
                 name: '',
                 description: '',
                 priority: 0,
-                status: 0,
+                status: TaskStatus.Todo,
                 executor: userId,
-                progress: 0,
+                progress: DEFAULT_PROGRESS[TaskStatus.Todo],
                 ...req.body,
             };
+            if (task.status !== TaskStatus.Doing) {
+                task.progress = DEFAULT_PROGRESS[task.status];
+            }
             cycle.tasks.push(task);
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
             return res.send(task);
@@ -441,6 +458,10 @@ router.put(
                 ...cycle.tasks[taskIndex],
                 ...req.body,
             };
+            if (cycle.tasks[taskIndex].status !== TaskStatus.Doing) {
+                cycle.tasks[taskIndex].progress =
+                    DEFAULT_PROGRESS[cycle.tasks[taskIndex].status];
+            }
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
             return res.send(cycle.tasks[taskIndex]);
         } catch (error) {
