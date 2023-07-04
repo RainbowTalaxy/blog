@@ -53,14 +53,11 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                 {task && (
                     <div className={styles.formItem}>
                         <label>状态：</label>
-                        <div className={styles.priorityOptions}>
+                        <div className={styles.options}>
                             {TASK_STATUSES.map((s) => (
                                 <div
                                     key={s}
-                                    className={clsx(styles.priority, s === status && styles.selected)}
-                                    style={{
-                                        background: `var(--theme-color-gray)`,
-                                    }}
+                                    className={clsx(styles.status, s === status && styles.selected)}
                                     onClick={() => setStatus(s)}
                                 >
                                     {TASK_STATUS_NAMES[s]}
@@ -69,7 +66,7 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                         </div>
                     </div>
                 )}
-                {task && status !== TaskStatus.Todo && (
+                {task && status === TaskStatus.Doing && (
                     <div className={styles.formItem}>
                         <label style={{ margin: '-4px 0' }}>进度：</label>
                         <div className={styles.progressOptions}>
@@ -89,7 +86,7 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                 </div>
                 <div className={styles.formItem}>
                     <label>优先级：</label>
-                    <div className={styles.priorityOptions}>
+                    <div className={styles.options}>
                         {TASK_PRIORITIES.map((p) => (
                             <div
                                 key={p}

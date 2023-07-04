@@ -87,7 +87,7 @@ const Weaver = () => {
                             });
                         }}
                     >
-                        <input className={styles.input} name="name" placeholder="项目名称" />
+                        <input className={styles.input} type="text" placeholder="项目名称" />
                         <br />
                         <button className={styles.formButton}>提交</button>
                     </form>
