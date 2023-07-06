@@ -458,7 +458,10 @@ router.put(
                 ...cycle.tasks[taskIndex],
                 ...req.body,
             };
-            if (cycle.tasks[taskIndex].status !== TaskStatus.Doing) {
+            if (
+                cycle.tasks[taskIndex].status !== TaskStatus.Doing ||
+                !cycle.tasks[taskIndex].progress
+            ) {
                 cycle.tasks[taskIndex].progress =
                     DEFAULT_PROGRESS[cycle.tasks[taskIndex].status];
             }
