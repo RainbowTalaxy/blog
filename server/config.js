@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const prettier = require('prettier');
+const { readJSON, writeJSONIfNotExist, uuid, writeJSON } = require('./utils');
 
 const PORT = 4000;
 
@@ -20,9 +21,15 @@ const SERVER_DIR = {
     temp: TEMP_DIR,
     static: path.join('/home', 'ubuntu', 'statics'),
     storage: {
+        // 用户数据
         user: path.join(STORAGE_PATH, 'user.json'),
+        // 登录 token 数据
+        token: path.join(STORAGE_PATH, 'token.json'),
+        // API 白名单数据
         whitelist: path.join(STORAGE_PATH, 'whitelist.json'),
+        // 书籍数据
         books: path.join(STORAGE_PATH, 'books'),
+        // Weaver 数据
         projects: path.join(STORAGE_PATH, 'projects'),
     },
 };
@@ -32,6 +39,7 @@ const LOCAL_DIR = {
     static: path.join(__dirname, '..', 'static'),
     storage: {
         user: path.join(TEMP_DIR, 'user.json'),
+        token: path.join(TEMP_DIR, 'token.json'),
         whitelist: path.join(__dirname, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
@@ -46,6 +54,8 @@ const Dir = {
     ...(process.env.NODE_ENV === 'production' ? SERVER_DIR : LOCAL_DIR),
 };
 
+// -- 初始化文件夹 --
+
 if (fs.existsSync(Dir.temp)) {
     fs.rmSync(Dir.temp, { recursive: true });
 }
@@ -55,19 +65,18 @@ mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
 
-// 如果没有 whitelist.json 文件，创建一个
-if (!fs.existsSync(Dir.storage.whitelist)) {
-    fs.writeFileSync(
-        Dir.storage.whitelist,
-        JSON.stringify({
-            [APIKey.file]: [],
-        }),
-    );
-}
+writeJSONIfNotExist(Dir.storage.whitelist, {
+    [APIKey.file]: [],
+});
+
+writeJSONIfNotExist(Dir.storage.token, []);
+
+// const OLD_VERSION = '0.0.0';
+const NEW_VERSION = '1.0.0';
 
 // 默认用户配置
 const DEFAULT_USER_CONFIG = {
-    version: '1.0.0',
+    version: NEW_VERSION,
     admin: ['talaxy'],
     users: [
         {
@@ -76,37 +85,43 @@ const DEFAULT_USER_CONFIG = {
         },
     ],
 };
-// 如果没有 user.json 文件，创建一个
-let needCreateUserConfig = false;
-if (!fs.existsSync(Dir.storage.user)) {
-    needCreateUserConfig = true;
-} else {
-    const userConfig = JSON.parse(fs.readFileSync(Dir.storage.user));
-    if (userConfig.version !== DEFAULT_USER_CONFIG.version) {
-        needCreateUserConfig = true;
-    }
-}
-if (needCreateUserConfig) {
-    fs.writeFileSync(
-        Dir.storage.user,
-        prettier.format(JSON.stringify(DEFAULT_USER_CONFIG), {
-            parser: 'json',
-        }),
-    );
-}
+
+writeJSONIfNotExist(Dir.storage.user, DEFAULT_USER_CONFIG);
 
 const User = {
-    config: JSON.parse(fs.readFileSync(Dir.storage.user)),
+    config: readJSON(Dir.storage.user),
     tokenExpireInterval: 1000 * 60 * 60 * 24,
     tokens: [],
+    // 验证用户
     validate(id, key) {
         return this.config.users.some(
             (user) => user.id === id && user.key === key,
         );
     },
+    // 是否为管理员
     isAdmin(id) {
         return this.config.admin.includes(id);
     },
+    generateToken(id) {
+        const token = {
+            id,
+            token: uuid(),
+            time: Date.now(),
+        };
+        this.tokens.push(token);
+        return token;
+    },
+    // 消耗 token ，登记用户的前置工作
+    digestToken(id, token) {
+        this.clearOldTokens();
+        const idx = this.tokens.findIndex(
+            (item) => item.id === id && item.token === token,
+        );
+        if (idx === -1) return false;
+        this.tokens.splice(idx, 1);
+        return true;
+    },
+    // 登记用户
     register(id, key) {
         const idx = this.config.users.findIndex((user) => user.id === id);
         if (idx === -1) {
@@ -124,15 +139,7 @@ const User = {
             }),
         );
     },
-    digestToken(id, token) {
-        this.clearOldTokens();
-        const idx = this.tokens.findIndex(
-            (item) => item.id === id && item.token === token,
-        );
-        if (idx === -1) return false;
-        this.tokens.splice(idx, 1);
-        return true;
-    },
+    // 清理过期 token
     clearOldTokens() {
         this.tokens = this.tokens.filter((item) => {
             return Date.now() - item.time < this.tokenExpireInterval;

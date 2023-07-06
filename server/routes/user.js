@@ -22,13 +22,8 @@ router.post('/token', login, async (req, res) => {
             return res.status(400).send({
                 error: 'id is required',
             });
-        const result = {
-            id,
-            token: uuid(),
-            time: Date.now(),
-        };
-        User.tokens.push(result);
-        res.send(result);
+        const token = User.generateToken(id);
+        res.send(token);
     } catch (error) {
         console.log(error);
         res.status(500).send({
