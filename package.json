@@ -33,6 +33,7 @@
         "express": "^4.18.2",
         "fontmin": "^0.9.9",
         "hast-util-is-element": "1.1.0",
+        "jsonwebtoken": "^9.0.1",
         "lodash": "^4.17.21",
         "mkdirp": "^3.0.0",
         "prettier": "^2.8.8",

@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const prettier = require('prettier');
-const { readJSON, writeJSONIfNotExist, uuid, writeJSON } = require('./utils');
+const { readJSON, writeJSONIfNotExist, uuid } = require('./utils');
 
 const PORT = 4000;
 
@@ -23,8 +23,8 @@ const SERVER_DIR = {
     storage: {
         // 用户数据
         user: path.join(STORAGE_PATH, 'user.json'),
-        // 登录 token 数据
-        token: path.join(STORAGE_PATH, 'token.json'),
+        // 配置信息
+        config: path.join(STORAGE_PATH, 'config.json'),
         // API 白名单数据
         whitelist: path.join(STORAGE_PATH, 'whitelist.json'),
         // 书籍数据
@@ -39,8 +39,8 @@ const LOCAL_DIR = {
     static: path.join(__dirname, '..', 'static'),
     storage: {
         user: path.join(TEMP_DIR, 'user.json'),
-        token: path.join(TEMP_DIR, 'token.json'),
-        whitelist: path.join(__dirname, 'whitelist.json'),
+        config: path.join(TEMP_DIR, 'config.json'),
+        whitelist: path.join(TEMP_DIR, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
     },
@@ -66,10 +66,12 @@ mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
 
 writeJSONIfNotExist(Dir.storage.whitelist, {
-    [APIKey.file]: [],
+    [APIKey.file]: ['talaxy'],
 });
 
-writeJSONIfNotExist(Dir.storage.token, []);
+writeJSONIfNotExist(Dir.storage.config, {
+    secret: uuid(),
+});
 
 // const OLD_VERSION = '0.0.0';
 const NEW_VERSION = '1.0.0';

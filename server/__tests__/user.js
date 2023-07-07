@@ -101,6 +101,34 @@ async function test() {
             resolve();
         },
     );
+
+    let token;
+
+    // 用户登录
+    await request(
+        'User - login',
+        curl(`${BASE_PATH}/login`, 'POST', admin),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            token = response.token;
+
+            resolve();
+        },
+    );
+
+    // 用户登录检验
+    await request(
+        'User - login test',
+        curl(`${BASE_PATH}/test`, 'GET', {}, null, { token }),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            if (response.id !== admin.id) return reject('Expect "id"');
+
+            resolve();
+        },
+    );
 }
 
 module.exports = test;
