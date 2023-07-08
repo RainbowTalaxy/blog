@@ -69,7 +69,7 @@ export const rocketV2 = {
         const res = await fetch(
             url + (query ? `?${new URLSearchParams(query)}` : ''),
             {
-                credentials: 'same-origin',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: login && getAuth(),

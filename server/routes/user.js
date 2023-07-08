@@ -84,7 +84,9 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id }, config.secret, {
             expiresIn: `${MAX_DAY}d`,
         });
-        res.cookie('token', token, { maxAge: DAY_TIME * MAX_DAY });
+        res.cookie('token', token, {
+            maxAge: DAY_TIME * MAX_DAY,
+        });
         res.send({
             token,
         });
@@ -104,8 +106,7 @@ router.get('/test', async (req, res) => {
         const { id } = jwt.verify(token, config.secret);
         res.send({ id });
     } catch (error) {
-        console.log(error);
-        res.status(500).send({ error: error.message });
+        res.status(401).send({ error: 'Cannot verify' });
     }
 });
 

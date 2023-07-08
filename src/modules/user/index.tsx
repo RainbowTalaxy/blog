@@ -3,6 +3,7 @@ import styles from './index.module.css';
 import { User } from './config';
 import useUser from '@site/src/hooks/useUser';
 import { useEffect } from 'react';
+import API from '@site/src/api';
 
 const FORM_CONFIG = [
     {
@@ -37,9 +38,11 @@ const UserPage = () => {
             userInfo.fileApiKey;
     }, [userInfo]);
 
-    if (!userInfo) return null;
+    useEffect(() => {
+        API.user.test();
+    }, []);
 
-    console.log(userInfo);
+    if (!userInfo) return null;
 
     return (
         <div className={styles.container}>
@@ -60,9 +63,18 @@ const UserPage = () => {
                     </div>
                 ))}
                 <button
-                    onClick={() => {
+                    onClick={async () => {
                         User.config = userInfo;
-                        if (nextUrl) window.location.href = nextUrl;
+                        try {
+                            const { token } = await API.user.login(
+                                userInfo.id,
+                                userInfo.key,
+                            );
+                            document.cookie = `token=${token}`;
+                            if (nextUrl) window.location.href = nextUrl;
+                        } catch {
+                            alert('登录失败');
+                        }
                     }}
                 >
                     保存
