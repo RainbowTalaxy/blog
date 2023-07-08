@@ -153,6 +153,18 @@ async function test() {
         },
     );
 
+    // 获取任务池
+    await request(
+        'Weaver - get cycle',
+        curl(`${BASE_PATH}/project/${project.id}/cycle/pool`, 'GET', {}, auth),
+        (response, resolve, reject) => {
+            if (response.error)
+                return reject('Expect "success"', response.error);
+
+            resolve();
+        },
+    );
+
     let task = {
         name: 'some_name',
         description: 'some_description',

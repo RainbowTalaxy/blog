@@ -76,6 +76,7 @@ const router = express.Router();
 
 const LIST_PATH = path.join(Dir.storage.projects, 'list.json');
 const CYCLE_LIST_NAME = 'cycles.json';
+const TASK_POOL_NAME = 'pool';
 
 const DEFAULT_CYCLE_DURATION = 7 * 24 * 60 * 60 * 1000;
 
@@ -103,6 +104,16 @@ const FileHandler = {
             fs.rmSync(projectDir, { recursive: true });
         }
     },
+    addPool: (projectId) => {
+        const poolPath = path.join(
+            Dir.storage.projects,
+            `${projectId}`,
+            `${TASK_POOL_NAME}.json`,
+        );
+        if (!fs.existsSync(poolPath)) {
+            fs.writeFileSync(poolPath, JSON.stringify({ tasks: [] }));
+        }
+    },
     initProject: (projectId) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
         mkdirp.sync(projectDir);
@@ -121,6 +132,7 @@ const FileHandler = {
             `${firstCycle.id}.json`,
         );
         fs.writeFileSync(firstCycleTasksPath, JSON.stringify({ tasks: [] }));
+        FileHandler.addPool(projectId);
     },
     getProjectPath: (projectId) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
@@ -129,6 +141,8 @@ const FileHandler = {
     getCyclePath: (projectId, cycleId) => {
         const projectDir = FileHandler.getProjectPath(projectId);
         if (!projectDir) return null;
+        // 兼容性代码，如果是任务池，需要先创建
+        if (cycleId === TASK_POOL_NAME) FileHandler.addPool(projectId);
         const cyclePath = path.join(projectDir, `${cycleId}.json`);
         return fs.existsSync(cyclePath) ? cyclePath : null;
     },
