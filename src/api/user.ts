@@ -18,11 +18,11 @@ const UserAPI = {
             token,
         }),
     login: (id: string, key: string) =>
-        rocketV2.post<{ token: string }>(`${LOCAL_API}/user/login`, {
+        rocketV2.post<{ token: string }>(`${SERVER_API}/user/login`, {
             id,
             key,
         }),
-    test: () => rocketV2.get<{ id: string }>(`${LOCAL_API}/user/test`),
+    test: () => rocketV2.get<{ id: string }>(`${SERVER_API}/user/test`),
 };
 
 export default UserAPI;
