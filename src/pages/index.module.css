@@ -69,33 +69,6 @@ p.paragraph > strong:hover::before {
     content: '';
 }
 
-.top-tip {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 30px;
-    background: rgb(106, 139, 173, 0.75);
-    color: white;
-}
-
-.top-tip a {
-    font-weight: bold;
-    color: #e1f0ff;
-}
-
-.top-tip button {
-    flex-shrink: 0;
-    margin-left: 18px;
-    border: none;
-    background: transparent;
-    font-size: medium;
-    color: white;
-}
-
-.top-tip button:hover {
-    cursor: pointer;
-}
-
 .contact-bar {
     display: flex;
     flex-wrap: wrap;

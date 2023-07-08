@@ -4,21 +4,8 @@ import Emoji from '../components/Emoji';
 import style from './index.module.css';
 
 export default function Home(): JSX.Element {
-    const [topTipVisible, setTopTipVisible] = useState(true);
-
     return (
         <Layout title="Welcome">
-            {topTipVisible && (
-                <div className={style['top-tip']}>
-                    <div>
-                        这是新博客站点，目前仍在迁移中。如果你在找原博客地址，
-                        <a href="https://talaxy.cn">点击这里</a>。
-                    </div>
-                    <button onClick={() => setTopTipVisible(false)}>
-                        关闭
-                    </button>
-                </div>
-            )}
             <div className={style['main-body']}>
                 <div className={style.introduction}>
                     <img className={style.avatar} src="img/mercy.png" />
