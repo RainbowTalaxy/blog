@@ -97,6 +97,10 @@ html[data-theme='dark'] {
     border-radius: 50%;
 }
 
+.navbar__title {
+    font-weight: var(--ifm-font-weight-semibold);
+}
+
 code {
     font-family: 'Fira Code' !important;
     font-size: 90% !important;
@@ -107,6 +111,11 @@ code {
 
 blockquote {
     color: var(--ifm-color-gray-600);
+}
+
+li > ol,
+li > ul {
+    margin-top: var(--ifm-list-item-margin);
 }
 
 @tailwind base;
