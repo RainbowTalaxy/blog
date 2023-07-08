@@ -11,7 +11,10 @@
             }
         },
         {
-            "files": ["src/modules/weaver/**/*.tsx"],
+            "files": [
+                "src/modules/weaver/**/*.tsx",
+                "src/modules/word-bank/**/*.tsx"
+            ],
             "options": {
                 "printWidth": 120
             }

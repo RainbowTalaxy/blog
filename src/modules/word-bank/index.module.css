@@ -210,3 +210,11 @@ html[data-theme='dark'] .wordList {
 .warning:hover {
     color: red;
 }
+
+.wordCount {
+    display: block;
+    margin: -18px 16px 0;
+    font-size: 14px;
+    text-align: right;
+    opacity: 0.6;
+}

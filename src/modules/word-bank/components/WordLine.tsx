@@ -1,11 +1,13 @@
 import { Word } from '@site/src/api/word-bank';
 import styles from '../index.module.css';
+import bookStyles from '../book.module.css';
 import QueryableWord from './QueryableWord';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 
 export const EditableSpan = ({
     className,
+    tabIndex,
     onChange,
     text,
     rightAlign = false,
@@ -14,7 +16,8 @@ export const EditableSpan = ({
     onEnter,
 }: {
     className?: string;
-    eleRef?: React.RefObject<HTMLSpanElement>;
+    tabIndex: number;
+    eleRef: React.RefObject<HTMLSpanElement>;
     text: string;
     rightAlign?: boolean;
     placeholder?: string;
@@ -22,19 +25,16 @@ export const EditableSpan = ({
     onEnter?: () => void;
 }) => {
     const placeholderRef = useRef<HTMLSpanElement>(null);
+    const preText = useRef<string>('');
+
+    preText.current = text;
 
     return (
-        <span
-            className={clsx(styles.inputBox, className)}
-            onClick={() => eleRef?.current?.focus()}
-        >
+        <span className={clsx(styles.inputBox, className)} onClick={() => eleRef?.current?.focus()}>
             {rightAlign && (
                 <span
                     ref={placeholderRef}
-                    className={clsx(
-                        styles.inputPlaceholder,
-                        text && styles.hide,
-                    )}
+                    className={clsx(styles.inputPlaceholder, text && styles.hide)}
                     onClick={() => {
                         eleRef?.current?.focus();
                     }}
@@ -44,16 +44,28 @@ export const EditableSpan = ({
             )}
             <span
                 ref={eleRef}
+                tabIndex={tabIndex}
                 className={clsx(styles.input)}
                 contentEditable
                 suppressContentEditableWarning
                 onInput={(e) => {
                     const text = e.currentTarget.innerText;
                     if (text.includes('\n')) {
-                        e.currentTarget.innerText = text.replace(/\n/g, '');
+                        e.currentTarget.innerText = preText.current;
                         e.currentTarget.blur();
                         onEnter?.();
+                        const nextInput = document.querySelector(`[tabindex="${tabIndex + 1}"]`) as HTMLDivElement;
+                        if (nextInput) {
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            selection.removeAllRanges();
+                            range.selectNodeContents(nextInput);
+                            range.collapse(false);
+                            selection.addRange(range);
+                            nextInput.focus();
+                        }
                     }
+                    preText.current = e.currentTarget.innerHTML;
                     if (!e.currentTarget.innerText) {
                         placeholderRef.current?.classList.remove(styles.hide);
                     } else {
@@ -67,10 +79,7 @@ export const EditableSpan = ({
             {!rightAlign && (
                 <span
                     ref={placeholderRef}
-                    className={clsx(
-                        styles.inputPlaceholder,
-                        text && styles.hide,
-                    )}
+                    className={clsx(styles.inputPlaceholder, text && styles.hide)}
                     onClick={() => {
                         eleRef?.current?.focus();
                     }}
@@ -83,13 +92,14 @@ export const EditableSpan = ({
 };
 
 interface Props {
+    index: number;
     word: Word;
     isLoading: boolean;
     isEditing: boolean;
     onReturn: () => void;
 }
 
-const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
+const WordLine = ({ index, word, isLoading, isEditing, onReturn }: Props) => {
     const nameRef = useRef<HTMLDivElement>(null);
     const partRef = useRef<HTMLDivElement>(null);
     const defRef = useRef<HTMLDivElement>(null);
@@ -101,22 +111,22 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
     }, []);
 
     return (
-        <div className={styles.word} key={word.id}>
+        <div className={clsx(styles.word, bookStyles.wordLine)} key={word.id}>
             {!isLoading &&
                 (isEditing ? (
                     <EditableSpan
                         eleRef={nameRef}
                         className={styles.wordName}
+                        tabIndex={index * 3 + 1}
                         text={word.name}
                         placeholder="单词"
                         onChange={(str) => {
                             word.name = str;
                         }}
-                        onEnter={() => partRef.current?.focus()}
                     />
                 ) : (
                     <div className={styles.wordName}>
-                        <QueryableWord word={word} />
+                        <QueryableWord word={word} showTranslation />
                     </div>
                 ))}
 
@@ -140,13 +150,13 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
                         <EditableSpan
                             eleRef={partRef}
                             className={styles.wordPartOfSpeech}
+                            tabIndex={index * 3 + 2}
                             text={word.part}
                             placeholder="词性"
                             rightAlign
                             onChange={(str) => {
                                 word.part = str;
                             }}
-                            onEnter={() => defRef.current?.focus()}
                         />
                         <div className={styles.wordPartOfSpeechDot}>
                             <span>.</span>
@@ -169,6 +179,7 @@ const WordLine = ({ word, isLoading, isEditing, onReturn }: Props) => {
                     <EditableSpan
                         eleRef={defRef}
                         className={styles.wordDefinition}
+                        tabIndex={index * 3 + 3}
                         text={word.def}
                         placeholder="释义"
                         onChange={(str) => {
