@@ -16,12 +16,27 @@ const project = {
     name: 'some_name',
 };
 
-const auth = {
-    id: 'talaxy',
-    key: 'talaxy',
-};
-
 async function test() {
+    let token;
+
+    // 用户登录
+    await request(
+        'User - login',
+        curl(`/user/login`, 'POST', {
+            id: 'talaxy',
+            key: 'talaxy',
+        }),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            token = response.token;
+
+            resolve();
+        },
+    );
+
+    const auth = { token };
+
     // 测试一下创建项目
     await request(
         'Weaver - create project',

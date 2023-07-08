@@ -61,7 +61,7 @@ export const rocket = {
 
 const getAuth = () => {
     const user = User.config;
-    return `id=${user.id};key=${user.key}`;
+    return `token=${user.token}`;
 };
 
 export const rocketV2 = {

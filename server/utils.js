@@ -32,7 +32,7 @@ async function downloadFile(url, localPath) {
     });
 }
 
-const readJSON = (filePath) => {
+const readJSON = (filePath, defaultValue = null) => {
     if (!fs.existsSync(filePath)) {
         return null;
     }
@@ -40,12 +40,24 @@ const readJSON = (filePath) => {
     try {
         return JSON.parse(content);
     } catch {
-        return null;
+        return defaultValue;
+    }
+};
+
+const writeJSON = (filePath, content) => {
+    fs.writeFileSync(filePath, JSON.stringify(content));
+};
+
+const writeJSONIfNotExist = (filePath, content) => {
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, JSON.stringify(content));
     }
 };
 
 module.exports = {
+    uuid,
     downloadFile,
     readJSON,
-    uuid,
+    writeJSON,
+    writeJSONIfNotExist,
 };

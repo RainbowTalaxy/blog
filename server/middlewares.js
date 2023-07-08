@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { Dir, User } = require('./config');
 const { readJSON } = require('./utils');
 
@@ -34,16 +35,15 @@ const authority = (key) => {
 const login = (req, res, next) => {
     const authorization = req.headers.authorization;
     const keys = parseKeyValueString(authorization);
-    if (User.validate(keys.id, keys.key)) {
-        req.userId = keys.id;
-        if (User.isAdmin(keys.id)) {
-            req.isAdmin = true;
-        }
-        return next();
+    if (!keys.token)
+        return res.status(401).send({ error: 'Please login first' });
+    const config = readJSON(Dir.storage.config);
+    const { id } = jwt.verify(keys.token, config.secret);
+    req.userId = id;
+    if (User.isAdmin(id)) {
+        req.isAdmin = true;
     }
-    res.status(401).send({
-        error: 'Unauthorized',
-    });
+    next();
 };
 
 module.exports = {
