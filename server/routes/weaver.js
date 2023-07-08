@@ -24,6 +24,7 @@
  * - 任务 Task
  *   + 任务 ID id
  *   + 创建时间 createdAt
+ *   + 修改时间 updatedAt
  *   + 任务名称 name
  *   + 任务描述 description
  *   + 优先级 priority
@@ -401,9 +402,11 @@ router.post(
                     error: 'project/cycle not found',
                 });
             const cycle = JSON.parse(fs.readFileSync(cyclePath));
+            const now = Date.now();
             const task = {
                 id: uuid(),
-                createdAt: Date.now(),
+                createdAt: now,
+                updatedAt: now,
                 name: '',
                 description: '',
                 priority: 0,
@@ -455,18 +458,22 @@ router.put(
                     error: 'task not found',
                 });
             cycle.tasks[taskIndex] = {
+                // 如果原先没有 progress 字段，设置为默认值
+                progress:
+                    DEFAULT_PROGRESS[
+                        req.body.status ?? cycle.tasks[taskIndex].status
+                    ],
                 ...cycle.tasks[taskIndex],
                 ...req.body,
+                updatedAt: Date.now(),
             };
-            if (
-                cycle.tasks[taskIndex].status !== TaskStatus.Doing ||
-                !cycle.tasks[taskIndex].progress
-            ) {
-                cycle.tasks[taskIndex].progress =
-                    DEFAULT_PROGRESS[cycle.tasks[taskIndex].status];
+            const targetTask = cycle.tasks[taskIndex];
+            // 如果不是进行中的任务，进度重置为默认值
+            if (targetTask.status !== TaskStatus.Doing) {
+                targetTask.progress = DEFAULT_PROGRESS[targetTask.status];
             }
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
-            return res.send(cycle.tasks[taskIndex]);
+            return res.send(targetTask);
         } catch (error) {
             console.log(error);
             return res.status(500).send({
@@ -509,6 +516,7 @@ router.put(
                     error: 'task not found',
                 });
             const task = cycle.tasks.splice(taskIndex, 1)[0];
+            task.updatedAt = Date.now();
             targetCycle.tasks.push(task);
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
             fs.writeFileSync(targetCyclePath, JSON.stringify(targetCycle));
