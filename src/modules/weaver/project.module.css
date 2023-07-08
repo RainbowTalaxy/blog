@@ -6,12 +6,6 @@
 .cycleOption {
     flex-shrink: 0;
     margin-top: 10px;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    border: 1px solid var(--ifm-menu-color-background-active);
-    color: var(--ifm-menu-color);
-    transition: background var(--ifm-transition-fast)
-        var(--ifm-transition-timing-default);
 }
 
 .cycle {
@@ -26,13 +20,6 @@
 
 .header:hover {
     color: var(--ifm-menu-color-active);
-}
-
-.cycle.active,
-.cycle:hover,
-.cycleOption:hover {
-    color: var(--ifm-menu-color-active);
-    background-color: var(--ifm-menu-color-background-active);
 }
 
 .cycleName {

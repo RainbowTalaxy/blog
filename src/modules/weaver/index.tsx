@@ -9,6 +9,7 @@ import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
+import clsx from 'clsx';
 
 const Weaver = () => {
     const user = useUser();
@@ -43,7 +44,7 @@ const Weaver = () => {
                         {list.map((project) => (
                             <div
                                 key={project.id}
-                                className={styles.projectCard}
+                                className={clsx(styles.itemCard, styles.projectCard)}
                                 onClick={() => {
                                     if (user.id && project.id) history.push(`?project=${project.id}`);
                                 }}

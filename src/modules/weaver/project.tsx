@@ -1,5 +1,6 @@
 import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
 import styles from './project.module.css';
+import commonStyles from './index.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import API from '@site/src/api';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
@@ -28,6 +29,18 @@ const ProjectView = ({ project }: Props) => {
         try {
             const cycles = await API.weaver.cycles(project.id);
             setCycles(cycles);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [project]);
+
+    const handleAddCycle = useCallback(async () => {
+        const asked = confirm('确定新建周期吗？');
+        if (!asked) return;
+        if (!project.id) return alert('用户 ID 或项目 ID 不得为空');
+        try {
+            await API.weaver.addCycle(project.id);
+            refetchCycle();
         } catch (error) {
             console.log(error);
         }
@@ -64,26 +77,17 @@ const ProjectView = ({ project }: Props) => {
                 sidebar={
                     <>
                         <span>{project.name}</span>
-                        <div
-                            className={styles.cycleOption}
-                            onClick={async () => {
-                                const asked = confirm('确定新建周期吗？');
-                                if (!asked) return;
-                                if (!project.id) return alert('用户 ID 或项目 ID 不得为空');
-                                try {
-                                    await API.weaver.addCycle(project.id);
-                                    refetchCycle();
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                            }}
-                        >
+                        <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
                             + 新建周期
                         </div>
                         {cycles?.map((cycle) => (
                             <div
                                 key={cycle.id}
-                                className={clsx(styles.cycle, cycle.id === targetCycle?.id && styles.active)}
+                                className={clsx(
+                                    styles.cycle,
+                                    commonStyles.itemCard,
+                                    cycle.id === targetCycle?.id && commonStyles.active,
+                                )}
                                 onClick={() => {
                                     if (project.id && cycle.id)
                                         history.replace(`?project=${project.id}&cycle=${cycle.id}`);
@@ -99,7 +103,14 @@ const ProjectView = ({ project }: Props) => {
                     </>
                 }
             >
-                {targetCycle && <CycleDetailView project={project} cycleInfo={targetCycle} cycles={cycles} />}
+                {targetCycle && (
+                    <CycleDetailView
+                        project={project}
+                        cycleInfo={targetCycle}
+                        cycles={cycles}
+                        addCycle={handleAddCycle}
+                    />
+                )}
             </ContentWithSidebar>
         </>
     );

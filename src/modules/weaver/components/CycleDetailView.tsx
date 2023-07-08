@@ -7,14 +7,17 @@ import { TaskStatus } from '../types';
 import clsx from 'clsx';
 import TaskForm from './TaskForm';
 import { TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
+import { useHistory } from '@docusaurus/router';
 
 interface Props {
     project: ProjectInfo;
     cycleInfo: CycleInfo;
     cycles: CycleInfo[];
+    addCycle: () => void;
 }
 
-const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
+const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
+    const history = useHistory();
     const [detail, setDetail] = useState<CycleDetail>();
     const [isFormVisible, setFormVisible] = useState(false);
     const targetTask = useRef<Task>();
@@ -110,6 +113,22 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.cycleBar}>
+                <div className={clsx(styles.cycleButton, styles.cycleAdd)} onClick={addCycle}>
+                    +
+                </div>
+                {cycles.map((cycle) => (
+                    <div
+                        key={cycle.id}
+                        className={clsx(styles.cycleButton, cycleInfo.id === cycle.id && styles.active)}
+                        onClick={() => {
+                            if (project.id) history.replace(`?project=${project.id}&cycle=${cycle.id}`);
+                        }}
+                    >
+                        {`第 ${cycle.idx + 1} 周` || '无标题'}
+                    </div>
+                ))}
+            </div>
             <div className={styles.taskPanel}>
                 {TASK_STATUSES.map((status) => (
                     <div
