@@ -11,10 +11,18 @@ import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
 import GlobalStyle from './components/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
+import { TASK_POOL_NAME } from './constants';
 
 interface Props {
     project: ProjectInfo;
 }
+
+const POOL_CYCLE: CycleInfo = {
+    id: TASK_POOL_NAME,
+    idx: -1,
+    start: 0,
+    end: 0,
+};
 
 const ProjectView = ({ project }: Props) => {
     const query = useQuery();
@@ -52,6 +60,7 @@ const ProjectView = ({ project }: Props) => {
 
     useEffect(() => {
         if (!cycles) return;
+        if (cycleId === TASK_POOL_NAME) return setCycle(POOL_CYCLE);
         const cycle = cycles?.find((cycle) => cycle.id === cycleId);
         if (cycle) {
             setCycle(cycle);
@@ -77,6 +86,18 @@ const ProjectView = ({ project }: Props) => {
                 sidebar={
                     <>
                         <span>{project.name}</span>
+                        <div
+                            className={clsx(
+                                styles.cycleOption,
+                                commonStyles.itemCard,
+                                cycleId === TASK_POOL_NAME && commonStyles.active,
+                            )}
+                            onClick={() => {
+                                if (project.id) history.replace(`?project=${project.id}&cycle=${TASK_POOL_NAME}`);
+                            }}
+                        >
+                            任务池
+                        </div>
                         <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
                             + 新建周期
                         </div>

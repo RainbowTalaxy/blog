@@ -6,7 +6,7 @@ import API from '@site/src/api';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
 import TaskForm from './TaskForm';
-import { TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
+import { TASK_POOL_NAME, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import { useHistory } from '@docusaurus/router';
 
 interface Props {
@@ -117,6 +117,14 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                 <div className={clsx(styles.cycleButton, styles.cycleAdd)} onClick={addCycle}>
                     +
                 </div>
+                <div
+                    className={clsx(styles.cycleButton, cycleInfo.id === TASK_POOL_NAME && styles.active)}
+                    onClick={() => {
+                        if (project.id) history.replace(`?project=${project.id}&cycle=${TASK_POOL_NAME}`);
+                    }}
+                >
+                    任务池
+                </div>
                 {cycles.map((cycle) => (
                     <div
                         key={cycle.id}
@@ -187,7 +195,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                                             />
                                             <div className={styles.taskName}>{task.name}</div>
                                             <div className={styles.taskExecutor}>执行者：{task.executor}</div>
-                                            {status === TaskStatus.Doing && (task.progress ?? 0) !== 0 && (
+                                            {status === TaskStatus.Doing && (
                                                 <div
                                                     className={styles.taskProgress}
                                                     style={{
