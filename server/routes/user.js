@@ -84,30 +84,19 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id }, config.secret, {
             expiresIn: `${MAX_DAY}d`,
         });
-        res.cookie('token', token, {
-            maxAge: DAY_TIME * MAX_DAY,
-        });
-        res.send({
+        return res.send({
             token,
         });
     } catch (error) {
         console.log(error);
-        res.status(500).send({
+        return res.status(500).send({
             error: error.message,
         });
     }
 });
 
-router.get('/test', async (req, res) => {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).send({ error: 'Please login first' });
-    try {
-        const config = readJSON(Dir.storage.config);
-        const { id } = jwt.verify(token, config.secret);
-        res.send({ id });
-    } catch (error) {
-        res.status(401).send({ error: 'Cannot verify' });
-    }
+router.get('/test', login, async (req, res) => {
+    res.send({ id: req.userId });
 });
 
 module.exports = { userRouter: router };

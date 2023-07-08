@@ -1,6 +1,7 @@
 export interface UserInfo {
     id?: string;
     key?: string;
+    token?: string;
     fileApiKey?: string;
 }
 
@@ -12,6 +13,7 @@ export class User {
             id: config?.id ?? 'guest',
             key: config?.key ?? '',
             fileApiKey: config?.fileApiKey ?? '',
+            token: config?.token ?? '',
         };
     }
 

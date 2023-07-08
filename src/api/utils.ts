@@ -61,7 +61,7 @@ export const rocket = {
 
 const getAuth = () => {
     const user = User.config;
-    return `id=${user.id};key=${user.key}`;
+    return `token=${user.token}`;
 };
 
 export const rocketV2 = {
@@ -69,7 +69,7 @@ export const rocketV2 = {
         const res = await fetch(
             url + (query ? `?${new URLSearchParams(query)}` : ''),
             {
-                credentials: 'include',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: login && getAuth(),

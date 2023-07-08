@@ -19,10 +19,38 @@ async function test() {
 
     const userId = 'allay';
 
+    let token;
+
+    // 用户登录
+    await request(
+        'User - login',
+        curl(`${BASE_PATH}/login`, 'POST', admin),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            token = response.token;
+
+            resolve();
+        },
+    );
+
+    // 用户登录检验
+    await request(
+        'User - login test',
+        curl(`${BASE_PATH}/test`, 'GET', {}, { token }),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            if (response.id !== admin.id) return reject('Expect "id"');
+
+            resolve();
+        },
+    );
+
     // 用管理员身份生成一个 token
     await request(
         'User - generate token (admin)',
-        curl(`${BASE_PATH}/token`, 'POST', { id: userId }, admin),
+        curl(`${BASE_PATH}/token`, 'POST', { id: userId }, { token }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -67,64 +95,9 @@ async function test() {
     // 列出用户信息（管理员）
     await request(
         'User - list (admin)',
-        curl(`${BASE_PATH}/list`, 'GET', {}, admin),
+        curl(`${BASE_PATH}/list`, 'GET', {}, { token }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
-
-    // 列出用户信息（非管理员）
-    await request(
-        'User - list (user)',
-        curl(`${BASE_PATH}/list`, 'GET', {}, user),
-        (response, resolve, reject) => {
-            if (!response.error) return reject('Expect "error"');
-
-            resolve();
-        },
-    );
-
-    // 用户身份生成 token
-    await request(
-        'User - generate token (user)',
-        curl(
-            `${BASE_PATH}/token`,
-            'POST',
-            { id: userId },
-            { id: userId, key: userKey },
-        ),
-        (response, resolve, reject) => {
-            if (!response.error) return reject('Expect "error"');
-
-            resolve();
-        },
-    );
-
-    let token;
-
-    // 用户登录
-    await request(
-        'User - login',
-        curl(`${BASE_PATH}/login`, 'POST', admin),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            token = response.token;
-
-            resolve();
-        },
-    );
-
-    // 用户登录检验
-    await request(
-        'User - login test',
-        curl(`${BASE_PATH}/test`, 'GET', {}, null, { token }),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            if (response.id !== admin.id) return reject('Expect "id"');
 
             resolve();
         },

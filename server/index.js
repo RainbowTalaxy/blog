@@ -13,13 +13,7 @@ const { weaverRouter } = require('./routes/weaver');
 
 const app = express();
 
-app.use(
-    '*',
-    cors({
-        credentials: true,
-        origin: 'http://localhost:3000',
-    }),
-);
+app.use(cors());
 app.use(cookieParser());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

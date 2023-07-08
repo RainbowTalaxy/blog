@@ -64,13 +64,13 @@ const UserPage = () => {
                 ))}
                 <button
                     onClick={async () => {
-                        User.config = userInfo;
                         try {
                             const { token } = await API.user.login(
                                 userInfo.id,
                                 userInfo.key,
                             );
-                            document.cookie = `token=${token}`;
+                            userInfo.token = token;
+                            User.config = userInfo;
                             if (nextUrl) window.location.href = nextUrl;
                         } catch {
                             alert('登录失败');
