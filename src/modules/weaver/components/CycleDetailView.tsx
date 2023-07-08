@@ -36,6 +36,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
         detail?.tasks.forEach((task) => {
             result[task.status].push(task);
         });
+        [TaskStatus.Todo, TaskStatus.Doing, TaskStatus.Testing, TaskStatus.Done].forEach((status) => {
+            result[status].sort((a, b) => a.priority - b.priority);
+        });
         return result;
     }, [detail]);
 
@@ -151,6 +154,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
                                                 e.dataTransfer.setData('text/plain', task.id);
                                                 e.dataTransfer.effectAllowed = 'move';
                                             }}
+                                            style={{
+                                                opacity: task.status === TaskStatus.Done ? 0.5 : 1,
+                                            }}
                                         >
                                             <div
                                                 className={styles.taskCardIndicator}
@@ -161,9 +167,8 @@ const CycleDetailView = ({ project, cycleInfo, cycles }: Props) => {
                                                 }}
                                             />
                                             <div className={styles.taskName}>{task.name}</div>
-
                                             <div className={styles.taskExecutor}>执行者：{task.executor}</div>
-                                            {status !== TaskStatus.Todo && (task.progress ?? 0) !== 0 && (
+                                            {status === TaskStatus.Doing && (task.progress ?? 0) !== 0 && (
                                                 <div
                                                     className={styles.taskProgress}
                                                     style={{

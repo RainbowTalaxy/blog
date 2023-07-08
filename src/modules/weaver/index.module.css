@@ -42,7 +42,7 @@ html[data-theme='dark'] .projectCard:hover {
 
 .projectDate {
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
+    opacity: 0.6;
 }
 
 .input {
