@@ -3,7 +3,14 @@ import styles from './TaskForm.module.css';
 import { CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import { useEffect, useRef, useState } from 'react';
 import { Priority, TaskStatus } from '../types';
-import { PROGRESS_STOPS, TASK_PRIORITIES, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
+import {
+    PROGRESS_STOPS,
+    TASK_POOL_NAME,
+    TASK_PRIORITIES,
+    TASK_PRIORITY_COLORS,
+    TASK_STATUSES,
+    TASK_STATUS_NAMES,
+} from '../constants';
 import clsx from 'clsx';
 
 interface Props {
@@ -105,6 +112,7 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                     <div className={styles.formItem}>
                         <label>周期：</label>
                         <select ref={cycleRef}>
+                            <option value={TASK_POOL_NAME}>任务池</option>
                             {cycles.map((c) => (
                                 <option key={c.id} value={c.id}>
                                     第 {c.idx + 1} 周
