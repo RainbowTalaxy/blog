@@ -73,6 +73,8 @@ router.put('/books', login, async (req, res) => {
         }
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
+        const now = Date.now();
+        book.updateAt = now;
         // 更新单词书
         updateBook(userDir, book);
         // 读取用户文件夹元数据内容
@@ -82,7 +84,12 @@ router.put('/books', login, async (req, res) => {
             userMeta = JSON.parse(fs.readFileSync(userMetaPath));
         }
         // 更新用户文件夹元数据
-        userMeta[book.id] = { id: book.id, date: book.date, title: book.title };
+        userMeta[book.id] = {
+            id: book.id,
+            date: book.date,
+            title: book.title,
+            updateAt: now,
+        };
         // 写入用户文件夹元数据
         fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
         // 返回成功
