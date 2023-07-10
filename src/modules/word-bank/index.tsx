@@ -31,7 +31,7 @@ const WordBank = () => {
         async (bookInfo: BookInfo) => {
             if (!user?.id) return;
             try {
-                const data = await API.wordBank.book(user.id, bookInfo.id);
+                const data = await API.wordBank.book(bookInfo.id, user.id);
                 setBook(data.book);
                 setIsEditing(data.book.words.length === 0);
                 setIsLoading(false);
@@ -79,7 +79,7 @@ const WordBank = () => {
                                 className={styles.headerButton}
                                 onClick={async () => {
                                     try {
-                                        await API.wordBank.uploadBook(user.id, {
+                                        await API.wordBank.uploadBook({
                                             id: uuid(),
                                             title: '新单词书',
                                             date: AppleDate(),
@@ -200,7 +200,7 @@ const WordBank = () => {
                                         <ActionItem
                                             onClick={async () => {
                                                 if (isEditing) {
-                                                    await API.wordBank.uploadBook(user.id, editData);
+                                                    await API.wordBank.uploadBook(editData);
                                                     refetch();
                                                 } else {
                                                     setIsEditing(true);
