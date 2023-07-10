@@ -33,7 +33,7 @@ const WordBank = () => {
             try {
                 const data = await API.wordBank.book(bookInfo.id, user.id);
                 setBook(data.book);
-                setIsEditing(data.book.words.length === 0);
+                setIsEditing(false);
                 setIsLoading(false);
             } catch {}
         },
@@ -49,6 +49,14 @@ const WordBank = () => {
             setList(data.books);
         } catch {}
     }, [user]);
+
+    const handleSwitchBook = (bookId: string) => {
+        if (isEditing) {
+            const granted = window.confirm('是否放弃当前编辑的内容？');
+            if (!granted) return;
+        }
+        history.replace('?id=' + bookId);
+    };
 
     useEffect(() => {
         if (!list) return;
@@ -86,8 +94,8 @@ const WordBank = () => {
                                             words: [],
                                             description: '',
                                         });
-                                        setBook(null);
                                         refetch();
+                                        history.replace('?');
                                     } catch (e) {
                                         console.log(e);
                                     }
@@ -101,16 +109,13 @@ const WordBank = () => {
                         <div
                             className={clsx(styles.book, book?.id === bookInfo.id && styles.active)}
                             key={bookInfo.id}
-                            onClick={() => {
-                                // 设置 query 来更新
-                                history.replace('?id=' + bookInfo.id);
-                            }}
+                            onClick={() => handleSwitchBook(bookInfo.id)}
                         >
                             <div className={styles.bookTitle}>{bookInfo.title || '无标题'}</div>
                             <div className={styles.spacer} />
                             {bookInfo.date && (
                                 <div className={styles.bookDate}>
-                                    {convertToAppleDate(bookInfo.date).format('YYYY/MM/DD')}
+                                    {convertToAppleDate(bookInfo.date).format('YYYY/M/D')}
                                 </div>
                             )}
                         </div>
@@ -124,7 +129,7 @@ const WordBank = () => {
                         <div
                             className={clsx(styles.book, book?.id === bookInfo.id && styles.active)}
                             key={bookInfo.id}
-                            onClick={() => history.replace('?id=' + bookInfo.id)}
+                            onClick={() => handleSwitchBook(bookInfo.id)}
                         >
                             <div className={styles.bookTitle}>{bookInfo.title || '无标题'}</div>
                         </div>
@@ -165,6 +170,7 @@ const WordBank = () => {
                             ) : (
                                 <p>{editData.description}</p>
                             )}
+                            {!isEditing && <span className={styles.wordCount}>共 {editData.words.length} 个词条</span>}
                             <div className={styles.wordList}>
                                 {editData.words.map((word, idx) => (
                                     <WordLine
@@ -184,11 +190,17 @@ const WordBank = () => {
                                         }}
                                     />
                                 ))}
-                                {isEditing && <ActionItem onClick={() => addEmptyWord()}>添加单词</ActionItem>}
+                                {(isEditing || editData.words.length === 0) && (
+                                    <ActionItem
+                                        onClick={() => {
+                                            setIsEditing(true);
+                                            addEmptyWord();
+                                        }}
+                                    >
+                                        添加单词
+                                    </ActionItem>
+                                )}
                             </div>
-                            {!isEditing && (
-                                <span className={styles.wordCount}>共计 {editData.words.length} 个词条</span>
-                            )}
                             {user?.id && (
                                 <>
                                     <div
@@ -197,18 +209,20 @@ const WordBank = () => {
                                             marginBottom: !isEditing && 72,
                                         }}
                                     >
-                                        <ActionItem
-                                            onClick={async () => {
-                                                if (isEditing) {
-                                                    await API.wordBank.uploadBook(editData);
-                                                    refetch();
-                                                } else {
-                                                    setIsEditing(true);
-                                                }
-                                            }}
-                                        >
-                                            {isEditing ? '保存' : '编辑'}
-                                        </ActionItem>
+                                        {editData.words.length > 0 && (
+                                            <ActionItem
+                                                onClick={async () => {
+                                                    if (isEditing) {
+                                                        await API.wordBank.uploadBook(editData);
+                                                        refetch();
+                                                    } else {
+                                                        setIsEditing(true);
+                                                    }
+                                                }}
+                                            >
+                                                {isEditing ? '保存' : '编辑'}
+                                            </ActionItem>
+                                        )}
                                         {isEditing ? (
                                             editData.words.length > 0 && (
                                                 <ActionItem
@@ -227,8 +241,9 @@ const WordBank = () => {
                                                     try {
                                                         const result = confirm(`确定删除《${book.title}》？`);
                                                         if (!result) return;
-                                                        await API.wordBank.removeBook(user.id, book.id);
+                                                        await API.wordBank.removeBook(book.id);
                                                         refetch();
+                                                        history.replace('?');
                                                     } catch (e) {
                                                         console.log(e);
                                                     }

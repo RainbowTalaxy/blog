@@ -1,13 +1,3 @@
-@media screen and (max-width: 850px) {
-    .sidebar {
-        display: none;
-    }
-
-    .sidebarMobile {
-        display: flex !important;
-    }
-}
-
 .container {
     flex: 1;
     position: relative;
@@ -39,9 +29,13 @@
 
 .sidebarMobile {
     display: none;
-    margin-bottom: 24px;
+    margin: -12px 0 18px;
     width: 100%;
     overflow: auto;
+}
+
+.sidebarMobile > .book + .book {
+    margin-left: 6px;
 }
 
 .sidebarMobile::-webkit-scrollbar {
@@ -108,7 +102,7 @@
 
 .content {
     flex: 1;
-    padding: 24px 12px 120px;
+    padding: 24px 12px 80px;
     width: 100%;
     background-color: var(--ifm-menu-color-background-active);
 }
@@ -119,8 +113,14 @@
 }
 
 .pageContent > h1,
-.pageContent > p {
-    margin-left: 6px;
+.pageContent > p,
+.pageContent > .wordCount {
+    margin: 8px 0 0 10px;
+}
+
+.pageContent > p,
+.pageContent > .wordCount {
+    margin-left: 12px;
 }
 
 .wordListTitle {
@@ -128,7 +128,7 @@
 }
 
 .wordList {
-    margin: 24px 0;
+    margin: 6px 0 28px;
     padding: 2px 12px 4px;
     border-radius: 0.5rem;
     background-color: var(--theme-white);
@@ -213,8 +213,17 @@ html[data-theme='dark'] .wordList {
 
 .wordCount {
     display: block;
-    margin: -18px 16px 0;
     font-size: 14px;
-    text-align: right;
+    font-weight: initial;
     opacity: 0.6;
+}
+
+@media screen and (max-width: 850px) {
+    .sidebar {
+        display: none;
+    }
+
+    .sidebarMobile {
+        display: flex;
+    }
 }

@@ -49,10 +49,8 @@ const WordBankAPI = {
         book.words = book.words.filter((word) => word.name);
         await rocketV2.put(`${SERVER_API}/word-bank/books`, book);
     },
-    removeBook: async (userId: string, bookId: string) => {
-        await rocketV2.delete(
-            `${SERVER_API}/word-bank/books/${userId}/${bookId}`,
-        );
+    removeBook: async (bookId: string) => {
+        await rocketV2.delete(`${SERVER_API}/word-bank/books/${bookId}`);
     },
 };
 
