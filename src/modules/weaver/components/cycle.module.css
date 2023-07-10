@@ -1,3 +1,13 @@
+@media screen and (max-width: 850px) {
+    .container {
+        --detail-view-h-padding: 20px !important;
+    }
+
+    .cycleBar {
+        display: flex !important;
+    }
+}
+
 .container {
     --detail-view-h-padding: 42px;
     position: relative;
@@ -122,18 +132,17 @@
     border-radius: 2px;
 }
 
-@media screen and (max-width: 850px) {
-    .cycleBar {
-        display: flex !important;
-    }
-}
-
 .cycleBar {
     flex-grow: 0;
     display: none;
     padding: 16px var(--detail-view-h-padding) 0;
     width: 100%;
     overflow: auto;
+    scrollbar-width: none;
+}
+
+.cycleBar::-webkit-scrollbar {
+    display: none;
 }
 
 .cycleButton {

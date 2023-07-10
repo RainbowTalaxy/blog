@@ -101,6 +101,7 @@ html[data-theme='dark'] .card:hover {
 }
 
 .itemCard {
+    position: relative;
     padding: 12px 12px 12px 24px;
     cursor: pointer;
     border-radius: 0.25rem;
