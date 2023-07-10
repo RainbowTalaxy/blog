@@ -23,7 +23,7 @@ const { mkdirp } = require('mkdirp');
 const path = require('path');
 const { Dir, Statics, APIKey } = require('../config');
 const { default: axios } = require('axios');
-const { authority } = require('../middlewares');
+const { login } = require('../middlewares');
 
 const BOOKS_DIR = Dir.storage.books;
 
@@ -61,10 +61,9 @@ const updateBook = (userDir, book) => {
 };
 
 // 用户上传单词书
-router.put('/books/:userId', authority(APIKey.file), async (req, res) => {
+router.put('/books', login, async (req, res) => {
     try {
-        // 获取 userId
-        const { userId } = req.params;
+        const userId = req.userId;
         // 获取请求的 body
         const book = req.body;
         if (!book.id) {
@@ -100,10 +99,10 @@ router.put('/books/:userId', authority(APIKey.file), async (req, res) => {
 });
 
 // 获取用户的单词书列表
-router.get('/books/:userId', async (req, res) => {
+router.get('/books', async (req, res) => {
     try {
         // 获取请求参数
-        const { userId } = req.params;
+        const userId = req.query.userId;
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 读取用户文件夹元数据内容
@@ -127,10 +126,11 @@ router.get('/books/:userId', async (req, res) => {
 });
 
 // 获取单词书信息
-router.get('/books/:userId/:bookId', async (req, res) => {
+router.get('/books/:bookId', async (req, res) => {
     try {
+        const { userId } = req.query;
         // 获取请求参数
-        const { userId, bookId } = req.params;
+        const { bookId } = req.params;
         // 获取用户的单词书目录
         const userDir = getUserDir(userId);
         // 获取该目录下的所有文件名
@@ -151,41 +151,38 @@ router.get('/books/:userId/:bookId', async (req, res) => {
 });
 
 // 删除单词书
-router.delete(
-    '/books/:userId/:bookId',
-    authority(APIKey.file),
-    async (req, res) => {
-        try {
-            // 获取请求参数
-            const { userId, bookId } = req.params;
-            // 获取用户的单词书目录
-            const userDir = getUserDir(userId);
-            // 删除该目录下的所有文件
-            const bookPath = path.join(userDir, `${bookId}.json`);
-            fs.unlinkSync(bookPath);
-            // 读取用户文件夹元数据内容
-            const userMetaPath = path.join(userDir, USER_META_FILE);
-            let userMeta = {};
-            if (fs.existsSync(userMetaPath)) {
-                userMeta = JSON.parse(fs.readFileSync(userMetaPath));
-            }
-            // 删除用户文件夹元数据
-            delete userMeta[bookId];
-            // 写入用户文件夹元数据
-            fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
-            // 返回成功
-            res.status(200).send({
-                message: 'success',
-            });
-        } catch (error) {
-            // 记录错误
-            logError(error);
-            res.status(500).send({
-                error: 'An error occurred while deleting the book.',
-            });
+router.delete('/books/:bookId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        // 获取请求参数
+        const { bookId } = req.params;
+        // 获取用户的单词书目录
+        const userDir = getUserDir(userId);
+        // 删除该目录下的所有文件
+        const bookPath = path.join(userDir, `${bookId}.json`);
+        fs.unlinkSync(bookPath);
+        // 读取用户文件夹元数据内容
+        const userMetaPath = path.join(userDir, USER_META_FILE);
+        let userMeta = {};
+        if (fs.existsSync(userMetaPath)) {
+            userMeta = JSON.parse(fs.readFileSync(userMetaPath));
         }
-    },
-);
+        // 删除用户文件夹元数据
+        delete userMeta[bookId];
+        // 写入用户文件夹元数据
+        fs.writeFileSync(userMetaPath, JSON.stringify(userMeta));
+        // 返回成功
+        res.status(200).send({
+            message: 'success',
+        });
+    } catch (error) {
+        // 记录错误
+        logError(error);
+        res.status(500).send({
+            error: 'An error occurred while deleting the book.',
+        });
+    }
+});
 
 /**
  * 新模块：书籍资源封装
