@@ -31,6 +31,12 @@ const GlobalStyle = createGlobalStyle`
     footer {
         display: none;
     }
+
+    @media (pointer: fine) {
+        html, body {
+            overflow: hidden;
+        }
+    }
 `;
 
 export default GlobalStyle;
