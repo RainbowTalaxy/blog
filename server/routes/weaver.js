@@ -114,16 +114,15 @@ const FileHandler = {
             fs.writeFileSync(poolPath, JSON.stringify({ tasks: [] }));
         }
     },
-    initProject: (projectId) => {
+    initProject: (projectId, firstDate) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
         mkdirp.sync(projectDir);
-        const timestamp = Date.now();
         const firstCycle = {
             id: uuid(),
-            createdAt: timestamp,
+            createdAt: firstDate,
             idx: 0,
-            start: timestamp,
-            end: timestamp + DEFAULT_CYCLE_DURATION,
+            start: firstDate,
+            end: firstDate + DEFAULT_CYCLE_DURATION,
         };
         const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
         fs.writeFileSync(cyclesPath, JSON.stringify([firstCycle]));
@@ -164,22 +163,23 @@ router.get('/projects', login, async (req, res) => {
 // 创建项目
 router.post('/project', login, async (req, res) => {
     const { userId } = req;
-    const { name } = req.body;
+    const { name, firstDate } = req.body;
     if (!userId || !name) {
         return res.status(400).send({
             error: 'userId/name is required',
         });
     }
+    const now = Date.now();
     const project = {
         ...req.body,
         id: uuid(),
         name,
         owner: userId,
-        createdAt: Date.now(),
+        createdAt: now,
     };
     try {
         // 初始化项目文件，并自动添加第一个周期
-        FileHandler.initProject(project.id);
+        FileHandler.initProject(project.id, firstDate ?? now);
         // 将项目信息写入 `projects/list.json`
         const list = FileHandler.readList();
         list.unshift(project);
