@@ -48,8 +48,8 @@
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
 
     --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji';
+        Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 .docusaurus-highlight-code-line {
@@ -95,10 +95,6 @@ html[data-theme='dark'] {
 .navbar__logo > img {
     margin: 0 10px;
     border-radius: 50%;
-}
-
-.navbar__title {
-    font-weight: var(--ifm-font-weight-semibold);
 }
 
 code {
