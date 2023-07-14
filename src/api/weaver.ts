@@ -41,9 +41,10 @@ export interface CycleDetail {
 const WeaverAPI = {
     projects: () =>
         rocketV2.get<ProjectInfo[]>(`${SERVER_API}/weaver/projects`),
-    createProject: (name: string) =>
+    createProject: (name: string, firstDate?: number) =>
         rocketV2.post<{ id: string }>(`${SERVER_API}/weaver/project`, {
             name,
+            firstDate,
         }),
     deleteProject: (projectId: string) =>
         rocketV2.delete(`${SERVER_API}/weaver/project/${projectId}`),
