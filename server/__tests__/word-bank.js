@@ -34,13 +34,34 @@ const book = {
     ],
 };
 
-const userId = 'test';
+const userId = 'talaxy';
 
 async function test() {
+    let token;
+    const user = {
+        id: userId,
+        key: 'talaxy',
+    };
+
+    // 用户登录
+    await request(
+        'User - login',
+        curl(`/user/login`, 'POST', user),
+        (response, resolve, reject) => {
+            if (response.error) return reject('Expect "success"');
+
+            token = response.token;
+
+            resolve();
+        },
+    );
+
+    const auth = { token };
+
     // 咱们先测一下上传单词书（未授权）
     await request(
         'Word bank - upload book (unauthorized)',
-        curl(`${BASE_PATH}/books/${userId}`, 'PUT', book),
+        curl(`${BASE_PATH}/books`, 'PUT', book),
         (response, resolve, reject) => {
             if (response.error) return resolve();
             reject('Expect "success"');
@@ -50,9 +71,7 @@ async function test() {
     // 咱们先测一下上传单词书
     await request(
         'Word bank - upload book',
-        curl(`${BASE_PATH}/books/${userId}`, 'PUT', book, {
-            [APIKey.file]: 'talaxy',
-        }),
+        curl(`${BASE_PATH}/books`, 'PUT', book, auth),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -79,7 +98,9 @@ async function test() {
     // 咱们再测一下获取单词书列表
     await request(
         'Word bank - book list',
-        curl(`${BASE_PATH}/books/${userId}`, 'GET'),
+        curl(`${BASE_PATH}/books`, 'GET', {
+            userId,
+        }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -100,7 +121,9 @@ async function test() {
     // 咱们再测一下获取单词书详情
     await request(
         'Word bank - book detail',
-        curl(`${BASE_PATH}/books/${userId}/${book.id}`, 'GET'),
+        curl(`${BASE_PATH}/books/${book.id}`, 'GET', {
+            userId,
+        }),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 
@@ -133,9 +156,7 @@ async function test() {
     // 咱们再测一下删除单词书
     await request(
         'Word bank - delete book',
-        curl(`${BASE_PATH}/books/${userId}/${book.id}`, 'DELETE', null, {
-            [APIKey.file]: 'talaxy',
-        }),
+        curl(`${BASE_PATH}/books/${book.id}`, 'DELETE', null, auth),
         (response, resolve, reject) => {
             if (response.error) return reject('Expect "success"');
 

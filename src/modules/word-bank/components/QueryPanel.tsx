@@ -19,11 +19,29 @@ interface Props {
     text: string;
 }
 
+const queryHistory: Array<{
+    text: string;
+    youdao: YouDaoResponse;
+}> = [];
+
 const QueryPanel = ({ text }: Props) => {
     const [dictInfo, setDictInfo] = useState<YouDaoResponse>();
 
     useEffect(() => {
-        API.dictionary.query(text).then(setDictInfo).catch(console.error);
+        (async () => {
+            const oldQuery = queryHistory.find((item) => item.text === text);
+            if (oldQuery) return setDictInfo(oldQuery.youdao);
+            try {
+                const data = await API.dictionary.query(text);
+                queryHistory.push({
+                    text,
+                    youdao: data,
+                });
+                setDictInfo(data);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
     }, [text]);
 
     return (
@@ -34,13 +52,7 @@ const QueryPanel = ({ text }: Props) => {
             }}
         >
             <div className="query-panel">
-                <div
-                    className={
-                        dictInfo?.returnPhrase?.[0]
-                            ? 'query-panel-term'
-                            : 'query-panel-translation'
-                    }
-                >
+                <div className={dictInfo?.returnPhrase?.[0] ? 'query-panel-term' : 'query-panel-translation'}>
                     {dictInfo?.returnPhrase?.[0] ?? text}
                 </div>
                 {dictInfo?.basic ? (
@@ -48,24 +60,20 @@ const QueryPanel = ({ text }: Props) => {
                         <div className="query-panel-phonetic">
                             {dictInfo.basic['us-phonetic'] && (
                                 <>
-                                    <span>美</span>/
-                                    {dictInfo.basic['us-phonetic']}/
+                                    <span>美</span>/{dictInfo.basic['us-phonetic']}/
                                     <span />
                                 </>
                             )}
                             {dictInfo.basic['uk-phonetic'] && (
                                 <>
-                                    <span>英</span>/
-                                    {dictInfo.basic['uk-phonetic']}/
+                                    <span>英</span>/{dictInfo.basic['uk-phonetic']}/
                                 </>
                             )}
                         </div>
                         <div className="query-panel-explains">
                             {dictInfo.basic.explains.map((explain) => {
                                 // 分离出词性
-                                const parts = explain
-                                    .split('.', 2)
-                                    .map((p) => p.trim());
+                                const parts = explain.split('.', 2).map((p) => p.trim());
                                 let partOfSpeech = parts[0] + '.';
                                 let rest = parts[1];
                                 if (parts.length === 1) {
@@ -73,13 +81,8 @@ const QueryPanel = ({ text }: Props) => {
                                     rest = parts[0];
                                 }
                                 return (
-                                    <div
-                                        key={explain}
-                                        className="query-panel-single-explain"
-                                    >
-                                        {partOfSpeech && (
-                                            <span>{partOfSpeech}</span>
-                                        )}
+                                    <div key={explain} className="query-panel-single-explain">
+                                        {partOfSpeech && <span>{partOfSpeech}</span>}
                                         {rest}
                                     </div>
                                 );
@@ -90,10 +93,7 @@ const QueryPanel = ({ text }: Props) => {
                     <div className="query-panel-explains">
                         {dictInfo?.translation?.map((translation, idx) => {
                             return (
-                                <div
-                                    key={idx}
-                                    className="query-panel-single-explain"
-                                >
+                                <div key={idx} className="query-panel-single-explain">
                                     {translation}
                                 </div>
                             );
