@@ -13,22 +13,17 @@
     margin: 24px 0;
 }
 
-.projectCard {
-    padding: 16px 24px 24px;
+.projectCard.itemCard {
+    padding: 18px 24px 24px;
     border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 5px var(--theme-black-shadow);
-    transform: scale(1);
+    box-shadow: 0 0 2px var(--theme-black-shadow);
 }
 
-.formButton:hover,
-.projectCard:hover {
+.formButton:hover {
     background-color: rgba(0, 0, 0, 0.02);
-    transition: background-color 0.2s ease-in-out;
 }
 
-html[data-theme='dark'] .formButton:hover,
-html[data-theme='dark'] .projectCard:hover {
+html[data-theme='dark'] .formButton:hover {
     background-color: rgba(255, 255, 255, 0.02);
 }
 
@@ -49,9 +44,6 @@ html[data-theme='dark'] .projectCard:hover {
     padding: 8px 10px;
     width: 100%;
     max-width: 300px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .formButton {
@@ -59,12 +51,16 @@ html[data-theme='dark'] .projectCard:hover {
     margin-top: 16px;
     padding: 6px 14px;
     outline: none;
-    border: 1px solid var(--theme-black-shadow);
-    border-radius: 5px;
     background: none;
-    font-size: 16px;
     color: initial;
     cursor: pointer;
+}
+
+.input,
+.formButton {
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid var(--theme-black-shadow);
 }
 
 .card {
@@ -102,4 +98,28 @@ html[data-theme='dark'] .card:hover {
 
 .projectCard:hover .projectDelete {
     display: block;
+}
+
+.itemCard {
+    position: relative;
+    padding: 12px 12px 12px 24px;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: 1px solid var(--ifm-menu-color-background-active);
+    color: var(--ifm-menu-color);
+    transition: background var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+}
+
+.itemCard.active,
+.itemCard:hover {
+    color: var(--ifm-menu-color-active);
+    background-color: var(--ifm-menu-color-background-active);
+}
+
+.fieldName {
+    display: block;
+    margin: 6px 0 0;
+    font-size: 16px;
+    font-weight: bold;
 }

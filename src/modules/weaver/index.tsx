@@ -9,6 +9,7 @@ import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
+import clsx from 'clsx';
 
 const Weaver = () => {
     const user = useUser();
@@ -43,7 +44,7 @@ const Weaver = () => {
                         {list.map((project) => (
                             <div
                                 key={project.id}
-                                className={styles.projectCard}
+                                className={clsx(styles.itemCard, styles.projectCard)}
                                 onClick={() => {
                                     if (user.id && project.id) history.push(`?project=${project.id}`);
                                 }}
@@ -79,15 +80,22 @@ const Weaver = () => {
                         onSubmit={(e) => {
                             e.preventDefault();
                             const form = e.target as HTMLFormElement;
-                            const name = (form as any).name.value;
-                            if (!name) return alert('项目名称不能为空');
-                            API.weaver.createProject(name).then(() => {
+                            const projectName = (form as any).projectName.value;
+                            const startDate = (form as any).startDate.value;
+                            if (!projectName) return alert('项目名称不能为空');
+                            if (!startDate) return alert('开始时间不能为空');
+                            const firstDate = dayjs(startDate).valueOf();
+                            console.log(projectName, firstDate);
+                            API.weaver.createProject(projectName, firstDate).then(() => {
                                 form.reset();
                                 refetch();
                             });
                         }}
                     >
-                        <input className={styles.input} type="text" placeholder="项目名称" />
+                        <input className={styles.input} name="projectName" type="text" placeholder="项目名称" />
+                        <br />
+                        <span className={styles.fieldName}>开始时间</span>
+                        <input className={styles.input} name="startDate" type="date" placeholder="开始时间" />
                         <br />
                         <button className={styles.formButton}>提交</button>
                     </form>

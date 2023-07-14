@@ -1,5 +1,6 @@
 import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
 import styles from './project.module.css';
+import commonStyles from './index.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import API from '@site/src/api';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
@@ -10,10 +11,18 @@ import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
 import GlobalStyle from './components/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
+import { TASK_POOL_NAME } from './constants';
 
 interface Props {
     project: ProjectInfo;
 }
+
+const POOL_CYCLE: CycleInfo = {
+    id: TASK_POOL_NAME,
+    idx: -1,
+    start: 0,
+    end: 0,
+};
 
 const ProjectView = ({ project }: Props) => {
     const query = useQuery();
@@ -33,12 +42,25 @@ const ProjectView = ({ project }: Props) => {
         }
     }, [project]);
 
+    const handleAddCycle = useCallback(async () => {
+        const asked = confirm('确定新建周期吗？');
+        if (!asked) return;
+        if (!project.id) return alert('用户 ID 或项目 ID 不得为空');
+        try {
+            await API.weaver.addCycle(project.id);
+            refetchCycle();
+        } catch (error) {
+            console.log(error);
+        }
+    }, [project]);
+
     useEffect(() => {
         refetchCycle();
     }, [project]);
 
     useEffect(() => {
         if (!cycles) return;
+        if (cycleId === TASK_POOL_NAME) return setCycle(POOL_CYCLE);
         const cycle = cycles?.find((cycle) => cycle.id === cycleId);
         if (cycle) {
             setCycle(cycle);
@@ -65,25 +87,28 @@ const ProjectView = ({ project }: Props) => {
                     <>
                         <span>{project.name}</span>
                         <div
-                            className={styles.cycleOption}
-                            onClick={async () => {
-                                const asked = confirm('确定新建周期吗？');
-                                if (!asked) return;
-                                if (!project.id) return alert('用户 ID 或项目 ID 不得为空');
-                                try {
-                                    await API.weaver.addCycle(project.id);
-                                    refetchCycle();
-                                } catch (error) {
-                                    console.log(error);
-                                }
+                            className={clsx(
+                                styles.cycleOption,
+                                commonStyles.itemCard,
+                                cycleId === TASK_POOL_NAME && commonStyles.active,
+                            )}
+                            onClick={() => {
+                                if (project.id) history.replace(`?project=${project.id}&cycle=${TASK_POOL_NAME}`);
                             }}
                         >
+                            任务池
+                        </div>
+                        <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
                             + 新建周期
                         </div>
                         {cycles?.map((cycle) => (
                             <div
                                 key={cycle.id}
-                                className={clsx(styles.cycle, cycle.id === targetCycle?.id && styles.active)}
+                                className={clsx(
+                                    styles.cycle,
+                                    commonStyles.itemCard,
+                                    cycle.id === targetCycle?.id && commonStyles.active,
+                                )}
                                 onClick={() => {
                                     if (project.id && cycle.id)
                                         history.replace(`?project=${project.id}&cycle=${cycle.id}`);
@@ -99,7 +124,14 @@ const ProjectView = ({ project }: Props) => {
                     </>
                 }
             >
-                {targetCycle && <CycleDetailView project={project} cycleInfo={targetCycle} cycles={cycles} />}
+                {targetCycle && (
+                    <CycleDetailView
+                        project={project}
+                        cycleInfo={targetCycle}
+                        cycles={cycles}
+                        addCycle={handleAddCycle}
+                    />
+                )}
             </ContentWithSidebar>
         </>
     );
