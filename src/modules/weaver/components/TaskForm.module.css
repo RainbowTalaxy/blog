@@ -1,3 +1,13 @@
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .container {
     position: fixed;
     left: 0;
@@ -10,6 +20,7 @@
     overflow: hidden;
     z-index: 200;
     user-select: none;
+    animation: fadeIn 0.1s ease-in-out;
 }
 
 .mask {

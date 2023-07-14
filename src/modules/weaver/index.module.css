@@ -6,6 +6,12 @@
     height: 100%;
 }
 
+.container h1,
+h2,
+h3 {
+    user-select: none;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -13,10 +19,28 @@
     margin: 24px 0;
 }
 
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-16px);
+    }
+
+    80% {
+        opacity: 0.3;
+        transform: translateX(-4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .projectCard.itemCard {
     padding: 18px 24px 24px;
     border-radius: 10px;
     box-shadow: 0 0 2px var(--theme-black-shadow);
+    animation: slideIn 0.2s ease-in-out;
 }
 
 .formButton:hover {
@@ -109,6 +133,7 @@ html[data-theme='dark'] .card:hover {
     color: var(--ifm-menu-color);
     transition: background var(--ifm-transition-fast)
         var(--ifm-transition-timing-default);
+    user-select: none;
 }
 
 .itemCard.active,
@@ -119,7 +144,8 @@ html[data-theme='dark'] .card:hover {
 
 .fieldName {
     display: block;
-    margin: 6px 0 0;
+    margin: 8px 4px 2px;
     font-size: 16px;
     font-weight: bold;
+    user-select: none;
 }

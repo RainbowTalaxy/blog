@@ -86,6 +86,9 @@ const ProjectView = ({ project }: Props) => {
                 sidebar={
                     <>
                         <span>{project.name}</span>
+                        <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
+                            + 新建周期
+                        </div>
                         <div
                             className={clsx(
                                 styles.cycleOption,
@@ -97,9 +100,6 @@ const ProjectView = ({ project }: Props) => {
                             }}
                         >
                             任务池
-                        </div>
-                        <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
-                            + 新建周期
                         </div>
                         {cycles?.map((cycle) => (
                             <div
