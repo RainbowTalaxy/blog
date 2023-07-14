@@ -12,10 +12,10 @@
 ### 应用
 
 -   [Overwatch v1.0](https://blog.talaxy.cn/ow)
--   [WordBank v1.1](https://blog.talaxy.cn/word-bank)
+-   [WordBank v1.2](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3](https://blog.talaxy.cn/playground/tokenize)
--   [Weaver v1.2](https://blog.talaxy.cn/weaver)
+-   [Weaver v1.3](https://blog.talaxy.cn/weaver)
 
 ### 工具
 
@@ -36,3 +36,4 @@
 
 -   docusaurus 自身版本，命令行会提示
 -   [Latex 工具](https://docusaurus.io/docs/markdown-features/math-equations)
+-   [Mermaid 工具](https://docusaurus.io/docs/markdown-features/diagrams)
