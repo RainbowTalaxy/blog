@@ -24,6 +24,7 @@
  * - 任务 Task
  *   + 任务 ID id
  *   + 创建时间 createdAt
+ *   + 修改时间 updatedAt
  *   + 任务名称 name
  *   + 任务描述 description
  *   + 优先级 priority
@@ -75,6 +76,7 @@ const router = express.Router();
 
 const LIST_PATH = path.join(Dir.storage.projects, 'list.json');
 const CYCLE_LIST_NAME = 'cycles.json';
+const TASK_POOL_NAME = 'pool';
 
 const DEFAULT_CYCLE_DURATION = 7 * 24 * 60 * 60 * 1000;
 
@@ -102,16 +104,25 @@ const FileHandler = {
             fs.rmSync(projectDir, { recursive: true });
         }
     },
-    initProject: (projectId) => {
+    addPool: (projectId) => {
+        const poolPath = path.join(
+            Dir.storage.projects,
+            `${projectId}`,
+            `${TASK_POOL_NAME}.json`,
+        );
+        if (!fs.existsSync(poolPath)) {
+            fs.writeFileSync(poolPath, JSON.stringify({ tasks: [] }));
+        }
+    },
+    initProject: (projectId, firstDate) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
         mkdirp.sync(projectDir);
-        const timestamp = Date.now();
         const firstCycle = {
             id: uuid(),
-            createdAt: timestamp,
+            createdAt: firstDate,
             idx: 0,
-            start: timestamp,
-            end: timestamp + DEFAULT_CYCLE_DURATION,
+            start: firstDate,
+            end: firstDate + DEFAULT_CYCLE_DURATION,
         };
         const cyclesPath = path.join(projectDir, CYCLE_LIST_NAME);
         fs.writeFileSync(cyclesPath, JSON.stringify([firstCycle]));
@@ -120,6 +131,7 @@ const FileHandler = {
             `${firstCycle.id}.json`,
         );
         fs.writeFileSync(firstCycleTasksPath, JSON.stringify({ tasks: [] }));
+        FileHandler.addPool(projectId);
     },
     getProjectPath: (projectId) => {
         const projectDir = path.join(Dir.storage.projects, `${projectId}`);
@@ -128,6 +140,8 @@ const FileHandler = {
     getCyclePath: (projectId, cycleId) => {
         const projectDir = FileHandler.getProjectPath(projectId);
         if (!projectDir) return null;
+        // 兼容性代码，如果是任务池，需要先创建
+        if (cycleId === TASK_POOL_NAME) FileHandler.addPool(projectId);
         const cyclePath = path.join(projectDir, `${cycleId}.json`);
         return fs.existsSync(cyclePath) ? cyclePath : null;
     },
@@ -149,22 +163,23 @@ router.get('/projects', login, async (req, res) => {
 // 创建项目
 router.post('/project', login, async (req, res) => {
     const { userId } = req;
-    const { name } = req.body;
+    const { name, firstDate } = req.body;
     if (!userId || !name) {
         return res.status(400).send({
             error: 'userId/name is required',
         });
     }
+    const now = Date.now();
     const project = {
         ...req.body,
         id: uuid(),
         name,
         owner: userId,
-        createdAt: Date.now(),
+        createdAt: now,
     };
     try {
         // 初始化项目文件，并自动添加第一个周期
-        FileHandler.initProject(project.id);
+        FileHandler.initProject(project.id, firstDate ?? now);
         // 将项目信息写入 `projects/list.json`
         const list = FileHandler.readList();
         list.unshift(project);
@@ -401,9 +416,11 @@ router.post(
                     error: 'project/cycle not found',
                 });
             const cycle = JSON.parse(fs.readFileSync(cyclePath));
+            const now = Date.now();
             const task = {
                 id: uuid(),
-                createdAt: Date.now(),
+                createdAt: now,
+                updatedAt: now,
                 name: '',
                 description: '',
                 priority: 0,
@@ -455,18 +472,22 @@ router.put(
                     error: 'task not found',
                 });
             cycle.tasks[taskIndex] = {
+                // 如果原先没有 progress 字段，设置为默认值
+                progress:
+                    DEFAULT_PROGRESS[
+                        req.body.status ?? cycle.tasks[taskIndex].status
+                    ],
                 ...cycle.tasks[taskIndex],
                 ...req.body,
+                updatedAt: Date.now(),
             };
-            if (
-                cycle.tasks[taskIndex].status !== TaskStatus.Doing ||
-                !cycle.tasks[taskIndex].progress
-            ) {
-                cycle.tasks[taskIndex].progress =
-                    DEFAULT_PROGRESS[cycle.tasks[taskIndex].status];
+            const targetTask = cycle.tasks[taskIndex];
+            // 如果不是进行中的任务，进度重置为默认值
+            if (targetTask.status !== TaskStatus.Doing) {
+                targetTask.progress = DEFAULT_PROGRESS[targetTask.status];
             }
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
-            return res.send(cycle.tasks[taskIndex]);
+            return res.send(targetTask);
         } catch (error) {
             console.log(error);
             return res.status(500).send({
@@ -509,6 +530,7 @@ router.put(
                     error: 'task not found',
                 });
             const task = cycle.tasks.splice(taskIndex, 1)[0];
+            task.updatedAt = Date.now();
             targetCycle.tasks.push(task);
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
             fs.writeFileSync(targetCyclePath, JSON.stringify(targetCycle));
