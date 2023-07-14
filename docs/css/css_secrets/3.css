@@ -1,63 +1,62 @@
-.basic {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 30px 0;
-  background: #F5BCBC;
-  height: 100px;
-  width: 200px;
-  font-size: 2em;
+.css-secret-3-basic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    background: #f5bcbc;
+    height: 100px;
+    width: 200px;
+    font-size: 2em;
 }
 
-.oval {
-  border-radius: 50% / 50%;
+.css-secret-3-oval {
+    border-radius: 50% / 50%;
 }
 
 .half-oval {
-  border-radius: 100% 0 0 100% / 50%;
+    border-radius: 100% 0 0 100% / 50%;
 }
 
 .quarter-oval {
-  border-radius: 100% 0 0 0;
+    border-radius: 100% 0 0 0;
 }
 
 .parallel {
-  transform: skewX(-20deg)
+    transform: skewX(-20deg);
 }
 
 .parallel-1 {
-  transform: skewX(-20deg)
+    transform: skewX(-20deg);
 }
 
 .parallel-1 > div {
-  transform: skewX(20deg)
+    transform: skewX(20deg);
 }
 
 .parallel-2 {
-  position: relative;
-  background: transparent;
-  z-index: 1;
+    position: relative;
+    background: transparent;
+    z-index: 1;
 }
 
 .parallel-2::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: #F5BCBC;
-  transform: skew(-20deg);
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #f5bcbc;
+    transform: skew(-20deg);
 }
 
 .cut-corner {
-  background: linear-gradient(-45deg, transparent 15px, #F5BCBC 0)
+    background: linear-gradient(-45deg, transparent 15px, #f5bcbc 0);
 }
 
 .cut-all-corner {
-  background: 
-    linear-gradient(135deg, transparent 15px, #F5BCBC 0) top left,
-    linear-gradient(-135deg, transparent 15px, #F5BCBC 0) top right,
-    linear-gradient(-45deg, transparent 15px, #F5BCBC 0) bottom right,
-    linear-gradient(45deg, transparent 15px, #F5BCBC 0) bottom left;
-  background-size: 51% 51%;
-  background-repeat: no-repeat;
+    background: linear-gradient(135deg, transparent 15px, #f5bcbc 0) top left,
+        linear-gradient(-135deg, transparent 15px, #f5bcbc 0) top right,
+        linear-gradient(-45deg, transparent 15px, #f5bcbc 0) bottom right,
+        linear-gradient(45deg, transparent 15px, #f5bcbc 0) bottom left;
+    background-size: 51% 51%;
+    background-repeat: no-repeat;
 }
