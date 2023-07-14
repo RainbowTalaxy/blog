@@ -48,9 +48,8 @@
     --safe-area-inset-bottom: constant(safe-area-inset-bottom);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
 
-    --ifm-font-family-base: 'PingFang SC', system-ui, -apple-system, Segoe UI,
-        Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
-        'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
         'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
@@ -102,10 +101,19 @@ html[data-theme='dark'] {
 
 code {
     font-family: 'Fira Code' !important;
+    font-size: 90% !important;
+    border: none;
+    color: var(--ifm-color-primary);
+    background: none;
 }
 
-code {
-    font-size: 90% !important;
+blockquote {
+    color: var(--ifm-color-gray-600);
+}
+
+li > ol,
+li > ul {
+    margin-top: var(--ifm-list-item-margin);
 }
 
 @tailwind base;
