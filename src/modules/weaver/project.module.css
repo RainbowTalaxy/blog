@@ -1,5 +1,14 @@
-.header {
+.titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addCycle {
+    font-size: 14px;
+    color: var(--ifm-menu-color-active);
     cursor: pointer;
+    font-weight: initial;
 }
 
 .cycle,

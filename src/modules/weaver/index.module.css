@@ -43,14 +43,6 @@ h3 {
     animation: slideIn 0.2s ease-in-out;
 }
 
-.formButton:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-html[data-theme='dark'] .formButton:hover {
-    background-color: rgba(255, 255, 255, 0.02);
-}
-
 .projectName {
     font-size: 24px;
 }
@@ -65,26 +57,7 @@ html[data-theme='dark'] .formButton:hover {
 }
 
 .input {
-    padding: 8px 10px;
-    width: 100%;
     max-width: 300px;
-}
-
-.formButton {
-    appearance: none;
-    margin-top: 16px;
-    padding: 6px 14px;
-    outline: none;
-    background: none;
-    color: initial;
-    cursor: pointer;
-}
-
-.input,
-.formButton {
-    font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid var(--theme-black-shadow);
 }
 
 .card {

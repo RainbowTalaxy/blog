@@ -10,6 +10,10 @@ import { useHistory } from '@docusaurus/router';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
 import clsx from 'clsx';
+import useTitle from '@site/src/hooks/useTitle';
+import { Button, Input } from '@site/src/components/Form';
+
+const today = dayjs().format('YYYY-MM-DD');
 
 const Weaver = () => {
     const user = useUser();
@@ -25,6 +29,8 @@ const Weaver = () => {
     }, [user]);
 
     useUserEntry();
+
+    useTitle('Weaver', '/weaver');
 
     useEffect(() => refetch(), [refetch]);
 
@@ -92,18 +98,24 @@ const Weaver = () => {
                             });
                         }}
                     >
-                        <input className={styles.input} name="projectName" type="text" placeholder="项目名称" />
+                        <Input className={styles.input} name="projectName" placeholder="项目名称" />
                         <br />
                         <span className={styles.fieldName}>开始时间</span>
-                        <input className={styles.input} name="startDate" type="date" placeholder="开始时间" />
+                        <Input
+                            className={styles.input}
+                            name="startDate"
+                            type="date"
+                            defaultValue={today}
+                            placeholder="开始时间"
+                        />
                         <br />
-                        <button className={styles.formButton}>提交</button>
+                        <Button style={{ marginTop: 18 }} type="primary">
+                            提交
+                        </Button>
                     </form>
                 </>
             ) : (
-                <button className={styles.formButton} onClick={() => Path.toUserConfig()}>
-                    请先登录
-                </button>
+                <Button onClick={() => Path.toUserConfig()}>请先登录</Button>
             )}
         </div>
     );
