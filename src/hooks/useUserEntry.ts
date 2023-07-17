@@ -4,9 +4,9 @@ import { getUser } from '../utils/user';
 const useUserEntry = () => {
     useEffect(() => {
         const user = getUser();
-        const element = document.querySelector(
-            '.header-unsplash-link',
-        ) as HTMLAnchorElement;
+        const element = document.querySelector<HTMLAnchorElement>(
+            '.header-placeholder',
+        );
         element.innerHTML = user.id || '设置用户';
         element.setAttribute(
             'href',

@@ -20,10 +20,6 @@ export default function Home(): JSX.Element {
                         Nanjing, China
                     </div>
                     <div className={style['contact-cell']}>
-                        <Emoji symbol="🐧" />
-                        747797254
-                    </div>
-                    <div className={style['contact-cell']}>
                         <Emoji symbol="📧" />
                         fujianchensiwei@163.com
                     </div>
@@ -35,10 +31,7 @@ export default function Home(): JSX.Element {
                     </div>
                 </div>
                 <p className={style.paragraph}>
-                    欢迎！我是<strong>Talaxy</strong>。你可能也会看到
-                    <strong>RainbowTalaxy</strong>、
-                    <strong>MoonstoneTalaxy</strong>
-                    等名字，那都是我 ^ ^ 。
+                    欢迎！我是<strong>Talaxy</strong>。
                 </p>
                 <p className={style.paragraph}>
                     我喜欢玩<strong>守望先锋</strong>
