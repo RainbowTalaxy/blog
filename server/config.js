@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const prettier = require('prettier');
-const { readJSON, writeJSONIfNotExist, uuid } = require('./utils');
+const { readJSON, writeJSONIfNotExist, uuid, writeJSON } = require('./utils');
 
 const PORT = 4000;
 
@@ -23,6 +23,7 @@ const SERVER_DIR = {
     storage: {
         // 用户数据
         user: path.join(STORAGE_PATH, 'user.json'),
+        token: path.join(STORAGE_PATH, 'token.json'),
         // 配置信息
         config: path.join(STORAGE_PATH, 'config.json'),
         // API 白名单数据
@@ -39,6 +40,7 @@ const LOCAL_DIR = {
     static: path.join(__dirname, '..', 'static'),
     storage: {
         user: path.join(TEMP_DIR, 'user.json'),
+        token: path.join(TEMP_DIR, 'token.json'),
         config: path.join(TEMP_DIR, 'config.json'),
         whitelist: path.join(TEMP_DIR, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
@@ -73,6 +75,8 @@ writeJSONIfNotExist(Dir.storage.config, {
     secret: uuid(),
 });
 
+writeJSONIfNotExist(Dir.storage.token, []);
+
 // const OLD_VERSION = '0.0.0';
 const NEW_VERSION = '1.0.0';
 
@@ -93,7 +97,7 @@ writeJSONIfNotExist(Dir.storage.user, DEFAULT_USER_CONFIG);
 const User = {
     config: readJSON(Dir.storage.user),
     tokenExpireInterval: 1000 * 60 * 60 * 24,
-    tokens: [],
+    tokens: readJSON(Dir.storage.token),
     // 验证用户
     validate(id, key) {
         return this.config.users.some(
@@ -111,6 +115,7 @@ const User = {
             time: Date.now(),
         };
         this.tokens.push(token);
+        writeJSON(Dir.storage.token, this.tokens);
         return token;
     },
     // 消耗 token ，登记用户的前置工作
@@ -121,6 +126,7 @@ const User = {
         );
         if (idx === -1) return false;
         this.tokens.splice(idx, 1);
+        writeJSON(Dir.storage.token, this.tokens);
         return true;
     },
     // 登记用户
