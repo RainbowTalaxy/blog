@@ -23,6 +23,9 @@ export interface Task {
     status: number;
     executor: string;
     progress?: number;
+    createdAt?: number;
+    updatedAt?: number;
+    finishedAt?: number;
 }
 
 export interface TaskProps {

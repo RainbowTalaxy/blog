@@ -110,6 +110,10 @@
 
 .taskExecutor {
     margin: 0 0 4px 0;
+}
+
+.taskExecutor,
+.taskFinished {
     font-size: 14px;
     color: var(--theme-black);
     opacity: 0.4;

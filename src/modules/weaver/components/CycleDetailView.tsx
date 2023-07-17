@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import TaskForm from './TaskForm';
 import { TASK_POOL_NAME, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import { useHistory } from '@docusaurus/router';
+import dayjs from 'dayjs';
 
 interface Props {
     project: ProjectInfo;
@@ -204,6 +205,11 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                                                         }%, rgba(0, 0, 0, 0.04) ${task.progress ?? 0}%)`,
                                                     }}
                                                 />
+                                            )}
+                                            {status === TaskStatus.Done && task.finishedAt && (
+                                                <div className={styles.taskFinished}>
+                                                    完成时间：{dayjs(task.finishedAt).format('YYYY年M月D日')}
+                                                </div>
                                             )}
                                         </div>
                                     ))}
