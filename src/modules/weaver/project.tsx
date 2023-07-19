@@ -12,6 +12,7 @@ import { useHistory } from '@docusaurus/router';
 import GlobalStyle from './components/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
 import { TASK_POOL_NAME } from './constants';
+import useTitle from '@site/src/hooks/useTitle';
 
 interface Props {
     project: ProjectInfo;
@@ -31,6 +32,8 @@ const ProjectView = ({ project }: Props) => {
     const [targetCycle, setCycle] = useState<CycleInfo>();
 
     const cycleId = query.get('cycle');
+
+    useTitle('Weaver', '/weaver');
 
     const refetchCycle = useCallback(async () => {
         if (!project.id) return;

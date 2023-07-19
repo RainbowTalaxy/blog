@@ -10,7 +10,6 @@ import { useHistory } from '@docusaurus/router';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
 import clsx from 'clsx';
-import useTitle from '@site/src/hooks/useTitle';
 import { Button, Input } from '@site/src/components/Form';
 
 const today = dayjs().format('YYYY-MM-DD');
@@ -29,8 +28,6 @@ const Weaver = () => {
     }, [user]);
 
     useUserEntry();
-
-    useTitle('Weaver', '/weaver');
 
     useEffect(() => refetch(), [refetch]);
 
