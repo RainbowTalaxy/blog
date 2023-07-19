@@ -35,10 +35,12 @@
     padding: 32px;
     width: 90vw;
     max-width: 600px;
+    max-height: 80%;
     border-radius: 0.25rem;
     border: 1px solid var(--ifm-menu-color-background-active);
     color: var(--ifm-menu-color);
     background-color: var(--pure-background);
+    overflow: auto;
     z-index: 10;
 }
 
@@ -67,6 +69,10 @@
     color: red;
 }
 
+.statusFormItem {
+    margin-bottom: 14px;
+}
+
 .options {
     display: flex;
     flex-wrap: wrap;
@@ -85,6 +91,7 @@
 }
 
 .status {
+    margin-bottom: 6px;
     border: 1px solid var(--theme-black-shadow);
     color: var(--ifm-menu-color-active);
     background-color: var(--theme-white);
@@ -144,6 +151,24 @@
     border-bottom-right-radius: 6px;
 }
 
-.formItem > button {
+.formItem button {
     margin: 0 16px 0 0;
+}
+
+@media screen and (max-width: 850px) {
+    .form {
+        padding: calc(16px + 2vw);
+    }
+
+    .formItem {
+        flex-direction: column;
+    }
+
+    .formItem > label {
+        text-align: left;
+    }
+
+    .progressOptions {
+        margin-top: 12px;
+    }
 }
