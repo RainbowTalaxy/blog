@@ -7,8 +7,8 @@
 }
 
 .container h1,
-h2,
-h3 {
+.container h2,
+.container h3 {
     user-select: none;
 }
 
