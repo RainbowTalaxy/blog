@@ -106,15 +106,10 @@ const config = {
                     { to: '/blog', label: '博客', position: 'left' },
                     { to: '/gallery', label: '画廊', position: 'left' },
                     {
-                        to: '/ow',
-                        label: 'Overwatch',
-                        position: 'left',
-                    },
-                    {
-                        href: 'https://unsplash.com/@talaxy',
-                        label: 'Unsplash',
+                        to: '/changelog',
+                        label: '版本更新',
                         position: 'right',
-                        className: 'header-unsplash-link',
+                        className: 'header-placeholder',
                     },
                     {
                         href: 'https://github.com/RainbowTalaxy',
@@ -125,7 +120,7 @@ const config = {
                 ],
             },
             footer: {
-                style: 'dark',
+                style: 'light',
                 links: [],
                 copyright: `Copyright © ${new Date().getFullYear()} Your Talaxy<br/><a href="http://beian.miit.gov.cn/" target="_blank">苏ICP备19075978号</a>`,
             },

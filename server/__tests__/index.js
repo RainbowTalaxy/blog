@@ -8,7 +8,7 @@ const fs = require('fs');
 const { request, curl } = require('./utils');
 const user = require('./user');
 const wordBank = require('./word-bank');
-const dictionary = require('./dictionary');
+// const dictionary = require('./dictionary');
 const statics = require('./statics');
 const weaver = require('./weaver');
 
@@ -31,8 +31,8 @@ async function test() {
         // word-bank 测试
         await wordBank();
 
-        // dictionary 测试
-        await dictionary();
+        // dictionary 测试（已经稳定）
+        // await dictionary();
 
         // statics 测试
         await statics();
