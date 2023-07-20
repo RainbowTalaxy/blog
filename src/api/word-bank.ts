@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { SERVER_API } from '../constants/config';
-import { APIKey, rocket, rocketV2 } from './utils';
+import { rocket, rocketV2 } from './utils';
 
 export interface Word {
     id: string;

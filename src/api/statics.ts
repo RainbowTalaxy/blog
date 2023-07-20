@@ -1,5 +1,5 @@
 import { SERVER_API } from '../constants/config';
-import { rocket } from './utils';
+import { rocketV2 } from './utils';
 
 export interface FileData {
     name: string;
@@ -8,7 +8,7 @@ export interface FileData {
 
 const StaticsAPI = {
     files: (path = '') =>
-        rocket.get<{
+        rocketV2.get<{
             files: FileData[];
         }>(`${SERVER_API}/statics/${decodeURIComponent(path)}`),
 };

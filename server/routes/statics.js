@@ -7,9 +7,10 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const { Dir } = require('../config');
+const { login } = require('../middlewares');
 
 // 获取指定目录下的所有文件
-router.get('*', (req, res) => {
+router.get('*', login, (req, res) => {
     const filePath = decodeURIComponent(req.params[0] ?? '');
     const dir = path.join(Dir.static, filePath);
     // 如果路径超出了静态资源目录，就返回403
