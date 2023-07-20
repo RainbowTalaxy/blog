@@ -15,7 +15,7 @@
 -   [WordBank v1.2](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3](https://blog.talaxy.cn/playground/tokenize)
--   [Weaver v1.3](https://blog.talaxy.cn/weaver)
+-   [Weaver v1.4](https://blog.talaxy.cn/weaver)
 
 ### 工具
 
@@ -27,6 +27,16 @@
 ## 待办
 
 -   Overwatch 优化
+
+## 版本更新流程
+
+1. 以下文件需要更新：
+    - [changelog](src/pages/changelog.md)
+    - [README](README.md)
+    - [package.json](package.json)
+    - [Overwatch](src/modules/ow/docs/CHANGELOG.md)
+2. 提交文案：`release: x.x.x` ，tag 名：`vx.x.x` 。
+3. 在 GitHub 中建立新 Release 。
 
 ## 检查项目
 
