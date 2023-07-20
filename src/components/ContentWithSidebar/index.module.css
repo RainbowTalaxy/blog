@@ -31,6 +31,7 @@
     font-size: 24px;
     font-weight: var(--ifm-heading-font-weight);
     color: var(--ifm-heading-color);
+    user-select: none;
 }
 
 .sidebarInner > span {
@@ -39,6 +40,7 @@
     font-weight: var(--ifm-heading-font-weight);
     color: var(--ifm-menu-color-active);
     cursor: default;
+    user-select: none;
 }
 
 .sidebarInner > p {

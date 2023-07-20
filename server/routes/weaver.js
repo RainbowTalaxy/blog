@@ -31,6 +31,7 @@
  *   + 进度 progress
  *   + 任务状态 status
  *   + 执行人 executor
+ *   + 完成时间 finishedAt
  *
  * 关联关系：
  *
@@ -471,6 +472,7 @@ router.put(
                 return res.status(404).send({
                     error: 'task not found',
                 });
+            const now = Date.now();
             cycle.tasks[taskIndex] = {
                 // 如果原先没有 progress 字段，设置为默认值
                 progress:
@@ -479,12 +481,15 @@ router.put(
                     ],
                 ...cycle.tasks[taskIndex],
                 ...req.body,
-                updatedAt: Date.now(),
+                updatedAt: now,
             };
             const targetTask = cycle.tasks[taskIndex];
             // 如果不是进行中的任务，进度重置为默认值
             if (targetTask.status !== TaskStatus.Doing) {
                 targetTask.progress = DEFAULT_PROGRESS[targetTask.status];
+            }
+            if (targetTask.status === TaskStatus.Done) {
+                targetTask.finishedAt = now;
             }
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
             return res.send(targetTask);

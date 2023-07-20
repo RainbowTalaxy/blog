@@ -12,6 +12,7 @@ import {
     TASK_STATUS_NAMES,
 } from '../constants';
 import clsx from 'clsx';
+import { Button, Input, Select, TextArea } from '@site/src/components/Form';
 
 interface Props {
     task?: Task;
@@ -55,10 +56,10 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                     <label>
                         <span>*</span>标题：
                     </label>
-                    <input ref={nameRef} type="text" />
+                    <Input raf={nameRef} />
                 </div>
                 {task && (
-                    <div className={styles.formItem}>
+                    <div className={clsx(styles.formItem, styles.statusFormItem)}>
                         <label>状态：</label>
                         <div className={styles.options}>
                             {TASK_STATUSES.map((s) => (
@@ -89,7 +90,7 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                 )}
                 <div className={styles.formItem}>
                     <label>描述：</label>
-                    <textarea ref={descriptionRef} />
+                    <TextArea raf={descriptionRef} />
                 </div>
                 <div className={styles.formItem}>
                     <label>优先级：</label>
@@ -111,54 +112,56 @@ const TaskForm = ({ task, context, cycles, update, moveCycle, remove, onClose }:
                 {task && cycles && (
                     <div className={styles.formItem}>
                         <label>周期：</label>
-                        <select ref={cycleRef}>
+                        <Select raf={cycleRef}>
                             <option value={TASK_POOL_NAME}>任务池</option>
                             {cycles.map((c) => (
                                 <option key={c.id} value={c.id}>
                                     第 {c.idx + 1} 周
                                 </option>
                             ))}
-                        </select>
+                        </Select>
                     </div>
                 )}
                 <div className={styles.formItem}>
                     <label></label>
-                    <button
-                        className={styles.primary}
-                        onClick={async () => {
-                            if (!nameRef.current?.value) return alert('请输入标题');
-                            const result = await update({
-                                name: nameRef.current!.value,
-                                description: descriptionRef.current!.value,
-                                status,
-                                priority,
-                                progress,
-                            });
-                            if (!result) return alert('提交失败');
-                            if (task && context.cycleInfo.id !== cycleRef.current!.value) {
-                                const cycleResult = await moveCycle(cycleRef.current!.value);
-                                if (!cycleResult) return alert('周期修改失败');
-                            }
-                            await onClose(true);
-                        }}
-                    >
-                        {task ? '保存' : '创建'}
-                    </button>
-                    <button onClick={() => onClose()}>取消</button>
-                    {task && (
-                        <button
-                            className={styles.danger}
+                    <div className={styles.options}>
+                        <Button
+                            type="primary"
                             onClick={async () => {
-                                const result = confirm(`确定删除任务 ${task.name} ？`);
-                                if (!result) return;
-                                const deleteResult = await remove(task.id);
-                                if (!deleteResult) return alert('删除失败');
+                                if (!nameRef.current?.value) return alert('请输入标题');
+                                const result = await update({
+                                    name: nameRef.current!.value,
+                                    description: descriptionRef.current!.value,
+                                    status,
+                                    priority,
+                                    progress,
+                                });
+                                if (!result) return alert('提交失败');
+                                if (task && context.cycleInfo.id !== cycleRef.current!.value) {
+                                    const cycleResult = await moveCycle(cycleRef.current!.value);
+                                    if (!cycleResult) return alert('周期修改失败');
+                                }
                                 await onClose(true);
                             }}
                         >
-                            删除
-                        </button>
-                    )}
+                            {task ? '保存' : '创建'}
+                        </Button>
+                        <Button onClick={() => onClose()}>取消</Button>
+                        {task && (
+                            <Button
+                                type="danger"
+                                onClick={async () => {
+                                    const result = confirm(`确定删除任务 ${task.name} ？`);
+                                    if (!result) return;
+                                    const deleteResult = await remove(task.id);
+                                    if (!deleteResult) return alert('删除失败');
+                                    await onClose(true);
+                                }}
+                            >
+                                删除
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className={styles.mask} onClick={() => onClose()} />

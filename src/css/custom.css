@@ -43,6 +43,7 @@
     --theme-color-lightgray: #e9e9e9;
     --theme-color-white: #fff;
     --theme-color-black: #000;
+    --pure-background: #fff;
 
     /* safe area */
     --safe-area-inset-bottom: constant(safe-area-inset-bottom);
@@ -51,6 +52,19 @@
     --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI',
         Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
         'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+html[data-theme='dark'] {
+    --theme-white: #000;
+    --theme-black: #fff;
+    --theme-color-white: #000;
+    --theme-color-black: #fff;
+    --theme-white-half: rgb(0, 0, 0, 0.8);
+    --theme-black-half: rgb(255, 255, 255, 0.8);
+    --theme-black-shadow: rgb(255, 255, 255, 0.1);
+    --theme-page-background: rgb(24, 25, 26, 0.7);
+    --ifm-color-primary-dark: #5a91ea;
+    --pure-background: #1b1b1d;
 }
 
 .docusaurus-highlight-code-line {
@@ -75,18 +89,6 @@
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
     background-color: rgba(0, 0, 0, 0.3);
-}
-
-html[data-theme='dark'] {
-    --theme-white: #000;
-    --theme-black: #fff;
-    --theme-color-white: #000;
-    --theme-color-black: #fff;
-    --theme-white-half: rgb(0, 0, 0, 0.8);
-    --theme-black-half: rgb(255, 255, 255, 0.8);
-    --theme-black-shadow: rgb(255, 255, 255, 0.1);
-    --theme-page-background: rgb(24, 25, 26, 0.7);
-    --ifm-color-primary-dark: #5a91ea;
 }
 
 [data-theme='dark'] .header-github-link::before {

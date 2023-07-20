@@ -12,6 +12,7 @@ import { useHistory } from '@docusaurus/router';
 import GlobalStyle from './components/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
 import { TASK_POOL_NAME } from './constants';
+import useTitle from '@site/src/hooks/useTitle';
 
 interface Props {
     project: ProjectInfo;
@@ -31,6 +32,8 @@ const ProjectView = ({ project }: Props) => {
     const [targetCycle, setCycle] = useState<CycleInfo>();
 
     const cycleId = query.get('cycle');
+
+    useTitle('Weaver', '/weaver');
 
     const refetchCycle = useCallback(async () => {
         if (!project.id) return;
@@ -65,12 +68,12 @@ const ProjectView = ({ project }: Props) => {
         if (cycle) {
             setCycle(cycle);
         } else {
+            // 查找当前周期
             const currentCycle = cycles.find((cycle) => {
                 return isBetween(cycle.start, cycle.end);
             });
-            if (currentCycle) {
-                setCycle(currentCycle);
-            }
+            // 如果没有当前周期，则指向任务池
+            setCycle(currentCycle ?? POOL_CYCLE);
         }
     }, [cycleId, cycles]);
 
@@ -79,13 +82,15 @@ const ProjectView = ({ project }: Props) => {
             <GlobalStyle />
             <ContentWithSidebar
                 title={
-                    <div className={styles.header} onClick={() => history.push('?')}>
-                        Weaver
+                    <div className={styles.titleBar}>
+                        {project.name}
+                        <span className={styles.addCycle} onClick={handleAddCycle}>
+                            新建周期
+                        </span>
                     </div>
                 }
                 sidebar={
                     <>
-                        <span>{project.name}</span>
                         <div
                             className={clsx(
                                 styles.cycleOption,
@@ -97,9 +102,6 @@ const ProjectView = ({ project }: Props) => {
                             }}
                         >
                             任务池
-                        </div>
-                        <div className={clsx(styles.cycleOption, commonStyles.itemCard)} onClick={handleAddCycle}>
-                            + 新建周期
                         </div>
                         {cycles?.map((cycle) => (
                             <div
