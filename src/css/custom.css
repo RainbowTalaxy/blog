@@ -101,6 +101,14 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
     border-radius: 50%;
 }
 
+/* 侧边栏显示断点 */
+@media (min-width: 996px) {
+    /* 文档左侧增加边距 */
+    main .col:first-of-type {
+        padding-left: calc(2 * var(--ifm-spacing-horizontal));
+    }
+}
+
 code {
     font-family: 'Fira Code' !important;
     font-size: 90% !important;
