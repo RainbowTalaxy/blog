@@ -473,6 +473,7 @@ router.put(
                     error: 'task not found',
                 });
             const now = Date.now();
+            const prevStatus = cycle.tasks[taskIndex].status;
             cycle.tasks[taskIndex] = {
                 // 如果原先没有 progress 字段，设置为默认值
                 progress:
@@ -488,7 +489,10 @@ router.put(
             if (targetTask.status !== TaskStatus.Doing) {
                 targetTask.progress = DEFAULT_PROGRESS[targetTask.status];
             }
-            if (targetTask.status === TaskStatus.Done) {
+            if (
+                targetTask.status === TaskStatus.Done &&
+                prevStatus !== TaskStatus.Done
+            ) {
                 targetTask.finishedAt = now;
             }
             fs.writeFileSync(cyclePath, JSON.stringify(cycle));
