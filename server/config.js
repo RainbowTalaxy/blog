@@ -32,6 +32,7 @@ const SERVER_DIR = {
         books: path.join(STORAGE_PATH, 'books'),
         // Weaver 数据
         projects: path.join(STORAGE_PATH, 'projects'),
+        luoye: path.join(STORAGE_PATH, 'luoye'),
     },
 };
 
@@ -45,6 +46,7 @@ const LOCAL_DIR = {
         whitelist: path.join(TEMP_DIR, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
+        luoye: path.join(TEMP_DIR, 'luoye'),
     },
 };
 
@@ -66,6 +68,7 @@ mkdirp.sync(Dir.temp);
 mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
+mkdirp.sync(Dir.storage.luoye);
 
 writeJSONIfNotExist(Dir.storage.whitelist, {
     [APIKey.file]: ['talaxy'],
