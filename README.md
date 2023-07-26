@@ -12,10 +12,10 @@
 ### 应用
 
 -   [Overwatch v1.0](https://blog.talaxy.cn/ow)
--   [WordBank v1.2](https://blog.talaxy.cn/word-bank)
+-   [WordBank v1.3](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3](https://blog.talaxy.cn/playground/tokenize)
--   [Weaver v1.4](https://blog.talaxy.cn/weaver)
+-   [Weaver v1.5](https://blog.talaxy.cn/weaver)
 
 ### 工具
 
@@ -35,7 +35,7 @@
     - [README](README.md)
     - [package.json](package.json)
     - [Overwatch](src/modules/ow/docs/CHANGELOG.md)
-2. 提交文案：`release: x.x.x` ，tag 名：`vx.x.x` 。
+2. 提交文案：`release: X.Y.Z` ，tag 名：`vX.Y.Z` 。
 3. 在 GitHub 中建立新 Release 。
 
 ## 检查项目
