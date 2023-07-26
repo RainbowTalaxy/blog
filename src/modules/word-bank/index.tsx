@@ -4,8 +4,6 @@ import { AppleDate, convertToAppleDate, uuid } from '@site/src/utils';
 import clsx from 'clsx';
 import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
-import { useLocalStorage } from 'usehooks-ts';
-import { DEFAULT_USER_INFO } from '@site/src/constants/user';
 import API from '@site/src/api';
 import { Book, BookInfo } from '@site/src/api/word-bank';
 import WordLine, { EditableSpan } from './components/WordLine';
@@ -13,6 +11,7 @@ import useEditData from './hooks/useEditData';
 import useUserEntry from '@site/src/hooks/useUserEntry';
 import { setUser } from '@site/src/utils/user';
 import ActionItem from './components/ActionItem';
+import useUser from '@site/src/hooks/useUser';
 
 const WordBank = () => {
     const titleRef = useRef<HTMLSpanElement>(null);
@@ -22,10 +21,12 @@ const WordBank = () => {
     const { editData, addEmptyWord, reset } = useEditData(book);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [user] = useLocalStorage('user', { ...DEFAULT_USER_INFO });
+    const user = useUser();
     // 帮我监听 query 参数，参数名为 id
     const query = useQuery();
     const history = useHistory();
+
+    console.log(user);
 
     const refetchBook = useCallback(
         async (bookInfo: BookInfo) => {
@@ -71,7 +72,7 @@ const WordBank = () => {
 
     useEffect(() => {
         refetch();
-    }, []);
+    }, [refetch]);
 
     useUserEntry();
 
@@ -217,6 +218,7 @@ const WordBank = () => {
                                                         refetch();
                                                     } else {
                                                         setIsEditing(true);
+                                                        addEmptyWord();
                                                     }
                                                 }}
                                             >
