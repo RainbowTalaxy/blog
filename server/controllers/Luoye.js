@@ -8,17 +8,17 @@ const USER_WORKSPACES_FILE = 'workspaces.json';
 const USER_DOCS_FILE = 'docs.json';
 const DEFAULT_WORKSPACE_NAME = 'default';
 
-const Scope = {
-    Private: 'private',
-    Public: 'public',
-};
+class Scope {
+    static Private = 'private';
+    static Public = 'public';
+}
 
-const Access = {
-    Forbidden: 'forbidden',
-    Visitor: 'visitor',
-    Member: 'member',
-    Admin: 'admin',
-};
+class Access {
+    static Forbidden = 'forbidden';
+    static Visitor = 'visitor';
+    static Member = 'member';
+    static Admin = 'admin';
+}
 
 const File = Dir.storage.luoye;
 
@@ -71,14 +71,6 @@ const FileController = {
         const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
         return readJSON(workspaceDir);
     },
-    workspaceAccess(workspace, visitor) {
-        if (!workspace || !visitor)
-            throw new Error('workspace/visitor is required');
-        if (workspace.admins.includes(visitor)) return Access.Admin;
-        if (workspace.members.includes(visitor)) return Access.Member;
-        if (workspace.scope === Scope.Public) return Access.Visitor;
-        return Access.Forbidden;
-    },
     createWorkspace(userDir, props, creator) {
         if (!userDir || !creator)
             throw new Error('userDir/creator is required');
@@ -121,43 +113,81 @@ const FileController = {
         const now = Date.now();
         const updatedWorkspace = {
             ...workspace,
-            ...props,
+            name: props.name || workspace.name,
+            description: props.description || workspace.description,
+            scope: props.scope || workspace.scope,
+            docs: props.docs || workspace.docs,
             updatedAt: now,
         };
         writeJSON(workspaceDir, updatedWorkspace);
-        // 更新用户的工作区信息
-        updatedWorkspace.members.forEach((member) => {
-            const memberDir = FileController.userDir(member);
-            const userWorkspacesPath = path.join(
-                memberDir,
-                USER_WORKSPACES_FILE,
-            );
-            const userWorkspaces = readJSON(userWorkspacesPath);
-            const userWorkspace = userWorkspaces.find(
-                (w) => w.id === workspaceId,
-            );
-            if (userWorkspace) {
-                userWorkspace.name = updatedWorkspace.name;
-                userWorkspace.description = updatedWorkspace.description;
-                userWorkspace.scope = updatedWorkspace.scope;
-                userWorkspace.updatedAt = now;
-            } else {
-                userWorkspaces.unshift({
-                    id: updatedWorkspace.id,
-                    name: updatedWorkspace.name,
-                    description: updatedWorkspace.description,
-                    scope: updatedWorkspace.scope,
-                    joinAt: now,
-                });
-            }
-            writeJSON(userWorkspacesPath, userWorkspaces);
-        });
+        // 条件更新用户工作区列表
+        let flag = props.name || props.description || props.scope;
+        if (flag) {
+            // 更新用户的工作区信息
+            updatedWorkspace.members.forEach((member) => {
+                const memberDir = FileController.userDir(member);
+                const userWorkspacesPath = path.join(
+                    memberDir,
+                    USER_WORKSPACES_FILE,
+                );
+                const userWorkspaces = readJSON(userWorkspacesPath);
+                const userWorkspace = userWorkspaces.find(
+                    (w) => w.id === workspaceId,
+                );
+                if (userWorkspace) {
+                    userWorkspace.name = updatedWorkspace.name;
+                    userWorkspace.description = updatedWorkspace.description;
+                    userWorkspace.scope = updatedWorkspace.scope;
+                } else {
+                    userWorkspaces.unshift({
+                        id: updatedWorkspace.id,
+                        name: updatedWorkspace.name,
+                        description: updatedWorkspace.description,
+                        scope: updatedWorkspace.scope,
+                        joinAt: now,
+                    });
+                }
+                writeJSON(userWorkspacesPath, userWorkspaces);
+            });
+        }
         return updatedWorkspace;
+    },
+};
+
+const Utility = {
+    access(entity, visitor) {
+        if (!entity || !visitor)
+            throw new Error('workspace/visitor is required');
+        if (entity.admins.includes(visitor)) return Access.Admin;
+        if (entity.members.includes(visitor)) return Access.Member;
+        if (entity.scope === Scope.Public) return Access.Visitor;
+        return Access.Forbidden;
+    },
+    scopeCheck(value) {
+        return Object.values(Scope).includes(value);
+    },
+    // TODO: 与原数据的一致性 & updatedAt 属性
+    safeDocItems(docs) {
+        if (!Array.isArray(docs)) return null;
+        const docItems = [];
+        for (const doc of docs) {
+            let { docId, name, docs: subDocs } = doc;
+            if (!docId || !name || !subDocs) return null;
+            subDocs = Utility.safeDocItems(subDocs);
+            if (!subDocs) return null;
+            docItems.push({
+                docId,
+                name,
+                docs: subDocs,
+            });
+        }
+        return docItems;
     },
 };
 
 module.exports = {
     LuoyeCtr: FileController,
+    LuoyeUtl: Utility,
     Scope,
     Access,
 };

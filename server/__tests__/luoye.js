@@ -16,11 +16,14 @@ async function test() {
     const workspace = await testCase.pos(
         '[Luoye] create workspace',
         async () => {
-            return await user.post('/workspace', {
+            const data = await user.post('/workspace', {
                 name: 'test 1',
                 description: 'some description',
                 scope: 'private',
+                nonExistProp: 'non exist prop', // 非法属性
             });
+            if (data.nonExistProp) throw new Error('invalid prop exist');
+            return data;
         },
     );
 
@@ -62,8 +65,37 @@ async function test() {
             name: 'test 3',
             description: 'new description',
             scope: 'public',
+            nonExistProp: 'non exist prop', // 非法属性
         };
-        return await user.put(`/workspace/${workspace.id}`, params);
+        const data = await user.put(`/workspace/${workspace.id}`, params);
+        if (data.nonExistProp) throw new Error('invalid prop exist');
+        return data;
+    });
+
+    // 更新工作区 - `docs`
+    await testCase.pos('[Luoye] update workspace - docs', async () => {
+        await user.put(`/workspace/${workspace.id}`, {
+            docs: [
+                {
+                    docId: 'xxx',
+                    name: 'xxx',
+                    docs: [],
+                },
+            ],
+        });
+    });
+
+    // 更新工作区 - 无效的 `docs`
+    await testCase.neg('[Luoye] update workspace - invalid docs', async () => {
+        await user.put(`/workspace/${workspace.id}`, {
+            docs: [
+                {
+                    docId: 'xxx',
+                    name: 'xxx',
+                    docs: 'xxx',
+                },
+            ],
+        });
     });
 
     // 更新工作区- 假 id

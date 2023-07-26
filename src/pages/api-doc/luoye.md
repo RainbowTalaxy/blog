@@ -14,58 +14,13 @@
 该项目数据使用 json 文件进行存储。在根目录下，有以下目录：
 
 -   `workspaces` 工作区目录
-    -   `{id}.json` 工作区信息
+    -   `{id}.json` 工作区信息 `Workspace`
 -   `docs` 文档目录
-    -   `{id}.json` 文档信息
+    -   `{id}.json` 文档信息 `Doc`
 -   `users` 用户目录
     -   `{id}` 用户目录
-        -   `workspaces.json` 工作区列表
-        -   `docs.json` 文档列表
-
-### 工作区信息
-
--   `id` 工作区 id
--   `name` 工作区名称
--   `description` 工作区描述
--   `creator` 创建者
--   `owner` 所有者
--   `admins` 管理员列表
--   `members` 成员列表
--   `scope` 可见范围
-    -   `public` 公开
-    -   `private` 私有
--   `docs` 文档列表，数组元素为：
-    -   `id` 文档 id
-    -   `name` 文档名称
-    -   `docs` 子文档列表，默认值为空数组
--   `createdAt` 创建时间
--   `updatedAt` 更新时间
-
-### 用户工作区列表
-
-列表元素为工作区的核心信息，有如下属性：
-
--   `id` 工作区 id
--   `name` 工作区名称
--   `description` 工作区描述
--   `scope` 可见范围
-    -   `public` 公开
-    -   `private` 私有
--   `joinAt` 添加时间
-
-### 文档信息
-
--   `id` 文档 id
--   `author` 文档作者
--   `name` 文档名称
--   `createdAt` 创建时间
--   `updatedAt` 更新时间
--   `admins` 管理员列表
--   `members` 成员列表
--   `scope` 可见范围
-    -   `public` 公开
-    -   `private` 私有
--   `content` 文档内容
+        -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
+        -   `docs.json` 文档列表 `DocItem[]`
 
 ## 数据类型
 
@@ -73,27 +28,58 @@
 
 ```ts
 interface Workspace {
-    id: string;
-    name: string;
-    description: string;
-    scope: 'private' | 'public';
-    owner: string;
-    creator: string;
-    admins: string[];
-    members: string[];
-    docs: DocNode[];
-    createdAt: number;
-    updatedAt: number;
+    id: string; // 工作区 id
+    name: string; // 工作区名称
+    description: string; // 工作区描述
+    scope: 'private' | 'public'; // 可见范围
+    owner: string; // 所有者
+    creator: string; // 创建者
+    admins: string[]; // 管理员列表
+    members: string[]; // 成员列表
+    docs: DocItem[]; // 文档列表
+    createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
 }
 ```
 
-### DocNode
+### WorkspaceItem
 
 ```ts
-interface DocNode {
-    id: string;
-    name: string;
-    docs: DocNode[];
+interface WorkspaceItem {
+    id: string; // 工作区 id
+    name: string; // 工作区名称
+    description: string; // 工作区描述
+    scope: 'private' | 'public'; // 可见范围
+    joinAt: number; // 添加时间
+}
+```
+
+### DocItem
+
+```ts
+interface DocItem {
+    docId: string; // 文档 id
+    name: string; // 文档名称
+    updatedAt: number; // 更新时间
+    docs: DocItem[]; // 子文档列表
+}
+```
+
+### Doc
+
+```ts
+interface Doc {
+    id: string; // 文档 id
+    name: string; // 文档名称
+    creator: string; // 创建者
+    owner: string; // 所有者
+    admins: string[]; // 管理员列表
+    members: string[]; // 成员列表
+    scope: 'private' | 'public'; // 可见范围
+    workspaces: string[]; // 所属工作区 id
+    content: string; // 文档内容
+    createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
 }
 ```
 
@@ -113,19 +99,15 @@ interface DocNode {
 ### `GET` 获取工作区列表
 
 ```
+
 /workspaces
+
 ```
 
 **响应**
 
 ```ts
-type Response = Array<{
-    id: string;
-    name: string;
-    description: string;
-    scope: 'private' | 'public';
-    joinAt: number;
-}>;
+type Response = WorkspaceItem[];
 ```
 
 ### `GET` 获取工作区信息
@@ -175,6 +157,7 @@ interface Body {
     name?: string;
     description?: string;
     scope?: 'private' | 'public';
+    docs?: DocItem[];
 }
 ```
 

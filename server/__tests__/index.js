@@ -21,9 +21,6 @@ async function test() {
         // user 测试
         // await user();
 
-        // luoye 测试
-        await luoye();
-
         // word-bank 测试
         await wordBank();
 
@@ -35,6 +32,9 @@ async function test() {
 
         // weaver 测试
         await weaver();
+
+        // luoye 测试
+        await luoye();
     } catch (error) {
         console.log(error);
     }
