@@ -1,5 +1,6 @@
 import { CycleDetail, CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import commonStyles from '../index.module.css';
+import projectStyles from '../project.module.css';
 import styles from './cycle.module.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
@@ -9,6 +10,7 @@ import TaskForm from './TaskForm';
 import { TASK_POOL_NAME, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import { useHistory } from '@docusaurus/router';
 import dayjs from 'dayjs';
+import { isBetween } from '@site/src/utils';
 
 interface Props {
     project: ProjectInfo;
@@ -29,6 +31,8 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
 
     const projectId = project.id;
     const cycleId = cycleInfo.id;
+    // 当前正在进行中的周期
+    const ongoingCycle = cycles?.find((cycle) => isBetween(cycle.start, cycle.end));
 
     const tasks = useMemo(() => {
         const result: { [key in TaskStatus]: Task[] } = {
@@ -135,6 +139,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                         }}
                     >
                         {`第 ${cycle.idx + 1} 周` || '无标题'}
+                        {cycle.id === ongoingCycle?.id && <div className={projectStyles.activeDot} />}
                     </div>
                 ))}
             </div>

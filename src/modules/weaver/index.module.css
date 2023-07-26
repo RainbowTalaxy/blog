@@ -115,6 +115,10 @@ html[data-theme='dark'] .card:hover {
     background-color: var(--ifm-menu-color-background-active);
 }
 
+.itemCard.bordered {
+    border: 1px solid var(--theme-secondary);
+}
+
 .fieldName {
     display: block;
     margin: 8px 4px 2px;

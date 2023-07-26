@@ -32,6 +32,8 @@ const ProjectView = ({ project }: Props) => {
     const [targetCycle, setCycle] = useState<CycleInfo>();
 
     const cycleId = query.get('cycle');
+    // 当前正在进行中的周期
+    const ongoingCycle = cycles?.find((cycle) => isBetween(cycle.start, cycle.end));
 
     useTitle('Weaver', '/weaver');
 
@@ -68,14 +70,10 @@ const ProjectView = ({ project }: Props) => {
         if (cycle) {
             setCycle(cycle);
         } else {
-            // 查找当前周期
-            const currentCycle = cycles.find((cycle) => {
-                return isBetween(cycle.start, cycle.end);
-            });
-            // 如果没有当前周期，则指向任务池
-            setCycle(currentCycle ?? POOL_CYCLE);
+            // 如果当前没有进行中的周期，则指向任务池
+            setCycle(ongoingCycle ?? POOL_CYCLE);
         }
-    }, [cycleId, cycles]);
+    }, [cycleId, cycles, ongoingCycle]);
 
     return (
         <>
@@ -110,13 +108,22 @@ const ProjectView = ({ project }: Props) => {
                                     styles.cycle,
                                     commonStyles.itemCard,
                                     cycle.id === targetCycle?.id && commonStyles.active,
+                                    cycle.id === ongoingCycle?.id && commonStyles.bordered,
                                 )}
                                 onClick={() => {
                                     if (project.id && cycle.id)
                                         history.replace(`?project=${project.id}&cycle=${cycle.id}`);
                                 }}
                             >
-                                <div className={styles.cycleName}>第 {cycle.idx + 1} 周</div>
+                                <div className={styles.cycleName}>
+                                    第 {cycle.idx + 1} 周
+                                    {cycle.id === ongoingCycle?.id && (
+                                        <div className={styles.ongoing}>
+                                            <div className={styles.activeDot} />
+                                            <span>进行中</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className={styles.cycleDate}>
                                     {dayjs(cycle.start).format('YYYY年M月D日')} -{' '}
                                     {dayjs(cycle.end).add(-1, 'day').format('YYYY年M月D日')}

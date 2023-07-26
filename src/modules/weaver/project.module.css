@@ -32,8 +32,28 @@
 }
 
 .cycleName {
+    display: flex;
     font-size: 20px;
     font-weight: var(--ifm-font-weight-semibold);
+}
+
+.ongoing {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: var(--theme-primary);
+}
+
+.ongoing > span {
+    margin-left: 4px;
+}
+
+.activeDot {
+    margin-left: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #00bc5b;
 }
 
 .cycleDate {
