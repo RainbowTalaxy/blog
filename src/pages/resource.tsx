@@ -7,6 +7,8 @@ import useQuery from '../hooks/useQuery';
 import { STATICS_URL } from '../constants/config';
 import useUserEntry from '../hooks/useUserEntry';
 import useUser from '../hooks/useUser';
+import { Button } from '../components/Form';
+import Path from '../utils/Path';
 
 const BASE_URL = '/resource';
 
@@ -74,7 +76,9 @@ const Page = () => {
                         </ul>
                     </>
                 ) : (
-                    <p>请先登录</p>
+                    <Button onClick={() => Path.toUserConfig()}>
+                        请先登录
+                    </Button>
                 )}
             </div>
         </Layout>
