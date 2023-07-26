@@ -26,8 +26,6 @@ const WordBank = () => {
     const query = useQuery();
     const history = useHistory();
 
-    console.log(user);
-
     const refetchBook = useCallback(
         async (bookInfo: BookInfo) => {
             if (!user?.id) return;
