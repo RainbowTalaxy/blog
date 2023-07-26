@@ -4,9 +4,6 @@ const fs = require('fs');
 const { writeJSON, uuid, readJSON } = require('../utils');
 const path = require('path');
 
-const WORKSPACES_DIR = path.join(Dir.storage.luoye, 'workspaces');
-const DOCS_DIR = path.join(Dir.storage.luoye, 'docs');
-const USERS_DIR = path.join(Dir.storage.luoye, 'users');
 const USER_WORKSPACES_FILE = 'workspaces.json';
 const USER_DOCS_FILE = 'docs.json';
 const DEFAULT_WORKSPACE_NAME = 'default';
@@ -23,14 +20,12 @@ const Access = {
     Admin: 'admin',
 };
 
-mkdirp.sync(WORKSPACES_DIR);
-mkdirp.sync(DOCS_DIR);
-mkdirp.sync(USERS_DIR);
+const File = Dir.storage.luoye;
 
 const FileController = {
     userDir(userId) {
         if (!userId) throw new Error('userId is required');
-        const userDir = path.join(USERS_DIR, userId);
+        const userDir = path.join(File.users, userId);
         if (!fs.existsSync(userDir)) {
             mkdirp.sync(userDir);
             const userWorkspacesFile = path.join(userDir, USER_WORKSPACES_FILE);
@@ -50,11 +45,11 @@ const FileController = {
                 scope: Scope.Private,
                 docs: [],
             };
-            const workspaceDir = path.join(
-                WORKSPACES_DIR,
+            const defaultWorkspaceFile = path.join(
+                File.workspaces,
                 `${defaultWorkspace.id}.json`,
             );
-            writeJSON(workspaceDir, defaultWorkspace);
+            writeJSON(defaultWorkspaceFile, defaultWorkspace);
             writeJSON(userWorkspacesFile, [
                 {
                     id: defaultWorkspace.id,
@@ -73,7 +68,7 @@ const FileController = {
         return readJSON(userWorkspacesPath);
     },
     workspace(workspaceId) {
-        const workspaceDir = path.join(WORKSPACES_DIR, `${workspaceId}.json`);
+        const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
         return readJSON(workspaceDir);
     },
     workspaceAccess(workspace, visitor) {
@@ -105,7 +100,7 @@ const FileController = {
             updatedAt: now,
         };
         const workspaceDir = path.join(
-            WORKSPACES_DIR,
+            File.workspaces,
             `${newWorkspace.id}.json`,
         );
         writeJSON(workspaceDir, newWorkspace);
@@ -121,7 +116,7 @@ const FileController = {
     },
     updateWorkspace(workspaceId, props) {
         if (!workspaceId) throw new Error('workspaceId is required');
-        const workspaceDir = path.join(WORKSPACES_DIR, `${workspaceId}.json`);
+        const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
         const workspace = readJSON(workspaceDir);
         const now = Date.now();
         const updatedWorkspace = {

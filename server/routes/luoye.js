@@ -1,6 +1,7 @@
 const express = require('express');
 const { login } = require('../middlewares');
 const { LuoyeCtr, Scope, Access } = require('../controllers/Luoye');
+const { enumCheck } = require('../utils');
 const router = express.Router();
 
 // 获取工作区列表
@@ -49,7 +50,14 @@ router.get('/workspace/:workspaceId', login, async (req, res) => {
 router.post('/workspace', login, async (req, res) => {
     try {
         const { name, description = '', scope = Scope.Private } = req.body;
-        if (!name) return res.status(400).send('name is required');
+        if (!name)
+            return res.status(400).send({
+                error: 'name is required',
+            });
+        if (!enumCheck(scope, Scope))
+            return res.status(400).send({
+                error: 'scope is invalid',
+            });
         const userDir = LuoyeCtr.userDir(req.userId);
         // 限制入参
         const safeProps = {
@@ -65,7 +73,9 @@ router.post('/workspace', login, async (req, res) => {
         return res.send(workspace);
     } catch (error) {
         console.log(error);
-        return res.status(500).send('Failed to create workspace');
+        return res.status(500).send({
+            error: 'Failed to create workspace',
+        });
     }
 });
 
@@ -78,6 +88,10 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(400).send({
                 error: 'workspaceId is required',
             });
+        if (scope && !enumCheck(scope, Scope))
+            return res.status(400).send({
+                error: 'scope is invalid',
+            });
         const workspace = LuoyeCtr.workspace(workspaceId);
         if (!workspace)
             return res.status(404).send({
@@ -88,7 +102,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
                 error: 'Forbidden',
             });
         const safeProps = {
-            name,
+            name: name || workspace.name,
             description,
             scope,
         };
@@ -104,3 +118,5 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
         });
     }
 });
+
+module.exports = { luoyeRouter: router };

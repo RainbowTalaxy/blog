@@ -32,7 +32,11 @@ const SERVER_DIR = {
         books: path.join(STORAGE_PATH, 'books'),
         // Weaver 数据
         projects: path.join(STORAGE_PATH, 'projects'),
-        luoye: path.join(STORAGE_PATH, 'luoye'),
+        luoye: {
+            workspaces: path.join(STORAGE_PATH, 'luoye', 'workspaces'),
+            docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
+            users: path.join(STORAGE_PATH, 'luoye', 'users'),
+        },
     },
 };
 
@@ -46,7 +50,11 @@ const LOCAL_DIR = {
         whitelist: path.join(TEMP_DIR, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
-        luoye: path.join(TEMP_DIR, 'luoye'),
+        luoye: {
+            workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
+            docs: path.join(TEMP_DIR, 'luoye', 'docs'),
+            users: path.join(TEMP_DIR, 'luoye', 'users'),
+        },
     },
 };
 
@@ -68,7 +76,9 @@ mkdirp.sync(Dir.temp);
 mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
-mkdirp.sync(Dir.storage.luoye);
+mkdirp.sync(Dir.storage.luoye.workspaces);
+mkdirp.sync(Dir.storage.luoye.docs);
+mkdirp.sync(Dir.storage.luoye.users);
 
 writeJSONIfNotExist(Dir.storage.whitelist, {
     [APIKey.file]: ['talaxy'],
@@ -91,6 +101,10 @@ const DEFAULT_USER_CONFIG = {
         {
             id: 'talaxy',
             key: 'talaxy',
+        },
+        {
+            id: 'allay',
+            key: 'allay',
         },
     ],
 };

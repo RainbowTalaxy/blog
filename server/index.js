@@ -10,6 +10,7 @@ const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
 const { weaverRouter } = require('./routes/weaver');
+const { luoyeRouter } = require('./routes/luoye');
 
 const app = express();
 
@@ -36,15 +37,20 @@ app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
 app.use('/statics', staticsRouter);
 app.use('/weaver', weaverRouter);
+app.use('/luoye', luoyeRouter);
 
 app.use('*', (_, res) => {
-    res.status(404).send('Not Found');
+    res.status(404).send({
+        error: 'Not Found',
+    });
 });
 
 // error handle
 app.use((error, _, res, __) => {
     console.log(error);
-    res.status(500).send('Server Error');
+    res.status(500).send({
+        error: 'Internal Server Error',
+    });
 });
 
 app.listen(PORT, () => {

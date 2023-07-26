@@ -4,9 +4,9 @@
  * 我打算简单地跑 curl 命令，然后检查返回值
  */
 
-const fs = require('fs');
-const { request, curl } = require('./utils');
-const user = require('./user');
+const { testCase, Rocket } = require('./utils');
+// const user = require('./user');
+const luoye = require('./luoye');
 const wordBank = require('./word-bank');
 // const dictionary = require('./dictionary');
 const statics = require('./statics');
@@ -14,19 +14,15 @@ const weaver = require('./weaver');
 
 async function test() {
     try {
-        // 咱们先测一下 echo 接口
-        await request(
-            'Echo',
-            curl('/echo', 'POST', { data: 'hello' }),
-            (response, resolve, reject) => {
-                if (response?.data !== 'hello') return reject('Expect "hello"');
-                // 放行
-                resolve();
-            },
-        );
+        await testCase.pos('[Echo]', async () => {
+            await new Rocket().post('/echo', { data: 'hello' });
+        });
 
         // user 测试
-        await user();
+        // await user();
+
+        // luoye 测试
+        await luoye();
 
         // word-bank 测试
         await wordBank();

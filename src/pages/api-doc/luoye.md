@@ -7,7 +7,7 @@
 -   工作区 `workspace`
 -   文档 `doc`
 
-## 数据结构
+## 数据设计
 
 ### 文件结构
 
@@ -67,6 +67,36 @@
     -   `private` 私有
 -   `content` 文档内容
 
+## 数据类型
+
+### Workspace
+
+```ts
+interface Workspace {
+    id: string;
+    name: string;
+    description: string;
+    scope: 'private' | 'public';
+    owner: string;
+    creator: string;
+    admins: string[];
+    members: string[];
+    docs: DocNode[];
+    createdAt: number;
+    updatedAt: number;
+}
+```
+
+### DocNode
+
+```ts
+interface DocNode {
+    id: string;
+    name: string;
+    docs: DocNode[];
+}
+```
+
 ## 接口
 
 | Method | Path             | Description    |
@@ -79,3 +109,77 @@
 | POST   | `/doc`           | 创建文档       |
 | PUT    | `/doc/:id`       | 更新文档信息   |
 | DELETE | `/doc/:id`       | 删除文档       |
+
+### `GET` 获取工作区列表
+
+```
+/workspaces
+```
+
+**响应**
+
+```ts
+type Response = Array<{
+    id: string;
+    name: string;
+    description: string;
+    scope: 'private' | 'public';
+    joinAt: number;
+}>;
+```
+
+### `GET` 获取工作区信息
+
+```
+/workspace/:id
+```
+
+**响应**
+
+```ts
+type Response = Workspace;
+```
+
+### `POST` 创建工作区
+
+```
+/workspace/:id
+```
+
+**参数**
+
+```ts
+interface Body {
+    name: string;
+    description?: string;
+    scope?: 'private' | 'public'; // 默认 `private`
+}
+```
+
+**响应**
+
+```ts
+type Response = Workspace;
+```
+
+### `PUT` 更新工作区信息
+
+```
+/workspace/:id
+```
+
+**参数**
+
+```ts
+interface Body {
+    name?: string;
+    description?: string;
+    scope?: 'private' | 'public';
+}
+```
+
+**响应**
+
+```ts
+type Response = Workspace;
+```
