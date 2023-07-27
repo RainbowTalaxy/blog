@@ -20,7 +20,7 @@
 -   `users` 用户目录
     -   `{id}` 用户目录
         -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
-        -   `docs.json` 文档列表 `DocItem[]`
+        -   `docs.json` 文档列表 `DocDir[]`
 
 ## 数据类型
 
@@ -32,11 +32,10 @@ interface Workspace {
     name: string; // 工作区名称
     description: string; // 工作区描述
     scope: 'private' | 'public'; // 可见范围
-    owner: string; // 所有者
     creator: string; // 创建者
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
-    docs: DocItem[]; // 文档列表
+    docs: DocDir[]; // 文档列表
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
 }
@@ -54,17 +53,6 @@ interface WorkspaceItem {
 }
 ```
 
-### DocItem
-
-```ts
-interface DocItem {
-    docId: string; // 文档 id
-    name: string; // 文档名称
-    updatedAt: number; // 更新时间
-    docs: DocItem[]; // 子文档列表
-}
-```
-
 ### Doc
 
 ```ts
@@ -72,13 +60,38 @@ interface Doc {
     id: string; // 文档 id
     name: string; // 文档名称
     creator: string; // 创建者
-    owner: string; // 所有者
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
     scope: 'private' | 'public'; // 可见范围
     workspaces: string[]; // 所属工作区 id
+    docType: 'markdown'; // 文档类型
     content: string; // 文档内容
     createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
+}
+```
+
+### DocItem
+
+```ts
+interface DocItem {
+    id: string; // 文档 id
+    name: string; // 文档名称
+    creator: string; // 创建者
+    scope: 'private' | 'public'; // 可见范围
+    docType: 'markdown'; // 文档类型
+    createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
+}
+```
+
+### DocDir
+
+```ts
+interface DocDir {
+    docId: string; // 文档 id
+    name: string; // 文档名称
+    scope: 'private' | 'public'; // 可见范围
     updatedAt: number; // 更新时间
 }
 ```
@@ -157,7 +170,6 @@ interface Body {
     name?: string;
     description?: string;
     scope?: 'private' | 'public';
-    docs?: DocItem[];
 }
 ```
 
@@ -165,4 +177,59 @@ interface Body {
 
 ```ts
 type Response = Workspace;
+```
+
+### `GET` 获取文档信息
+
+```
+/doc/:id
+```
+
+**响应**
+
+```ts
+type Response = Doc;
+```
+
+### `POST` 创建文档
+
+```
+/doc
+```
+
+**参数**
+
+```ts
+interface Body {
+    workspaceId: string;
+    name?: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = Doc;
+```
+
+### `PUT` 更新文档信息
+
+```
+/doc/:id
+```
+
+**参数**
+
+```ts
+interface Body {
+    name?: string;
+    content?: string;
+    scope?: 'private' | 'public';
+}
+```
+
+**响应**
+
+```ts
+type Response = Doc;
 ```

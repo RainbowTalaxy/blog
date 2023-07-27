@@ -13,16 +13,21 @@ class Scope {
     static Public = 'public';
 }
 
+class DocType {
+    static Markdown = 'markdown';
+}
+
 class Access {
-    static Forbidden = 'forbidden';
-    static Visitor = 'visitor';
-    static Member = 'member';
-    static Admin = 'admin';
+    static Forbidden = 0;
+    static Visitor = 10;
+    static Member = 50;
+    static Admin = 100;
 }
 
 const File = Dir.storage.luoye;
 
 const FileController = {
+    // 获取用户目录
     userDir(userId) {
         if (!userId) throw new Error('userId is required');
         const userDir = path.join(File.users, userId);
@@ -39,7 +44,6 @@ const FileController = {
                 createdAt: now,
                 updatedAt: now,
                 creator: userId,
-                owner: userId,
                 admins: [userId],
                 members: [userId],
                 scope: Scope.Private,
@@ -63,14 +67,18 @@ const FileController = {
         }
         return userDir;
     },
+    // 获取用户工作区列表
     workspaces(userDir) {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         return readJSON(userWorkspacesPath);
     },
+    // 获取工作区信息
     workspace(workspaceId) {
+        if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
         return readJSON(workspaceDir);
     },
+    // 创建工作区
     createWorkspace(userDir, props, creator) {
         if (!userDir || !creator)
             throw new Error('userDir/creator is required');
@@ -78,12 +86,10 @@ const FileController = {
         const userWorkspaces = readJSON(userWorkspacesPath);
         const now = Date.now();
         const newWorkspace = {
-            name: '',
-            description: '',
-            scope: Scope.Private,
-            ...props,
             id: uuid(),
-            owner: creator,
+            name: props.name || '',
+            description: props.description || '',
+            scope: props.scope || Scope.Private,
             creator: creator,
             admins: [creator],
             members: [creator],
@@ -91,11 +97,11 @@ const FileController = {
             createdAt: now,
             updatedAt: now,
         };
-        const workspaceDir = path.join(
+        const workspaceFile = path.join(
             File.workspaces,
             `${newWorkspace.id}.json`,
         );
-        writeJSON(workspaceDir, newWorkspace);
+        writeJSON(workspaceFile, newWorkspace);
         userWorkspaces.unshift({
             id: newWorkspace.id,
             name: newWorkspace.name,
@@ -106,6 +112,7 @@ const FileController = {
         writeJSON(userWorkspacesPath, userWorkspaces);
         return newWorkspace;
     },
+    // 更新工作区
     updateWorkspace(workspaceId, props) {
         if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
@@ -116,7 +123,6 @@ const FileController = {
             name: props.name || workspace.name,
             description: props.description || workspace.description,
             scope: props.scope || workspace.scope,
-            docs: props.docs || workspace.docs,
             updatedAt: now,
         };
         writeJSON(workspaceDir, updatedWorkspace);
@@ -152,6 +158,117 @@ const FileController = {
         }
         return updatedWorkspace;
     },
+    // 获取文档信息
+    doc(docId) {
+        if (!docId) throw new Error('docId is required');
+        const docDir = path.join(File.docs, `${docId}.json`);
+        return readJSON(docDir);
+    },
+    // 创建文档
+    createDoc(userDir, workspace, props, creator) {
+        if (!userDir || !workspace || !creator)
+            throw new Error('userDir/workspace/creator is required');
+        const userDocFile = path.join(userDir, USER_DOCS_FILE);
+        const userDocs = readJSON(userDocFile);
+        const now = Date.now();
+        const newDoc = {
+            id: uuid(),
+            name: props.name || '',
+            creator,
+            admins: _.uniq([creator, ...workspace.admins]),
+            members: workspace.members,
+            scope: workspace.scope,
+            workspaces: [workspace.id],
+            docType: DocType.Markdown,
+            content: '',
+            createdAt: now,
+            updatedAt: now,
+        };
+        const docFile = path.join(File.docs, `${newDoc.id}.json`);
+        writeJSON(docFile, newDoc);
+        userDocs.unshift({
+            id: newDoc.id,
+            name: newDoc.name,
+            creator: newDoc.creator,
+            scope: newDoc.scope,
+            docType: newDoc.docType,
+            updatedAt: newDoc.updatedAt,
+            createdAt: newDoc.createdAt,
+        });
+        writeJSON(userDocFile, userDocs);
+        const workspaceDir = path.join(File.workspaces, `${workspace.id}.json`);
+        workspace.docs.unshift({
+            docId: newDoc.id,
+            name: newDoc.name,
+            scope: newDoc.scope,
+            updatedAt: newDoc.updatedAt,
+        });
+        writeJSON(workspaceDir, workspace);
+        return newDoc;
+    },
+    updateDoc(docId, props) {
+        if (!docId) throw new Error('docId is required');
+        const docDir = path.join(File.docs, `${docId}.json`);
+        const doc = readJSON(docDir);
+        const now = Date.now();
+        const updatedDoc = {
+            ...doc,
+            name: props.name || doc.name,
+            content: props.content || doc.content,
+            scope: props.scope || doc.scope,
+            updatedAt: now,
+        };
+        writeJSON(docDir, updatedDoc);
+        // 更新所有成员的文档信息
+        doc.members.forEach((member) => {
+            const memberDir = FileController.userDir(member);
+            const userDocFile = path.join(memberDir, USER_DOCS_FILE);
+            const userDocs = readJSON(userDocFile);
+            const userDoc = userDocs.find((d) => d.id === docId);
+            if (userDoc) {
+                userDoc.name = updatedDoc.name;
+                userDoc.scope = updatedDoc.scope;
+                userDoc.updatedAt = updatedDoc.updatedAt;
+                // 将更新后的文档信息置顶
+                userDocs.splice(userDocs.indexOf(userDoc), 1);
+                userDocs.unshift(userDoc);
+            } else {
+                userDocs.unshift({
+                    id: updatedDoc.id,
+                    name: updatedDoc.name,
+                    creator: updatedDoc.creator,
+                    scope: updatedDoc.scope,
+                    docType: updatedDoc.docType,
+                    updatedAt: updatedDoc.updatedAt,
+                    createdAt: updatedDoc.createdAt,
+                });
+            }
+            writeJSON(userDocFile, userDocs);
+        });
+        // 更新所有工作区的文档信息
+        doc.workspaces.forEach((workspaceId) => {
+            const workspaceDir = path.join(
+                File.workspaces,
+                `${workspaceId}.json`,
+            );
+            const workspace = readJSON(workspaceDir);
+            const workspaceDoc = workspace.docs.find((d) => d.docId === docId);
+            if (workspaceDoc) {
+                workspaceDoc.name = updatedDoc.name;
+                workspaceDoc.scope = updatedDoc.scope;
+                workspaceDoc.updatedAt = updatedDoc.updatedAt;
+            } else {
+                workspace.docs.unshift({
+                    docId: updatedDoc.id,
+                    name: updatedDoc.name,
+                    scope: updatedDoc.scope,
+                    updatedAt: updatedDoc.updatedAt,
+                });
+            }
+            writeJSON(workspaceDir, workspace);
+        });
+        return updatedDoc;
+    },
 };
 
 const Utility = {
@@ -165,23 +282,6 @@ const Utility = {
     },
     scopeCheck(value) {
         return Object.values(Scope).includes(value);
-    },
-    // TODO: 与原数据的一致性 & updatedAt 属性
-    safeDocItems(docs) {
-        if (!Array.isArray(docs)) return null;
-        const docItems = [];
-        for (const doc of docs) {
-            let { docId, name, docs: subDocs } = doc;
-            if (!docId || !name || !subDocs) return null;
-            subDocs = Utility.safeDocItems(subDocs);
-            if (!subDocs) return null;
-            docItems.push({
-                docId,
-                name,
-                docs: subDocs,
-            });
-        }
-        return docItems;
     },
 };
 

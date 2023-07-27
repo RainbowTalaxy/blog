@@ -72,32 +72,6 @@ async function test() {
         return data;
     });
 
-    // 更新工作区 - `docs`
-    await testCase.pos('[Luoye] update workspace - docs', async () => {
-        await user.put(`/workspace/${workspace.id}`, {
-            docs: [
-                {
-                    docId: 'xxx',
-                    name: 'xxx',
-                    docs: [],
-                },
-            ],
-        });
-    });
-
-    // 更新工作区 - 无效的 `docs`
-    await testCase.neg('[Luoye] update workspace - invalid docs', async () => {
-        await user.put(`/workspace/${workspace.id}`, {
-            docs: [
-                {
-                    docId: 'xxx',
-                    name: 'xxx',
-                    docs: 'xxx',
-                },
-            ],
-        });
-    });
-
     // 更新工作区- 假 id
     await testCase.neg('[Luoye] update workspace - fake id', async () => {
         return await user.put(`/workspace/fake`, {

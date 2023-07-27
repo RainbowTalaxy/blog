@@ -81,7 +81,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
-        const { name, description, scope, docs } = req.body;
+        const { name, description, scope } = req.body;
         if (!workspaceId)
             return res.status(400).send({
                 error: 'workspaceId is required',
@@ -101,17 +101,10 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(403).send({
                 error: 'Forbidden',
             });
-        // `docs` 参数校验
-        const safeDocItems = LuoyeUtl.safeDocItems(docs);
-        if (docs && !safeDocItems)
-            return res.status(400).send({
-                error: 'docs is invalid',
-            });
         const safeProps = {
             name: name,
             description,
             scope,
-            docs: safeDocItems,
         };
         const updatedWorkspace = LuoyeCtr.updateWorkspace(
             workspaceId,
@@ -122,6 +115,102 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to update workspace',
+        });
+    }
+});
+
+// 获取文档信息
+router.get('/doc/:docId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const doc = LuoyeCtr.doc(docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        if (LuoyeUtl.access(doc, userId) === Access.Forbidden)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        return res.send(doc);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get doc',
+        });
+    }
+});
+
+// 创建文档
+router.post('/doc', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { workspaceId, name } = req.body;
+        if (!workspaceId)
+            return res.status(400).send({
+                error: 'workspaceId is required',
+            });
+        const workspace = LuoyeCtr.workspace(workspaceId);
+        if (!workspace)
+            return res.status(404).send({
+                error: 'workspace not found',
+            });
+        if (LuoyeUtl.access(workspace, userId) < Access.Member)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        const doc = LuoyeCtr.createDoc(userDir, workspace, { name }, userId);
+        return res.send(doc);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to create doc',
+        });
+    }
+});
+
+// 更新文档信息
+router.put('/doc/:docId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        const { name, content, scope } = req.body;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        // `scope` 参数校验
+        if (scope && !LuoyeUtl.scopeCheck(scope))
+            return res.status(400).send({
+                error: 'scope is invalid',
+            });
+        const doc = LuoyeCtr.doc(docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(doc, userId) < Access.Member)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        const safeProps = {
+            name,
+            content,
+            scope,
+        };
+        const updatedDoc = LuoyeCtr.updateDoc(docId, safeProps);
+        return res.send(updatedDoc);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to update doc',
         });
     }
 });
