@@ -4,10 +4,9 @@
  * 使用 curl 命令测试接口
  */
 
-const fs = require('fs');
-const { Dir, APIKey, Server } = require('../config');
+const { Dir, Server } = require('../config');
 const { readJSON } = require('../utils');
-const { request, curl, Rocket, testCase } = require('./utils');
+const { Rocket, TestCase } = require('./utils');
 
 const BOOKS_DIR = Dir.storage.books;
 
@@ -37,11 +36,13 @@ const book = {
 const userId = 'talaxy';
 
 async function test() {
+    const testCase = new TestCase('WordBank');
+
     const rocket = new Rocket(Server + '/word-bank');
     await rocket.login(userId, 'talaxy');
 
     // 上传单词书
-    await testCase.pos('[WordBank] - upload book', async () => {
+    await testCase.pos('upload book', async () => {
         await rocket.put('/books', book);
 
         // 读取测试数据中的 meta 文件
@@ -60,7 +61,7 @@ async function test() {
     });
 
     // 获取单词书列表
-    await testCase.pos('[WordBank] - book list', async () => {
+    await testCase.pos('book list', async () => {
         const data = await rocket.get('/books', { userId });
 
         // 检查返回的数据是否正确
@@ -74,7 +75,7 @@ async function test() {
     });
 
     // 获取单词书详情
-    await testCase.pos('[WordBank] - book detail', async () => {
+    await testCase.pos('book detail', async () => {
         const data = await rocket.get(`/books/${book.id}`, { userId });
 
         // 检查返回的数据是否正确
@@ -98,7 +99,7 @@ async function test() {
     });
 
     // 删除单词书
-    await testCase.pos('[WordBank] - delete book', async () => {
+    await testCase.pos('delete book', async () => {
         await rocket.delete(`/books/${book.id}`);
 
         // 读取测试数据中的 meta 文件
@@ -109,7 +110,7 @@ async function test() {
     });
 
     // 获取书本资源的 meta 信息
-    await testCase.pos('[WordBank] - literary meta', async () => {
+    await testCase.pos('literary meta', async () => {
         const data = await rocket.get('/literary', {
             bookName: 'Harry Potter and the Half-Blood Prince',
         });

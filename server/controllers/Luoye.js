@@ -3,6 +3,7 @@ const { Dir } = require('../config');
 const fs = require('fs');
 const { writeJSON, uuid, readJSON } = require('../utils');
 const path = require('path');
+const _ = require('lodash');
 
 const USER_WORKSPACES_FILE = 'workspaces.json';
 const USER_DOCS_FILE = 'docs.json';

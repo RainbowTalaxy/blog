@@ -159,36 +159,43 @@ class Rocket {
         );
         if (data.error) throw new Error(data.error);
         this.token = data.token;
-        console.log('🙂', 'Login:', id);
+        console.log('🐰', 'Login:', id);
     }
 }
 
-const testCase = {
+class TestCase {
+    constructor(name) {
+        this.name = `[${name}]`;
+        console.log(`--------------------${this.name}--------------------`);
+    }
+    title(title) {
+        console.log('📢', this.name, title);
+    }
     async pos(title, task) {
         try {
             const result = await task();
-            console.log('🔆', title);
+            console.log('🔆', this.name, title);
             return result;
         } catch (e) {
-            console.log('❗️', title);
+            console.log('❗️', this.name, title);
             console.error('\tERROR:', e.message);
         }
-    },
+    }
     async neg(title, task) {
         try {
             await task();
-            console.log('❗️', title);
+            console.log('❗️', this.name, title);
             console.error('\tERROR:', 'Expect "error"');
         } catch (e) {
-            console.log('🔆', title, `(error: ${e.message})`);
+            console.log('🔆', this.name, title, `(error: ${e.message})`);
         }
-    },
-};
+    }
+}
 
 module.exports = {
     request,
     cmd,
     curl,
     Rocket,
-    testCase,
+    TestCase,
 };
