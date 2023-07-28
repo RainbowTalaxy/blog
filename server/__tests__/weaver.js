@@ -1,12 +1,6 @@
-/**
- * weaver 的测试用例
- *
- * 使用 curl 命令测试接口
- */
-
 const { Dir, Server } = require('../config');
 const { readJSON } = require('../utils');
-const { Rocket, testCase, TestCase } = require('./utils');
+const { Rocket, TestCase } = require('./utils');
 
 const PROJECTS_DIR = Dir.storage.projects;
 

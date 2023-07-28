@@ -1,9 +1,3 @@
-/**
- * dictionary 的测试用例
- *
- * 使用 curl 命令测试接口
- */
-
 const { Server } = require('../config');
 const { Rocket, TestCase } = require('./utils');
 

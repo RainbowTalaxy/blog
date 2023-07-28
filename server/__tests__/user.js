@@ -1,107 +1,69 @@
-/**
- * user 的测试用例
- *
- * 使用 curl 命令测试接口
- */
-
-const { request, curl } = require('./utils');
+const { TestCase, Rocket } = require('./utils');
 const { uuid } = require('../utils');
-
-const BASE_PATH = '/user';
-
-const admin = {
-    id: 'talaxy',
-    key: 'talaxy',
-};
+const { Server } = require('../config');
 
 async function test() {
-    let generateToken;
+    const testCase = new TestCase('User');
 
-    const userId = 'allay';
-
-    let token;
-
-    // 用户登录
-    await request(
-        'User - login',
-        curl(`${BASE_PATH}/login`, 'POST', admin),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            token = response.token;
-
-            resolve();
-        },
-    );
-
-    // 用户登录检验
-    await request(
-        'User - login test',
-        curl(`${BASE_PATH}/test`, 'GET', {}, { token }),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            if (response.id !== admin.id) return reject('Expect "id"');
-
-            resolve();
-        },
-    );
-
-    // 用管理员身份生成一个 token
-    await request(
-        'User - generate token (admin)',
-        curl(`${BASE_PATH}/token`, 'POST', { id: userId }, { token }),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            generateToken = response;
-
-            resolve();
-        },
-    );
-
-    const userKey = 'test';
-
-    const user = {
-        ...generateToken,
-        key: userKey,
+    const adminInfo = {
+        id: 'talaxy',
+        key: 'talaxy',
     };
 
-    // 用户使用假的 token 登记信息
-    await request(
-        'User - register (fake)',
-        curl(`${BASE_PATH}/register`, 'POST', {
-            ...user,
-            token: uuid(),
-        }),
-        (response, resolve, reject) => {
-            if (!response.error) return reject('Expect "error"');
+    const userInfo = {
+        id: 'test',
+        key: 'test',
+    };
 
-            resolve();
+    const admin = new Rocket(Server + '/user');
+    await admin.login(adminInfo.id, adminInfo.key);
+    const user = new Rocket(Server + '/user');
+
+    // 测试登录
+    await testCase.pos('test login', async () => {
+        const data = await admin.get('/test');
+        if (data.id !== adminInfo.id) throw new Error('Expect "id"');
+    });
+
+    // 管理员生成 token
+    const generatedToken = await testCase.pos(
+        'admin generate token',
+        async () => {
+            return await admin.post('/token', {
+                id: userInfo.id,
+            });
         },
     );
+
+    // 用户使用假 token 登记信息
+    await testCase.neg('user register by fake token', async () => {
+        await user.post('/register', {
+            ...userInfo,
+            token: uuid(),
+        });
+    });
 
     // 用户使用 token 登记信息
-    await request(
-        'User - register',
-        curl(`${BASE_PATH}/register`, 'POST', user),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
+    await testCase.pos('user register by token', async () => {
+        await user.post('/register', {
+            ...userInfo,
+            token: generatedToken.token,
+        });
+    });
 
-            resolve();
-        },
-    );
+    await user.login(userInfo.id, userInfo.key);
+
+    // 用户生成 token
+    await testCase.neg('user generate token', async () => {
+        await user.post('/token', {
+            id: 'someone',
+        });
+    });
 
     // 列出用户信息（管理员）
-    await request(
-        'User - list (admin)',
-        curl(`${BASE_PATH}/list`, 'GET', {}, { token }),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
+    await testCase.pos(' admin list users', async () => {
+        const data = await admin.get('/list');
+    });
 }
 
 module.exports = test;

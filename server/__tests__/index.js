@@ -1,14 +1,8 @@
-/**
- * 我准备写一些测试用例，我希望这个文件先测一些测试接口，然后引入其他测试文件执行测试
- *
- * 我打算简单地跑 curl 命令，然后检查返回值
- */
-
 const { Rocket, TestCase } = require('./utils');
-// const user = require('./user');
+const user = require('./user');
 const luoye = require('./luoye');
 const wordBank = require('./word-bank');
-// const dictionary = require('./dictionary');
+const dictionary = require('./dictionary');
 const statics = require('./statics');
 const weaver = require('./weaver');
 
@@ -19,13 +13,13 @@ async function test() {
         });
 
         // user 测试
-        // await user();
+        await user();
 
         // word-bank 测试
         await wordBank();
 
-        // dictionary 测试（已经稳定）
-        // await dictionary();
+        // dictionary 测试
+        await dictionary();
 
         // statics 测试
         await statics();

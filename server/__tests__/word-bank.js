@@ -1,9 +1,3 @@
-/**
- * word-bank 的测试用例
- *
- * 使用 curl 命令测试接口
- */
-
 const { Dir, Server } = require('../config');
 const { readJSON } = require('../utils');
 const { Rocket, TestCase } = require('./utils');
@@ -40,6 +34,21 @@ async function test() {
 
     const rocket = new Rocket(Server + '/word-bank');
     await rocket.login(userId, 'talaxy');
+
+    // 获取书本资源的 meta 信息
+    await testCase.pos('literary meta', async () => {
+        const data = await rocket.get('/literary', {
+            bookName: 'Harry Potter and the Half-Blood Prince',
+        });
+
+        // 检查返回的数据是否正确
+        if (!data) throw new Error('Expect "meta"');
+        if (!data.title) throw new Error('Expect book title');
+        if (!data.chapters) throw new Error('Expect book chapters');
+        // chapters 应当是个数组
+        if (!Array.isArray(data.chapters))
+            throw new Error('Expect chapters to be an array');
+    });
 
     // 上传单词书
     await testCase.pos('upload book', async () => {
@@ -107,21 +116,6 @@ async function test() {
             readJSON(`${BOOKS_DIR}/${userId}/list-meta.json`),
         );
         if (userMeta.length !== 0) return reject('Expect 0 book');
-    });
-
-    // 获取书本资源的 meta 信息
-    await testCase.pos('literary meta', async () => {
-        const data = await rocket.get('/literary', {
-            bookName: 'Harry Potter and the Half-Blood Prince',
-        });
-
-        // 检查返回的数据是否正确
-        if (!data) throw new Error('Expect "meta"');
-        if (!data.title) throw new Error('Expect book title');
-        if (!data.chapters) throw new Error('Expect book chapters');
-        // chapters 应当是个数组
-        if (!Array.isArray(data.chapters))
-            throw new Error('Expect chapters to be an array');
     });
 }
 
