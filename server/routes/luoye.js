@@ -215,4 +215,35 @@ router.put('/doc/:docId', login, async (req, res) => {
     }
 });
 
+// 删除文档
+router.delete('/doc/:docId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const doc = LuoyeCtr.doc(docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(doc, userId) < Access.Member)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        LuoyeCtr.deleteDoc(docId);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to delete doc',
+        });
+    }
+});
+
 module.exports = { luoyeRouter: router };

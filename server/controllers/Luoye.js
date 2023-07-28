@@ -270,6 +270,37 @@ const FileController = {
         });
         return updatedDoc;
     },
+    deleteDoc(docId) {
+        if (!docId) throw new Error('docId is required');
+        const docDir = path.join(File.docs, `${docId}.json`);
+        const doc = readJSON(docDir);
+        // 删除文档
+        fs.unlinkSync(docDir);
+        // 删除用户的文档信息
+        doc.members.forEach((member) => {
+            const memberDir = FileController.userDir(member);
+            const userDocFile = path.join(memberDir, USER_DOCS_FILE);
+            const userDocs = readJSON(userDocFile);
+            const userDoc = userDocs.find((d) => d.id === docId);
+            if (userDoc) {
+                userDocs.splice(userDocs.indexOf(userDoc), 1);
+                writeJSON(userDocFile, userDocs);
+            }
+        });
+        // 删除工作区的文档信息
+        doc.workspaces.forEach((workspaceId) => {
+            const workspaceDir = path.join(
+                File.workspaces,
+                `${workspaceId}.json`,
+            );
+            const workspace = readJSON(workspaceDir);
+            const workspaceDoc = workspace.docs.find((d) => d.docId === docId);
+            if (workspaceDoc) {
+                workspace.docs.splice(workspace.docs.indexOf(workspaceDoc), 1);
+                writeJSON(workspaceDir, workspace);
+            }
+        });
+    },
 };
 
 const Utility = {

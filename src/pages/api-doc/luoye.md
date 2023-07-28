@@ -233,3 +233,15 @@ interface Body {
 ```ts
 type Response = Doc;
 ```
+
+### `DELETE` 删除文档
+
+```
+/doc/:id
+```
+
+**响应**
+
+```ts
+type Response = Doc;
+```

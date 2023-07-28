@@ -4,7 +4,7 @@
  * 我打算简单地跑 curl 命令，然后检查返回值
  */
 
-const { testCase, Rocket } = require('./utils');
+const { Rocket, TestCase } = require('./utils');
 // const user = require('./user');
 const luoye = require('./luoye');
 const wordBank = require('./word-bank');
@@ -14,7 +14,7 @@ const weaver = require('./weaver');
 
 async function test() {
     try {
-        await testCase.pos('[Echo]', async () => {
+        await new TestCase('Echo').pos('echo', async () => {
             await new Rocket().post('/echo', { data: 'hello' });
         });
 

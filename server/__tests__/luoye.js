@@ -156,6 +156,16 @@ async function test() {
         await visitor.get(`/doc/${doc.id}`);
     });
 
+    // 删除文档 - 访客
+    await testCase.neg('delete private doc - visitor', async () => {
+        await visitor.delete(`/doc/${doc.id}`);
+    });
+
+    // 删除文档
+    await testCase.pos('delete private doc', async () => {
+        await user.delete(`/doc/${doc.id}`);
+    });
+
     // ## 工作区与文档 `scope` 一致性测试
     testCase.title('workspace & doc scope consistency');
 
