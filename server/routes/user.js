@@ -67,7 +67,6 @@ router.get('/list', login, async (req, res) => {
     }
 });
 
-const DAY_TIME = 1000 * 60 * 60 * 24;
 const MAX_DAY = 120;
 
 router.post('/login', async (req, res) => {

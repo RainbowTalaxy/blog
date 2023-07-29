@@ -54,10 +54,15 @@ const writeJSONIfNotExist = (filePath, content) => {
     }
 };
 
+const enumCheck = (value, enumObj) => {
+    return Object.values(enumObj).includes(value);
+};
+
 module.exports = {
     uuid,
     downloadFile,
     readJSON,
     writeJSON,
     writeJSONIfNotExist,
+    enumCheck,
 };

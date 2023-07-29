@@ -1,254 +1,119 @@
-/**
- * weaver 的测试用例
- *
- * 使用 curl 命令测试接口
- */
+const { Dir, Server } = require('../config');
+const { readJSON } = require('../utils');
+const { Rocket, TestCase } = require('./utils');
 
-const fs = require('fs');
-const { Dir, APIKey } = require('../config');
-const { request, curl } = require('./utils');
-
-const BASE_PATH = '/weaver';
 const PROJECTS_DIR = Dir.storage.projects;
 
-// 定义一个项目的测试数据
-const project = {
-    name: 'some_name',
-};
-
 async function test() {
-    let token;
+    const testCase = new TestCase('Weaver');
 
-    // 用户登录
-    await request(
-        'User - login',
-        curl(`/user/login`, 'POST', {
-            id: 'talaxy',
-            key: 'talaxy',
-        }),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
+    const rocket = new Rocket(Server + '/weaver');
+    await rocket.login('talaxy', 'talaxy');
 
-            token = response.token;
+    // 创建项目
+    const project = await testCase.pos('create project', async () => {
+        const data = await rocket.post('/project', {
+            name: 'some_name',
+        });
+        // 读取测试数据中的 meta 文件
+        let list = readJSON(`${PROJECTS_DIR}/list.json`);
 
-            resolve();
-        },
-    );
+        if (!list.some((item) => item.name === data.name)) {
+            throw new Error('Expect project created');
+        }
 
-    const auth = { token };
+        return data;
+    });
 
-    // 测试一下创建项目
-    await request(
-        'Weaver - create project',
-        curl(`${BASE_PATH}/project`, 'POST', project, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
+    // 查看项目列表
+    await testCase.pos('list projects', async () => {
+        const data = await rocket.get('/projects');
 
-            // 读取测试数据中的 meta 文件
-            let list = fs.readFileSync(`${PROJECTS_DIR}/list.json`, 'utf-8');
-            list = JSON.parse(list);
+        if (data.length === 0) {
+            throw new Error('Expect project list');
+        }
+    });
 
-            if (!list.some((item) => item.name === project.name)) {
-                return reject('Expect project created');
-            }
+    // 查看项目
+    await testCase.pos('get project', async () => {
+        await rocket.get(`/project/${project.id}`);
+    });
 
-            resolve();
-        },
-    );
+    // 修改项目信息
+    await testCase.pos('modify project', async () => {
+        await rocket.put(`/project/${project.id}`, {
+            name: 'some_name',
+        });
+    });
 
-    // 测试一下查看项目列表
-    await request(
-        'Weaver - list projects',
-        curl(`${BASE_PATH}/projects`, 'GET', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
+    // 获取周期信息
+    const cycle = await testCase.pos('get cycles', async () => {
+        const cycles = await rocket.get(`/project/${project.id}/cycles`);
+        return cycles[0];
+    });
 
-            // 读取测试数据中的 meta 文件
-            let list = fs.readFileSync(`${PROJECTS_DIR}/list.json`, 'utf-8');
-            list = JSON.parse(list);
+    // 创建周期
+    const newCycle = await testCase.pos('create cycle', async () => {
+        return await rocket.post(`/project/${project.id}/cycle`, {
+            name: 'some_name',
+            description: 'some_description',
+        });
+    });
 
-            if (list.length === 0) {
-                return reject('Expect project list');
-            }
-
-            project.id = list[0].id;
-
-            resolve();
-        },
-    );
-
-    // 测试一下查看项目
-    await request(
-        'Weaver - get project',
-        curl(`${BASE_PATH}/project/${project.id}`, 'GET', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
-
-    // 测试一下修改项目信息
-    await request(
-        'Weaver - modify project',
-        curl(
-            `${BASE_PATH}/project/${project.id}`,
-            'PUT',
-            {
-                name: 'another_name',
-            },
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
-
-    let cycle;
-
-    // 测试一下获取周期信息
-    await request(
-        'Weaver - get project cycles',
-        curl(`${BASE_PATH}/project/${project.id}/cycles`, 'GET', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            cycle = response[0];
-
-            resolve();
-        },
-    );
-
-    let newCycle;
-
-    // 测试一下创建周期
-    await request(
-        'Weaver - create cycle',
-        curl(`${BASE_PATH}/project/${project.id}/cycle`, 'POST', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            newCycle = response;
-
-            resolve();
-        },
-    );
-
-    // 测试一下获取周期信息
-    await request(
-        'Weaver - get cycle',
-        curl(
-            `${BASE_PATH}/project/${project.id}/cycle/${cycle.id}`,
-            'GET',
-            {},
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error)
-                return reject('Expect "success"', response.error);
-
-            resolve();
-        },
-    );
+    // 获取周期信息
+    await testCase.pos('get cycle', async () => {
+        await rocket.get(`/project/${project.id}/cycle/${cycle.id}`);
+    });
 
     // 获取任务池
-    await request(
-        'Weaver - get cycle',
-        curl(`${BASE_PATH}/project/${project.id}/cycle/pool`, 'GET', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error)
-                return reject('Expect "success"', response.error);
-
-            resolve();
-        },
-    );
-
-    let task = {
-        name: 'some_name',
-        description: 'some_description',
-        priority: 1,
-        status: 1,
-    };
+    await testCase.pos('get task pool', async () => {
+        await rocket.get(`/project/${project.id}/cycle/pool`);
+    });
 
     // 创建任务
-    await request(
-        'Weaver - create task',
-        curl(
-            `${BASE_PATH}/project/${project.id}/cycle/${cycle.id}/task`,
-            'POST',
-            task,
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            task = response;
-
-            resolve();
-        },
-    );
+    const task = await testCase.pos('create task', async () => {
+        return await rocket.post(
+            `/project/${project.id}/cycle/${cycle.id}/task`,
+            {
+                name: 'some_name',
+                description: 'some_description',
+                priority: 1,
+                status: 1,
+            },
+        );
+    });
 
     // 修改任务
-    await request(
-        'Weaver - modify task',
-        curl(
-            `${BASE_PATH}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
-            'PUT',
-            { status: 2 },
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error)
-                return reject('Expect "success"', response.error);
-
-            resolve();
-        },
-    );
+    await testCase.pos('modify task', async () => {
+        await rocket.put(
+            `/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
+            {
+                status: 2,
+            },
+        );
+    });
 
     // 移动任务周期
-    await request(
-        'Weaver - move task',
-        curl(
-            `${BASE_PATH}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
-            'PUT',
-            { cycleId: newCycle.id },
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
+    await testCase.pos('move task', async () => {
+        await rocket.put(
+            `/project/${project.id}/cycle/${cycle.id}/task/${task.id}/move`,
+            {
+                cycleId: newCycle.id,
+            },
+        );
+    });
 
     // 删除任务
-    await request(
-        'Weaver - delete task',
-        curl(
-            `${BASE_PATH}/project/${project.id}/cycle/${cycle.id}/task/${task.id}`,
-            'DELETE',
-            {},
-            auth,
-        ),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
+    await testCase.pos('delete task', async () => {
+        await rocket.delete(
+            `/project/${project.id}/cycle/${newCycle.id}/task/${task.id}`,
+        );
+    });
 
     // 删除项目
-    await request(
-        'Weaver - delete project',
-        curl(`${BASE_PATH}/project/${project.id}`, 'DELETE', {}, auth),
-        (response, resolve, reject) => {
-            if (response.error) return reject('Expect "success"');
-
-            resolve();
-        },
-    );
+    await testCase.pos('delete project', async () => {
+        await rocket.delete(`/project/${project.id}`);
+    });
 }
 
 module.exports = test;

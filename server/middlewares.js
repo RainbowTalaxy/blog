@@ -38,12 +38,16 @@ const login = (req, res, next) => {
     if (!keys.token)
         return res.status(401).send({ error: 'Please login first' });
     const config = readJSON(Dir.storage.config);
-    const { id } = jwt.verify(keys.token, config.secret);
-    req.userId = id;
-    if (User.isAdmin(id)) {
-        req.isAdmin = true;
+    try {
+        const { id } = jwt.verify(keys.token, config.secret);
+        req.userId = id;
+        if (User.isAdmin(id)) {
+            req.isAdmin = true;
+        }
+        next();
+    } catch (error) {
+        return res.status(401).send({ error: 'Please login first' });
     }
-    next();
 };
 
 module.exports = {

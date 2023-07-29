@@ -21,14 +21,11 @@ const router = express.Router();
 const fs = require('fs');
 const { mkdirp } = require('mkdirp');
 const path = require('path');
-const { Dir, Statics, APIKey } = require('../config');
+const { Dir, Statics } = require('../config');
 const { default: axios } = require('axios');
 const { login } = require('../middlewares');
 
 const BOOKS_DIR = Dir.storage.books;
-
-// 用来存放用户上传的单词书的目录
-mkdirp.sync(BOOKS_DIR);
 
 // 错误日志的文件路径
 const errorLogPath = path.join(BOOKS_DIR, 'error.log');

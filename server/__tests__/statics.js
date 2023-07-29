@@ -1,62 +1,28 @@
-/**
- * dictionary 的测试用例
- *
- * 使用 curl 命令测试接口
- */
-
-const { request, curl } = require('./utils');
-
-const BASE_PATH = '/statics';
+const { Server } = require('../config');
+const { Rocket, TestCase } = require('./utils');
 
 const testDir = 'assets';
 
-const userId = 'talaxy';
-
 async function test() {
-    try {
-        let token;
-        const user = {
-            id: userId,
-            key: 'talaxy',
-        };
+    const testCase = new TestCase('Statics');
 
-        // 用户登录
-        await request(
-            'User - login',
-            curl(`/user/login`, 'POST', user),
-            (response, resolve, reject) => {
-                if (response.error) return reject('Expect "success"');
+    const rocket = new Rocket(Server + '/statics');
+    await rocket.login('talaxy', 'talaxy');
 
-                token = response.token;
+    // 获取静态资源列表
+    await testCase.pos('list', async () => {
+        await rocket.get('/');
+    });
 
-                resolve();
-            },
-        );
+    // 获取指定静态资源
+    await testCase.pos('target list', async () => {
+        await rocket.get(`/${testDir}`);
+    });
 
-        const auth = { token };
-
-        await request(
-            'Statics - root',
-            curl(`${BASE_PATH}`, 'GET', null, auth),
-            (response, resolve, reject) => {
-                if (response.error) return reject('Expect "success"');
-
-                // 放行
-                resolve();
-            },
-        );
-
-        await request(
-            'Statics - files',
-            curl(`${BASE_PATH}/${testDir}`, 'GET', null, auth),
-            (response, resolve, reject) => {
-                if (response.error) return reject('Expect "success"');
-
-                // 放行
-                resolve();
-            },
-        );
-    } catch {}
+    // 获取非法的静态资源路径
+    await testCase.neg('invalid path', async () => {
+        await rocket.get('/../invalid');
+    });
 }
 
 module.exports = test;
