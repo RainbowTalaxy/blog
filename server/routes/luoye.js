@@ -119,6 +119,21 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 获取用户文档列表
+router.get('/docs', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.docs(userDir);
+        return res.send(docs);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get docs',
+        });
+    }
+});
+
 // 获取文档信息
 router.get('/doc/:docId', login, async (req, res) => {
     try {

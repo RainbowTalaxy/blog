@@ -38,6 +38,16 @@ export interface Workspace {
     updatedAt: number; // 更新时间
 }
 
+export interface DocItem {
+    id: string; // 文档 id
+    name: string; // 文档名称
+    creator: string; // 创建者
+    scope: Scope; // 可见范围
+    docType: DocType; // 文档类型
+    createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
+}
+
 export interface Doc {
     id: string; // 文档 id
     name: string; // 文档名称
@@ -70,6 +80,7 @@ const LuoyeAPI = {
             scope?: Scope;
         },
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
+    docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
     doc: (id: string) => rocketV2.get<Doc>(`${SERVER_API}/luoye/doc/${id}`),
     createDoc: (
         workspaceId: string,

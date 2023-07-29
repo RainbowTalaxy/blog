@@ -159,6 +159,11 @@ const FileController = {
         }
         return updatedWorkspace;
     },
+    // 获取用户文档列表
+    docs(userDir) {
+        const userDocFile = path.join(userDir, USER_DOCS_FILE);
+        return readJSON(userDocFile);
+    },
     // 获取文档信息
     doc(docId) {
         if (!docId) throw new Error('docId is required');
