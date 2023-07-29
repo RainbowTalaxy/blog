@@ -115,7 +115,6 @@ async function test() {
     // 获取文档列表
     await testCase.pos('doc list', async () => {
         const data = await user.get('/docs');
-        console.log(data);
         if (data.length !== 1) throw new Error('doc list not match');
     });
 
