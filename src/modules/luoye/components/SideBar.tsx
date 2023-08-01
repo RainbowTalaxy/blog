@@ -18,20 +18,9 @@ interface ListItemProps {
     children?: ReactNode;
 }
 
-export const SideBarListItem = ({
-    className,
-    active,
-    icon,
-    children,
-}: ListItemProps) => {
+export const SideBarListItem = ({ className, active, icon, children }: ListItemProps) => {
     return (
-        <li
-            className={clsx(
-                styles.sidebarListItem,
-                active && styles.active,
-                className,
-            )}
-        >
+        <li className={clsx(styles.sidebarListItem, active && styles.active, className)}>
             {icon && <span className={styles.sidebarListItemIcon}>{icon}</span>}
             {children}
         </li>

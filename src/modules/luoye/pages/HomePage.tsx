@@ -4,13 +4,11 @@ import API from '@site/src/api';
 import { Button } from '@site/src/components/Form';
 import Path from '@site/src/utils/Path';
 import styles from '../styles/home.module.css';
-import ContentWithSideBar, {
-    SideBarList,
-    SideBarListItem,
-} from '../components/SideBar';
+import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { date, DEFAULT_WORKSPACE_NAME } from '../constants';
-import Spacer from '@site/src/components/Spacer';
+import WorkspaceForm from '../components/WorkspaceForm';
+import DocForm from '../components/DocForm';
 
 const HomePage = () => {
     const [data, setData] = useState<{
@@ -18,19 +16,15 @@ const HomePage = () => {
         workspaces: WorkspaceItem[];
         docs: DocItem[];
     }>();
+    const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
+    const [isDocFormVisible, setDocFormVisible] = useState(false);
 
     const refetch = useCallback(async () => {
         try {
-            const [workspaces, docs] = await Promise.all([
-                API.luoye.workspaces(),
-                API.luoye.docs(),
-            ]);
+            const [workspaces, docs] = await Promise.all([API.luoye.workspaces(), API.luoye.docs()]);
             // 摘取默认工作区
-            const defaultWorkspaceIdx = workspaces.findIndex(
-                (workspace) => workspace.name === DEFAULT_WORKSPACE_NAME,
-            );
-            const defaultWorkspace =
-                workspaces[defaultWorkspaceIdx] || workspaces[0];
+            const defaultWorkspaceIdx = workspaces.findIndex((workspace) => workspace.name === DEFAULT_WORKSPACE_NAME);
+            const defaultWorkspace = workspaces[defaultWorkspaceIdx] || workspaces[0];
             if (defaultWorkspaceIdx !== -1) {
                 workspaces.splice(defaultWorkspaceIdx, 1);
             }
@@ -51,7 +45,6 @@ const HomePage = () => {
         refetch();
     }, [refetch]);
 
-    document.title = '落页';
     const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];
 
     return (
@@ -72,9 +65,7 @@ const HomePage = () => {
                         {allWorkspaces && (
                             <SideBarList>
                                 {allWorkspaces.map((workspace) => (
-                                    <SideBarListItem key={workspace.id}>
-                                        {workspace.name || '未命名'}
-                                    </SideBarListItem>
+                                    <SideBarListItem key={workspace.id}>{workspace.name || '未命名'}</SideBarListItem>
                                 ))}
                             </SideBarList>
                         )}
@@ -82,36 +73,27 @@ const HomePage = () => {
                 }
             >
                 <div className={styles.pageView}>
-                    {data === null && (
-                        <Button onClick={() => Path.toUserConfig()}>
-                            请先登录
-                        </Button>
-                    )}
+                    {data === null && <Button onClick={() => Path.toUserConfig()}>请先登录</Button>}
                     {data && (
                         <>
                             <h2 className={styles.pageTitle}>开始</h2>
                             <div className={styles.actionSheet}>
-                                <div className={styles.action}>
+                                <div className={styles.action} onClick={() => setWorkspaceFormVisible(true)}>
                                     <span>🪸</span>新建工作区
                                 </div>
-                                <div className={styles.action}>
+                                <div className={styles.action} onClick={() => setDocFormVisible(true)}>
                                     <span>🍂</span>新建文档
                                 </div>
                             </div>
                             <h2>工作区</h2>
                             <div className={styles.workspaceList}>
                                 {allWorkspaces.map((workspace) => (
-                                    <div
-                                        className={styles.workspaceItem}
-                                        key={workspace.id}
-                                    >
+                                    <div className={styles.workspaceItem} key={workspace.id}>
                                         <div className={styles.workspaceName}>
                                             <span>🪴</span>
-                                            <div>{workspace.name}</div>
+                                            <div>{workspace.name || '未命名'}</div>
                                         </div>
-                                        <div className={styles.description}>
-                                            {workspace.description}
-                                        </div>
+                                        <div className={styles.description}>{workspace.description}</div>
                                     </div>
                                 ))}
                             </div>
@@ -121,16 +103,10 @@ const HomePage = () => {
                             ) : (
                                 <div className={styles.docList}>
                                     {data.docs.map((doc) => (
-                                        <div className={styles.docItem}>
-                                            <div className={styles.docName}>
-                                                {doc.name}
-                                            </div>
-                                            <div className={styles.docCreator}>
-                                                {doc.creator}
-                                            </div>
-                                            <div className={styles.docDate}>
-                                                {date(doc.updatedAt)}
-                                            </div>
+                                        <div className={styles.docItem} key={doc.id}>
+                                            <div className={styles.docName || '未命名文档'}>{doc.name}</div>
+                                            <div className={styles.docCreator}>{doc.creator}</div>
+                                            <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -138,6 +114,23 @@ const HomePage = () => {
                         </>
                     )}
                 </div>
+                {isWorkspaceFormVisible && (
+                    <WorkspaceForm
+                        onClose={async (success) => {
+                            if (success) await refetch();
+                            setWorkspaceFormVisible(false);
+                        }}
+                    />
+                )}
+                {data && isDocFormVisible && (
+                    <DocForm
+                        workspaceId={data.defaultWorkspace.id}
+                        onClose={async (success) => {
+                            if (success) await refetch();
+                            setDocFormVisible(false);
+                        }}
+                    />
+                )}
             </ContentWithSideBar>
         </div>
     );

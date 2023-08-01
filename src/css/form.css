@@ -3,10 +3,6 @@
 .input,
 .textarea,
 .select {
-    --primary: var(--ifm-color-primary);
-    --border: var(--theme-black-shadow);
-    --background: var(--theme-background);
-
     appearance: none;
     background: none;
     outline: none;

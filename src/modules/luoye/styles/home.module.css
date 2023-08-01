@@ -1,9 +1,4 @@
 .container {
-    --ly-primary: #785617;
-    --ly-secondary: #d09d3e;
-    --ly-background: #fff8ed;
-    --ly-active-background: #ffedcc;
-
     position: relative;
     width: 100%;
     height: 100%;
@@ -24,7 +19,7 @@
 }
 
 .pageView {
-    padding: 24px 10vw;
+    padding: 36px 10vw;
 }
 
 .pageTitle {
@@ -111,11 +106,13 @@
 }
 
 .docCreator {
-    min-width: 10vw;
+    width: 160px;
 }
 
+.docCreator,
 .docDate {
-    min-width: 10vw;
+    font-variant: tabular-nums;
+    font-feature-settings: 'tnum';
 }
 
 .action,
@@ -136,7 +133,8 @@
 
 .workspaceItem .description,
 .workspaceName > div,
-.docName {
+.docName,
+.docCreator {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -144,7 +142,7 @@
 
 @media screen and (max-width: 1600px) {
     .pageView {
-        padding: 24px 36px;
+        padding: 36px 36px;
     }
 
     .workspaceItem {

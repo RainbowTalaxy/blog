@@ -45,6 +45,17 @@
     --theme-color-black: #000;
     --pure-background: #fff;
 
+    /* 通用 */
+    --primary: var(--ifm-color-primary);
+    --border: var(--theme-black-shadow);
+    --background: var(--theme-background);
+
+    /* 落页 */
+    --ly-primary: #785617;
+    --ly-secondary: #d09d3e;
+    --ly-background: #fff8ed;
+    --ly-active-background: #ffedcc;
+
     /* safe area */
     --safe-area-inset-bottom: constant(safe-area-inset-bottom);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
