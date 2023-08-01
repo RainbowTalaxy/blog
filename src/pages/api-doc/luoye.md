@@ -20,7 +20,7 @@
 -   `users` 用户目录
     -   `{id}` 用户目录
         -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
-        -   `docs.json` 文档列表 `DocDir[]`
+        -   `docs.json` 文档列表 `DocItem[]`
 
 ## 数据类型
 
