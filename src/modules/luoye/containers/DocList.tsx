@@ -4,7 +4,7 @@ import { Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Spacer from '@site/src/components/Spacer';
 import { useEffect, useState } from 'react';
-import { date } from '../constants';
+import { date, workSpaceName } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 
@@ -36,7 +36,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
 
     return (
         <>
-            <h2 className={styles.pageTitle}>{workspace.name}</h2>
+            <h2 className={styles.pageTitle}>{workSpaceName(workspace.name)}</h2>
             <h2 className={styles.titleBar}>
                 文档列表
                 <Spacer />
