@@ -34,6 +34,7 @@
 .form {
     --primary: var(--ly-primary);
     --border: var(--ly-secondary);
+    --shadow: var(--ly-inactive-background);
     --background: var(--ly-active-background);
 
     padding: 32px;
@@ -60,7 +61,7 @@
     font-size: 18px;
 }
 
-.formItem > label {
+.formItem > label:first-of-type {
     flex-shrink: 0;
     margin: 5px 0;
     width: 5em;
@@ -68,7 +69,7 @@
     text-align: right;
 }
 
-.formItem > label > span {
+.formItem > label:first-of-type > span {
     margin-right: 4px;
     color: red;
 }

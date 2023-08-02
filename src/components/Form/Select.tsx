@@ -7,7 +7,7 @@ interface Props {
         value: string;
         label: string;
     }>;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 const Select = ({ raf, options, children }: Props) => {

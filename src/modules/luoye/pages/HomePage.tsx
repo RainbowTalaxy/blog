@@ -124,7 +124,7 @@ const HomePage = () => {
                 )}
                 {data && isDocFormVisible && (
                     <DocForm
-                        workspaceId={data.defaultWorkspace.id}
+                        workspaceItems={allWorkspaces}
                         onClose={async (success) => {
                             if (success) await refetch();
                             setDocFormVisible(false);

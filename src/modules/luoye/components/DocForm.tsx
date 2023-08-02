@@ -1,22 +1,26 @@
 import API from '@site/src/api';
-import { Doc } from '@site/src/api/luoye';
-import { Button, Input } from '@site/src/components/Form';
+import { Doc, Scope, WorkspaceItem } from '@site/src/api/luoye';
+import { Button, Input, Select } from '@site/src/components/Form';
+import Toggle from '@site/src/components/Form/Toggle';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
-    workspaceId?: string;
+    workspaceItems: WorkspaceItem[];
     doc?: Doc;
     onClose: (success?: boolean) => Promise<void>;
 }
 
-const DocForm = ({ workspaceId, doc, onClose }: Props) => {
+const DocForm = ({ workspaceItems, doc, onClose }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
+    const workspaceRef = useRef<HTMLSelectElement>(null);
+    const scopeRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (doc) {
             nameRef.current!.value = doc.name;
+            scopeRef.current!.checked = doc.scope === Scope.Public;
         }
     }, [doc]);
 
@@ -24,11 +28,24 @@ const DocForm = ({ workspaceId, doc, onClose }: Props) => {
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{doc ? '文档属性' : '新建文档'}</h2>
+                {!doc && (
+                    <div className={styles.formItem}>
+                        <label>
+                            <span>*</span>工作区：
+                        </label>
+                        <Select
+                            raf={workspaceRef}
+                            options={workspaceItems.map((w) => ({ label: w.name, value: w.id }))}
+                        />
+                    </div>
+                )}
                 <div className={styles.formItem}>
-                    <label>
-                        <span>*</span>标题：
-                    </label>
+                    <label>标题：</label>
                     <Input raf={nameRef} />
+                </div>
+                <div className={styles.formItem}>
+                    <label>公开：</label>
+                    <Toggle raf={scopeRef} />
                 </div>
                 <div className={styles.formItem}>
                     <label></label>
@@ -36,14 +53,15 @@ const DocForm = ({ workspaceId, doc, onClose }: Props) => {
                         <Button
                             type="primary"
                             onClick={async () => {
-                                if (!nameRef.current!.value) return alert('请输入标题');
                                 const props = {
                                     name: nameRef.current!.value,
+                                    scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                 };
                                 try {
                                     if (doc) {
                                         await API.luoye.updateDoc(doc.id, props);
                                     } else {
+                                        const workspaceId = workspaceRef.current.value;
                                         if (!workspaceId) return alert('请选择工作区');
                                         await API.luoye.createDoc(workspaceId, props);
                                     }

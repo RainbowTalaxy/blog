@@ -44,30 +44,82 @@
 }
 
 .btn:hover {
-    background-color: var(--background);
+    background: var(--background);
 }
 
 .btn.primary {
-    background-color: var(--primary);
+    background: var(--primary);
     border: 1px solid var(--primary);
     color: white;
 }
 
 .btn.primary:hover {
-    background-color: var(--primary);
+    background: var(--primary);
 }
 
 .btn.danger {
-    background-color: rgb(255, 0, 0, 0.7);
+    background: rgb(255, 0, 0, 0.7);
     border: 1px solid rgb(255, 0, 0, 0.7);
     color: white;
 }
 
 .btn.danger:hover {
-    background-color: rgb(255, 0, 0, 0.9);
+    background: rgb(255, 0, 0, 0.9);
 }
 
 /* 文本框 */
 .textarea {
     min-height: 110px;
+}
+
+/* 开关 Toggle */
+.toggle {
+    margin: 3px 0;
+    position: relative;
+    display: inline-block;
+    width: 62px;
+    height: 34px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    background: var(--shadow);
+    transition: 0.4s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    border-radius: 50%;
+    background: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+input:checked + .toggle-slider {
+    background: var(--primary);
+}
+
+input:focus + .toggle-slider {
+    box-shadow: 0 0 1px var(--border);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
 }

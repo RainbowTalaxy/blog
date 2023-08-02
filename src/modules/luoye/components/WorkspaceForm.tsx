@@ -1,6 +1,7 @@
 import API from '@site/src/api';
-import { WorkspaceItem } from '@site/src/api/luoye';
+import { Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { Button, Input } from '@site/src/components/Form';
+import Toggle from '@site/src/components/Form/Toggle';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
@@ -13,11 +14,13 @@ interface Props {
 const WorkspaceForm = ({ workspace, onClose }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
+    const scopeRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (workspace) {
             nameRef.current!.value = workspace.name;
             descriptionRef.current!.value = workspace.description;
+            scopeRef.current!.checked = workspace.scope === Scope.Public;
         }
     }, [workspace]);
 
@@ -36,6 +39,10 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                     <Input raf={descriptionRef} />
                 </div>
                 <div className={styles.formItem}>
+                    <label>公开：</label>
+                    <Toggle raf={scopeRef} />
+                </div>
+                <div className={styles.formItem}>
                     <label></label>
                     <div className={styles.options}>
                         <Button
@@ -45,6 +52,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                 const props = {
                                     name: nameRef.current!.value,
                                     description: descriptionRef.current!.value,
+                                    scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                 };
                                 try {
                                     if (workspace) {
