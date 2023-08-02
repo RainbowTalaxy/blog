@@ -53,7 +53,7 @@ const HomePage = () => {
             <ContentWithSideBar
                 sidebar={
                     <>
-                        <h1>
+                        <h1 className={styles.projectTitle}>
                             <span className={styles.pageIcon}>🍂</span>落页
                         </h1>
                         <SideBarList>

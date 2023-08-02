@@ -20,6 +20,7 @@
 }
 
 .sidebar h2 {
+    margin: 0 0 6px 12px;
     font-size: 18px;
 }
 
@@ -52,4 +53,15 @@
 .active,
 .sidebarList li:hover {
     background: var(--ly-active-background);
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
 }
