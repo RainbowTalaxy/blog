@@ -7,12 +7,13 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
+    workspaceId?: string;
     workspaceItems?: WorkspaceItem[];
     doc?: Doc;
     onClose: (success?: boolean, id?: string) => Promise<void>;
 }
 
-const DocForm = ({ workspaceItems, doc, onClose }: Props) => {
+const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
     const workspaceRef = useRef<HTMLSelectElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
@@ -36,6 +37,7 @@ const DocForm = ({ workspaceItems, doc, onClose }: Props) => {
                         <Select
                             raf={workspaceRef}
                             options={workspaceItems.map((w) => ({ label: w.name, value: w.id }))}
+                            defaultValue={workspaceId ?? workspaceItems[0].id}
                         />
                     </div>
                 )}

@@ -39,6 +39,7 @@
     border-radius: 5px;
     border: 1px solid var(--primary);
     font-size: 16px;
+    line-height: 1.65;
     color: var(--primary);
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;

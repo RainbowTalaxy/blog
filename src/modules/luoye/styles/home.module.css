@@ -45,12 +45,6 @@
     font-size: 30px;
 }
 
-.pageView > h1,
-.pageView > h2,
-.pageView > h3 {
-    margin-left: 4px;
-}
-
 .actionSheet,
 .workspaceList {
     display: flex;
@@ -132,6 +126,13 @@
 .docDate {
     font-variant: tabular-nums;
     font-feature-settings: 'tnum';
+}
+
+.titleBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
 }
 
 .action,
