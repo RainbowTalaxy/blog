@@ -52,6 +52,10 @@
     margin-right: 6px;
 }
 
+.active {
+    background: var(--ly-active-background);
+}
+
 @media screen and (max-width: 768px) {
     .sidebar {
         display: none;
@@ -64,7 +68,6 @@
 }
 
 @media (pointer: fine) {
-    .active,
     .sidebarList li:hover {
         background: var(--ly-active-background);
     }
