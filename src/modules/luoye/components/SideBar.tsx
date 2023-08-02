@@ -16,11 +16,12 @@ interface ListItemProps {
     active?: boolean;
     icon?: ReactNode;
     children?: ReactNode;
+    onClick?: () => void;
 }
 
-export const SideBarListItem = ({ className, active, icon, children }: ListItemProps) => {
+export const SideBarListItem = ({ className, active, icon, children, onClick }: ListItemProps) => {
     return (
-        <li className={clsx(styles.sidebarListItem, active && styles.active, className)}>
+        <li className={clsx(styles.sidebarListItem, active && styles.active, className)} onClick={onClick}>
             {icon && <span className={styles.sidebarListItemIcon}>{icon}</span>}
             {children}
         </li>

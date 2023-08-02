@@ -7,9 +7,9 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
-    workspaceItems: WorkspaceItem[];
+    workspaceItems?: WorkspaceItem[];
     doc?: Doc;
-    onClose: (success?: boolean) => Promise<void>;
+    onClose: (success?: boolean, id?: string) => Promise<void>;
 }
 
 const DocForm = ({ workspaceItems, doc, onClose }: Props) => {
@@ -58,20 +58,21 @@ const DocForm = ({ workspaceItems, doc, onClose }: Props) => {
                                     scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                 };
                                 try {
+                                    let newDoc: Doc;
                                     if (doc) {
                                         await API.luoye.updateDoc(doc.id, props);
                                     } else {
                                         const workspaceId = workspaceRef.current.value;
                                         if (!workspaceId) return alert('请选择工作区');
-                                        await API.luoye.createDoc(workspaceId, props);
+                                        newDoc = await API.luoye.createDoc(workspaceId, props);
                                     }
-                                    await onClose(true);
+                                    await onClose(true, doc ? doc.id : newDoc.id);
                                 } catch (error) {
                                     alert(`提交失败：${error.message}`);
                                 }
                             }}
                         >
-                            创建
+                            {doc ? '保存' : '创建'}
                         </Button>
                         <Button onClick={() => onClose()}>取消</Button>
                     </div>

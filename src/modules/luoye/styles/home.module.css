@@ -1,4 +1,10 @@
 .container {
+    --primary: var(--ly-primary);
+    --border: var(--ly-secondary);
+    --shadow: var(--ly-inactive-background);
+    --background: var(--ly-active-background);
+    --page: var(--ly-background);
+
     --item-gap: 12px;
 
     position: relative;
@@ -12,6 +18,11 @@
 .projectTitle {
     display: flex;
     align-items: center;
+}
+
+.projectTitle:hover {
+    color: var(--ly-primary);
+    cursor: pointer;
 }
 
 .pageIcon {
@@ -130,15 +141,6 @@
     cursor: pointer;
 }
 
-.docItem:hover {
-    background: var(--ly-background);
-}
-
-.action:hover,
-.workspaceItem:hover {
-    background: var(--ly-active-background);
-}
-
 .workspaceItem .description,
 .workspaceName > div,
 .docName,
@@ -179,5 +181,16 @@
 
     .docCreator {
         display: none;
+    }
+}
+
+@media (pointer: fine) {
+    .docItem:hover {
+        background: var(--ly-background);
+    }
+
+    .action:hover,
+    .workspaceItem:hover {
+        background: var(--ly-active-background);
     }
 }

@@ -13,6 +13,7 @@
     height: 100%;
     border-right: 1px solid var(--ly-active-background);
     background: #fff8ed;
+    user-select: none;
 }
 
 .sidebar h1 {
@@ -20,7 +21,7 @@
 }
 
 .sidebar h2 {
-    margin: 0 0 6px 12px;
+    margin: 0 0 10px 12px;
     font-size: 18px;
 }
 
@@ -33,7 +34,7 @@
 }
 
 .sidebarList {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     padding: 0;
     list-style: none;
 }
@@ -41,6 +42,7 @@
 .sidebarListItem,
 .sidebarList li {
     border-radius: 6px;
+    margin-bottom: 4px;
     padding: 6px 12px;
     transition: all 0.3s;
     cursor: pointer;
@@ -48,11 +50,6 @@
 
 .sidebarListItemIcon {
     margin-right: 6px;
-}
-
-.active,
-.sidebarList li:hover {
-    background: var(--ly-active-background);
 }
 
 @media screen and (max-width: 768px) {
@@ -63,5 +60,12 @@
     .content {
         margin-left: 0;
         width: 100%;
+    }
+}
+
+@media (pointer: fine) {
+    .active,
+    .sidebarList li:hover {
+        background: var(--ly-active-background);
     }
 }

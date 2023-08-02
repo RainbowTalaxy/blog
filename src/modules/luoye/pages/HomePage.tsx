@@ -6,11 +6,17 @@ import Path from '@site/src/utils/Path';
 import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
-import { date, DEFAULT_WORKSPACE_NAME } from '../constants';
-import WorkspaceForm from '../components/WorkspaceForm';
-import DocForm from '../components/DocForm';
+import { date, DEFAULT_WORKSPACE_NAME, PROJECT_NAME } from '../constants';
+import WorkspaceForm from '../containers/WorkspaceForm';
+import DocForm from '../containers/DocForm';
+import { useHistory } from '@docusaurus/router';
+import ProjectTitle from '../containers/ProjectTitle';
+import useQuery from '@site/src/hooks/useQuery';
 
 const HomePage = () => {
+    const history = useHistory();
+    const query = useQuery();
+    const workspaceId = query.get('workspace');
     const [data, setData] = useState<{
         defaultWorkspace: WorkspaceItem;
         workspaces: WorkspaceItem[];
@@ -42,6 +48,10 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
+        document.title = PROJECT_NAME;
+    }, []);
+
+    useEffect(() => {
         refetch();
     }, [refetch]);
 
@@ -53,11 +63,9 @@ const HomePage = () => {
             <ContentWithSideBar
                 sidebar={
                     <>
-                        <h1 className={styles.projectTitle}>
-                            <span className={styles.pageIcon}>🍂</span>落页
-                        </h1>
+                        <ProjectTitle />
                         <SideBarList>
-                            <SideBarListItem active icon="🍄">
+                            <SideBarListItem active={!workspaceId} icon="🍄" onClick={() => history.replace('?')}>
                                 开始
                             </SideBarListItem>
                         </SideBarList>
@@ -65,7 +73,13 @@ const HomePage = () => {
                         {allWorkspaces && (
                             <SideBarList>
                                 {allWorkspaces.map((workspace) => (
-                                    <SideBarListItem key={workspace.id}>{workspace.name || '未命名'}</SideBarListItem>
+                                    <SideBarListItem
+                                        key={workspace.id}
+                                        active={workspaceId === workspace.id}
+                                        onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                                    >
+                                        {workspace.name || '未命名'}
+                                    </SideBarListItem>
                                 ))}
                             </SideBarList>
                         )}
@@ -88,7 +102,11 @@ const HomePage = () => {
                             <h2>工作区</h2>
                             <div className={styles.workspaceList}>
                                 {allWorkspaces.map((workspace) => (
-                                    <div className={styles.workspaceItem} key={workspace.id}>
+                                    <div
+                                        className={styles.workspaceItem}
+                                        key={workspace.id}
+                                        onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                                    >
                                         <div className={styles.workspaceName}>
                                             <span>🪴</span>
                                             <div>{workspace.name || '未命名'}</div>
@@ -103,8 +121,12 @@ const HomePage = () => {
                             ) : (
                                 <div className={styles.docList}>
                                     {data.docs.map((doc) => (
-                                        <div className={styles.docItem} key={doc.id}>
-                                            <div className={styles.docName || '未命名文档'}>{doc.name}</div>
+                                        <div
+                                            className={styles.docItem}
+                                            key={doc.id}
+                                            onClick={() => history.push(`/luoye/doc?id=${doc.id}`)}
+                                        >
+                                            <div className={styles.docName}>{doc.name || '未命名文档'}</div>
                                             <div className={styles.docCreator}>{doc.creator}</div>
                                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                                         </div>
@@ -125,9 +147,10 @@ const HomePage = () => {
                 {data && isDocFormVisible && (
                     <DocForm
                         workspaceItems={allWorkspaces}
-                        onClose={async (success) => {
+                        onClose={async (success, newDocId) => {
                             if (success) await refetch();
                             setDocFormVisible(false);
+                            if (newDocId) history.push(`/luoye/doc?id=${newDocId}`);
                         }}
                     />
                 )}

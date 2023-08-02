@@ -41,6 +41,7 @@
         "prism-react-renderer": "^1.2.1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
+        "react-markdown": "^8.0.7",
         "rehype-katex": "5",
         "remark-math": "3",
         "sha256": "^0.2.0",

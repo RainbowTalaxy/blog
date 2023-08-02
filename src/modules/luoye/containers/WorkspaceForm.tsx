@@ -66,7 +66,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                 }
                             }}
                         >
-                            创建
+                            {workspace ? '保存' : '创建'}
                         </Button>
                         <Button onClick={() => onClose()}>取消</Button>
                     </div>

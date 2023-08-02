@@ -93,6 +93,10 @@
         flex-direction: column;
     }
 
+    .formItem > label:first-of-type {
+        text-align: left;
+    }
+
     .formItem > label {
         text-align: left;
     }

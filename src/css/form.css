@@ -12,6 +12,7 @@
     cursor: inherit;
     color: inherit;
     line-height: inherit;
+    user-select: none;
 }
 
 .input,
@@ -96,7 +97,7 @@
     bottom: 0;
     border-radius: 34px;
     background: var(--shadow);
-    transition: 0.4s;
+    transition: 0.3s;
 }
 
 .toggle-slider:before {
@@ -108,7 +109,7 @@
     bottom: 4px;
     border-radius: 50%;
     background: white;
-    transition: 0.4s;
+    transition: 0.3s;
 }
 
 input:checked + .toggle-slider {
