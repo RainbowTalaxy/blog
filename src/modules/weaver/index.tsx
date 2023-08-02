@@ -106,7 +106,7 @@ const Weaver = () => {
                             placeholder="开始时间"
                         />
                         <br />
-                        <Button style={{ marginTop: 18 }} type="primary">
+                        <Button style={{ margin: '18px 0 0 4px' }} type="primary">
                             提交
                         </Button>
                     </form>
