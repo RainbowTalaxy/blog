@@ -15,7 +15,8 @@
 -   [WordBank v1.3](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3](https://blog.talaxy.cn/playground/tokenize)
--   [Weaver v1.5](https://blog.talaxy.cn/weaver)
+-   [Weaver v1.5.1](https://blog.talaxy.cn/weaver)
+-   [落页 v0.1.0](https://blog.talaxy.cn/luoye)
 
 ### 工具
 
@@ -35,7 +36,7 @@
     - [README](README.md)
     - [package.json](package.json)
     - [Overwatch](src/modules/ow/docs/CHANGELOG.md)
-2. 提交文案：`release: X.Y.Z` ，tag 名：`vX.Y.Z` 。
+2. 提交文案：`Release: X.Y.Z` ，tag 名：`vX.Y.Z` 。
 3. 在 GitHub 中建立新 Release 。
 
 ## 检查项目
