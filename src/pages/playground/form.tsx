@@ -1,4 +1,5 @@
 import { Button, Input, Select, TextArea } from '@site/src/components/Form';
+import Toggle from '@site/src/components/Form/Toggle';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -22,6 +23,9 @@ const Page = () => {
             <Button>Normal</Button>
             <Button type="primary">Primary</Button>
             <Button type="danger">Danger</Button>
+
+            <h2>开关</h2>
+            <Toggle />
 
             <h2>输入框</h2>
             <Input />

@@ -1,0 +1,70 @@
+.docView {
+    position: relative;
+    width: 100%;
+}
+
+.docNavBar {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--ly-active-background);
+    background: var(--ly-background);
+    z-index: 100;
+}
+
+.docNavBar header {
+    flex: 1;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.docNavBar button {
+    margin-left: 10px;
+}
+
+.document {
+    margin: 0 auto;
+    padding: 108px 24px;
+    max-width: 1000px;
+    font-size: 18px;
+}
+
+.document > h1:first-of-type {
+    margin-bottom: 36px;
+}
+
+.docInfo {
+    font-size: 16px;
+    color: var(--ly-primary);
+    font-variant: tabular-nums;
+    font-feature-settings: 'tnum';
+}
+
+.docInfo > span {
+    font-weight: bold;
+}
+
+.docInput {
+    appearance: none;
+    background: none;
+    outline: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    color: inherit;
+    line-height: inherit;
+}
+
+.docInput::before {
+    position: absolute;
+    content: attr(data-placeholder);
+    color: lightgray;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+}

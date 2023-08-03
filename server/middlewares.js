@@ -41,16 +41,28 @@ const login = (req, res, next) => {
     try {
         const { id } = jwt.verify(keys.token, config.secret);
         req.userId = id;
-        if (User.isAdmin(id)) {
-            req.isAdmin = true;
-        }
+        if (User.isAdmin(id)) req.isAdmin = true;
         next();
     } catch (error) {
         return res.status(401).send({ error: 'Please login first' });
     }
 };
 
+const weakLogin = (req, _, next) => {
+    const authorization = req.headers.authorization;
+    const keys = parseKeyValueString(authorization);
+    if (!keys.token) return next();
+    const config = readJSON(Dir.storage.config);
+    try {
+        const { id } = jwt.verify(keys.token, config.secret);
+        req.userId = id;
+        if (User.isAdmin(id)) req.isAdmin = true;
+    } catch (error) {}
+    next();
+};
+
 module.exports = {
     authority,
     login,
+    weakLogin,
 };

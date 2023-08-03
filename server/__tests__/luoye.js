@@ -8,6 +8,8 @@ async function test() {
     await user.login('talaxy', 'talaxy');
     const visitor = new Rocket(Server + '/luoye');
     await visitor.login('allay', 'allay');
+    // 游客（未登录）
+    const viewer = new Rocket(Server + '/luoye');
 
     testCase.title('general tests');
 
@@ -92,6 +94,11 @@ async function test() {
         await visitor.get(`/workspace/${workspace.id}`);
     });
 
+    // 获取工作区信息 - 游客
+    await testCase.pos('public workspace info - visitor', async () => {
+        await viewer.get(`/workspace/${workspace.id}`);
+    });
+
     // 更新工作区 - 访客
     await testCase.neg('update workspace - visitor', async () => {
         return await visitor.put(`/workspace/${workspace.id}`, {
@@ -112,6 +119,12 @@ async function test() {
         return data;
     });
 
+    // 获取文档列表
+    await testCase.pos('doc list', async () => {
+        const data = await user.get('/docs');
+        if (data.length !== 1) throw new Error('doc list not match');
+    });
+
     // 获取文档
     await testCase.pos('public doc info', async () => {
         await user.get(`/doc/${doc.id}`);
@@ -125,6 +138,11 @@ async function test() {
     // 获取文档 - 访客
     await testCase.pos('public doc info - visitor', async () => {
         await visitor.get(`/doc/${doc.id}`);
+    });
+
+    // 获取文档 - 游客
+    await testCase.pos('public doc info - visitor', async () => {
+        await viewer.get(`/doc/${doc.id}`);
     });
 
     // 更新文档

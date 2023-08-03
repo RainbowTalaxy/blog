@@ -13,7 +13,8 @@
         {
             "files": [
                 "src/modules/weaver/**/*.tsx",
-                "src/modules/word-bank/**/*.tsx"
+                "src/modules/word-bank/**/*.tsx",
+                "src/modules/luoye/**/*.tsx"
             ],
             "options": {
                 "printWidth": 120

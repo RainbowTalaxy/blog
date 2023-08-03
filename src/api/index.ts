@@ -1,5 +1,6 @@
 import AzaleaAPI from './azalea';
 import DictionaryAPI from './dictionary';
+import LuoyeAPI from './luoye';
 import StaticsAPI from './statics';
 import UserAPI from './user';
 import { rocket } from './utils';
@@ -17,6 +18,7 @@ const API = {
     azalea: AzaleaAPI,
     weaver: WeaverAPI,
     user: UserAPI,
+    luoye: LuoyeAPI,
 };
 
 export default API;

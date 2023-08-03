@@ -20,7 +20,7 @@
 -   `users` 用户目录
     -   `{id}` 用户目录
         -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
-        -   `docs.json` 文档列表 `DocDir[]`
+        -   `docs.json` 文档列表 `DocItem[]`
 
 ## 数据类型
 
@@ -104,6 +104,7 @@ interface DocDir {
 | POST   | `/workspace`     | 创建工作区     |
 | GET    | `/workspace/:id` | 获取工作区信息 |
 | PUT    | `/workspace/:id` | 更新工作区信息 |
+| GET    | `/docs`          | 获取文档列表   |
 | GET    | `/doc/:id`       | 获取文档信息   |
 | POST   | `/doc`           | 创建文档       |
 | PUT    | `/doc/:id`       | 更新文档信息   |
@@ -177,6 +178,18 @@ interface Body {
 
 ```ts
 type Response = Workspace;
+```
+
+### `GET` 获取文档列表
+
+```
+/docs
+```
+
+**响应**
+
+```ts
+type Response = DocItem[];
 ```
 
 ### `GET` 获取文档信息

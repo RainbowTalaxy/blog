@@ -1,0 +1,197 @@
+.container {
+    --primary: var(--ly-primary);
+    --border: var(--ly-secondary);
+    --shadow: var(--ly-inactive-background);
+    --background: var(--ly-active-background);
+    --page: var(--ly-background);
+
+    --item-gap: 12px;
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
+        Helvetica, Arial, sans-serif;
+}
+
+.projectTitle {
+    display: flex;
+    align-items: center;
+}
+
+.projectTitle:hover {
+    color: var(--ly-primary);
+    cursor: pointer;
+}
+
+.pageIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 6px;
+    background: #ffe4b1;
+    text-align: center;
+}
+
+.pageView {
+    padding: 36px 10vw;
+}
+
+.pageTitle {
+    font-size: 30px;
+}
+
+.actionSheet,
+.workspaceList {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 var(--item-gap) var(--item-gap) 0;
+    padding: 8px 12px 8px 0;
+    width: 180px;
+    border-radius: 6px;
+    border: 1px solid var(--ly-secondary);
+    background: var(--ly-background);
+    font-size: 18px;
+    color: var(--ly-primary);
+}
+
+.action > span,
+.workspaceName > span {
+    margin-right: 6px;
+    font-size: 26px;
+}
+
+.workspaceItem {
+    flex-shrink: 0;
+    margin: 0 var(--item-gap) var(--item-gap) 0;
+    padding: 8px 14px 8px 24px;
+    width: calc(25% - var(--item-gap));
+    height: 94px;
+    border: 1px solid var(--ly-secondary);
+    border-radius: 6px;
+    background: var(--ly-background);
+}
+
+.workspaceName {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--ly-primary);
+}
+
+.workspaceItem .description {
+    margin-left: 4px;
+    font-size: 16px;
+    color: var(--ly-secondary);
+}
+
+.docList {
+    --doc-list-border: 1px solid var(--ly-secondary);
+    display: flex;
+    flex-direction: column;
+    border-top: var(--doc-list-border);
+}
+
+.docItem {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: var(--doc-list-border);
+    font-size: 18px;
+    color: var(--ly-secondary);
+}
+
+.docName {
+    flex: 1;
+    color: var(--ly-primary);
+}
+
+.docCreator {
+    width: 160px;
+}
+
+.docCreator,
+.docDate {
+    font-variant: tabular-nums;
+    font-feature-settings: 'tnum';
+}
+
+.titleBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.action,
+.workspaceItem,
+.docItem {
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.workspaceItem .description,
+.workspaceName > div,
+.docName,
+.docCreator {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 1600px) {
+    .pageView {
+        padding: 36px 36px;
+    }
+
+    .workspaceItem {
+        width: calc(33.333% - var(--item-gap));
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .workspaceItem {
+        width: calc(50% - var(--item-gap));
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .pageView {
+        padding: 36px 24px 48px;
+    }
+
+    .action {
+        width: 100%;
+    }
+
+    .workspaceItem {
+        width: calc(100% - var(--item-gap));
+    }
+
+    .docCreator {
+        display: none;
+    }
+}
+
+@media (pointer: fine) {
+    .docItem:hover {
+        background: var(--ly-background);
+    }
+
+    .action:hover,
+    .workspaceItem:hover {
+        background: var(--ly-active-background);
+    }
+}

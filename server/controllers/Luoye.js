@@ -159,6 +159,11 @@ const FileController = {
         }
         return updatedWorkspace;
     },
+    // 获取用户文档列表
+    docs(userDir) {
+        const userDocFile = path.join(userDir, USER_DOCS_FILE);
+        return readJSON(userDocFile);
+    },
     // 获取文档信息
     doc(docId) {
         if (!docId) throw new Error('docId is required');
@@ -305,8 +310,7 @@ const FileController = {
 
 const Utility = {
     access(entity, visitor) {
-        if (!entity || !visitor)
-            throw new Error('workspace/visitor is required');
+        if (!entity) throw new Error('entity is required');
         if (entity.admins.includes(visitor)) return Access.Admin;
         if (entity.members.includes(visitor)) return Access.Member;
         if (entity.scope === Scope.Public) return Access.Visitor;

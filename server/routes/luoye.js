@@ -1,5 +1,5 @@
 const express = require('express');
-const { login } = require('../middlewares');
+const { login, weakLogin } = require('../middlewares');
 const { LuoyeCtr, Scope, Access, LuoyeUtl } = require('../controllers/Luoye');
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.get('/workspaces', login, async (req, res) => {
 });
 
 // 获取工作区信息
-router.get('/workspace/:workspaceId', login, async (req, res) => {
+router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
@@ -119,8 +119,23 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 获取用户文档列表
+router.get('/docs', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.docs(userDir);
+        return res.send(docs);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get docs',
+        });
+    }
+});
+
 // 获取文档信息
-router.get('/doc/:docId', login, async (req, res) => {
+router.get('/doc/:docId', weakLogin, async (req, res) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;

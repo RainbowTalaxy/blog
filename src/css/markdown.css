@@ -1,0 +1,24 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    transition: all 0.3s;
+}
+
+a,
+a:hover,
+code,
+h1:hover,
+h2:hover,
+h3:hover,
+h4:hover,
+h5:hover,
+h6:hover {
+    color: var(--primary);
+}
+
+pre {
+    background: var(--page);
+}
