@@ -62,24 +62,30 @@ const HomePage = () => {
                 sidebar={
                     <>
                         <ProjectTitle />
-                        <SideBarList>
-                            <SideBarListItem active={!workspaceId} icon="🍄" onClick={() => history.replace('?')}>
-                                开始
-                            </SideBarListItem>
-                        </SideBarList>
-                        <h2>工作区</h2>
                         {allWorkspaces && (
-                            <SideBarList>
-                                {allWorkspaces.map((workspace) => (
+                            <>
+                                <SideBarList>
                                     <SideBarListItem
-                                        key={workspace.id}
-                                        active={workspaceId === workspace.id}
-                                        onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                                        active={!workspaceId}
+                                        icon="🍄"
+                                        onClick={() => history.replace('?')}
                                     >
-                                        {workspace.name || '未命名'}
+                                        开始
                                     </SideBarListItem>
-                                ))}
-                            </SideBarList>
+                                </SideBarList>
+                                <h2>工作区</h2>
+                                <SideBarList>
+                                    {allWorkspaces.map((workspace) => (
+                                        <SideBarListItem
+                                            key={workspace.id}
+                                            active={workspaceId === workspace.id}
+                                            onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                                        >
+                                            {workspace.name || '未命名'}
+                                        </SideBarListItem>
+                                    ))}
+                                </SideBarList>
+                            </>
                         )}
                     </>
                 }
