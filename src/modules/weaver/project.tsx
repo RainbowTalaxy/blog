@@ -111,8 +111,13 @@ const ProjectView = ({ project }: Props) => {
                                     cycle.id === ongoingCycle?.id && commonStyles.bordered,
                                 )}
                                 onClick={() => {
-                                    if (project.id && cycle.id)
-                                        history.replace(`?project=${project.id}&cycle=${cycle.id}`);
+                                    if (project.id && cycle.id) {
+                                        if (cycle.id === ongoingCycle?.id) {
+                                            history.replace(`?project=${project.id}`);
+                                        } else {
+                                            history.replace(`?project=${project.id}&cycle=${cycle.id}`);
+                                        }
+                                    }
                                 }}
                             >
                                 <div className={styles.cycleName}>

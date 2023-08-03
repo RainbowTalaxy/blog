@@ -27,10 +27,6 @@
     text-align: center;
 }
 
-.header:hover {
-    color: var(--ifm-menu-color-active);
-}
-
 .cycleName {
     display: flex;
     font-size: 20px;
@@ -59,4 +55,10 @@
 .cycleDate {
     font-size: 14px;
     opacity: 0.6;
+}
+
+@media (pointer: fine) {
+    .header:hover {
+        color: var(--ifm-menu-color-active);
+    }
 }

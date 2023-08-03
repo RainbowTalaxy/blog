@@ -74,15 +74,6 @@ html[data-theme='dark'] .card {
     background-color: var(--ifm-menu-color-background-active);
 }
 
-.card:hover {
-    color: var(--ifm-menu-color-active);
-    background-color: var(--ifm-menu-color-background-active);
-}
-
-html[data-theme='dark'] .card:hover {
-    background-color: var(--theme-page-background);
-}
-
 .projectDelete {
     display: none;
     position: absolute;
@@ -91,10 +82,6 @@ html[data-theme='dark'] .card:hover {
     color: red;
     opacity: 0.8;
     cursor: pointer;
-}
-
-.projectCard:hover .projectDelete {
-    display: block;
 }
 
 .itemCard {
@@ -109,8 +96,7 @@ html[data-theme='dark'] .card:hover {
     user-select: none;
 }
 
-.itemCard.active,
-.itemCard:hover {
+.itemCard.active {
     color: var(--ifm-menu-color-active);
     background-color: var(--ifm-menu-color-background-active);
 }
@@ -125,4 +111,24 @@ html[data-theme='dark'] .card:hover {
     font-size: 16px;
     font-weight: bold;
     user-select: none;
+}
+
+@media (pointer: fine) {
+    .card:hover {
+        color: var(--ifm-menu-color-active);
+        background-color: var(--ifm-menu-color-background-active);
+    }
+
+    html[data-theme='dark'] .card:hover {
+        background-color: var(--theme-page-background);
+    }
+
+    .itemCard:hover {
+        color: var(--ifm-menu-color-active);
+        background-color: var(--ifm-menu-color-background-active);
+    }
+
+    .projectCard:hover .projectDelete {
+        display: block;
+    }
 }

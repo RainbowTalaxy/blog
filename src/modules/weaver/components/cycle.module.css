@@ -178,9 +178,15 @@ html[data-theme='dark'] .cycleAdd {
     background-color: var(--ifm-menu-color-background-active);
 }
 
-.cycleButton.active,
-.cycleButton:hover,
-.cycleAdd:hover {
+.cycleButton.active {
     color: var(--ifm-menu-color-active);
     background-color: var(--ifm-menu-color-background-active);
+}
+
+@media (pointer: fine) {
+    .cycleButton:hover,
+    .cycleAdd:hover {
+        color: var(--ifm-menu-color-active);
+        background-color: var(--ifm-menu-color-background-active);
+    }
 }
