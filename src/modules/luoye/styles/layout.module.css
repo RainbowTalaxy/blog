@@ -63,6 +63,12 @@
 }
 
 @media screen and (max-width: 768px) {
+    .pageView {
+        --sidebar-width: 0;
+
+        display: initial;
+    }
+
     .sidebar {
         display: none;
     }
