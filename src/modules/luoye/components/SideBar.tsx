@@ -32,12 +32,13 @@ interface SideBarProps {
     className?: string;
     sidebar: ReactNode;
     children?: ReactNode;
+    sidebarVisible?: boolean;
 }
 
-const ContentWithSideBar = ({ className, sidebar, children }: SideBarProps) => {
+const ContentWithSideBar = ({ className, sidebar, children, sidebarVisible = true }: SideBarProps) => {
     return (
-        <div className={clsx(styles.pageView, className)}>
-            <div className={styles.sidebar}>{sidebar}</div>
+        <div className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
+            {sidebarVisible && <div className={styles.sidebar}>{sidebar}</div>}
             <div className={styles.content}>{children}</div>
         </div>
     );

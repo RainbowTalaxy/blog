@@ -47,14 +47,13 @@ const DocPage = () => {
 
     if (workspace === undefined) return null;
 
-    const renderDoc = doc ? <Document doc={doc} onSave={refetch} /> : null;
-
     return (
         <div className={styles.container}>
             <GlobalStyle />
-            {workspace ? (
-                <ContentWithSideBar
-                    sidebar={
+            <ContentWithSideBar
+                sidebarVisible={workspace !== null}
+                sidebar={
+                    workspace && (
                         <>
                             <ProjectTitle />
                             <h2>文档列表</h2>
@@ -70,13 +69,11 @@ const DocPage = () => {
                                 ))}
                             </SideBarList>
                         </>
-                    }
-                >
-                    {renderDoc}
-                </ContentWithSideBar>
-            ) : (
-                renderDoc
-            )}
+                    )
+                }
+            >
+                <Document doc={doc} onSave={refetch} mode={workspace ? 'edit' : 'view'} />
+            </ContentWithSideBar>
         </div>
     );
 };

@@ -6,6 +6,12 @@
     min-height: 100%;
 }
 
+.pageView.noSidebar {
+    --sidebar-width: 0;
+
+    display: initial;
+}
+
 .sidebar {
     position: fixed;
     padding: 12px;
