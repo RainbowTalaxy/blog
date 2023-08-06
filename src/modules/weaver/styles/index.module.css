@@ -74,16 +74,6 @@ html[data-theme='dark'] .card {
     background-color: var(--ifm-menu-color-background-active);
 }
 
-.projectDelete {
-    display: none;
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    color: red;
-    opacity: 0.8;
-    cursor: pointer;
-}
-
 .itemCard {
     position: relative;
     padding: 12px 12px 12px 24px;
@@ -128,7 +118,7 @@ html[data-theme='dark'] .card {
         background-color: var(--ifm-menu-color-background-active);
     }
 
-    .projectCard:hover .projectDelete {
+    .projectCard:hover {
         display: block;
     }
 }

@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import styles from './TaskForm.module.css';
+import styles from '../styles/form.module.css';
 import { CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import { useEffect, useRef, useState } from 'react';
 import { Priority, TaskStatus } from '../types';

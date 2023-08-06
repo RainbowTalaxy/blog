@@ -41,3 +41,11 @@ export function isBetween(start: number, end: number) {
 export function uuid() {
     return uuidV4();
 }
+
+export function time(form: string) {
+    return dayjs(form).valueOf();
+}
+
+export function formToday() {
+    return dayjs().format('YYYY-MM-DD');
+}

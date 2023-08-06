@@ -1,6 +1,6 @@
 import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
-import styles from './project.module.css';
-import commonStyles from './index.module.css';
+import styles from './styles/project.module.css';
+import commonStyles from './styles/index.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import API from '@site/src/api';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
@@ -13,10 +13,7 @@ import GlobalStyle from './components/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
 import { TASK_POOL_NAME } from './constants';
 import useTitle from '@site/src/hooks/useTitle';
-
-interface Props {
-    project: ProjectInfo;
-}
+import ProjectForm from './components/ProjectForm';
 
 const POOL_CYCLE: CycleInfo = {
     id: TASK_POOL_NAME,
@@ -25,12 +22,18 @@ const POOL_CYCLE: CycleInfo = {
     end: 0,
 };
 
-const ProjectView = ({ project }: Props) => {
+interface Props {
+    project: ProjectInfo;
+    refetch: () => Promise<void>;
+}
+
+const ProjectView = ({ project, refetch }: Props) => {
     const query = useQuery();
     const history = useHistory();
     const [cycles, setCycles] = useState<CycleInfo[]>();
     const [targetCycle, setCycle] = useState<CycleInfo>();
     const [isCycleListFolded, setCycleListFolded] = useState(true);
+    const [isFormVisible, setFormVisible] = useState(false);
 
     const cycleId = query.get('cycle');
     // 当前正在进行中的周期
@@ -83,7 +86,9 @@ const ProjectView = ({ project }: Props) => {
             <ContentWithSidebar
                 title={
                     <div className={styles.titleBar}>
-                        {project.name}
+                        <span className={styles.title} onClick={() => setFormVisible(true)}>
+                            {project.name}
+                        </span>
                         <span className={styles.addCycle} onClick={handleAddCycle}>
                             新建周期
                         </span>
@@ -154,6 +159,15 @@ const ProjectView = ({ project }: Props) => {
                         cycleInfo={targetCycle}
                         cycles={cycles}
                         addCycle={handleAddCycle}
+                    />
+                )}
+                {isFormVisible && (
+                    <ProjectForm
+                        project={project}
+                        onClose={async (success) => {
+                            if (success) await refetch();
+                            setFormVisible(false);
+                        }}
                     />
                 )}
             </ContentWithSidebar>

@@ -58,7 +58,8 @@
 }
 
 @media (pointer: fine) {
-    .header:hover {
+    .title:hover {
         color: var(--ifm-menu-color-active);
+        cursor: pointer;
     }
 }
