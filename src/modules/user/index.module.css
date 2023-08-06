@@ -24,14 +24,11 @@
     border: 1px solid var(--theme-black-half);
 }
 
-.form button {
-    appearance: none;
-    margin: 12px 12px 24px 0;
-    padding: 6px 14px;
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid var(--theme-black-half);
-    font-size: 16px;
-    color: initial;
-    cursor: pointer;
+.buttonGroup {
+    display: flex;
+    margin-top: 24px;
+}
+
+.buttonGroup > button + button {
+    margin-left: 16px;
 }
