@@ -18,12 +18,6 @@ const FORM_CONFIG = [
         type: 'password',
         placeholder: '该 Key 需向管理员申请，且由个人保管',
     },
-    {
-        attr: 'fileApiKey',
-        name: '文件 API Key（即将弃用）',
-        type: 'password',
-        placeholder: '该 Key 需向管理员申请',
-    },
 ];
 
 const UserPage = () => {
@@ -34,8 +28,6 @@ const UserPage = () => {
     useEffect(() => {
         document.querySelector<HTMLInputElement>('#id')!.value = userInfo.id;
         document.querySelector<HTMLInputElement>('#key')!.value = userInfo.key;
-        document.querySelector<HTMLInputElement>('#fileApiKey')!.value =
-            userInfo.fileApiKey;
     }, [userInfo]);
 
     useEffect(() => {
