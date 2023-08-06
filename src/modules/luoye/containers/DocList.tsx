@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { date, workSpaceName } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
+import Placeholder from '../components/PlaceHolder';
 
 interface Props {
     workspaceId: string;
@@ -45,22 +46,25 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                 </Button>
             </h2>
 
-            <div className={styles.docList}>
-                {workspace.docs.length === 0 ? (
-                    <div className={styles.docItem}>暂无文档</div>
-                ) : (
-                    workspace.docs.map((doc) => (
+            {workspace.docs.length === 0 ? (
+                <p>
+                    <Placeholder>暂无文档</Placeholder>
+                </p>
+            ) : (
+                <div className={styles.docList}>
+                    {workspace.docs.map((doc) => (
                         <div
                             className={styles.docItem}
                             key={doc.docId}
                             onClick={() => history.push(`/luoye/doc?id=${doc.docId}`)}
                         >
-                            <div className={styles.docName}>{doc.name || '未命名文档'}</div>
+                            <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                         </div>
-                    ))
-                )}
-            </div>
+                    ))}
+                </div>
+            )}
+
             {isDocFormVisible && (
                 <DocForm
                     workspaceId={workspaceId}

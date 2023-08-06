@@ -12,6 +12,7 @@ import ProjectTitle from '../containers/ProjectTitle';
 import useQuery from '@site/src/hooks/useQuery';
 import Welcome from '../containers/Welcome';
 import DocList from '../containers/DocList';
+import Placeholder from '../components/PlaceHolder';
 
 const HomePage = () => {
     const history = useHistory();
@@ -81,7 +82,7 @@ const HomePage = () => {
                                             active={workspaceId === workspace.id}
                                             onClick={() => history.replace(`?workspace=${workspace.id}`)}
                                         >
-                                            {workspace.name || '未命名'}
+                                            {workspace.name || <Placeholder>未命名</Placeholder>}
                                         </SideBarListItem>
                                     ))}
                                 </SideBarList>

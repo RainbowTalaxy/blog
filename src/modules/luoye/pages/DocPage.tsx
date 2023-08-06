@@ -9,6 +9,7 @@ import Document from '../containers/Document';
 import { useHistory } from '@docusaurus/router';
 import { PROJECT_NAME } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
+import Placeholder from '../components/PlaceHolder';
 
 const DocPage = () => {
     const history = useHistory();
@@ -64,7 +65,7 @@ const DocPage = () => {
                                         key={docDir.docId}
                                         onClick={() => history.replace(`?id=${docDir.docId}`)}
                                     >
-                                        {docDir.name || '未命名'}
+                                        {docDir.name || <Placeholder>未命名</Placeholder>}
                                     </SideBarListItem>
                                 ))}
                             </SideBarList>

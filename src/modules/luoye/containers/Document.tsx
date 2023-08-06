@@ -27,8 +27,8 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
 
     return (
         <div className={styles.docView}>
-            <div className={styles.docNavBar}>
-                <header>{doc.name}</header>
+            <header className={styles.docNavBar}>
+                <div className={styles.docNavTitle}>{doc.name}</div>
                 {mode === 'edit' && (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
@@ -58,8 +58,8 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                     </>
                 )}
                 {mode === 'view' && doc.creator}
-            </div>
-            <div className={styles.document}>
+            </header>
+            <main className={styles.document}>
                 {!isEdit && (
                     <>
                         <h1>{doc.name}</h1>
@@ -70,7 +70,7 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                     </>
                 )}
                 <Editor ref={textRef} visible={isEdit} keyId={doc.id} />
-            </div>
+            </main>
             {doc && isDocFormVisible && (
                 <DocForm
                     doc={doc}

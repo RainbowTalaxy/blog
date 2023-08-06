@@ -37,10 +37,10 @@ interface SideBarProps {
 
 const ContentWithSideBar = ({ className, sidebar, children, sidebarVisible = true }: SideBarProps) => {
     return (
-        <div className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
+        <nav className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
             {sidebarVisible && <div className={styles.sidebar}>{sidebar}</div>}
             <div className={styles.content}>{children}</div>
-        </div>
+        </nav>
     );
 };
 
