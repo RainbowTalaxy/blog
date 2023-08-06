@@ -30,10 +30,12 @@ const ProjectView = ({ project }: Props) => {
     const history = useHistory();
     const [cycles, setCycles] = useState<CycleInfo[]>();
     const [targetCycle, setCycle] = useState<CycleInfo>();
+    const [isCycleListFolded, setCycleListFolded] = useState(true);
 
     const cycleId = query.get('cycle');
     // 当前正在进行中的周期
     const ongoingCycle = cycles?.find((cycle) => isBetween(cycle.start, cycle.end));
+    const foldedCycles = isCycleListFolded ? cycles?.slice(0, 5) : cycles;
 
     useTitle('Weaver', '/weaver');
 
@@ -101,7 +103,7 @@ const ProjectView = ({ project }: Props) => {
                         >
                             任务池
                         </div>
-                        {cycles?.map((cycle) => (
+                        {foldedCycles?.map((cycle) => (
                             <div
                                 key={cycle.id}
                                 className={clsx(
@@ -135,6 +137,14 @@ const ProjectView = ({ project }: Props) => {
                                 </div>
                             </div>
                         ))}
+                        {isCycleListFolded && (
+                            <div
+                                className={clsx(styles.cycleOption, commonStyles.itemCard)}
+                                onClick={() => setCycleListFolded(false)}
+                            >
+                                显示更多周期...
+                            </div>
+                        )}
                     </>
                 }
             >
