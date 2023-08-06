@@ -58,6 +58,10 @@
     cursor: inherit;
     color: inherit;
     line-height: inherit;
+    word-break: break-all;
+    font-family: 'Fira Code', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
+        Helvetica, Arial, sans-serif;
 }
 
 .docInput::before {

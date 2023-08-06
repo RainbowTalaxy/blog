@@ -42,10 +42,16 @@ const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedR
             className={clsx(styles.docInput, className)}
             style={{ display: visible ? '' : 'none' }}
             contentEditable
+            spellCheck={false}
             data-placeholder={PLACE_HOLDER}
             onInput={(e) => {
                 const text = e.currentTarget.innerText.trim();
                 e.currentTarget.dataset.placeholder = text ? '' : PLACE_HOLDER;
+            }}
+            onPaste={(e) => {
+                e.preventDefault();
+                const text = e.clipboardData.getData('text/plain');
+                document.execCommand('insertText', false, text);
             }}
         ></div>
     );
