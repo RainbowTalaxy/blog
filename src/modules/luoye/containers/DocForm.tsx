@@ -44,7 +44,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                         <Select
                             raf={workspaceRef}
                             options={workspaceItems.map((w) => ({ label: w.name, value: w.id }))}
-                            defaultValue={workspace.id ?? workspaceItems[0].id}
+                            defaultValue={workspace?.id ?? workspaceItems[0].id}
                         />
                     </div>
                 )}

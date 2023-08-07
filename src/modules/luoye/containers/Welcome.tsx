@@ -95,6 +95,7 @@ const Welcome = ({ data, refetch }: Props) => {
             )}
             {data && isDocFormVisible && (
                 <DocForm
+                    workspace={data.defaultWorkspace}
                     workspaceItems={allWorkspaces}
                     onClose={async (success, newDocId) => {
                         if (success) await refetch();
