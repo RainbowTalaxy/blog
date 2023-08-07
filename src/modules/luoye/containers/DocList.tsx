@@ -9,6 +9,7 @@ import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
+import WorkspaceForm from './WorkspaceForm';
 
 interface Props {
     workspaceId: string;
@@ -20,6 +21,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
     const history = useHistory();
     const [workspace, setWorkspace] = useState<Workspace>();
     const [isDocFormVisible, setDocFormVisible] = useState(false);
+    const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -42,6 +44,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
             <h2 className={styles.titleBar}>
                 文档列表
                 <Spacer />
+                <Button onClick={() => setWorkspaceFormVisible(true)}>工作区属性</Button>
                 <Button type="primary" onClick={() => setDocFormVisible(true)}>
                     新建文档
                 </Button>
@@ -67,7 +70,6 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                     ))}
                 </div>
             )}
-
             {isDocFormVisible && (
                 <DocForm
                     workspace={workspace}
@@ -76,6 +78,15 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                         if (success) await refetch();
                         setDocFormVisible(false);
                         if (newDocId) history.push(`/luoye/doc?id=${newDocId}`);
+                    }}
+                />
+            )}
+            {isWorkspaceFormVisible && (
+                <WorkspaceForm
+                    workspace={workspace}
+                    onClose={async (success) => {
+                        if (success) await refetch();
+                        setWorkspaceFormVisible(false);
                     }}
                 />
             )}

@@ -65,7 +65,7 @@ const DocPage = () => {
                             <h2>{workSpaceName(workspace.name)}</h2>
                             <SideBarList>
                                 <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
-                                    工作区详情
+                                    工作区属性
                                 </SideBarListItem>
                                 <SideBarListItem onClick={() => setDocFormVisible(true)}>新建文档</SideBarListItem>
                             </SideBarList>
