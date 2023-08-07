@@ -1,6 +1,6 @@
 import { useHistory } from '@docusaurus/router';
 import API from '@site/src/api';
-import { Workspace, WorkspaceItem } from '@site/src/api/luoye';
+import { Scope, Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Spacer from '@site/src/components/Spacer';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { date, workSpaceName } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import Placeholder from '../components/PlaceHolder';
+import SVG from '../components/SVG';
 
 interface Props {
     workspaceId: string;
@@ -59,6 +60,8 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                             onClick={() => history.push(`/luoye/doc?id=${doc.docId}`)}
                         >
                             <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
+                            {doc.scope === Scope.Private && <SVG.Lock />}
+                            <Spacer />
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                         </div>
                     ))}

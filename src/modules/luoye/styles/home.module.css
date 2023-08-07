@@ -114,7 +114,6 @@
 }
 
 .docName {
-    flex: 1;
     color: var(--ly-primary);
 }
 

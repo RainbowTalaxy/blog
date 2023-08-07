@@ -29,7 +29,7 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{doc ? '文档属性' : '新建文档'}</h2>
-                {!doc && (
+                {!doc && workspaceItems && (
                     <div className={styles.formItem}>
                         <label>
                             <span>*</span>工作区：
@@ -64,9 +64,9 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
                                     if (doc) {
                                         await API.luoye.updateDoc(doc.id, props);
                                     } else {
-                                        const workspaceId = workspaceRef.current.value;
-                                        if (!workspaceId) return alert('请选择工作区');
-                                        newDoc = await API.luoye.createDoc(workspaceId, props);
+                                        const wId = workspaceRef.current?.value ?? workspaceId;
+                                        if (!wId) return alert('请选择工作区');
+                                        newDoc = await API.luoye.createDoc(wId, props);
                                     }
                                     await onClose(true, doc ? doc.id : newDoc.id);
                                 } catch (error) {

@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
-    workspace?: WorkspaceItem;
+    workspace?: Omit<WorkspaceItem, 'joinAt'>;
     onClose: (success?: boolean) => Promise<void>;
 }
 

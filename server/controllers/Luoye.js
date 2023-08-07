@@ -179,11 +179,11 @@ const FileController = {
         const now = Date.now();
         const newDoc = {
             id: uuid(),
-            name: props.name || '',
+            name: props.name ?? '',
             creator,
             admins: _.uniq([creator, ...workspace.admins]),
             members: workspace.members,
-            scope: workspace.scope,
+            scope: props.scope ?? workspace.scope,
             workspaces: [workspace.id],
             docType: DocType.Markdown,
             content: '',

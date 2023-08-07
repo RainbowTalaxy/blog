@@ -1,11 +1,13 @@
 import { useHistory } from '@docusaurus/router';
-import { DocItem, WorkspaceItem } from '@site/src/api/luoye';
+import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { useState } from 'react';
 import { date } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import WorkspaceForm from './WorkspaceForm';
 import Placeholder from '../components/PlaceHolder';
+import SVG from '../components/SVG';
+import Spacer from '@site/src/components/Spacer';
 
 interface Props {
     data: {
@@ -45,6 +47,7 @@ const Welcome = ({ data, refetch }: Props) => {
                         <div className={styles.workspaceName}>
                             <span>🪴</span>
                             <div>{workspace.name || <Placeholder>未命名</Placeholder>}</div>
+                            {workspace.scope === Scope.Private && <SVG.Lock />}
                         </div>
                         <div className={styles.description}>
                             {workspace.description || <Placeholder>暂无描述</Placeholder>}
@@ -66,6 +69,8 @@ const Welcome = ({ data, refetch }: Props) => {
                             onClick={() => history.push(`/luoye/doc?id=${doc.id}`)}
                         >
                             <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
+                            {doc.scope === Scope.Private && <SVG.Lock />}
+                            <Spacer />
                             <div className={styles.docCreator}>{doc.creator}</div>
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                         </div>

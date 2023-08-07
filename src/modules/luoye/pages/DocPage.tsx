@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
-import { Doc, Workspace } from '@site/src/api/luoye';
+import { Doc, Scope, Workspace } from '@site/src/api/luoye';
 import useQuery from '@site/src/hooks/useQuery';
 import API from '@site/src/api';
 import Document from '../containers/Document';
@@ -10,6 +10,9 @@ import { useHistory } from '@docusaurus/router';
 import { PROJECT_NAME } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
 import Placeholder from '../components/PlaceHolder';
+import SVG from '../components/SVG';
+import WorkspaceForm from '../containers/WorkspaceForm';
+import DocForm from '../containers/DocForm';
 
 const DocPage = () => {
     const history = useHistory();
@@ -17,6 +20,8 @@ const DocPage = () => {
     const id = query.get('id');
     const [doc, setDoc] = useState<Doc>();
     const [workspace, setWorkspace] = useState<Workspace>();
+    const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
+    const [isDocFormVisible, setDocFormVisible] = useState(false);
 
     const refetch = useCallback(async () => {
         try {
@@ -40,7 +45,7 @@ const DocPage = () => {
                 setWorkspace(null);
             }
         })();
-    }, [doc?.workspaces[0]]);
+    }, [doc]);
 
     useEffect(() => {
         refetch();
@@ -57,6 +62,12 @@ const DocPage = () => {
                     workspace && (
                         <>
                             <ProjectTitle />
+                            <SideBarList>
+                                <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
+                                    工作区详情
+                                </SideBarListItem>
+                                <SideBarListItem onClick={() => setDocFormVisible(true)}>新建文档</SideBarListItem>
+                            </SideBarList>
                             <h2>文档列表</h2>
                             <SideBarList>
                                 {workspace.docs.map((docDir) => (
@@ -65,7 +76,8 @@ const DocPage = () => {
                                         key={docDir.docId}
                                         onClick={() => history.replace(`?id=${docDir.docId}`)}
                                     >
-                                        {docDir.name || <Placeholder>未命名</Placeholder>}
+                                        <span>{docDir.name || <Placeholder>未命名</Placeholder>}</span>
+                                        {docDir.scope === Scope.Private && <SVG.Lock />}
                                     </SideBarListItem>
                                 ))}
                             </SideBarList>
@@ -75,6 +87,24 @@ const DocPage = () => {
             >
                 <Document doc={doc} onSave={refetch} mode={workspace ? 'edit' : 'view'} />
             </ContentWithSideBar>
+            {workspace && isWorkspaceFormVisible && (
+                <WorkspaceForm
+                    workspace={workspace}
+                    onClose={async (success) => {
+                        if (success) await refetch();
+                        setWorkspaceFormVisible(false);
+                    }}
+                />
+            )}
+            {workspace && isDocFormVisible && (
+                <DocForm
+                    workspaceId={workspace.id}
+                    onClose={async (success, id) => {
+                        setDocFormVisible(false);
+                        if (success) history.push(`?id=${id}`);
+                    }}
+                />
+            )}
         </div>
     );
 };

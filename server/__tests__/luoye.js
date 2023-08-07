@@ -119,10 +119,20 @@ async function test() {
         return data;
     });
 
+    // 新建文档 - 与工作区不同权限
+    await testCase.pos('create private doc - different scope', async () => {
+        const params = {
+            workspaceId: workspace.id,
+            scope: 'private',
+        };
+        const data = await user.post(`/doc`, params);
+        if (data.scope !== params.scope) throw new Error('scope not match');
+    });
+
     // 获取文档列表
     await testCase.pos('doc list', async () => {
         const data = await user.get('/docs');
-        if (data.length !== 1) throw new Error('doc list not match');
+        if (data.length !== 2) throw new Error('doc list not match');
     });
 
     // 获取文档

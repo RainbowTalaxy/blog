@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { DocItem, WorkspaceItem } from '@site/src/api/luoye';
+import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import API from '@site/src/api';
 import { Button } from '@site/src/components/Form';
 import Path from '@site/src/utils/Path';
@@ -13,6 +13,7 @@ import useQuery from '@site/src/hooks/useQuery';
 import Welcome from '../containers/Welcome';
 import DocList from '../containers/DocList';
 import Placeholder from '../components/PlaceHolder';
+import SVG from '../components/SVG';
 
 const HomePage = () => {
     const history = useHistory();
@@ -82,7 +83,8 @@ const HomePage = () => {
                                             active={workspaceId === workspace.id}
                                             onClick={() => history.replace(`?workspace=${workspace.id}`)}
                                         >
-                                            {workspace.name || <Placeholder>未命名</Placeholder>}
+                                            <span>{workspace.name || <Placeholder>未命名</Placeholder>}</span>
+                                            {workspace.scope === Scope.Private && <SVG.Lock />}
                                         </SideBarListItem>
                                     ))}
                                 </SideBarList>
