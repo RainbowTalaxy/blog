@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import API from '@site/src/api';
-import { Button } from '@site/src/components/Form';
-import Path from '@site/src/utils/Path';
 import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
-import { DEFAULT_WORKSPACE_NAME, PROJECT_NAME } from '../constants';
+import { DEFAULT_WORKSPACE, DEFAULT_WORKSPACE_PLACEHOLDER, PROJECT_NAME } from '../constants';
 import { useHistory } from '@docusaurus/router';
 import ProjectTitle from '../containers/ProjectTitle';
 import useQuery from '@site/src/hooks/useQuery';
@@ -29,13 +27,13 @@ const HomePage = () => {
         try {
             const [workspaces, docs] = await Promise.all([API.luoye.workspaces(), API.luoye.docs()]);
             // 摘取默认工作区
-            const defaultWorkspaceIdx = workspaces.findIndex((workspace) => workspace.name === DEFAULT_WORKSPACE_NAME);
+            const defaultWorkspaceIdx = workspaces.findIndex((workspace) => workspace.name === DEFAULT_WORKSPACE.name);
             const defaultWorkspace = workspaces[defaultWorkspaceIdx] || workspaces[0];
             if (defaultWorkspaceIdx !== -1) {
                 workspaces.splice(defaultWorkspaceIdx, 1);
             }
-            defaultWorkspace.name = '个人工作区';
-            defaultWorkspace.description = '用于存放个人文档的工作区';
+            defaultWorkspace.name = DEFAULT_WORKSPACE_PLACEHOLDER.name;
+            defaultWorkspace.description = DEFAULT_WORKSPACE_PLACEHOLDER.description;
             setData({
                 defaultWorkspace,
                 workspaces,
@@ -49,7 +47,7 @@ const HomePage = () => {
 
     useEffect(() => {
         document.title = PROJECT_NAME;
-    }, []);
+    }, [data]);
 
     useEffect(() => {
         refetch();
@@ -94,7 +92,6 @@ const HomePage = () => {
                 }
             >
                 <div className={styles.pageView}>
-                    {data === null && <Button onClick={() => Path.toUserConfig()}>请先登录</Button>}
                     {data && !workspaceId && <Welcome data={data} refetch={refetch} />}
                     {data && workspaceId && (
                         <DocList workspaceId={workspaceId} allWorkspaces={allWorkspaces} refetch={refetch} />

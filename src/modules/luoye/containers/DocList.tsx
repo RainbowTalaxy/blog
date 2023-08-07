@@ -4,12 +4,13 @@ import { Scope, Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Spacer from '@site/src/components/Spacer';
 import { useEffect, useState } from 'react';
-import { date, workSpaceName } from '../constants';
+import { DEFAULT_WORKSPACE_PLACEHOLDER, date, workSpaceName } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import WorkspaceForm from './WorkspaceForm';
+import useUser from '@site/src/hooks/useUser';
 
 interface Props {
     workspaceId: string;
@@ -19,6 +20,7 @@ interface Props {
 
 const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
     const history = useHistory();
+    const user = useUser();
     const [workspace, setWorkspace] = useState<Workspace>();
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
@@ -41,6 +43,9 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
     return (
         <>
             <h2 className={styles.pageTitle}>{workSpaceName(workspace.name)}</h2>
+            <p className={styles.pageDescription}>
+                {user?.id === workspace.id ? DEFAULT_WORKSPACE_PLACEHOLDER.description : workspace.description}
+            </p>
             <h2 className={styles.titleBar}>
                 文档列表
                 <Spacer />
