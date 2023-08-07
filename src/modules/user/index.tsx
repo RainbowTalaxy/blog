@@ -4,6 +4,7 @@ import { User } from './config';
 import useUser from '@site/src/hooks/useUser';
 import { useEffect } from 'react';
 import API from '@site/src/api';
+import { Button, Input } from '@site/src/components/Form';
 
 const FORM_CONFIG = [
     {
@@ -18,25 +19,12 @@ const FORM_CONFIG = [
         type: 'password',
         placeholder: '该 Key 需向管理员申请，且由个人保管',
     },
-    {
-        attr: 'fileApiKey',
-        name: '文件 API Key（即将弃用）',
-        type: 'password',
-        placeholder: '该 Key 需向管理员申请',
-    },
 ];
 
 const UserPage = () => {
     const query = useQuery();
     const nextUrl = query.get('nextUrl');
     const userInfo = useUser();
-
-    useEffect(() => {
-        document.querySelector<HTMLInputElement>('#id')!.value = userInfo.id;
-        document.querySelector<HTMLInputElement>('#key')!.value = userInfo.key;
-        document.querySelector<HTMLInputElement>('#fileApiKey')!.value =
-            userInfo.fileApiKey;
-    }, [userInfo]);
 
     useEffect(() => {
         API.user.test();
@@ -48,37 +36,65 @@ const UserPage = () => {
         <div className={styles.container}>
             <h1>权限设置</h1>
             <div className={styles.form}>
-                {FORM_CONFIG.map((config) => (
-                    <div className={styles.field} key={config.attr}>
-                        <label htmlFor={config.attr}>{config.name}</label>
-                        <input
-                            type={config.type}
-                            name={config.attr}
-                            id={config.attr}
-                            placeholder={config.placeholder}
-                            onChange={(e) => {
-                                userInfo[config.attr] = e.target.value;
+                {userInfo.id ? (
+                    <>
+                        <p>当前用户：{userInfo.id}</p>
+                        <Button
+                            onClick={() => {
+                                const granted = confirm('确定要退出登录吗？');
+                                if (granted) {
+                                    User.config = null;
+                                    window.location.reload();
+                                }
                             }}
-                        />
-                    </div>
-                ))}
-                <button
-                    onClick={async () => {
-                        try {
-                            const { token } = await API.user.login(
-                                userInfo.id,
-                                userInfo.key,
-                            );
-                            userInfo.token = token;
-                            User.config = userInfo;
-                            if (nextUrl) window.location.href = nextUrl;
-                        } catch {
-                            alert('登录失败');
-                        }
-                    }}
-                >
-                    保存
-                </button>
+                        >
+                            退出登录
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        {FORM_CONFIG.map((config) => (
+                            <div className={styles.field} key={config.attr}>
+                                <label htmlFor={config.attr}>
+                                    {config.name}
+                                </label>
+                                <Input
+                                    type={config.type}
+                                    name={config.attr}
+                                    id={config.attr}
+                                    placeholder={config.placeholder}
+                                    onChange={(e) => {
+                                        userInfo[config.attr] = e.target.value;
+                                    }}
+                                />
+                            </div>
+                        ))}
+                        <div className={styles.buttonGroup}>
+                            <Button
+                                type="primary"
+                                onClick={async () => {
+                                    try {
+                                        const { token } = await API.user.login(
+                                            userInfo.id,
+                                            userInfo.key,
+                                        );
+                                        userInfo.token = token;
+                                        User.config = userInfo;
+                                        if (nextUrl) {
+                                            window.location.href = nextUrl;
+                                        } else {
+                                            window.location.reload();
+                                        }
+                                    } catch {
+                                        alert('登录失败');
+                                    }
+                                }}
+                            >
+                                登录
+                            </Button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
