@@ -20,11 +20,6 @@
     align-items: center;
 }
 
-.projectTitle:hover {
-    color: var(--ly-primary);
-    cursor: pointer;
-}
-
 .pageIcon {
     display: flex;
     align-items: center;
@@ -37,6 +32,10 @@
     text-align: center;
 }
 
+.pageName {
+    transition: color 0.3s;
+}
+
 .pageUser {
     padding: 4px 8px 5px;
     border: 1px solid transparent;
@@ -44,6 +43,7 @@
     font-size: 16px;
     font-weight: normal;
     transition: all 0.3s;
+    cursor: pointer;
 }
 
 .pageView {
@@ -223,6 +223,12 @@
     .action:hover,
     .workspaceItem:hover {
         background: var(--ly-active-background);
+    }
+
+    .pageIcon:hover,
+    .pageName:hover {
+        color: var(--ly-primary);
+        cursor: pointer;
     }
 
     .pageUser:hover {

@@ -10,9 +10,13 @@ const ProjectTitle = () => {
     const history = useHistory();
 
     return (
-        <h1 className={styles.projectTitle} onClick={() => history.push('/luoye')}>
-            <span className={styles.pageIcon}>{PROJECT_ICON}</span>
-            {PROJECT_NAME}
+        <h1 className={styles.projectTitle}>
+            <span className={styles.pageIcon} onClick={() => history.push('/luoye')}>
+                {PROJECT_ICON}
+            </span>
+            <span className={styles.pageName} onClick={() => history.push('/luoye')}>
+                {PROJECT_NAME}
+            </span>
             <Spacer />
             <span className={styles.pageUser} onClick={() => Path.toUserConfig()}>
                 {user?.id || '请先登录'}

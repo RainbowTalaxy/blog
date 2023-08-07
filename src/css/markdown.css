@@ -1,24 +1,24 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+main > h1,
+main > h2,
+main > h3,
+main > h4,
+main > h5,
+main > h6 {
     transition: all 0.3s;
 }
 
-a,
-a:hover,
-code,
-h1:hover,
-h2:hover,
-h3:hover,
-h4:hover,
-h5:hover,
-h6:hover {
+main > a,
+main > a:hover,
+main > code,
+main > h1:hover,
+main > h2:hover,
+main > h3:hover,
+main > h4:hover,
+main > h5:hover,
+main > h6:hover {
     color: var(--primary);
 }
 
-pre {
+main > pre {
     background: var(--page);
 }
