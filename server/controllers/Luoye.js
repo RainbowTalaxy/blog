@@ -122,8 +122,8 @@ const FileController = {
         const updatedWorkspace = {
             ...workspace,
             name: props.name || workspace.name,
-            description: props.description || workspace.description,
-            scope: props.scope || workspace.scope,
+            description: props.description ?? workspace.description,
+            scope: props.scope ?? workspace.scope,
             updatedAt: now,
         };
         writeJSON(workspaceDir, updatedWorkspace);
@@ -219,9 +219,9 @@ const FileController = {
         const now = Date.now();
         const updatedDoc = {
             ...doc,
-            name: props.name || doc.name,
-            content: props.content || doc.content,
-            scope: props.scope || doc.scope,
+            name: props.name ?? doc.name,
+            content: props.content ?? doc.content,
+            scope: props.scope ?? doc.scope,
             updatedAt: now,
         };
         writeJSON(docDir, updatedDoc);
