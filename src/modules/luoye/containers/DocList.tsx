@@ -70,7 +70,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
 
             {isDocFormVisible && (
                 <DocForm
-                    workspaceId={workspaceId}
+                    workspace={workspace}
                     workspaceItems={allWorkspaces}
                     onClose={async (success, newDocId) => {
                         if (success) await refetch();

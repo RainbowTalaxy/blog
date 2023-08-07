@@ -8,6 +8,9 @@ import WorkspaceForm from './WorkspaceForm';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import Spacer from '@site/src/components/Spacer';
+import useUser from '@site/src/hooks/useUser';
+import { Button } from '@site/src/components/Form';
+import Path from '@site/src/utils/Path';
 
 interface Props {
     data: {
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const Welcome = ({ data, refetch }: Props) => {
+    const user = useUser();
     const history = useHistory();
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
@@ -27,7 +31,11 @@ const Welcome = ({ data, refetch }: Props) => {
 
     return (
         <>
-            <h2 className={styles.pageTitle}>开始</h2>
+            <h2 className={styles.pageTitle}>
+                开始
+                <Spacer />
+                <Button onClick={() => Path.toUserConfig()}>用户：{user.id}</Button>
+            </h2>
             <div className={styles.actionSheet}>
                 <div className={styles.action} onClick={() => setWorkspaceFormVisible(true)}>
                     <span>🪸</span>新建工作区

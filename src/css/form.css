@@ -60,13 +60,13 @@
 }
 
 .btn.danger {
-    background: rgb(255, 0, 0, 0.7);
-    border: 1px solid rgb(255, 0, 0, 0.7);
+    background: rgb(255, 0, 0, 0.9);
+    border: 1px solid rgb(255, 0, 0, 0.9);
     color: white;
 }
 
 .btn.danger:hover {
-    background: rgb(255, 0, 0, 0.9);
+    background: rgb(255, 0, 0, 0.7);
 }
 
 /* 文本框 */

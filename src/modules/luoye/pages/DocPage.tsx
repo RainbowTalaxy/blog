@@ -7,7 +7,7 @@ import useQuery from '@site/src/hooks/useQuery';
 import API from '@site/src/api';
 import Document from '../containers/Document';
 import { useHistory } from '@docusaurus/router';
-import { PROJECT_NAME } from '../constants';
+import { PROJECT_NAME, workSpaceName } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
@@ -62,6 +62,7 @@ const DocPage = () => {
                     workspace && (
                         <>
                             <ProjectTitle />
+                            <h2>{workSpaceName(workspace.name)}</h2>
                             <SideBarList>
                                 <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
                                     工作区详情
@@ -98,7 +99,7 @@ const DocPage = () => {
             )}
             {workspace && isDocFormVisible && (
                 <DocForm
-                    workspaceId={workspace.id}
+                    workspace={workspace}
                     onClose={async (success, id) => {
                         setDocFormVisible(false);
                         if (success) history.push(`?id=${id}`);

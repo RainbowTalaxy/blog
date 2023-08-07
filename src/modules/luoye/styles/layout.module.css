@@ -56,6 +56,8 @@
     cursor: pointer;
 }
 
+.sidebar h1,
+.sidebar h2,
 .sidebarListItem > span,
 .sidebarList li > span {
     white-space: nowrap;

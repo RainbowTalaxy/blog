@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
 import Editor, { EditorRef } from '../components/Editor';
+import { useHistory } from '@docusaurus/router';
 
 interface Props {
     doc?: Doc;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const Document = ({ doc, mode = 'edit', onSave }: Props) => {
+    const history = useHistory();
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const textRef = useRef<EditorRef>();
@@ -77,6 +79,9 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                     onClose={async (success) => {
                         if (success) await onSave();
                         setDocFormVisible(false);
+                    }}
+                    onDelete={() => {
+                        history.replace(`/luoye?workspace=${doc.workspaces[0]}`);
                     }}
                 />
             )}
