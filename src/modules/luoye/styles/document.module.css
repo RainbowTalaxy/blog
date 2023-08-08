@@ -1,6 +1,5 @@
 .docView {
     --h-padding: 24px;
-    --hr-padding: 24px;
     position: relative;
     width: 100%;
 }
@@ -30,16 +29,12 @@
 
 .document {
     margin: 0 auto;
-    padding: 108px var(--hr-padding) 108px var(--h-padding);
+    padding: 108px var(--h-padding) 108px;
     max-width: 1000px;
-    font-size: 18px;
-}
-
-.document > h1:first-of-type {
-    margin-bottom: 36px;
 }
 
 .docInfo {
+    margin-top: 24px;
     font-size: 16px;
     color: var(--ly-primary);
     font-variant: tabular-nums;
@@ -83,7 +78,6 @@
 
 @media screen and (max-width: 768px) {
     .docView {
-        --h-padding: 18px;
-        --hr-padding: 16px;
+        --h-padding: 22px;
     }
 }
