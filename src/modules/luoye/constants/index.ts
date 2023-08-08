@@ -20,12 +20,13 @@ export const workSpaceName = (name: string) => {
 
 export const date = (time: number) => dayjs(time).format('YYYY-MM-DD HH:mm');
 
-export const checkAuth = (entity: Workspace | Doc) => {
+export const checkAuth = (entity?: Workspace | Doc) => {
     const user = getUser();
     const result = {
         editable: false,
         configurable: false,
     };
+    if (!entity) return result;
     if (entity.admins.includes(user?.id)) {
         result.editable = true;
         result.configurable = true;

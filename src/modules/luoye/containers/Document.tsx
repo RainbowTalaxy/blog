@@ -22,6 +22,7 @@ const Document = ({ doc, onSave }: Props) => {
     const textRef = useRef<EditorRef>();
 
     useEffect(() => {
+        if (!doc) return;
         setEdit(doc.content === '');
     }, [doc]);
 
