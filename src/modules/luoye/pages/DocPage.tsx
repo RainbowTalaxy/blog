@@ -64,10 +64,10 @@ const DocPage = () => {
                             <ProjectTitle />
                             <h2>{workSpaceName(workspace.name)}</h2>
                             <SideBarList>
+                                <SideBarListItem onClick={() => setDocFormVisible(true)}>新建文档</SideBarListItem>
                                 <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
                                     工作区属性
                                 </SideBarListItem>
-                                <SideBarListItem onClick={() => setDocFormVisible(true)}>新建文档</SideBarListItem>
                             </SideBarList>
                             <h2>文档列表</h2>
                             <SideBarList>

@@ -42,14 +42,16 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
 
     return (
         <>
-            <h2 className={styles.pageTitle}>{workSpaceName(workspace.name)}</h2>
+            <div className={styles.titleBar}>
+                <h2 className={styles.pageTitle}>{workSpaceName(workspace.name)}</h2>
+                <span className={styles.settings}>设置</span>
+            </div>
             <p className={styles.pageDescription}>
                 {user?.id === workspace.id ? DEFAULT_WORKSPACE_PLACEHOLDER.description : workspace.description}
             </p>
-            <h2 className={styles.titleBar}>
+            <h2 className={styles.docTitleBar}>
                 文档列表
                 <Spacer />
-                <Button onClick={() => setWorkspaceFormVisible(true)}>工作区属性</Button>
                 <Button type="primary" onClick={() => setDocFormVisible(true)}>
                     新建文档
                 </Button>
