@@ -35,7 +35,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                 setWorkspace(null);
             }
         })();
-    }, [workspaceId]);
+    }, [workspaceId, allWorkspaces]);
 
     if (workspace === undefined) return null;
     if (workspace === null) return <p>工作区不存在</p>;
@@ -44,7 +44,9 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
         <>
             <div className={styles.titleBar}>
                 <h2 className={styles.pageTitle}>{workSpaceName(workspace.name)}</h2>
-                <span className={styles.settings}>设置</span>
+                <span className={styles.settings} onClick={() => setWorkspaceFormVisible(true)}>
+                    设置
+                </span>
             </div>
             <p className={styles.pageDescription}>
                 {user?.id === workspace.id ? DEFAULT_WORKSPACE_PLACEHOLDER.description : workspace.description}

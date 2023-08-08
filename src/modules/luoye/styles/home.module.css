@@ -57,8 +57,10 @@
 }
 
 .settings {
+    align-self: flex-end;
     flex-shrink: 0;
-    margin: 4px 0 0 12px;
+    margin-left: 12px;
+    color: gray;
 }
 
 .pageTitle {
