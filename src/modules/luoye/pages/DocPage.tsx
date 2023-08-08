@@ -7,7 +7,7 @@ import useQuery from '@site/src/hooks/useQuery';
 import API from '@site/src/api';
 import Document from '../containers/Document';
 import { useHistory } from '@docusaurus/router';
-import { PROJECT_NAME, workSpaceName } from '../constants';
+import { PROJECT_NAME, checkAuth, workSpaceName } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
@@ -53,6 +53,8 @@ const DocPage = () => {
 
     if (workspace === undefined) return null;
 
+    const spaceAuth = checkAuth(workspace);
+
     return (
         <div className={styles.container}>
             <GlobalStyle />
@@ -63,13 +65,19 @@ const DocPage = () => {
                         <>
                             <ProjectTitle />
                             <h2>{workSpaceName(workspace.name)}</h2>
-                            <SideBarList>
-                                <SideBarListItem onClick={() => setDocFormVisible(true)}>新建文档</SideBarListItem>
-                                <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
-                                    工作区属性
-                                </SideBarListItem>
-                            </SideBarList>
-                            <h2>文档列表</h2>
+                            {spaceAuth.configurable && (
+                                <>
+                                    <SideBarList>
+                                        <SideBarListItem onClick={() => setDocFormVisible(true)}>
+                                            新建文档
+                                        </SideBarListItem>
+                                        <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
+                                            工作区属性
+                                        </SideBarListItem>
+                                    </SideBarList>
+                                    <h2>文档列表</h2>
+                                </>
+                            )}
                             <SideBarList>
                                 {workspace.docs.map((docDir) => (
                                     <SideBarListItem
@@ -86,7 +94,7 @@ const DocPage = () => {
                     )
                 }
             >
-                <Document doc={doc} onSave={refetch} mode={workspace ? 'edit' : 'view'} />
+                <Document doc={doc} onSave={refetch} />
             </ContentWithSideBar>
             {workspace && isWorkspaceFormVisible && (
                 <WorkspaceForm
@@ -97,7 +105,7 @@ const DocPage = () => {
                     }}
                 />
             )}
-            {workspace && isDocFormVisible && (
+            {workspace && spaceAuth.configurable && isDocFormVisible && (
                 <DocForm
                     workspace={workspace}
                     onClose={async (success, id) => {

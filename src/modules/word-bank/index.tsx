@@ -9,9 +9,9 @@ import { Book, BookInfo } from '@site/src/api/word-bank';
 import WordLine, { EditableSpan } from './components/WordLine';
 import useEditData from './hooks/useEditData';
 import useUserEntry from '@site/src/hooks/useUserEntry';
-import { setUser } from '@site/src/utils/user';
 import ActionItem from './components/ActionItem';
 import useUser from '@site/src/hooks/useUser';
+import Path from '@site/src/utils/Path';
 
 const WordBank = () => {
     const titleRef = useRef<HTMLSpanElement>(null);
@@ -259,7 +259,7 @@ const WordBank = () => {
                     )}
                     {!user.id && (
                         <div className={styles.wordList}>
-                            <ActionItem onClick={() => setUser()}>设置用户</ActionItem>
+                            <ActionItem onClick={() => Path.toUserConfig()}>设置用户</ActionItem>
                         </div>
                     )}
                 </article>

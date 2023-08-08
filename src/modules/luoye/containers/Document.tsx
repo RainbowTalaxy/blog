@@ -8,14 +8,14 @@ import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
 import Editor, { EditorRef } from '../components/Editor';
 import { useHistory } from '@docusaurus/router';
+import { checkAuth } from '../constants';
 
 interface Props {
     doc?: Doc;
     onSave: () => Promise<void>;
-    mode: 'view' | 'edit';
 }
 
-const Document = ({ doc, mode = 'edit', onSave }: Props) => {
+const Document = ({ doc, onSave }: Props) => {
     const history = useHistory();
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
@@ -27,11 +27,13 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
 
     if (!doc) return null;
 
+    const auth = checkAuth(doc);
+
     return (
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
                 <div className={styles.docNavTitle}>{doc.name}</div>
-                {mode === 'edit' && (
+                {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
                         <Button
@@ -58,8 +60,9 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                         </Button>
                         {isEdit && <Button onClick={() => setEdit(false)}>取 消</Button>}
                     </>
+                ) : (
+                    doc.creator
                 )}
-                {mode === 'view' && doc.creator}
             </header>
             <main className={styles.document}>
                 {!isEdit && (
