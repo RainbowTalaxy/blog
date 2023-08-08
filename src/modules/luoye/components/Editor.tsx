@@ -17,7 +17,7 @@ export interface EditorRef {
 const PLACE_HOLDER = '点击此处直接输入正文';
 
 const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedRef<EditorRef>) => {
-    const eleRef = useRef<HTMLDivElement>();
+    const eleRef = useRef<HTMLPreElement>();
 
     useImperativeHandle(ref, () => ({
         focus: () => {
@@ -37,7 +37,7 @@ const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedR
     }, [visible, keyId]);
 
     return (
-        <div
+        <pre
             ref={eleRef}
             className={clsx(styles.docInput, className)}
             style={{ display: visible ? '' : 'none' }}
@@ -53,7 +53,7 @@ const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedR
                 const text = e.clipboardData.getData('text/plain');
                 document.execCommand('insertText', false, text);
             }}
-        ></div>
+        ></pre>
     );
 });
 
