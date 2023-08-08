@@ -127,6 +127,7 @@
     --doc-list-border: 1px solid var(--ly-secondary);
     display: flex;
     flex-direction: column;
+    margin-bottom: 72px;
     border-top: var(--doc-list-border);
 }
 

@@ -12,6 +12,7 @@ import Welcome from '../containers/Welcome';
 import DocList from '../containers/DocList';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
+import Head from '@docusaurus/Head';
 
 const HomePage = () => {
     const history = useHistory();
@@ -46,10 +47,6 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        document.title = PROJECT_NAME;
-    }, [data]);
-
-    useEffect(() => {
         refetch();
     }, [refetch]);
 
@@ -57,6 +54,10 @@ const HomePage = () => {
 
     return (
         <div className={styles.container}>
+            <Head>
+                <title>{PROJECT_NAME}</title>
+                <meta name="theme-color" content="#ffedcc" />
+            </Head>
             <GlobalStyle />
             <ContentWithSideBar
                 sidebar={

@@ -13,6 +13,7 @@ import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import WorkspaceForm from '../containers/WorkspaceForm';
 import DocForm from '../containers/DocForm';
+import Head from '@docusaurus/Head';
 
 const DocPage = () => {
     const history = useHistory();
@@ -35,7 +36,6 @@ const DocPage = () => {
 
     useEffect(() => {
         if (!doc) return;
-        document.title = `${doc.name} | ${PROJECT_NAME}`;
         (async () => {
             try {
                 const workspaceData = await API.luoye.workspace(doc.workspaces[0]);
@@ -51,15 +51,22 @@ const DocPage = () => {
         refetch();
     }, [refetch]);
 
-    if (workspace === undefined) return null;
+    if (doc === undefined) return null;
+    if (doc && workspace === undefined) return null;
 
     const spaceAuth = checkAuth(workspace);
 
     return (
         <div className={styles.container}>
+            <Head>
+                <title>
+                    {doc?.name || '文档不存在'} | {PROJECT_NAME}
+                </title>
+                <meta name="theme-color" content="#ffedcc" />
+            </Head>
             <GlobalStyle />
             <ContentWithSideBar
-                sidebarVisible={workspace !== null}
+                sidebarVisible={Boolean(workspace)}
                 sidebar={
                     workspace && (
                         <>

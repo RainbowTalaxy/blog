@@ -76,6 +76,12 @@
     text-overflow: ellipsis;
 }
 
+@media screen and (max-width: 1600px) and (min-width: 769px) {
+    .document {
+        max-width: 90%;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .docView {
         --h-padding: 22px;

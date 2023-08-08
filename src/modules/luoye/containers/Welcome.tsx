@@ -27,7 +27,9 @@ const Welcome = ({ data, refetch }: Props) => {
 
     return (
         <>
-            <h2 className={styles.pageTitle}>开始</h2>
+            <div className={styles.titleBar}>
+                <h2 className={styles.pageTitle}>开始</h2>
+            </div>
             <div className={styles.actionSheet}>
                 <div className={styles.action} onClick={() => setWorkspaceFormVisible(true)}>
                     <span>🪸</span>新建工作区

@@ -11,7 +11,7 @@ import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 
 interface Props {
-    doc?: Doc;
+    doc: Doc;
     onSave: () => Promise<void>;
 }
 
@@ -26,9 +26,20 @@ const Document = ({ doc, onSave }: Props) => {
         setEdit(doc.content === '');
     }, [doc]);
 
-    if (!doc) return null;
-
     const auth = checkAuth(doc);
+
+    if (!doc)
+        return (
+            <div className={styles.docView}>
+                <header className={styles.docNavBar}>
+                    <div className={styles.docNavTitle}>🍂 落叶</div>
+                    {`>_<`}
+                </header>
+                <main className={styles.document}>
+                    <p>抱歉，文档不存在。</p>
+                </main>
+            </div>
+        );
 
     return (
         <div className={styles.docView}>
@@ -77,7 +88,7 @@ const Document = ({ doc, onSave }: Props) => {
                 )}
                 <Editor ref={textRef} visible={isEdit} keyId={doc.id} />
             </main>
-            {doc && isDocFormVisible && (
+            {isDocFormVisible && (
                 <DocForm
                     doc={doc}
                     onClose={async (success) => {
