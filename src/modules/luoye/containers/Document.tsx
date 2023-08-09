@@ -9,6 +9,7 @@ import DocForm from './DocForm';
 import Editor, { EditorRef } from '../components/Editor';
 import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
+import ProjectTitle from './ProjectTitle';
 
 interface Props {
     doc: Doc | null;
@@ -44,7 +45,7 @@ const Document = ({ doc, onSave }: Props) => {
     return (
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
-                <div className={styles.docNavTitle}>{doc.name}</div>
+                <ProjectTitle fold showInfo={false} />
                 {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
@@ -73,7 +74,7 @@ const Document = ({ doc, onSave }: Props) => {
                         {isEdit && <Button onClick={() => setEdit(false)}>取 消</Button>}
                     </>
                 ) : (
-                    doc.creator
+                    doc.creator.toUpperCase()
                 )}
             </header>
             <main className={styles.document}>

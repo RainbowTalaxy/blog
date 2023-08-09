@@ -28,6 +28,9 @@ export const SideBarListItem = ({ className, active, icon, children, onClick }: 
     );
 };
 
+const SIDE_BAR_ID = 'sidebar';
+const REVEAL_CLASS = 'unfold-sidebar';
+
 interface SideBarProps {
     className?: string;
     sidebar: ReactNode;
@@ -36,11 +39,22 @@ interface SideBarProps {
     sidebarVisible?: boolean;
 }
 
+export const revealSidebar = () => {
+    const sidebar = document.querySelector<HTMLDivElement>(`#${SIDE_BAR_ID}`);
+    sidebar?.classList.add(REVEAL_CLASS);
+};
+
+export const hideSidebar = () => {
+    const sidebar = document.querySelector<HTMLDivElement>(`#${SIDE_BAR_ID}`);
+    sidebar?.classList.remove(REVEAL_CLASS);
+};
+
 const ContentWithSideBar = ({ className, sidebar, navbar, children, sidebarVisible = true }: SideBarProps) => {
     return (
-        <div className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
+        <div id={SIDE_BAR_ID} className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
             {sidebarVisible && <nav className={styles.sidebar}>{sidebar}</nav>}
-            <div className={styles.contentView}>
+            <div className={styles.sidebarMask} onClick={hideSidebar} />
+            <div className={clsx(styles.contentView, navbar && styles.showNav)}>
                 {navbar && <nav className={styles.navbar}>{navbar}</nav>}
                 <div className={styles.content}>{children}</div>
             </div>

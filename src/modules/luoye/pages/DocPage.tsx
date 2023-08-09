@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import styles from '../styles/home.module.css';
-import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
+import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Doc, Scope, Workspace } from '@site/src/api/luoye';
 import useQuery from '@site/src/hooks/useQuery';
@@ -44,6 +44,7 @@ const DocPage = () => {
                 console.log(error);
                 setWorkspace(null);
             }
+            hideSidebar();
         })();
     }, [doc]);
 
@@ -62,7 +63,7 @@ const DocPage = () => {
                 <title>
                     {doc?.name || '文档不存在'} | {PROJECT_NAME}
                 </title>
-                <meta name="theme-color" content="#ffedcc" />
+                <meta name="theme-color" content="#fff8ed" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
@@ -71,7 +72,10 @@ const DocPage = () => {
                     workspace && (
                         <>
                             <ProjectTitle marginBottom="1rem" />
-                            <h2>{workSpaceName(workspace.name)}</h2>
+                            <h2>
+                                <span>{workSpaceName(workspace.name)}</span>
+                                {workspace.scope === Scope.Private && <SVG.Lock />}
+                            </h2>
                             {spaceAuth.configurable && (
                                 <>
                                     <SideBarList>
@@ -100,7 +104,7 @@ const DocPage = () => {
                         </>
                     )
                 }
-                navbar={<ProjectTitle owner={doc?.creator ?? '404'} />}
+                navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold />}
             >
                 <Document doc={doc} onSave={refetch} />
             </ContentWithSideBar>

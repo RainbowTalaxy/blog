@@ -11,6 +11,7 @@ import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import WorkspaceForm from './WorkspaceForm';
 import useUser from '@site/src/hooks/useUser';
+import { hideSidebar } from '../components/SideBar';
 
 interface Props {
     workspaceId: string;
@@ -35,6 +36,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                 console.log(error);
                 if (isMounted) setWorkspace(null);
             }
+            hideSidebar();
         })();
         return () => {
             isMounted = false;

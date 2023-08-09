@@ -20,6 +20,7 @@
     border-right: 1px solid var(--ly-active-background);
     background: #fff8ed;
     user-select: none;
+    transition: transform 0.3s;
 }
 
 .sidebar h1 {
@@ -27,8 +28,22 @@
 }
 
 .sidebar h2 {
+    display: flex;
+    align-items: center;
     margin: 0 0 10px 12px;
     font-size: 18px;
+}
+
+.sidebarMask {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 150;
 }
 
 .sidebarList {
@@ -50,6 +65,7 @@
 
 .sidebar h1,
 .sidebar h2,
+.sidebar h2 > span:first-of-type,
 .sidebarListItem > span,
 .sidebarList li > span {
     white-space: nowrap;
@@ -101,13 +117,30 @@
     }
 
     .sidebar {
-        display: none;
+        --sidebar-width: 300px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 200;
+        transform: translateX(calc(-1 * var(--sidebar-width)));
+    }
+
+    :global(.unfold-sidebar) .sidebar {
+        transform: translateX(0);
+    }
+
+    :global(.unfold-sidebar) .sidebarMask {
+        display: block;
     }
 
     .contentView {
-        --navbar-height: 72px;
+        --h-padding: 22px;
         margin-left: 0;
         width: 100%;
+    }
+
+    .contentView.showNav {
+        --navbar-height: 72px;
     }
 
     .navbar {

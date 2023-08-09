@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import API from '@site/src/api';
 import styles from '../styles/home.module.css';
-import ContentWithSideBar, { SideBarList, SideBarListItem } from '../components/SideBar';
+import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { DEFAULT_WORKSPACE, DEFAULT_WORKSPACE_PLACEHOLDER, PROJECT_NAME } from '../constants';
 import { useHistory } from '@docusaurus/router';
@@ -40,6 +40,7 @@ const HomePage = () => {
                 workspaces,
                 docs,
             });
+            hideSidebar();
         } catch (error) {
             console.log(error);
             setData(null);
@@ -56,7 +57,7 @@ const HomePage = () => {
         <div className={styles.container}>
             <Head>
                 <title>{PROJECT_NAME}</title>
-                <meta name="theme-color" content="#ffedcc" />
+                <meta name="theme-color" content="#fff8ed" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
@@ -87,7 +88,7 @@ const HomePage = () => {
                         )}
                     </>
                 }
-                navbar={<ProjectTitle />}
+                navbar={<ProjectTitle fold />}
             >
                 <div className={styles.pageView}>
                     {data && !workspaceId && <Welcome data={data} refetch={refetch} />}
