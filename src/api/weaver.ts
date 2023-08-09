@@ -37,6 +37,10 @@ export interface TaskProps {
     progress?: number;
 }
 
+export interface ProjectProps {
+    name?: string;
+}
+
 export interface CycleDetail {
     tasks: Task[];
 }
@@ -49,6 +53,8 @@ const WeaverAPI = {
             name,
             firstDate,
         }),
+    updateProject: (id: string, props: ProjectProps) =>
+        rocketV2.put(`${SERVER_API}/weaver/project/${id}`, props),
     deleteProject: (projectId: string) =>
         rocketV2.delete(`${SERVER_API}/weaver/project/${projectId}`),
     cycles: (projectId: string) =>

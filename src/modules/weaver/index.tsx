@@ -3,14 +3,15 @@ import { ProjectInfo } from '@site/src/api/weaver';
 import useUserEntry from '@site/src/hooks/useUserEntry';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
-import styles from './index.module.css';
+import styles from './styles/index.module.css';
 import useQuery from '@site/src/hooks/useQuery';
 import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
 import clsx from 'clsx';
-import { Button, Input } from '@site/src/components/Form';
+import { Button } from '@site/src/components/Form';
+import ProjectForm from './components/ProjectForm';
 
 const today = dayjs().format('YYYY-MM-DD');
 
@@ -19,22 +20,25 @@ const Weaver = () => {
     const query = useQuery();
     const history = useHistory();
     const [list, setList] = useState<ProjectInfo[]>();
+    const [isFormVisible, setFormVisible] = useState(false);
 
     const projectId = query.get('project');
 
-    const refetch = useCallback(() => {
+    const refetch = useCallback(async () => {
         if (!user.id) return;
-        API.weaver.projects().then((data) => setList(data));
+        await API.weaver.projects().then((data) => setList(data));
     }, [user]);
 
     useUserEntry();
 
-    useEffect(() => refetch(), [refetch]);
+    useEffect(() => {
+        refetch();
+    }, [refetch]);
 
     const project = list?.find((project) => project.id === projectId);
 
     if (project && user.id) {
-        return <ProjectView project={project} />;
+        return <ProjectView project={project} refetch={refetch} />;
     }
 
     return (
@@ -58,61 +62,21 @@ const Weaver = () => {
                                     创建时间：
                                     {dayjs(project.createdAt).format('YYYY年M月D日')}
                                 </div>
-                                <div
-                                    className={styles.projectDelete}
-                                    onClick={async (e) => {
-                                        e.stopPropagation();
-                                        const result = confirm(`确定删除“${project.name}”？`);
-                                        if (result) {
-                                            try {
-                                                await API.weaver.deleteProject(project.id);
-                                                refetch();
-                                            } catch (error) {
-                                                console.log(error);
-                                            }
-                                        }
-                                    }}
-                                >
-                                    删除
-                                </div>
                             </div>
                         ))}
                     </div>
-                    <h3>新建项目</h3>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            const form = e.target as HTMLFormElement;
-                            const projectName = (form as any).projectName.value;
-                            const startDate = (form as any).startDate.value;
-                            if (!projectName) return alert('项目名称不能为空');
-                            if (!startDate) return alert('开始时间不能为空');
-                            const firstDate = dayjs(startDate).valueOf();
-                            console.log(projectName, firstDate);
-                            API.weaver.createProject(projectName, firstDate).then(() => {
-                                form.reset();
-                                refetch();
-                            });
-                        }}
-                    >
-                        <Input className={styles.input} name="projectName" placeholder="项目名称" />
-                        <br />
-                        <span className={styles.fieldName}>开始时间</span>
-                        <Input
-                            className={styles.input}
-                            name="startDate"
-                            type="date"
-                            defaultValue={today}
-                            placeholder="开始时间"
-                        />
-                        <br />
-                        <Button style={{ margin: '18px 0 0 4px' }} type="primary">
-                            提交
-                        </Button>
-                    </form>
+                    <Button onClick={() => setFormVisible(true)}>新建项目</Button>
                 </>
             ) : (
                 <Button onClick={() => Path.toUserConfig()}>请先登录</Button>
+            )}
+            {isFormVisible && (
+                <ProjectForm
+                    onClose={async (success) => {
+                        if (success) await refetch();
+                        setFormVisible(false);
+                    }}
+                />
             )}
         </div>
     );
