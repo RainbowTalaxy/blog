@@ -44,7 +44,7 @@ const Welcome = ({ data, refetch }: Props) => {
                     <div
                         className={styles.workspaceItem}
                         key={workspace.id}
-                        onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                        onClick={() => history.push(`?workspace=${workspace.id}`)}
                     >
                         <div className={styles.workspaceName}>
                             <span>🪴</span>

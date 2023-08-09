@@ -90,7 +90,7 @@ const DocPage = () => {
                                     <SideBarListItem
                                         active={docDir.docId === id}
                                         key={docDir.docId}
-                                        onClick={() => history.replace(`?id=${docDir.docId}`)}
+                                        onClick={() => history.push(`?id=${docDir.docId}`)}
                                     >
                                         <span>{docDir.name || <Placeholder>未命名</Placeholder>}</span>
                                         {docDir.scope === Scope.Private && <SVG.Lock />}

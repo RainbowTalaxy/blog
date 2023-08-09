@@ -66,11 +66,7 @@ const HomePage = () => {
                         {allWorkspaces && (
                             <>
                                 <SideBarList>
-                                    <SideBarListItem
-                                        active={!workspaceId}
-                                        icon="🍄"
-                                        onClick={() => history.replace('?')}
-                                    >
+                                    <SideBarListItem active={!workspaceId} icon="🍄" onClick={() => history.push('?')}>
                                         开始
                                     </SideBarListItem>
                                 </SideBarList>
@@ -80,7 +76,7 @@ const HomePage = () => {
                                         <SideBarListItem
                                             key={workspace.id}
                                             active={workspaceId === workspace.id}
-                                            onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                                            onClick={() => history.push(`?workspace=${workspace.id}`)}
                                         >
                                             <span>{workspace.name || <Placeholder>未命名</Placeholder>}</span>
                                             {workspace.scope === Scope.Private && <SVG.Lock />}
