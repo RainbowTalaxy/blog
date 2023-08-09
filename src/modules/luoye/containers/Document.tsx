@@ -45,7 +45,8 @@ const Document = ({ doc, onSave }: Props) => {
     return (
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
-                <ProjectTitle fold showInfo={false} />
+                <div className={styles.docNavTitle}>{doc.name}</div>
+                <ProjectTitle className={styles.docIcon} fold showInfo={false} />
                 {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}

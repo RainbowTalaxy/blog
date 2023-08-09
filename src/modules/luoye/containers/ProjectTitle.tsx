@@ -9,18 +9,19 @@ import SVG from '../components/SVG';
 import { revealSidebar } from '../components/SideBar';
 
 interface Props {
+    className?: string;
     marginBottom?: number | string;
     owner?: string;
     showInfo?: boolean;
     fold?: boolean;
 }
 
-const ProjectTitle = ({ marginBottom = 0, owner, fold = false, showInfo = true }: Props) => {
+const ProjectTitle = ({ className, marginBottom = 0, owner, fold = false, showInfo = true }: Props) => {
     const user = useUser();
     const history = useHistory();
 
     return (
-        <div className={styles.projectTitle} style={{ marginBottom }}>
+        <div className={clsx(styles.projectTitle, className)} style={{ marginBottom }}>
             {fold && (
                 <span className={clsx(styles.pageFoldIcon)} onClick={revealSidebar}>
                     <SVG.Hamburger />

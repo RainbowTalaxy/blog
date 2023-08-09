@@ -24,6 +24,10 @@
     font-weight: bold;
 }
 
+.docIcon {
+    display: none;
+}
+
 .docNavBar button {
     margin-left: 10px;
 }
@@ -92,5 +96,13 @@
 
     .document {
         padding: 24px var(--h-padding) 108px;
+    }
+
+    .docIcon {
+        display: flex;
+    }
+
+    .docNavTitle {
+        display: none;
     }
 }
