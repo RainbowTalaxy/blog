@@ -43,7 +43,7 @@ const UserPage = () => {
                             onClick={() => {
                                 const granted = confirm('确定要退出登录吗？');
                                 if (granted) {
-                                    User.config = null;
+                                    User.config = {};
                                     window.location.reload();
                                 }
                             }}
@@ -75,8 +75,8 @@ const UserPage = () => {
                                 onClick={async () => {
                                     try {
                                         const { token } = await API.user.login(
-                                            userInfo.id,
-                                            userInfo.key,
+                                            userInfo.id ?? '',
+                                            userInfo.key ?? '',
                                         );
                                         userInfo.token = token;
                                         User.config = userInfo;

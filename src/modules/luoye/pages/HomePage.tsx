@@ -22,7 +22,7 @@ const HomePage = () => {
         defaultWorkspace: WorkspaceItem;
         workspaces: WorkspaceItem[];
         docs: DocItem[];
-    }>();
+    } | null>();
 
     const refetch = useCallback(async () => {
         try {
@@ -62,7 +62,7 @@ const HomePage = () => {
             <ContentWithSideBar
                 sidebar={
                     <>
-                        <ProjectTitle />
+                        <ProjectTitle marginBottom="1rem" />
                         {allWorkspaces && (
                             <>
                                 <SideBarList>
@@ -87,10 +87,11 @@ const HomePage = () => {
                         )}
                     </>
                 }
+                navbar={<ProjectTitle />}
             >
                 <div className={styles.pageView}>
                     {data && !workspaceId && <Welcome data={data} refetch={refetch} />}
-                    {data && workspaceId && (
+                    {data && workspaceId && allWorkspaces && (
                         <DocList workspaceId={workspaceId} allWorkspaces={allWorkspaces} refetch={refetch} />
                     )}
                 </div>

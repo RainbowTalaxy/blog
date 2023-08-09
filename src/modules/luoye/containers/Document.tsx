@@ -11,7 +11,7 @@ import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 
 interface Props {
-    doc: Doc;
+    doc: Doc | null;
     onSave: () => Promise<void>;
 }
 
@@ -19,7 +19,7 @@ const Document = ({ doc, onSave }: Props) => {
     const history = useHistory();
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
-    const textRef = useRef<EditorRef>();
+    const textRef = useRef<EditorRef>(null);
 
     useEffect(() => {
         if (!doc) return;
@@ -59,11 +59,11 @@ const Document = ({ doc, onSave }: Props) => {
                                         });
                                         await onSave();
                                         setEdit(false);
-                                    } catch (error) {
+                                    } catch (error: any) {
                                         return alert(`提交失败：${error.message}`);
                                     }
                                 } else {
-                                    textRef.current.setText(doc.content);
+                                    textRef.current?.setText(doc.content);
                                     setEdit(true);
                                 }
                             }}

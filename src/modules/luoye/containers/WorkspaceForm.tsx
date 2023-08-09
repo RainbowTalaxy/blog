@@ -66,7 +66,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                         await API.luoye.createWorkspace(props);
                                     }
                                     await onClose(true);
-                                } catch (error) {
+                                } catch (error: any) {
                                     alert(`提交失败：${error.message}`);
                                 }
                             }}

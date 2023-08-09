@@ -18,9 +18,9 @@ import Head from '@docusaurus/Head';
 const DocPage = () => {
     const history = useHistory();
     const query = useQuery();
-    const id = query.get('id');
-    const [doc, setDoc] = useState<Doc>();
-    const [workspace, setWorkspace] = useState<Workspace>();
+    const id = query.get('id') ?? '';
+    const [doc, setDoc] = useState<Doc | null>();
+    const [workspace, setWorkspace] = useState<Workspace | null>();
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
 
@@ -70,7 +70,7 @@ const DocPage = () => {
                 sidebar={
                     workspace && (
                         <>
-                            <ProjectTitle />
+                            <ProjectTitle marginBottom="1rem" />
                             <h2>{workSpaceName(workspace.name)}</h2>
                             {spaceAuth.configurable && (
                                 <>
@@ -100,6 +100,7 @@ const DocPage = () => {
                         </>
                     )
                 }
+                navbar={<ProjectTitle owner={doc?.creator ?? '404'} />}
             >
                 <Document doc={doc} onSave={refetch} />
             </ContentWithSideBar>

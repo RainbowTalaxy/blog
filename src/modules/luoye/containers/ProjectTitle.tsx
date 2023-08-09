@@ -5,23 +5,33 @@ import useUser from '@site/src/hooks/useUser';
 import Spacer from '@site/src/components/Spacer';
 import Path from '@site/src/utils/Path';
 
-const ProjectTitle = () => {
+interface Props {
+    marginBottom?: number | string;
+    owner?: string;
+}
+
+const ProjectTitle = ({ marginBottom = 0, owner }: Props) => {
     const user = useUser();
     const history = useHistory();
 
     return (
-        <h1 className={styles.projectTitle}>
+        <div className={styles.projectTitle} style={{ marginBottom }}>
             <span className={styles.pageIcon} onClick={() => history.push('/luoye')}>
                 {PROJECT_ICON}
             </span>
-            <span className={styles.pageName} onClick={() => history.push('/luoye')}>
+            <h1 className={styles.pageName} onClick={() => history.push('/luoye')}>
                 {PROJECT_NAME}
-            </span>
+            </h1>
             <Spacer />
-            <span className={styles.pageUser} onClick={() => Path.toUserConfig()}>
-                {user?.id || '请先登录'}
+            <span
+                className={styles.pageUser}
+                onClick={() => {
+                    if (!owner) Path.toUserConfig();
+                }}
+            >
+                {(owner ?? user?.id)?.toUpperCase() || '请先登录'}
             </span>
-        </h1>
+        </div>
     );
 };
 

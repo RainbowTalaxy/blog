@@ -17,7 +17,7 @@ export interface EditorRef {
 const PLACE_HOLDER = '点击此处直接输入正文';
 
 const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedRef<EditorRef>) => {
-    const eleRef = useRef<HTMLPreElement>();
+    const eleRef = useRef<HTMLPreElement>(null);
 
     useImperativeHandle(ref, () => ({
         focus: () => {
@@ -33,7 +33,7 @@ const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedR
     }));
 
     useEffect(() => {
-        if (visible && !eleRef.current.innerText) eleRef.current?.focus();
+        if (visible && !eleRef.current?.innerText) eleRef.current?.focus();
     }, [visible, keyId]);
 
     return (

@@ -12,6 +12,7 @@
     left: var(--sidebar-width);
     right: 0;
     padding: 16px var(--h-padding);
+    height: 72px;
     border-bottom: 1px solid var(--ly-active-background);
     background: var(--ly-background);
     z-index: 100;
@@ -29,7 +30,7 @@
 
 .document {
     margin: 0 auto;
-    padding: 108px var(--h-padding) 108px;
+    padding: 108px var(--h-padding);
     max-width: 1000px;
 }
 
@@ -85,5 +86,13 @@
 @media screen and (max-width: 768px) {
     .docView {
         --h-padding: 22px;
+    }
+
+    .docNavBar {
+        display: none;
+    }
+
+    .document {
+        padding: 24px var(--h-padding) 108px;
     }
 }

@@ -31,16 +31,20 @@ export const SideBarListItem = ({ className, active, icon, children, onClick }: 
 interface SideBarProps {
     className?: string;
     sidebar: ReactNode;
+    navbar?: ReactNode;
     children?: ReactNode;
     sidebarVisible?: boolean;
 }
 
-const ContentWithSideBar = ({ className, sidebar, children, sidebarVisible = true }: SideBarProps) => {
+const ContentWithSideBar = ({ className, sidebar, navbar, children, sidebarVisible = true }: SideBarProps) => {
     return (
-        <nav className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
-            {sidebarVisible && <div className={styles.sidebar}>{sidebar}</div>}
-            <div className={styles.content}>{children}</div>
-        </nav>
+        <div className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
+            {sidebarVisible && <nav className={styles.sidebar}>{sidebar}</nav>}
+            <div className={styles.contentView}>
+                {navbar && <nav className={styles.navbar}>{navbar}</nav>}
+                <div className={styles.content}>{children}</div>
+            </div>
+        </div>
     );
 };
 

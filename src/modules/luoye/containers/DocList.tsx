@@ -21,20 +21,24 @@ interface Props {
 const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
     const history = useHistory();
     const user = useUser();
-    const [workspace, setWorkspace] = useState<Workspace>();
+    const [workspace, setWorkspace] = useState<Workspace | null>();
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
 
     useEffect(() => {
+        let isMounted = true;
         (async () => {
             try {
                 const workspace = await API.luoye.workspace(workspaceId);
-                setWorkspace(workspace);
+                if (isMounted) setWorkspace(workspace);
             } catch (error) {
                 console.log(error);
-                setWorkspace(null);
+                if (isMounted) setWorkspace(null);
             }
         })();
+        return () => {
+            isMounted = false;
+        };
     }, [workspaceId, allWorkspaces]);
 
     if (workspace === undefined) return null;
