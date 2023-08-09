@@ -319,6 +319,11 @@ const Utility = {
     scopeCheck(value) {
         return Object.values(Scope).includes(value);
     },
+    filterPrivate(workspace) {
+        workspace.docs = workspace.docs.filter((doc) => {
+            return doc.scope !== Scope.Private;
+        });
+    },
 };
 
 module.exports = {

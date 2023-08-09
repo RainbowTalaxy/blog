@@ -32,10 +32,14 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
             return res.status(404).send({
                 error: 'workspace not found',
             });
-        if (LuoyeUtl.access(workspace, userId) === Access.Forbidden)
+        const accessScope = LuoyeUtl.access(workspace, userId);
+        if (accessScope === Access.Forbidden)
             return res.status(403).send({
                 error: 'Forbidden',
             });
+        if (accessScope === Access.Visitor) {
+            LuoyeUtl.filterPrivate(workspace);
+        }
         return res.send(workspace);
     } catch (error) {
         console.log(error);
