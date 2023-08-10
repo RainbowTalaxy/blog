@@ -2,7 +2,6 @@ import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
 import { User } from './config';
 import useUser from '@site/src/hooks/useUser';
-import { useEffect } from 'react';
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';
 
@@ -25,10 +24,6 @@ const UserPage = () => {
     const query = useQuery();
     const nextUrl = query.get('nextUrl');
     const userInfo = useUser();
-
-    useEffect(() => {
-        API.user.test();
-    }, []);
 
     if (!userInfo) return null;
 

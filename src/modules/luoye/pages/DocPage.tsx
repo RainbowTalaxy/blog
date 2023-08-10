@@ -106,7 +106,7 @@ const DocPage = () => {
                 }
                 navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold />}
             >
-                <Document doc={doc} onSave={refetch} />
+                <Document doc={doc} workspace={workspace} onSave={refetch} />
             </ContentWithSideBar>
             {workspace && isWorkspaceFormVisible && (
                 <WorkspaceForm

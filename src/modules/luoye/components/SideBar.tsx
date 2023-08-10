@@ -52,8 +52,12 @@ export const hideSidebar = () => {
 const ContentWithSideBar = ({ className, sidebar, navbar, children, sidebarVisible = true }: SideBarProps) => {
     return (
         <div id={SIDE_BAR_ID} className={clsx(styles.pageView, !sidebarVisible && styles.noSidebar, className)}>
-            {sidebarVisible && <nav className={styles.sidebar}>{sidebar}</nav>}
-            <div className={styles.sidebarMask} onClick={hideSidebar} />
+            {sidebarVisible && (
+                <>
+                    <nav className={styles.sidebar}>{sidebar}</nav>
+                    <div className={styles.sidebarMask} onClick={hideSidebar} />
+                </>
+            )}
             <div className={clsx(styles.contentView, navbar && styles.showNav)}>
                 {navbar && <nav className={styles.navbar}>{navbar}</nav>}
                 <div className={styles.content}>{children}</div>

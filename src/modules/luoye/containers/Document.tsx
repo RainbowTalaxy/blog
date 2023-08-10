@@ -1,5 +1,5 @@
 import API from '@site/src/api';
-import { Doc } from '@site/src/api/luoye';
+import { Doc, Workspace } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Markdown from '@site/src/components/Markdown';
 import dayjs from 'dayjs';
@@ -13,10 +13,11 @@ import ProjectTitle from './ProjectTitle';
 
 interface Props {
     doc: Doc | null;
+    workspace?: Workspace | null;
     onSave: () => Promise<void>;
 }
 
-const Document = ({ doc, onSave }: Props) => {
+const Document = ({ doc, workspace, onSave }: Props) => {
     const history = useHistory();
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
@@ -33,7 +34,7 @@ const Document = ({ doc, onSave }: Props) => {
         return (
             <div className={styles.docView}>
                 <header className={styles.docNavBar}>
-                    <div className={styles.docNavTitle}>🍂 落叶</div>
+                    <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
                     {`>_<`}
                 </header>
                 <main className={styles.document}>
@@ -46,7 +47,7 @@ const Document = ({ doc, onSave }: Props) => {
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
                 <div className={styles.docNavTitle}>{doc.name}</div>
-                <ProjectTitle className={styles.docIcon} fold showInfo={false} />
+                <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
                 {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
