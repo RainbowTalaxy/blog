@@ -49,6 +49,10 @@
     z-index: 10;
 }
 
+.form .hidden {
+    display: none;
+}
+
 .form > h2 {
     margin-bottom: 24px;
     color: var(--primary);

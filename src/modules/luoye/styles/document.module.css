@@ -1,4 +1,5 @@
 .docView {
+    --h-padding: 24px;
     position: relative;
     width: 100%;
 }
@@ -10,16 +11,21 @@
     top: 0;
     left: var(--sidebar-width);
     right: 0;
-    padding: 16px 24px;
+    padding: 16px var(--h-padding);
+    height: 72px;
     border-bottom: 1px solid var(--ly-active-background);
     background: var(--ly-background);
     z-index: 100;
 }
 
-.docNavBar header {
+.docNavTitle {
     flex: 1;
     font-size: 20px;
     font-weight: bold;
+}
+
+.docIcon {
+    display: none;
 }
 
 .docNavBar button {
@@ -28,16 +34,12 @@
 
 .document {
     margin: 0 auto;
-    padding: 108px 24px;
+    padding: 108px var(--h-padding);
     max-width: 1000px;
-    font-size: 18px;
-}
-
-.document > h1:first-of-type {
-    margin-bottom: 36px;
 }
 
 .docInfo {
+    margin-top: 24px;
     font-size: 16px;
     color: var(--ly-primary);
     font-variant: tabular-nums;
@@ -48,6 +50,7 @@
     font-weight: bold;
 }
 
+/* 编辑器 */
 .docInput {
     appearance: none;
     background: none;
@@ -58,6 +61,11 @@
     cursor: inherit;
     color: inherit;
     line-height: inherit;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: 'Fira Code', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+        'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .docInput::before {
@@ -67,4 +75,34 @@
     user-select: none;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.docNavTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 1600px) and (min-width: 769px) {
+    .document {
+        max-width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .docView {
+        --h-padding: 22px;
+    }
+
+    .document {
+        padding: 24px var(--h-padding) 108px;
+    }
+
+    .docIcon {
+        display: flex;
+    }
+
+    .docNavTitle {
+        display: none;
+    }
 }

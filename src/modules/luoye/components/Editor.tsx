@@ -17,7 +17,7 @@ export interface EditorRef {
 const PLACE_HOLDER = '点击此处直接输入正文';
 
 const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedRef<EditorRef>) => {
-    const eleRef = useRef<HTMLDivElement>();
+    const eleRef = useRef<HTMLPreElement>(null);
 
     useImperativeHandle(ref, () => ({
         focus: () => {
@@ -33,21 +33,27 @@ const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedR
     }));
 
     useEffect(() => {
-        if (visible && !eleRef.current.innerText) eleRef.current?.focus();
+        if (visible && !eleRef.current?.innerText) eleRef.current?.focus();
     }, [visible, keyId]);
 
     return (
-        <div
+        <pre
             ref={eleRef}
             className={clsx(styles.docInput, className)}
             style={{ display: visible ? '' : 'none' }}
             contentEditable
+            spellCheck={false}
             data-placeholder={PLACE_HOLDER}
             onInput={(e) => {
                 const text = e.currentTarget.innerText.trim();
                 e.currentTarget.dataset.placeholder = text ? '' : PLACE_HOLDER;
             }}
-        ></div>
+            onPaste={(e) => {
+                e.preventDefault();
+                const text = e.clipboardData.getData('text/plain');
+                document.execCommand('insertText', false, text);
+            }}
+        ></pre>
     );
 });
 

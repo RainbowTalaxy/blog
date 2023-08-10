@@ -1,10 +1,13 @@
 import { useHistory } from '@docusaurus/router';
-import { DocItem, WorkspaceItem } from '@site/src/api/luoye';
+import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { useState } from 'react';
 import { date } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import WorkspaceForm from './WorkspaceForm';
+import Placeholder from '../components/PlaceHolder';
+import SVG from '../components/SVG';
+import Spacer from '@site/src/components/Spacer';
 
 interface Props {
     data: {
@@ -24,7 +27,9 @@ const Welcome = ({ data, refetch }: Props) => {
 
     return (
         <>
-            <h2 className={styles.pageTitle}>开始</h2>
+            <div className={styles.titleBar}>
+                <h2 className={styles.pageTitle}>开始</h2>
+            </div>
             <div className={styles.actionSheet}>
                 <div className={styles.action} onClick={() => setWorkspaceFormVisible(true)}>
                     <span>🪸</span>新建工作区
@@ -39,19 +44,24 @@ const Welcome = ({ data, refetch }: Props) => {
                     <div
                         className={styles.workspaceItem}
                         key={workspace.id}
-                        onClick={() => history.replace(`?workspace=${workspace.id}`)}
+                        onClick={() => history.push(`?workspace=${workspace.id}`)}
                     >
                         <div className={styles.workspaceName}>
                             <span>🪴</span>
-                            <div>{workspace.name || '未命名'}</div>
+                            <div>{workspace.name || <Placeholder>未命名</Placeholder>}</div>
+                            {workspace.scope === Scope.Private && <SVG.Lock />}
                         </div>
-                        <div className={styles.description}>{workspace.description}</div>
+                        <div className={styles.description}>
+                            {workspace.description || <Placeholder>暂无描述</Placeholder>}
+                        </div>
                     </div>
                 ))}
             </div>
             <h2>文档</h2>
             {data.docs.length === 0 ? (
-                <p>暂无文档</p>
+                <p>
+                    <Placeholder>暂无文档</Placeholder>
+                </p>
             ) : (
                 <div className={styles.docList}>
                     {data.docs.map((doc) => (
@@ -60,7 +70,9 @@ const Welcome = ({ data, refetch }: Props) => {
                             key={doc.id}
                             onClick={() => history.push(`/luoye/doc?id=${doc.id}`)}
                         >
-                            <div className={styles.docName}>{doc.name || '未命名文档'}</div>
+                            <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
+                            {doc.scope === Scope.Private && <SVG.Lock />}
+                            <Spacer />
                             <div className={styles.docCreator}>{doc.creator}</div>
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                         </div>
@@ -77,6 +89,7 @@ const Welcome = ({ data, refetch }: Props) => {
             )}
             {data && isDocFormVisible && (
                 <DocForm
+                    workspace={data.defaultWorkspace}
                     workspaceItems={allWorkspaces}
                     onClose={async (success, newDocId) => {
                         if (success) await refetch();

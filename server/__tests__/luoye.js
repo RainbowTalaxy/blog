@@ -119,10 +119,26 @@ async function test() {
         return data;
     });
 
+    // 新建文档 - 与工作区不同权限
+    await testCase.pos('create private doc - different scope', async () => {
+        const params = {
+            workspaceId: workspace.id,
+            scope: 'private',
+        };
+        const data = await user.post(`/doc`, params);
+        if (data.scope !== params.scope) throw new Error('scope not match');
+    });
+
+    /**
+     * - 公开工作区
+     *     + 公开文档
+     *     + 私有文档
+     */
+
     // 获取文档列表
     await testCase.pos('doc list', async () => {
         const data = await user.get('/docs');
-        if (data.length !== 1) throw new Error('doc list not match');
+        if (data.length !== 2) throw new Error('doc list not match');
     });
 
     // 获取文档
@@ -161,6 +177,21 @@ async function test() {
         if (data.nonExistProp) throw new Error('invalid prop exist');
         return data;
     });
+
+    /**
+     * - 公开工作区
+     *     + 私有文档
+     */
+
+    // 获取工作区 - 游客
+    await testCase.pos(
+        'public workspace info & no private doc - visitor',
+        async () => {
+            const space = await visitor.get(`/workspace/${workspace.id}`);
+            if (space.docs.includes(doc.id))
+                throw new Error('private doc in public workspace');
+        },
+    );
 
     // 更新文档 - 访客
     await testCase.neg('update private doc - visitor', async () => {

@@ -2,16 +2,19 @@ import API from '@site/src/api';
 import { Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { Button, Input } from '@site/src/components/Form';
 import Toggle from '@site/src/components/Form/Toggle';
+import useUser from '@site/src/hooks/useUser';
+import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
-    workspace?: WorkspaceItem;
+    workspace?: Omit<WorkspaceItem, 'joinAt'>;
     onClose: (success?: boolean) => Promise<void>;
 }
 
 const WorkspaceForm = ({ workspace, onClose }: Props) => {
+    const user = useUser();
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLInputElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
@@ -24,17 +27,19 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
         }
     }, [workspace]);
 
+    const isDefaultWorkspace = user?.id && user.id === workspace?.id;
+
     return createPortal(
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{workspace ? '工作区属性' : '新建工作区'}</h2>
-                <div className={styles.formItem}>
+                <div className={clsx(styles.formItem, isDefaultWorkspace && styles.hidden)}>
                     <label>
                         <span>*</span>标题：
                     </label>
                     <Input raf={nameRef} />
                 </div>
-                <div className={styles.formItem}>
+                <div className={clsx(styles.formItem, isDefaultWorkspace && styles.hidden)}>
                     <label>描述：</label>
                     <Input raf={descriptionRef} />
                 </div>
@@ -61,7 +66,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                         await API.luoye.createWorkspace(props);
                                     }
                                     await onClose(true);
-                                } catch (error) {
+                                } catch (error: any) {
                                     alert(`提交失败：${error.message}`);
                                 }
                             }}

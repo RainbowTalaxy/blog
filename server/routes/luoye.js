@@ -32,10 +32,14 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
             return res.status(404).send({
                 error: 'workspace not found',
             });
-        if (LuoyeUtl.access(workspace, userId) === Access.Forbidden)
+        const accessScope = LuoyeUtl.access(workspace, userId);
+        if (accessScope === Access.Forbidden)
             return res.status(403).send({
                 error: 'Forbidden',
             });
+        if (accessScope === Access.Visitor) {
+            LuoyeUtl.filterPrivate(workspace);
+        }
         return res.send(workspace);
     } catch (error) {
         console.log(error);
@@ -165,10 +169,15 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
 router.post('/doc', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const { workspaceId, name } = req.body;
+        const { workspaceId, name, scope } = req.body;
         if (!workspaceId)
             return res.status(400).send({
                 error: 'workspaceId is required',
+            });
+        // `scope` 参数校验
+        if (scope && !LuoyeUtl.scopeCheck(scope))
+            return res.status(400).send({
+                error: 'scope is invalid',
             });
         const workspace = LuoyeCtr.workspace(workspaceId);
         if (!workspace)
@@ -180,7 +189,12 @@ router.post('/doc', login, async (req, res) => {
                 error: 'Forbidden',
             });
         const userDir = LuoyeCtr.userDir(userId);
-        const doc = LuoyeCtr.createDoc(userDir, workspace, { name }, userId);
+        const doc = LuoyeCtr.createDoc(
+            userDir,
+            workspace,
+            { name, scope },
+            userId,
+        );
         return res.send(doc);
     } catch (error) {
         console.log(error);

@@ -2,7 +2,6 @@ import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
 import { User } from './config';
 import useUser from '@site/src/hooks/useUser';
-import { useEffect } from 'react';
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';
 
@@ -26,10 +25,6 @@ const UserPage = () => {
     const nextUrl = query.get('nextUrl');
     const userInfo = useUser();
 
-    useEffect(() => {
-        API.user.test();
-    }, []);
-
     if (!userInfo) return null;
 
     return (
@@ -43,7 +38,7 @@ const UserPage = () => {
                             onClick={() => {
                                 const granted = confirm('确定要退出登录吗？');
                                 if (granted) {
-                                    User.config = null;
+                                    User.config = {};
                                     window.location.reload();
                                 }
                             }}
@@ -75,8 +70,8 @@ const UserPage = () => {
                                 onClick={async () => {
                                     try {
                                         const { token } = await API.user.login(
-                                            userInfo.id,
-                                            userInfo.key,
+                                            userInfo.id ?? '',
+                                            userInfo.key ?? '',
                                         );
                                         userInfo.token = token;
                                         User.config = userInfo;

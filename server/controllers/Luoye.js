@@ -122,8 +122,8 @@ const FileController = {
         const updatedWorkspace = {
             ...workspace,
             name: props.name || workspace.name,
-            description: props.description || workspace.description,
-            scope: props.scope || workspace.scope,
+            description: props.description ?? workspace.description,
+            scope: props.scope ?? workspace.scope,
             updatedAt: now,
         };
         writeJSON(workspaceDir, updatedWorkspace);
@@ -179,11 +179,11 @@ const FileController = {
         const now = Date.now();
         const newDoc = {
             id: uuid(),
-            name: props.name || '',
+            name: props.name ?? '',
             creator,
             admins: _.uniq([creator, ...workspace.admins]),
             members: workspace.members,
-            scope: workspace.scope,
+            scope: props.scope ?? workspace.scope,
             workspaces: [workspace.id],
             docType: DocType.Markdown,
             content: '',
@@ -219,9 +219,9 @@ const FileController = {
         const now = Date.now();
         const updatedDoc = {
             ...doc,
-            name: props.name || doc.name,
-            content: props.content || doc.content,
-            scope: props.scope || doc.scope,
+            name: props.name ?? doc.name,
+            content: props.content ?? doc.content,
+            scope: props.scope ?? doc.scope,
             updatedAt: now,
         };
         writeJSON(docDir, updatedDoc);
@@ -318,6 +318,11 @@ const Utility = {
     },
     scopeCheck(value) {
         return Object.values(Scope).includes(value);
+    },
+    filterPrivate(workspace) {
+        workspace.docs = workspace.docs.filter((doc) => {
+            return doc.scope !== Scope.Private;
+        });
     },
 };
 

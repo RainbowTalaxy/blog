@@ -1,5 +1,5 @@
 import API from '@site/src/api';
-import { Doc } from '@site/src/api/luoye';
+import { Doc, Workspace } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Markdown from '@site/src/components/Markdown';
 import dayjs from 'dayjs';
@@ -7,29 +7,48 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
 import Editor, { EditorRef } from '../components/Editor';
+import { useHistory } from '@docusaurus/router';
+import { checkAuth } from '../constants';
+import ProjectTitle from './ProjectTitle';
 
 interface Props {
-    doc?: Doc;
+    doc: Doc | null;
+    workspace?: Workspace | null;
     onSave: () => Promise<void>;
-    mode: 'view' | 'edit';
 }
 
-const Document = ({ doc, mode = 'edit', onSave }: Props) => {
+const Document = ({ doc, workspace, onSave }: Props) => {
+    const history = useHistory();
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
-    const textRef = useRef<EditorRef>();
+    const textRef = useRef<EditorRef>(null);
 
     useEffect(() => {
+        if (!doc) return;
         setEdit(doc.content === '');
     }, [doc]);
 
-    if (!doc) return null;
+    const auth = checkAuth(doc);
+
+    if (!doc)
+        return (
+            <div className={styles.docView}>
+                <header className={styles.docNavBar}>
+                    <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                    {`>_<`}
+                </header>
+                <main className={styles.document}>
+                    <p>抱歉，文档不存在。</p>
+                </main>
+            </div>
+        );
 
     return (
         <div className={styles.docView}>
-            <div className={styles.docNavBar}>
-                <header>{doc.name}</header>
-                {mode === 'edit' && (
+            <header className={styles.docNavBar}>
+                <div className={styles.docNavTitle}>{doc.name}</div>
+                <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
                         <Button
@@ -43,11 +62,11 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                                         });
                                         await onSave();
                                         setEdit(false);
-                                    } catch (error) {
+                                    } catch (error: any) {
                                         return alert(`提交失败：${error.message}`);
                                     }
                                 } else {
-                                    textRef.current.setText(doc.content);
+                                    textRef.current?.setText(doc.content);
                                     setEdit(true);
                                 }
                             }}
@@ -56,10 +75,11 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                         </Button>
                         {isEdit && <Button onClick={() => setEdit(false)}>取 消</Button>}
                     </>
+                ) : (
+                    doc.creator.toUpperCase()
                 )}
-                {mode === 'view' && doc.creator}
-            </div>
-            <div className={styles.document}>
+            </header>
+            <main className={styles.document}>
                 {!isEdit && (
                     <>
                         <h1>{doc.name}</h1>
@@ -70,13 +90,16 @@ const Document = ({ doc, mode = 'edit', onSave }: Props) => {
                     </>
                 )}
                 <Editor ref={textRef} visible={isEdit} keyId={doc.id} />
-            </div>
-            {doc && isDocFormVisible && (
+            </main>
+            {isDocFormVisible && (
                 <DocForm
                     doc={doc}
                     onClose={async (success) => {
                         if (success) await onSave();
                         setDocFormVisible(false);
+                    }}
+                    onDelete={() => {
+                        history.replace(`/luoye?workspace=${doc.workspaces[0]}`);
                     }}
                 />
             )}

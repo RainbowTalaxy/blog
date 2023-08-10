@@ -7,13 +7,18 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 
 interface Props {
-    workspaceId?: string;
+    workspace?: {
+        id: string;
+        name: string;
+        scope: Scope;
+    };
     workspaceItems?: WorkspaceItem[];
     doc?: Doc;
     onClose: (success?: boolean, id?: string) => Promise<void>;
+    onDelete?: () => void;
 }
 
-const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
+const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) => {
     const nameRef = useRef<HTMLInputElement>(null);
     const workspaceRef = useRef<HTMLSelectElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
@@ -22,6 +27,8 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
         if (doc) {
             nameRef.current!.value = doc.name;
             scopeRef.current!.checked = doc.scope === Scope.Public;
+        } else if (workspace) {
+            scopeRef.current!.checked = workspace.scope === Scope.Public;
         }
     }, [doc]);
 
@@ -29,7 +36,7 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>{doc ? '文档属性' : '新建文档'}</h2>
-                {!doc && (
+                {!doc && workspaceItems && (
                     <div className={styles.formItem}>
                         <label>
                             <span>*</span>工作区：
@@ -37,7 +44,7 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
                         <Select
                             raf={workspaceRef}
                             options={workspaceItems.map((w) => ({ label: w.name, value: w.id }))}
-                            defaultValue={workspaceId ?? workspaceItems[0].id}
+                            defaultValue={workspace?.id ?? workspaceItems[0].id}
                         />
                     </div>
                 )}
@@ -60,16 +67,16 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
                                     scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                 };
                                 try {
-                                    let newDoc: Doc;
+                                    let newDoc: Doc | null = null;
                                     if (doc) {
                                         await API.luoye.updateDoc(doc.id, props);
                                     } else {
-                                        const workspaceId = workspaceRef.current.value;
-                                        if (!workspaceId) return alert('请选择工作区');
-                                        newDoc = await API.luoye.createDoc(workspaceId, props);
+                                        const wId = workspaceRef.current?.value ?? workspace?.id;
+                                        if (!wId) return alert('请选择工作区');
+                                        newDoc = await API.luoye.createDoc(wId, props);
                                     }
-                                    await onClose(true, doc ? doc.id : newDoc.id);
-                                } catch (error) {
+                                    await onClose(true, doc ? doc.id : newDoc?.id);
+                                } catch (error: any) {
                                     alert(`提交失败：${error.message}`);
                                 }
                             }}
@@ -77,6 +84,22 @@ const DocForm = ({ workspaceId, workspaceItems, doc, onClose }: Props) => {
                             {doc ? '保存' : '创建'}
                         </Button>
                         <Button onClick={() => onClose()}>取消</Button>
+                        {doc && onDelete && (
+                            <Button
+                                type="danger"
+                                onClick={async () => {
+                                    if (!confirm('确定要删除吗？')) return;
+                                    try {
+                                        await API.luoye.deleteDoc(doc.id);
+                                        onDelete();
+                                    } catch (error: any) {
+                                        alert(`删除失败：${error.message}`);
+                                    }
+                                }}
+                            >
+                                删除
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>

@@ -16,13 +16,10 @@
 }
 
 .projectTitle {
+    flex: 1;
     display: flex;
     align-items: center;
-}
-
-.projectTitle:hover {
-    color: var(--ly-primary);
-    cursor: pointer;
+    margin-bottom: 0;
 }
 
 .pageIcon {
@@ -30,19 +27,71 @@
     align-items: center;
     justify-content: center;
     margin-right: 12px;
-    width: 1.8em;
-    height: 1.8em;
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 1.5rem;
     border-radius: 6px;
     background: #ffe4b1;
     text-align: center;
+}
+
+.pageIcon.showIcon {
+    display: flex;
+}
+
+.pageFoldIcon {
+    display: none;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: -8px;
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.pageName {
+    margin: 0;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.pageUser {
+    padding: 0 8px 1px;
+    border: 1px solid var(--ly-primary);
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: normal;
+    color: var(--ly-primary);
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
 .pageView {
     padding: 36px 10vw;
 }
 
+.titleBar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.settings {
+    align-self: flex-end;
+    flex-shrink: 0;
+    margin: 0 0 2px 12px;
+    color: gray;
+}
+
 .pageTitle {
+    margin: 0;
     font-size: 30px;
+}
+
+.pageDescription {
+    font-size: 18px;
+    color: var(--ly-primary);
 }
 
 .actionSheet,
@@ -101,6 +150,7 @@
     --doc-list-border: 1px solid var(--ly-secondary);
     display: flex;
     flex-direction: column;
+    margin-bottom: 72px;
     border-top: var(--doc-list-border);
 }
 
@@ -114,26 +164,42 @@
 }
 
 .docName {
-    flex: 1;
     color: var(--ly-primary);
 }
 
 .docCreator {
-    width: 160px;
+    min-width: 10vw;
+}
+
+.docDate {
+    min-width: 10vw;
 }
 
 .docCreator,
 .docDate {
+    flex-shrink: 0;
+    padding: 0 12px;
     font-variant: tabular-nums;
     font-feature-settings: 'tnum';
 }
 
-.titleBar {
+.docTitleBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
+
+.docTitleBar > button {
+    margin-left: 16px;
+}
+
+.placeholder {
+    color: var(--ly-inactive-background);
+    user-select: none;
+}
+
+/* 通用样式 */
 
 .action,
 .workspaceItem,
@@ -142,6 +208,7 @@
     cursor: pointer;
 }
 
+.pageTitle,
 .workspaceItem .description,
 .workspaceName > div,
 .docName,
@@ -151,37 +218,66 @@
     text-overflow: ellipsis;
 }
 
+.pageFoldIcon,
+.settings,
+.pageIcon,
+.pageName {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1600px) {
     .pageView {
         padding: 36px 36px;
     }
 
     .workspaceItem {
-        width: calc(33.333% - var(--item-gap));
+        width: calc((100% - var(--item-gap) * 2) / 3);
+    }
+}
+
+@media screen and (max-width: 1600px) and (min-width: 1201px) {
+    .workspaceItem:nth-child(3n) {
+        margin: 0 0 var(--item-gap) 0;
     }
 }
 
 @media screen and (max-width: 1200px) {
     .workspaceItem {
-        width: calc(50% - var(--item-gap));
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .pageView {
-        padding: 36px 24px 48px;
-    }
-
-    .action {
-        width: 100%;
-    }
-
-    .workspaceItem {
-        width: calc(100% - var(--item-gap));
+        width: calc((100% - var(--item-gap)) / 2);
     }
 
     .docCreator {
         display: none;
+    }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 769px) {
+    .workspaceItem:nth-of-type(2n) {
+        margin: 0 0 var(--item-gap) 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .pageFoldIcon {
+        display: flex;
+    }
+
+    .pageIcon {
+        display: none;
+    }
+
+    .docDate {
+        display: none;
+    }
+
+    .pageView {
+        padding: 36px 24px 48px;
+    }
+
+    .action,
+    .workspaceItem {
+        width: 100%;
+        margin: 0 0 var(--item-gap) 0;
     }
 }
 
@@ -193,5 +289,19 @@
     .action:hover,
     .workspaceItem:hover {
         background: var(--ly-active-background);
+    }
+
+    .settings:hover,
+    .pageIcon:hover,
+    .pageName:hover {
+        color: var(--ly-primary);
+    }
+
+    .pageUser {
+        border: 1px solid transparent;
+    }
+
+    .pageUser:hover {
+        border: 1px solid var(--ly-primary);
     }
 }
