@@ -1,6 +1,5 @@
 export interface UserInfo {
     id?: string;
-    key?: string;
     token?: string;
 }
 
@@ -10,7 +9,6 @@ export class User {
         const config: UserInfo = data ? JSON.parse(data) : {};
         return {
             id: config?.id ?? '',
-            key: config?.key ?? '',
             token: config?.token ?? '',
         };
     }

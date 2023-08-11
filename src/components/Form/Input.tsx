@@ -32,6 +32,7 @@ const Input = ({
             name={name}
             placeholder={placeholder}
             defaultValue={defaultValue}
+            spellCheck={false}
             autoComplete="off"
             onChange={onChange}
         />
