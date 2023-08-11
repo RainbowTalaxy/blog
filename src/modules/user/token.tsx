@@ -44,7 +44,7 @@ const TokenGenerate = () => {
                 ))}
                 <button
                     onClick={() => {
-                        if (!form.current.id) alert('请输入 ID');
+                        if (!form.current.id) return alert('请输入 ID');
                         API.user
                             .generateToken(form.current.id)
                             .then((data) => setTokenInfo(data))

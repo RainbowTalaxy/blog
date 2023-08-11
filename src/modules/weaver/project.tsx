@@ -153,7 +153,7 @@ const ProjectView = ({ project, refetch }: Props) => {
                     </>
                 }
             >
-                {targetCycle && (
+                {targetCycle && cycles && (
                     <CycleDetailView
                         project={project}
                         cycleInfo={targetCycle}

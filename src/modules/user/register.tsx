@@ -93,7 +93,7 @@ const RegisterPage = () => {
                                 key: form.current.key,
                             };
                             window.location.href = '/user';
-                        } catch (error) {
+                        } catch (error: any) {
                             console.error(error);
                             alert(`登记失败：${error.message}`);
                         }

@@ -52,7 +52,7 @@ const ProjectForm = ({ project, onClose }: Props) => {
                                             name: nameRef.current.value,
                                         });
                                     } else {
-                                        const firstDate = time(dateRef.current.value);
+                                        const firstDate = time(dateRef.current!.value);
                                         await API.weaver.createProject(nameRef.current.value, firstDate);
                                     }
                                     await onClose(true);
