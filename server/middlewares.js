@@ -39,7 +39,9 @@ const login = (req, res, next) => {
         return res.status(401).send({ error: 'Please login first' });
     const config = readJSON(Dir.storage.config);
     try {
-        const { id } = jwt.verify(keys.token, config.secret);
+        const { id, key } = jwt.verify(keys.token, config.secret);
+        if (!User.validate(id, key))
+            return res.status(401).send({ error: 'Please login again' });
         req.userId = id;
         if (User.isAdmin(id)) req.isAdmin = true;
         next();

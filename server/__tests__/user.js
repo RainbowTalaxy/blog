@@ -12,7 +12,7 @@ async function test() {
 
     const userInfo = {
         id: 'test',
-        key: 'test',
+        key: 'test_key',
     };
 
     const admin = new Rocket(Server + '/user');
@@ -43,6 +43,15 @@ async function test() {
         });
     });
 
+    // 用户使用过短的 key 登记信息
+    await testCase.neg('user register by too short key length', async () => {
+        await user.post('/register', {
+            ...userInfo,
+            key: '12345',
+            token: uuid(),
+        });
+    });
+
     // 用户使用 token 登记信息
     await testCase.pos('user register by token', async () => {
         await user.post('/register', {
@@ -60,9 +69,46 @@ async function test() {
         });
     });
 
+    // 更改 key 流程
+
+    // 管理员再次生成 token 用于更改 key
+    const generatedToken2 = await testCase.pos(
+        'admin generate token',
+        async () => {
+            return await admin.post('/token', {
+                id: userInfo.id,
+            });
+        },
+    );
+
+    const newUserInfo = {
+        id: 'test',
+        key: 'another_key',
+    };
+
+    // 用户使用 token 登记信息
+    await testCase.pos('user register by token', async () => {
+        await user.post('/register', {
+            ...newUserInfo,
+            token: generatedToken2.token,
+        });
+    });
+
+    // 用户用旧账号登录
+    await testCase.neg('user old key login', async () => {
+        await user.get('/test');
+    });
+
+    await user.login(newUserInfo.id, newUserInfo.key);
+
+    // 用户用新账号登录
+    await testCase.pos('user new key login', async () => {
+        await user.get('/test');
+    });
+
     // 列出用户信息（管理员）
     await testCase.pos(' admin list users', async () => {
-        const data = await admin.get('/list');
+        await admin.get('/list');
     });
 }
 

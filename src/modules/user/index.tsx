@@ -10,7 +10,7 @@ const FORM_CONFIG = [
         attr: 'id',
         name: 'ID',
         type: 'text',
-        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+        placeholder: '请用字母数字或 _ 组合',
     },
     {
         attr: 'key',

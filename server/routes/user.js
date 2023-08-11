@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).send({
             error: 'id and key are required',
         });
-    if (key.length < 4) {
+    if (key.length < 6) {
         return res.status(400).send({ error: 'key is too short' });
     }
     if (!User.digestToken(id, token))
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
                 error: 'Wrong id or key',
             });
         }
-        const token = jwt.sign({ id }, config.secret, {
+        const token = jwt.sign({ id, key }, config.secret, {
             expiresIn: `${MAX_DAY}d`,
         });
         return res.send({
