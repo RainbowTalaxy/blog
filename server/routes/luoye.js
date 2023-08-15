@@ -85,20 +85,24 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
-        const { name, description, scope } = req.body;
+        const { name, description, scope, docs } = req.body;
         if (!workspaceId)
             return res.status(400).send({
-                error: 'workspaceId is required',
+                error: '`workspaceId` is required',
             });
         // `scope` 参数校验
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
-                error: 'scope is invalid',
+                error: '`scope` is invalid',
             });
         const workspace = LuoyeCtr.workspace(workspaceId);
         if (!workspace)
             return res.status(404).send({
                 error: 'workspace not found',
+            });
+        if (docs && !LuoyeUtl.docDirCheck(docs, workspace))
+            return res.status(400).send({
+                error: '`docs` is invalid',
             });
         // 权限校验
         if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
@@ -106,9 +110,10 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
                 error: 'Forbidden',
             });
         const safeProps = {
-            name: name,
+            name,
             description,
             scope,
+            docs,
         };
         const updatedWorkspace = LuoyeCtr.updateWorkspace(
             workspaceId,

@@ -78,6 +78,7 @@ const LuoyeAPI = {
             name?: string;
             description?: string;
             scope?: Scope;
+            docs?: DocDir[];
         },
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
     docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
