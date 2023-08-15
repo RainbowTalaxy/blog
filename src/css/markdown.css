@@ -4,6 +4,6 @@ main a:hover {
     color: var(--primary);
 }
 
-main > pre {
+main pre {
     background: var(--page);
 }
