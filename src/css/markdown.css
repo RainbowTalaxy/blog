@@ -1,4 +1,5 @@
 main a,
+main code,
 main a:hover {
     color: var(--primary);
 }
