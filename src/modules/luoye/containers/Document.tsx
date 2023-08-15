@@ -10,6 +10,7 @@ import Editor, { EditorRef } from '../components/Editor';
 import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
+import Toast from '../components/Notification/Toast';
 
 interface Props {
     doc: Doc | null;
@@ -25,7 +26,7 @@ const Document = ({ doc, workspace, onSave }: Props) => {
 
     useEffect(() => {
         if (!doc) return;
-        setEdit(doc.content === '');
+        if (doc.content === '') setEdit(true);
     }, [doc]);
 
     const auth = checkAuth(doc);
@@ -90,7 +91,23 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                         </p>
                     </>
                 )}
-                <Editor ref={textRef} visible={isEdit} keyId={doc.id} />
+                <Editor
+                    ref={textRef}
+                    visible={isEdit}
+                    keyId={doc.id}
+                    onSave={async () => {
+                        const text = textRef.current?.getText();
+                        try {
+                            await API.luoye.updateDoc(doc.id, {
+                                content: text,
+                            });
+                            Toast.notify('保存成功');
+                            onSave();
+                        } catch {
+                            Toast.notify('保存失败');
+                        }
+                    }}
+                />
             </main>
             {isDocFormVisible && (
                 <DocForm
