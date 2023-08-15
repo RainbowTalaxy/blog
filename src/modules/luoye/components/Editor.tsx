@@ -25,10 +25,6 @@ const Editor = forwardRef(({ className, visible, keyId, onSave }: Props, ref: Fo
         if (visible && eleRef.current) document.execCommand('insertText', false, '\t');
     });
 
-    useKeyboard('Enter', () => {
-        if (visible && eleRef.current) document.execCommand('insertHTML', false, '<br><br>');
-    });
-
     useKeyboard(
         's',
         () => {
@@ -45,7 +41,12 @@ const Editor = forwardRef(({ className, visible, keyId, onSave }: Props, ref: Fo
             eleRef.current!.innerText = text;
             eleRef.current!.dataset.placeholder = text ? '' : PLACE_HOLDER;
         },
-        getText: () => eleRef.current!.innerText,
+        getText: () => {
+            let text = eleRef.current!.innerText;
+            // 去除行间多余的空行
+            text = text.replace(/\n{3,}/g, '\n\n');
+            return text;
+        },
     }));
 
     useEffect(() => {
