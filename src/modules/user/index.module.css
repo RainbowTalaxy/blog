@@ -13,22 +13,18 @@
 
 .field > label {
     margin-bottom: 4px;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.field > input {
-    padding: 8px 10px;
     font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid var(--theme-black-half);
+    font-weight: 600;
 }
 
 .buttonGroup {
     display: flex;
-    margin-top: 24px;
 }
 
 .buttonGroup > button + button {
     margin-left: 16px;
+}
+
+.tokenInfo {
+    margin: 16px 0 12px;
 }

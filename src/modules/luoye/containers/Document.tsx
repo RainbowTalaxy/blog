@@ -85,7 +85,8 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                         <h1>{doc.name}</h1>
                         <Markdown>{doc.content}</Markdown>
                         <p className={styles.docInfo}>
-                            <span>{doc.creator}</span> 更新于 {dayjs(doc.updatedAt).format('YYYY年MM月DD日 HH:mm')}
+                            <span>{doc.creator.toUpperCase()}</span> 更新于{' '}
+                            {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')}
                         </p>
                     </>
                 )}

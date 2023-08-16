@@ -235,7 +235,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                     </div>
                 ))}
             </div>
-            {isFormVisible && (
+            {isFormVisible && context.current && (
                 <TaskForm
                     task={targetTask.current}
                     context={context.current}

@@ -58,10 +58,10 @@ export const EditableSpan = ({
                         if (nextInput) {
                             const selection = window.getSelection();
                             const range = document.createRange();
-                            selection.removeAllRanges();
+                            selection?.removeAllRanges();
                             range.selectNodeContents(nextInput);
                             range.collapse(false);
-                            selection.addRange(range);
+                            selection?.addRange(range);
                             nextInput.focus();
                         }
                     }
@@ -136,10 +136,10 @@ const WordLine = ({ index, word, isLoading, isEditing, onReturn }: Props) => {
                     if (isEditing) {
                         const selection = window.getSelection();
                         const range = document.createRange();
-                        selection.removeAllRanges();
+                        selection?.removeAllRanges();
                         range.selectNodeContents(nameRef.current!);
                         range.collapse(false);
-                        selection.addRange(range);
+                        selection?.addRange(range);
                         nameRef.current?.focus();
                     }
                 }}

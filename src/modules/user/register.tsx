@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import API from '@site/src/api';
 import useQuery from '@site/src/hooks/useQuery';
 import { User } from './config';
+import { Button, Input } from '@site/src/components/Form';
 
 const FORM_CONFIG = [
     {
@@ -15,19 +16,19 @@ const FORM_CONFIG = [
         attr: 'id',
         name: 'ID',
         type: 'text',
-        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+        placeholder: '请用字母数字或 _ 组合',
     },
     {
         attr: 'key',
         name: 'API Key',
         type: 'password',
-        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+        placeholder: '请用字母数字等组合，不得少于 6 个字符',
     },
     {
         attr: 'rekey',
         name: '再次输入 API Key',
         type: 'password',
-        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+        placeholder: '请用字母数字等组合，不得少于 6 个字符',
     },
 ];
 
@@ -60,7 +61,7 @@ const RegisterPage = () => {
                 {FORM_CONFIG.map((config) => (
                     <div className={styles.field} key={config.attr}>
                         <label htmlFor={config.attr}>{config.name}</label>
-                        <input
+                        <Input
                             type={config.type}
                             name={config.attr}
                             id={config.attr}
@@ -71,7 +72,9 @@ const RegisterPage = () => {
                         />
                     </div>
                 ))}
-                <button
+                <Button
+                    type="primary"
+                    style={{ marginTop: 6 }}
                     onClick={async () => {
                         if (!form.current.token) return alert('请输入 Token');
                         if (!form.current.id) return alert('请输入 ID');
@@ -87,20 +90,23 @@ const RegisterPage = () => {
                                 form.current.token,
                             );
                             alert('登记成功');
+                            const { token } = await API.user.login(
+                                form.current.id,
+                                form.current.key,
+                            );
                             User.config = {
-                                ...User.config,
                                 id: form.current.id,
-                                key: form.current.key,
+                                token,
                             };
                             window.location.href = '/user';
-                        } catch (error) {
+                        } catch (error: any) {
                             console.error(error);
                             alert(`登记失败：${error.message}`);
                         }
                     }}
                 >
                     登记
-                </button>
+                </Button>
             </div>
         </div>
     );

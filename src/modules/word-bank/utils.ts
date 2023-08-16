@@ -29,7 +29,7 @@ export const sentenceSplit = (text: string) => {
     if (text.length < START_MAX) return [text];
     const sentences: string[] = [];
     const words = text.split(/\s+/g);
-    let sentence = [];
+    let sentence: string[] = [];
     words
         .filter((word) => word)
         .forEach((word) => {
@@ -43,7 +43,7 @@ export const sentenceSplit = (text: string) => {
         sentences.push(sentence.join(' '));
     }
     // 对 sentences 做一些合并操作，使得句子不会太短
-    const limited = [];
+    const limited: string[] = [];
     let mergeFlag = false;
     sentences.forEach((sentence, idx) => {
         if (mergeFlag) {

@@ -22,9 +22,7 @@ const QueryableParagraph = ({ paragraph }: Props) => {
                                   <span
                                       className={styles.word}
                                       onClick={(e) => {
-                                          QueryPanel.lookup(
-                                              String(word.origin),
-                                          );
+                                          QueryPanel.lookup(String(word.origin));
                                           // 禁止事件冒泡
                                           e.stopPropagation();
                                       }}

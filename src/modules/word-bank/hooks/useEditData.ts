@@ -3,10 +3,11 @@ import { AppleDate, uuid } from '@site/src/utils';
 import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 
-const useEditData = (book: Book) => {
+const useEditData = (book?: Book) => {
     const [data, setData] = useState(book);
 
     const addEmptyWord = useCallback(() => {
+        if (!data) return;
         const newWord = {
             id: uuid(),
             date: AppleDate(),

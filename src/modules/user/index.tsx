@@ -1,16 +1,16 @@
 import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
 import { User } from './config';
-import useUser from '@site/src/hooks/useUser';
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';
+import { useEffect, useState } from 'react';
 
 const FORM_CONFIG = [
     {
         attr: 'id',
         name: 'ID',
         type: 'text',
-        placeholder: '请用字母数字或 - 组合，不得少于 4 个字符',
+        placeholder: '请用字母数字或 _ 组合',
     },
     {
         attr: 'key',
@@ -23,17 +23,33 @@ const FORM_CONFIG = [
 const UserPage = () => {
     const query = useQuery();
     const nextUrl = query.get('nextUrl');
-    const userInfo = useUser();
+    const [userId, setUserId] = useState<string | null>();
+    const form = {
+        id: '',
+        key: '',
+        token: '',
+    };
 
-    if (!userInfo) return null;
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await API.user.test();
+                setUserId(data.id);
+            } catch {
+                setUserId(null);
+            }
+        })();
+    }, []);
+
+    if (userId === undefined) return null;
 
     return (
         <div className={styles.container}>
             <h1>权限设置</h1>
             <div className={styles.form}>
-                {userInfo.id ? (
+                {userId ? (
                     <>
-                        <p>当前用户：{userInfo.id}</p>
+                        <p>当前用户：{userId}</p>
                         <Button
                             onClick={() => {
                                 const granted = confirm('确定要退出登录吗？');
@@ -59,22 +75,31 @@ const UserPage = () => {
                                     id={config.attr}
                                     placeholder={config.placeholder}
                                     onChange={(e) => {
-                                        userInfo[config.attr] = e.target.value;
+                                        form[config.attr] = e.target.value;
                                     }}
                                 />
                             </div>
                         ))}
-                        <div className={styles.buttonGroup}>
+                        <div
+                            className={styles.buttonGroup}
+                            style={{ marginTop: 24 }}
+                        >
                             <Button
                                 type="primary"
                                 onClick={async () => {
                                     try {
+                                        if (!form.id) return alert('请输入 ID');
+                                        if (!form.key)
+                                            return alert('请输入 API Key');
                                         const { token } = await API.user.login(
-                                            userInfo.id ?? '',
-                                            userInfo.key ?? '',
+                                            form.id,
+                                            form.key,
                                         );
-                                        userInfo.token = token;
-                                        User.config = userInfo;
+                                        form.token = token;
+                                        User.config = {
+                                            id: form.id,
+                                            token,
+                                        };
                                         if (nextUrl) {
                                             window.location.href = nextUrl;
                                         } else {

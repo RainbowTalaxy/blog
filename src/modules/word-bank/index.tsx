@@ -17,7 +17,7 @@ const WordBank = () => {
     const titleRef = useRef<HTMLSpanElement>(null);
     const descRef = useRef<HTMLSpanElement>(null);
     const [list, setList] = useState<BookInfo[]>([]);
-    const [book, setBook] = useState<Book | null>(null);
+    const [book, setBook] = useState<Book>();
     const { editData, addEmptyWord, reset } = useEditData(book);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -205,7 +205,7 @@ const WordBank = () => {
                                     <div
                                         className={styles.wordList}
                                         style={{
-                                            marginBottom: !isEditing && 72,
+                                            marginBottom: !isEditing ? 72 : undefined,
                                         }}
                                     >
                                         {editData.words.length > 0 && (

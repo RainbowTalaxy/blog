@@ -2,6 +2,7 @@ import styles from './index.module.css';
 import { useEffect, useRef, useState } from 'react';
 import API from '@site/src/api';
 import { TokenInfo } from '@site/src/api/user';
+import { Button, Input } from '@site/src/components/Form';
 
 const FORM_CONFIG = [
     {
@@ -31,7 +32,7 @@ const TokenGenerate = () => {
                 {FORM_CONFIG.map((config) => (
                     <div className={styles.field} key={config.attr}>
                         <label htmlFor={config.attr}>{config.name}</label>
-                        <input
+                        <Input
                             type={config.type}
                             name={config.attr}
                             id={config.attr}
@@ -42,9 +43,10 @@ const TokenGenerate = () => {
                         />
                     </div>
                 ))}
-                <button
+                <Button
+                    type="primary"
                     onClick={() => {
-                        if (!form.current.id) alert('请输入 ID');
+                        if (!form.current.id) return alert('请输入 ID');
                         API.user
                             .generateToken(form.current.id)
                             .then((data) => setTokenInfo(data))
@@ -55,31 +57,33 @@ const TokenGenerate = () => {
                     }}
                 >
                     生成
-                </button>
+                </Button>
                 {tokenInfo && (
                     <>
                         <div className={styles.tokenInfo}>
                             <span>Token：</span>
                             <span>{tokenInfo.token}</span>
                         </div>
-                        <button
-                            onClick={() => {
-                                window.navigator.clipboard?.writeText(
-                                    tokenInfo.token,
-                                );
-                            }}
-                        >
-                            复制 Token
-                        </button>
-                        <button
-                            onClick={() => {
-                                window.navigator.clipboard?.writeText(
-                                    `${window.location.origin}/user/register?id=${tokenInfo.id}&token=${tokenInfo.token}`,
-                                );
-                            }}
-                        >
-                            复制使用链接
-                        </button>
+                        <div className={styles.buttonGroup}>
+                            <Button
+                                onClick={() => {
+                                    window.navigator.clipboard?.writeText(
+                                        tokenInfo.token,
+                                    );
+                                }}
+                            >
+                                复制 Token
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    window.navigator.clipboard?.writeText(
+                                        `${window.location.origin}/user/register?id=${tokenInfo.id}&token=${tokenInfo.token}`,
+                                    );
+                                }}
+                            >
+                                复制使用链接
+                            </Button>
+                        </div>
                     </>
                 )}
             </div>
