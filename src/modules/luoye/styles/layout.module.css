@@ -35,8 +35,8 @@
     font-size: 18px;
 }
 
-.sidebar h1,
-.sidebar h2 {
+.sidebar > h1,
+.sidebar > h2 {
     padding: 0 12px;
 }
 
