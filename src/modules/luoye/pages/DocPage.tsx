@@ -71,7 +71,7 @@ const DocPage = () => {
                 sidebar={
                     workspace && (
                         <>
-                            <ProjectTitle marginBottom="1rem" />
+                            <ProjectTitle className={styles.fixedTitle} />
                             <h2>
                                 <span>{workSpaceName(workspace.name)}</span>
                                 {workspace.scope === Scope.Private && <SVG.Lock />}

@@ -22,6 +22,15 @@
     margin-bottom: 0;
 }
 
+.fixedTitle {
+    position: sticky;
+    top: 0;
+    left: 0;
+    margin-bottom: 1rem;
+    padding: 12px;
+    background-color: var(--ly-background);
+}
+
 .pageIcon {
     display: flex;
     align-items: center;
@@ -43,7 +52,7 @@
     display: none;
     align-items: center;
     justify-content: flex-start;
-    margin-left: -8px;
+    margin-left: -4px;
     width: 2.7rem;
     height: 2.7rem;
     border-radius: 6px;
@@ -278,6 +287,10 @@
     .workspaceItem {
         width: 100%;
         margin: 0 0 var(--item-gap) 0;
+    }
+
+    .docItem {
+        padding: 12px 8px;
     }
 }
 
