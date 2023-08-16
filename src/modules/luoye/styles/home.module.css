@@ -26,7 +26,7 @@
     position: sticky;
     top: 0;
     left: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 6px !important;
     padding: 12px;
     background-color: var(--ly-background);
 }
