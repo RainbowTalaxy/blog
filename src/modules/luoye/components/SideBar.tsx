@@ -1,32 +1,52 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { CSSProperties, ForwardedRef, ReactNode, forwardRef } from 'react';
 import styles from '../styles/layout.module.css';
+import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from 'react-beautiful-dnd';
 
 interface ListProps {
     className?: string;
     children?: ReactNode;
 }
 
-export const SideBarList = ({ className, children }: ListProps) => {
-    return <ul className={clsx(styles.sidebarList, className)}>{children}</ul>;
-};
+export const SideBarList = forwardRef(({ className, children }: ListProps, ref: ForwardedRef<HTMLUListElement>) => {
+    return (
+        <ul ref={ref} className={clsx(styles.sidebarList, className)}>
+            {children}
+        </ul>
+    );
+});
 
 interface ListItemProps {
     className?: string;
     active?: boolean;
     icon?: ReactNode;
     children?: ReactNode;
+    style?: CSSProperties;
     onClick?: () => void;
+    draggableProps?: DraggableProvidedDraggableProps;
+    dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
-export const SideBarListItem = ({ className, active, icon, children, onClick }: ListItemProps) => {
-    return (
-        <li className={clsx(styles.sidebarListItem, active && styles.active, className)} onClick={onClick}>
-            {icon && <span className={styles.sidebarListItemIcon}>{icon}</span>}
-            {children}
-        </li>
-    );
-};
+export const SideBarListItem = forwardRef(
+    (
+        { className, active, icon, children, style, onClick, dragHandleProps, draggableProps }: ListItemProps,
+        ref: ForwardedRef<HTMLLIElement>,
+    ) => {
+        return (
+            <li
+                ref={ref}
+                className={clsx(styles.sidebarListItem, active && styles.active, className)}
+                onClick={onClick}
+                style={style}
+                {...dragHandleProps}
+                {...draggableProps}
+            >
+                {icon && <span className={styles.sidebarListItemIcon}>{icon}</span>}
+                {children}
+            </li>
+        );
+    },
+);
 
 const SIDE_BAR_ID = 'sidebar';
 const REVEAL_CLASS = 'unfold-sidebar';

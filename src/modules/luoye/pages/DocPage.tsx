@@ -14,6 +14,7 @@ import SVG from '../components/SVG';
 import WorkspaceForm from '../containers/WorkspaceForm';
 import DocForm from '../containers/DocForm';
 import Head from '@docusaurus/Head';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 const DocPage = () => {
     const history = useHistory();
@@ -89,18 +90,57 @@ const DocPage = () => {
                                     <h2>文档列表</h2>
                                 </>
                             )}
-                            <SideBarList>
-                                {workspace.docs.map((docDir) => (
-                                    <SideBarListItem
-                                        active={docDir.docId === id}
-                                        key={docDir.docId}
-                                        onClick={() => history.push(`?id=${docDir.docId}`)}
-                                    >
-                                        <span>{docDir.name || <Placeholder>未命名</Placeholder>}</span>
-                                        {docDir.scope === Scope.Private && <SVG.Lock />}
-                                    </SideBarListItem>
-                                ))}
-                            </SideBarList>
+                            <DragDropContext
+                                onDragEnd={async (result) => {
+                                    const sourceIdx = result.source.index;
+                                    const destIdx = result.destination?.index ?? -1;
+                                    if (destIdx < 0 || sourceIdx === destIdx) return;
+                                    const reOrdered = Array.from(workspace.docs);
+                                    const [removed] = reOrdered.splice(sourceIdx, 1);
+                                    reOrdered.splice(destIdx, 0, removed);
+                                    // 先更新状态，避免回弹动画
+                                    setWorkspace({
+                                        ...workspace,
+                                        docs: reOrdered,
+                                    });
+                                    try {
+                                        const newWorkspace = await API.luoye.updateWorkspace(workspace.id, {
+                                            docs: reOrdered,
+                                        });
+                                        setWorkspace(newWorkspace);
+                                    } catch (error) {
+                                        console.log(error);
+                                        setWorkspace(workspace);
+                                    }
+                                }}
+                            >
+                                <Droppable droppableId="droppable">
+                                    {(provided) => (
+                                        <SideBarList ref={provided.innerRef} {...provided.droppableProps}>
+                                            {workspace.docs.map((docDir, index) => (
+                                                <Draggable key={docDir.docId} draggableId={docDir.docId} index={index}>
+                                                    {(provided) => (
+                                                        <SideBarListItem
+                                                            ref={provided.innerRef}
+                                                            active={docDir.docId === id}
+                                                            onClick={() => history.push(`?id=${docDir.docId}`)}
+                                                            draggableProps={provided.draggableProps}
+                                                            dragHandleProps={provided.dragHandleProps}
+                                                            style={provided.draggableProps.style}
+                                                        >
+                                                            <span>
+                                                                {docDir.name || <Placeholder>未命名</Placeholder>}
+                                                            </span>
+                                                            {docDir.scope === Scope.Private && <SVG.Lock />}
+                                                        </SideBarListItem>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {provided.placeholder}
+                                        </SideBarList>
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
                         </>
                     )
                 }
