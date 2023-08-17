@@ -113,7 +113,12 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             name,
             description,
             scope,
-            docs,
+            docs: docs?.map((docDir) => ({
+                docId: docDir.docId,
+                name: docDir.name,
+                scope: docDir.scope,
+                updatedAt: docDir.updatedAt,
+            })),
         };
         const updatedWorkspace = LuoyeCtr.updateWorkspace(
             workspaceId,

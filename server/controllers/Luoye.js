@@ -332,6 +332,7 @@ const Utility = {
             if (!item.docId) return false;
             if (item.name === undefined) return false;
             if (!Utility.scopeCheck(item.scope)) return false;
+            if (!item.updatedAt) return false;
         }
         return true;
     },
