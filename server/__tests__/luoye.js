@@ -178,11 +178,6 @@ async function test() {
         return data;
     });
 
-    /**
-     * - 公开工作区
-     *     + 私有文档
-     */
-
     // 获取工作区 - 游客
     await testCase.pos(
         'public workspace info & no private doc - visitor',
@@ -205,6 +200,44 @@ async function test() {
         await visitor.get(`/doc/${doc.id}`);
     });
 
+    const updatedWorkspace = await user.get(`/workspace/${workspace.id}`);
+
+    // 更新工作区文档顺序 - 错误参数
+    await testCase.neg(
+        'update workspace doc order - invalid params',
+        async () => {
+            await user.put(`/workspace/${workspace.id}`, {
+                docs: updatedWorkspace.docs
+                    .slice()
+                    .reverse()
+                    .map((item) => ({
+                        docId: item.id,
+                        name: item.name,
+                    })),
+            });
+        },
+    );
+
+    // 更新工作区文档顺序 - 数量不一致
+    await testCase.neg(
+        'update workspace doc order - wrong doc count',
+        async () => {
+            await user.put(`/workspace/${workspace.id}`, {
+                docs: updatedWorkspace.docs.slice(1),
+            });
+        },
+    );
+
+    // 更新工作区文档顺序
+    await testCase.pos('update workspace doc order', async () => {
+        const params = {
+            docs: updatedWorkspace.docs.slice().reverse(),
+        };
+        const data = await user.put(`/workspace/${workspace.id}`, params);
+        if (data.docs[0].docId !== params.docs[0].docId)
+            throw new Error('doc order not match');
+    });
+
     // 删除文档 - 访客
     await testCase.neg('delete private doc - visitor', async () => {
         await visitor.delete(`/doc/${doc.id}`);
@@ -214,6 +247,11 @@ async function test() {
     await testCase.pos('delete private doc', async () => {
         await user.delete(`/doc/${doc.id}`);
     });
+
+    /**
+     * - 公开工作区
+     *     + 私有文档
+     */
 
     // ## 工作区与文档 `scope` 一致性测试
     testCase.title('workspace & doc scope consistency');

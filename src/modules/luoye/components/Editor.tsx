@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import styles from '../styles/document.module.css';
+import useKeyboard from '@site/src/hooks/useKeyboard';
 
 interface Props {
     className?: string;
     visible: boolean;
     keyId: string;
+    onSave: (text: string) => void;
 }
 
 export interface EditorRef {
@@ -16,19 +18,34 @@ export interface EditorRef {
 
 const PLACE_HOLDER = '点击此处直接输入正文';
 
-const Editor = forwardRef(({ className, visible, keyId }: Props, ref: ForwardedRef<EditorRef>) => {
+const Editor = forwardRef(({ className, visible, keyId, onSave }: Props, ref: ForwardedRef<EditorRef>) => {
     const eleRef = useRef<HTMLPreElement>(null);
 
-    useImperativeHandle(ref, () => ({
-        focus: () => {
-            eleRef.current?.focus();
+    useKeyboard('Tab', () => {
+        if (visible && eleRef.current) document.execCommand('insertText', false, '\t');
+    });
+
+    useKeyboard(
+        's',
+        () => {
+            if (visible && eleRef.current) onSave(eleRef.current.innerText);
         },
+        {
+            ctrl: true,
+        },
+    );
+
+    useImperativeHandle(ref, () => ({
+        focus: () => eleRef.current?.focus(),
         setText: (text: string) => {
             eleRef.current!.innerText = text;
             eleRef.current!.dataset.placeholder = text ? '' : PLACE_HOLDER;
         },
         getText: () => {
-            return eleRef.current!.innerText;
+            let text = eleRef.current!.innerText;
+            // 去除行间多余的空行
+            text = text.replace(/\n{3,}/g, '\n\n');
+            return text;
         },
     }));
 

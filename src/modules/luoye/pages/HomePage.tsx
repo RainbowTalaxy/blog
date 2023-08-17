@@ -63,7 +63,7 @@ const HomePage = () => {
             <ContentWithSideBar
                 sidebar={
                     <>
-                        <ProjectTitle marginBottom="1rem" />
+                        <ProjectTitle className={styles.fixedTitle} />
                         {allWorkspaces && (
                             <>
                                 <SideBarList>

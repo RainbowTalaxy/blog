@@ -171,6 +171,7 @@ interface Body {
     name?: string;
     description?: string;
     scope?: 'private' | 'public';
+    docs?: DocDir[];
 }
 ```
 

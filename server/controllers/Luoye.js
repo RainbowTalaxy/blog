@@ -124,6 +124,7 @@ const FileController = {
             name: props.name || workspace.name,
             description: props.description ?? workspace.description,
             scope: props.scope ?? workspace.scope,
+            docs: props.docs ?? workspace.docs,
             updatedAt: now,
         };
         writeJSON(workspaceDir, updatedWorkspace);
@@ -323,6 +324,17 @@ const Utility = {
         workspace.docs = workspace.docs.filter((doc) => {
             return doc.scope !== Scope.Private;
         });
+    },
+    docDirCheck(dir, workspace) {
+        if (!Array.isArray(dir)) return false;
+        if (dir.length !== workspace.docs.length) return false;
+        for (item of dir) {
+            if (!item.docId) return false;
+            if (item.name === undefined) return false;
+            if (!Utility.scopeCheck(item.scope)) return false;
+            if (!item.updatedAt) return false;
+        }
+        return true;
     },
 };
 
