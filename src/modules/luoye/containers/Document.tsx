@@ -23,10 +23,18 @@ const Document = ({ doc, workspace, onSave }: Props) => {
     const [isEdit, setEdit] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const textRef = useRef<EditorRef>(null);
+    const prevDoc = useRef<Doc | null>(null);
 
     useEffect(() => {
         if (!doc) return;
-        if (doc.content === '') setEdit(true);
+        if (prevDoc.current?.id !== doc.id) {
+            setEdit(false);
+            prevDoc.current = doc;
+        }
+        if (doc.content === '') {
+            textRef.current?.setText(doc.content);
+            setEdit(true);
+        }
     }, [doc]);
 
     const auth = checkAuth(doc);
@@ -57,6 +65,7 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                             onClick={async () => {
                                 if (isEdit) {
                                     const text = textRef.current?.getText();
+                                    if (doc.content === '' && text === '') return setEdit(false);
                                     try {
                                         await API.luoye.updateDoc(doc.id, {
                                             content: text,
