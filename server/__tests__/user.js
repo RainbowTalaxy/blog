@@ -108,7 +108,7 @@ async function test() {
 
     // 列出用户信息（管理员）
     await testCase.pos('admin list users', async () => {
-        const data = await admin.get('/list');
+        await admin.get('/list');
     });
 }
 
