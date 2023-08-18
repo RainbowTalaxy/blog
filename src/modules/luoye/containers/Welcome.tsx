@@ -57,14 +57,14 @@ const Welcome = ({ data, refetch }: Props) => {
                     </div>
                 ))}
             </div>
-            <h2>文档</h2>
+            <h2>最近文档</h2>
             {data.docs.length === 0 ? (
                 <p>
                     <Placeholder>暂无文档</Placeholder>
                 </p>
             ) : (
                 <div className={styles.docList}>
-                    {data.docs.map((doc) => (
+                    {data.docs.slice(0, 10).map((doc) => (
                         <div
                             className={styles.docItem}
                             key={doc.id}
