@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 
 const { PORT } = require('./config');
 const { userRouter } = require('./routes/user');
-const { fontRouter } = require('./routes/font');
 const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
@@ -32,7 +31,6 @@ app.post('/echo', (req, res) => {
 });
 
 app.use('/user', userRouter);
-app.use('/font', fontRouter);
 app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
 app.use('/statics', staticsRouter);
