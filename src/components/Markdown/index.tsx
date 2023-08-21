@@ -27,6 +27,7 @@ const Markdown = ({ children, toc }: Props) => {
     const [slugs, setSlugs] = useState<Array<Slug>>([]);
     const slugsRef = useRef<Array<Slug>>([]);
 
+    // TODO: 极其丑陋的代码
     useEffect(() => {
         if (slugsRef.current.length === 0) setSlugs([]);
     }, [children]);
