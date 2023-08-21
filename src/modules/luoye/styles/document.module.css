@@ -67,6 +67,8 @@
         Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
         'Helvetica Neue', Helvetica, Arial, sans-serif;
     tab-size: 4;
+
+    padding: 0;
 }
 
 .docInput::before {
