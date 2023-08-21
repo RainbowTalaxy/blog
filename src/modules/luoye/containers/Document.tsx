@@ -93,7 +93,22 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                 {!isEdit && (
                     <>
                         <h1>{doc.name}</h1>
-                        <Markdown>{doc.content}</Markdown>
+                        <Markdown
+                            toc={(slugs) => (
+                                <div className={styles.toc}>
+                                    <div>
+                                        <strong>{doc.name}</strong>
+                                    </div>
+                                    {slugs.map((slug) => (
+                                        <div key={slug.slug} className={styles.tocItem}>
+                                            <a href={`#${slug.slug}`}>{slug.title}</a>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        >
+                            {doc.content}
+                        </Markdown>
                         <p className={styles.docInfo}>
                             <span>{doc.creator.toUpperCase()}</span> 更新于{' '}
                             {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')}

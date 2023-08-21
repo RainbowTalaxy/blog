@@ -1,5 +1,7 @@
 .docView {
     --h-padding: 24px;
+    --doc-nav-bar: 72px;
+    --toc-width: 160px;
     position: relative;
     width: 100%;
 }
@@ -12,7 +14,7 @@
     left: var(--sidebar-width);
     right: 0;
     padding: 16px var(--h-padding);
-    height: 72px;
+    height: var(--doc-nav-bar);
     border-bottom: 1px solid var(--ly-active-background);
     background: var(--ly-background);
     z-index: 100;
@@ -36,6 +38,10 @@
     margin: 0 auto;
     padding: 108px var(--h-padding);
     max-width: 1000px;
+}
+
+.document > h2 {
+    scroll-margin-top: calc(var(--doc-nav-bar) + 12px);
 }
 
 .docInfo {
@@ -86,9 +92,35 @@
     text-overflow: ellipsis;
 }
 
+.toc {
+    position: fixed;
+    top: calc(var(--doc-nav-bar) + 24px);
+    right: var(--h-padding);
+    padding: 2px 0 2px 16px;
+    width: var(--toc-width);
+    border-left: 1px solid var(--ly-primary);
+    background: var(--ly-page-background);
+}
+
+.tocItem {
+    margin-top: 6px;
+}
+
+.toc > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media screen and (max-width: 1600px) and (min-width: 769px) {
     .document {
         max-width: 90%;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .document {
+        padding-right: calc(var(--toc-width) + var(--h-padding) + 12px);
     }
 }
 
@@ -105,6 +137,7 @@
         display: flex;
     }
 
+    .toc,
     .docNavTitle {
         display: none;
     }
