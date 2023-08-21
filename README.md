@@ -7,7 +7,6 @@
 -   [笔记](https://blog.talaxy.cn/docs/doc-intro)
 -   [博客](https://blog.talaxy.cn/blog)
 -   [画廊](https://blog.talaxy.cn/gallery)
--   [记录](https://blog.talaxy.cn/some)
 
 ### 应用
 

@@ -38,15 +38,6 @@ const config = {
                 routeBasePath: 'gallery',
             },
         ],
-        [
-            '@docusaurus/plugin-content-docs',
-            {
-                id: 'some',
-                path: 'some',
-                routeBasePath: 'some',
-                sidebarPath: false,
-            },
-        ],
     ],
 
     presets: [

@@ -26,8 +26,6 @@ const SERVER_DIR = {
         token: path.join(STORAGE_PATH, 'token.json'),
         // 配置信息
         config: path.join(STORAGE_PATH, 'config.json'),
-        // API 白名单数据
-        whitelist: path.join(STORAGE_PATH, 'whitelist.json'),
         // 书籍数据
         books: path.join(STORAGE_PATH, 'books'),
         // Weaver 数据
@@ -47,7 +45,6 @@ const LOCAL_DIR = {
         user: path.join(TEMP_DIR, 'user.json'),
         token: path.join(TEMP_DIR, 'token.json'),
         config: path.join(TEMP_DIR, 'config.json'),
-        whitelist: path.join(TEMP_DIR, 'whitelist.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
         luoye: {
@@ -56,10 +53,6 @@ const LOCAL_DIR = {
             users: path.join(TEMP_DIR, 'luoye', 'users'),
         },
     },
-};
-
-const APIKey = {
-    file: 'fileApiKey',
 };
 
 const Dir = {
@@ -79,10 +72,6 @@ mkdirp.sync(Dir.storage.projects);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
-
-writeJSONIfNotExist(Dir.storage.whitelist, {
-    [APIKey.file]: ['talaxy'],
-});
 
 writeJSONIfNotExist(Dir.storage.config, {
     secret: uuid(),
@@ -180,6 +169,5 @@ module.exports = {
     Server,
     Statics,
     Dir,
-    APIKey,
     User,
 };
