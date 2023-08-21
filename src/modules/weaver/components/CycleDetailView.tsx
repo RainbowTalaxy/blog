@@ -6,11 +6,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
 import { TaskStatus } from '../types';
 import clsx from 'clsx';
-import TaskForm from './TaskForm';
+import TaskForm, { NEW_FORM_ID } from './TaskForm';
 import { TASK_POOL_NAME, TASK_PRIORITY_COLORS, TASK_STATUSES, TASK_STATUS_NAMES } from '../constants';
 import { useHistory } from '@docusaurus/router';
 import dayjs from 'dayjs';
-import { isBetween } from '@site/src/utils';
+import { isBetween, queryString } from '@site/src/utils';
+import useQuery from '@site/src/hooks/useQuery';
 
 interface Props {
     project: ProjectInfo;
@@ -21,9 +22,8 @@ interface Props {
 
 const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
     const history = useHistory();
+    const query = useQuery();
     const [detail, setDetail] = useState<CycleDetail>();
-    const [isFormVisible, setFormVisible] = useState(false);
-    const targetTask = useRef<Task>();
     const context = useRef<{
         project: ProjectInfo;
         cycleInfo: CycleInfo;
@@ -31,6 +31,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
 
     const projectId = project.id;
     const cycleId = cycleInfo.id;
+    const taskId = query.get('task');
+    const task = detail?.tasks.find((task) => task.id === taskId);
+
     // 当前正在进行中的周期
     const ongoingCycle = cycles?.find((cycle) => isBetween(cycle.start, cycle.end));
 
@@ -63,8 +66,8 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
     const handleUpdateTask = useCallback(
         async (taskProps: TaskProps) => {
             try {
-                if (targetTask.current) {
-                    await API.weaver.updateTask(projectId, cycleId, targetTask.current.id, taskProps);
+                if (task) {
+                    await API.weaver.updateTask(projectId, cycleId, task.id, taskProps);
                     return true;
                 } else {
                     if (!taskProps.name) return false;
@@ -85,9 +88,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
 
     const handleMoveTaskCycle = useCallback(
         async (newCycleId: string) => {
-            if (!targetTask.current) return false;
+            if (!task) return false;
             try {
-                await API.weaver.changeTaskCycle(projectId, cycleId, targetTask.current.id, newCycleId);
+                await API.weaver.changeTaskCycle(projectId, cycleId, task.id, newCycleId);
                 return true;
             } catch (error) {
                 console.log(error);
@@ -98,9 +101,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
     );
 
     const handleDeleteTask = useCallback(async () => {
-        if (!targetTask.current) return false;
+        if (!task) return false;
         try {
-            await API.weaver.deleteTask(projectId, cycleId, targetTask.current.id);
+            await API.weaver.deleteTask(projectId, cycleId, task.id);
             return true;
         } catch (error) {
             console.log(error);
@@ -135,7 +138,12 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                         key={cycle.id}
                         className={clsx(styles.cycleButton, cycleInfo.id === cycle.id && styles.active)}
                         onClick={() => {
-                            if (project.id) history.replace(`?project=${project.id}&cycle=${cycle.id}`);
+                            history.replace(
+                                queryString({
+                                    project: project.id,
+                                    cycle: cycle.id === ongoingCycle?.id ? null : cycle.id,
+                                }),
+                            );
                         }}
                     >
                         {`第 ${cycle.idx + 1} 周` || '无标题'}
@@ -179,8 +187,13 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                                             key={task.id}
                                             className={clsx(styles.taskCard, commonStyles.card)}
                                             onClick={() => {
-                                                targetTask.current = task;
-                                                setFormVisible(true);
+                                                history.replace(
+                                                    queryString({
+                                                        project: project.id,
+                                                        cycle: cycleId === ongoingCycle?.id ? null : cycleId,
+                                                        task: task.id,
+                                                    }),
+                                                );
                                             }}
                                             draggable
                                             onDragStart={(e) => {
@@ -224,8 +237,13 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                                 <div
                                     className={clsx(styles.taskAdd, commonStyles.card)}
                                     onClick={async () => {
-                                        targetTask.current = undefined;
-                                        setFormVisible(true);
+                                        history.replace(
+                                            queryString({
+                                                project: project.id,
+                                                cycle: cycleId === ongoingCycle?.id ? null : cycleId,
+                                                task: NEW_FORM_ID,
+                                            }),
+                                        );
                                     }}
                                 >
                                     +
@@ -235,9 +253,9 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                     </div>
                 ))}
             </div>
-            {isFormVisible && context.current && (
+            {(task || taskId === NEW_FORM_ID) && context.current && (
                 <TaskForm
-                    task={targetTask.current}
+                    task={task}
                     context={context.current}
                     cycles={cycles}
                     update={handleUpdateTask}
@@ -245,7 +263,12 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                     remove={handleDeleteTask}
                     onClose={async (success) => {
                         if (success) await refetch();
-                        setFormVisible(false);
+                        history.replace(
+                            queryString({
+                                project: project.id,
+                                cycle: cycleId === ongoingCycle?.id ? null : cycleId,
+                            }),
+                        );
                     }}
                 />
             )}
