@@ -48,7 +48,7 @@ const ProjectView = ({ project, refetch }: Props) => {
         if (!project.id) return;
         try {
             const cycles = await API.weaver.cycles(project.id);
-            if (cycles.length > CYCLE_FOLD_THRESHOLD) setCycleListFolded(false);
+            if (cycles.length <= CYCLE_FOLD_THRESHOLD) setCycleListFolded(false);
             setCycles(cycles);
         } catch (error) {
             console.log(error);
