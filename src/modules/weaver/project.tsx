@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { isBetween, queryString } from '@site/src/utils';
 import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
-import GlobalStyle from './components/GlobalStyle';
+import GlobalStyle from './styles/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
 import { TASK_POOL_NAME } from './constants';
 import useTitle from '@site/src/hooks/useTitle';

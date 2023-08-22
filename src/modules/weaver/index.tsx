@@ -7,7 +7,6 @@ import styles from './styles/index.module.css';
 import useQuery from '@site/src/hooks/useQuery';
 import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
-import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
 import clsx from 'clsx';
 import { Button } from '@site/src/components/Form';
