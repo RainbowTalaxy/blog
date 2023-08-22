@@ -55,8 +55,14 @@ const Document = ({ doc, workspace, onSave }: Props) => {
     return (
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
-                <div className={styles.docNavTitle}>{doc.name}</div>
-                <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                {workspace ? (
+                    <>
+                        <div className={styles.docNavTitle}>{doc.name}</div>
+                        <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                    </>
+                ) : (
+                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} />
+                )}
                 {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}

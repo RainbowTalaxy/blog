@@ -68,6 +68,7 @@ const DocPage = () => {
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
+                navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold />}
                 sidebarVisible={Boolean(workspace)}
                 sidebar={
                     workspace && (
@@ -144,7 +145,6 @@ const DocPage = () => {
                         </>
                     )
                 }
-                navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold />}
             >
                 <Document doc={doc} workspace={workspace} onSave={refetch} />
             </ContentWithSideBar>
