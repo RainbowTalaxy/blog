@@ -94,12 +94,11 @@
 
 .toc {
     position: fixed;
-    top: calc(var(--doc-nav-bar) + 24px);
+    top: calc(var(--doc-nav-bar) + 36px);
     right: var(--h-padding);
     padding: 2px 0 2px 16px;
     width: var(--toc-width);
     border-left: 1px solid var(--ly-primary);
-    background: var(--ly-page-background);
 }
 
 .tocItem {
@@ -112,9 +111,13 @@
     text-overflow: ellipsis;
 }
 
+.centeredDoc {
+    padding-left: calc(var(--toc-width) + var(--h-padding) + 12px);
+}
+
 @media screen and (max-width: 1600px) and (min-width: 769px) {
-    .document {
-        max-width: 90%;
+    .document:not(.centeredDoc) {
+        margin-left: 4%;
     }
 }
 

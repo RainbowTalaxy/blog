@@ -11,6 +11,7 @@ import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
+import clsx from 'clsx';
 
 interface Props {
     doc: Doc | null;
@@ -95,7 +96,7 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                     doc.creator.toUpperCase()
                 )}
             </header>
-            <main className={styles.document}>
+            <main className={clsx(styles.document, !workspace && styles.centeredDoc)}>
                 {!isEdit && (
                     <>
                         <h1>{doc.name}</h1>
