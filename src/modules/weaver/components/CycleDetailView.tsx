@@ -83,7 +83,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                 return false;
             }
         },
-        [cycleId, projectId],
+        [cycleId, projectId, task],
     );
 
     const handleMoveTaskCycle = useCallback(
@@ -97,7 +97,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
                 return false;
             }
         },
-        [projectId, cycleId],
+        [projectId, cycleId, task],
     );
 
     const handleDeleteTask = useCallback(async () => {
@@ -109,7 +109,7 @@ const CycleDetailView = ({ project, cycleInfo, cycles, addCycle }: Props) => {
             console.log(error);
             return false;
         }
-    }, [projectId, cycleId]);
+    }, [projectId, cycleId, task]);
 
     useEffect(() => {
         refetch();
