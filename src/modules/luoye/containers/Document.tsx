@@ -11,6 +11,7 @@ import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
+import clsx from 'clsx';
 
 interface Props {
     doc: Doc | null;
@@ -55,8 +56,14 @@ const Document = ({ doc, workspace, onSave }: Props) => {
     return (
         <div className={styles.docView}>
             <header className={styles.docNavBar}>
-                <div className={styles.docNavTitle}>{doc.name}</div>
-                <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                {workspace ? (
+                    <>
+                        <div className={styles.docNavTitle}>{doc.name}</div>
+                        <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                    </>
+                ) : (
+                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} />
+                )}
                 {auth.editable ? (
                     <>
                         {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
@@ -89,11 +96,26 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                     doc.creator.toUpperCase()
                 )}
             </header>
-            <main className={styles.document}>
+            <main className={clsx(styles.document, !workspace && styles.centeredDoc)}>
                 {!isEdit && (
                     <>
                         <h1>{doc.name}</h1>
-                        <Markdown>{doc.content}</Markdown>
+                        <Markdown
+                            toc={(slugs) => (
+                                <div className={styles.toc}>
+                                    <div>
+                                        <strong>{doc.name}</strong>
+                                    </div>
+                                    {slugs.map((item) => (
+                                        <div key={item.slug} className={styles.tocItem}>
+                                            <a href={`#${item.slug}`}>{item.title}</a>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        >
+                            {doc.content}
+                        </Markdown>
                         <p className={styles.docInfo}>
                             <span>{doc.creator.toUpperCase()}</span> 更新于{' '}
                             {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')}

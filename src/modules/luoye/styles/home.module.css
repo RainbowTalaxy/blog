@@ -28,7 +28,8 @@
     left: 0;
     margin-bottom: 6px !important;
     padding: 12px;
-    background-color: var(--ly-background);
+    background: var(--ly-background);
+    z-index: 50;
 }
 
 .pageIcon {
