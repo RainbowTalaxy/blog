@@ -12,6 +12,7 @@ const toSlug = (str: string, prev: Array<Slug>) => {
     const count = prev.filter((item) => item.title === str).length;
     return (
         str
+            .toString()
             .toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[/?:=&]/g, '') + (count ? `-${count}` : '')
