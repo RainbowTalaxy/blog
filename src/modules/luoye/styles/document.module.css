@@ -115,9 +115,19 @@
     padding-left: calc(var(--toc-width) + var(--h-padding) + 12px);
 }
 
-@media screen and (max-width: 1600px) and (min-width: 769px) {
+@media screen and (max-width: 1400px) and (min-width: 769px) {
     .document:not(.centeredDoc) {
         margin-left: 4%;
+    }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 769px) {
+    .document {
+        max-width: 100%;
+    }
+
+    .centeredDoc {
+        padding-left: calc(var(--h-padding) + 24% - 100px);
     }
 }
 
