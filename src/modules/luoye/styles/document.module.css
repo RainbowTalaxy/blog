@@ -99,6 +99,7 @@
     padding: 2px 0 2px 16px;
     width: var(--toc-width);
     border-left: 1px solid var(--ly-primary);
+    color: var(--ly-primary);
 }
 
 .tocItem {
