@@ -49,3 +49,11 @@ export function time(form: string) {
 export function formToday() {
     return dayjs().format('YYYY-MM-DD');
 }
+
+export function queryString(query: any) {
+    const queryStr = Object.keys(query)
+        .filter((key) => query[key] !== undefined && query[key] !== null)
+        .map((key) => `${key}=${query[key]}`)
+        .join('&');
+    return queryStr ? `?${queryStr}` : '';
+}

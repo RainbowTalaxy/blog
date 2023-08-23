@@ -7,27 +7,29 @@ import styles from './styles/index.module.css';
 import useQuery from '@site/src/hooks/useQuery';
 import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';
-import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
 import clsx from 'clsx';
 import { Button } from '@site/src/components/Form';
 import ProjectForm from './components/ProjectForm';
-
-const today = dayjs().format('YYYY-MM-DD');
+import { queryString } from '@site/src/utils';
 
 const Weaver = () => {
-    const user = useUser();
     const query = useQuery();
     const history = useHistory();
-    const [list, setList] = useState<ProjectInfo[]>();
+    const [list, setList] = useState<ProjectInfo[] | null>();
     const [isFormVisible, setFormVisible] = useState(false);
 
     const projectId = query.get('project');
 
     const refetch = useCallback(async () => {
-        if (!user.id) return;
-        await API.weaver.projects().then((data) => setList(data));
-    }, [user]);
+        try {
+            const data = await API.weaver.projects();
+            setList(data);
+        } catch (error) {
+            console.log(error);
+            setList(null);
+        }
+    }, []);
 
     useUserEntry();
 
@@ -37,7 +39,7 @@ const Weaver = () => {
 
     const project = list?.find((project) => project.id === projectId);
 
-    if (project && user.id) {
+    if (project) {
         return <ProjectView project={project} refetch={refetch} />;
     }
 
@@ -53,7 +55,11 @@ const Weaver = () => {
                                 key={project.id}
                                 className={clsx(styles.itemCard, styles.projectCard)}
                                 onClick={() => {
-                                    if (user.id && project.id) history.push(`?project=${project.id}`);
+                                    history.push(
+                                        queryString({
+                                            project: project.id,
+                                        }),
+                                    );
                                 }}
                             >
                                 <div className={styles.projectName}>{project.name}</div>

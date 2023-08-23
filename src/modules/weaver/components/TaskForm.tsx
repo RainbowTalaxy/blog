@@ -14,6 +14,8 @@ import {
 import clsx from 'clsx';
 import { Button, Input, Select, TextArea } from '@site/src/components/Form';
 
+export const NEW_FORM_ID = 'new';
+
 interface Props {
     task?: Task;
     context: {

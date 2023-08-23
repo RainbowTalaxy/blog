@@ -6,10 +6,10 @@ import API from '@site/src/api';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';
 import useQuery from '@site/src/hooks/useQuery';
 import dayjs from 'dayjs';
-import { isBetween } from '@site/src/utils';
+import { isBetween, queryString } from '@site/src/utils';
 import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
-import GlobalStyle from './components/GlobalStyle';
+import GlobalStyle from './styles/GlobalStyle';
 import CycleDetailView from './components/CycleDetailView';
 import { TASK_POOL_NAME } from './constants';
 import useTitle from '@site/src/hooks/useTitle';
@@ -27,6 +27,8 @@ interface Props {
     refetch: () => Promise<void>;
 }
 
+const CYCLE_FOLD_THRESHOLD = 5;
+
 const ProjectView = ({ project, refetch }: Props) => {
     const query = useQuery();
     const history = useHistory();
@@ -38,7 +40,7 @@ const ProjectView = ({ project, refetch }: Props) => {
     const cycleId = query.get('cycle');
     // 当前正在进行中的周期
     const ongoingCycle = cycles?.find((cycle) => isBetween(cycle.start, cycle.end));
-    const foldedCycles = isCycleListFolded ? cycles?.slice(0, 5) : cycles;
+    const foldedCycles = isCycleListFolded ? cycles?.slice(0, CYCLE_FOLD_THRESHOLD) : cycles;
 
     useTitle('Weaver', '/weaver');
 
@@ -46,6 +48,7 @@ const ProjectView = ({ project, refetch }: Props) => {
         if (!project.id) return;
         try {
             const cycles = await API.weaver.cycles(project.id);
+            if (cycles.length <= CYCLE_FOLD_THRESHOLD) setCycleListFolded(false);
             setCycles(cycles);
         } catch (error) {
             console.log(error);
@@ -103,7 +106,13 @@ const ProjectView = ({ project, refetch }: Props) => {
                                 cycleId === TASK_POOL_NAME && commonStyles.active,
                             )}
                             onClick={() => {
-                                if (project.id) history.replace(`?project=${project.id}&cycle=${TASK_POOL_NAME}`);
+                                if (project.id)
+                                    history.replace(
+                                        queryString({
+                                            project: project.id,
+                                            cycle: TASK_POOL_NAME,
+                                        }),
+                                    );
                             }}
                         >
                             任务池
@@ -119,11 +128,12 @@ const ProjectView = ({ project, refetch }: Props) => {
                                 )}
                                 onClick={() => {
                                     if (project.id && cycle.id) {
-                                        if (cycle.id === ongoingCycle?.id) {
-                                            history.replace(`?project=${project.id}`);
-                                        } else {
-                                            history.replace(`?project=${project.id}&cycle=${cycle.id}`);
-                                        }
+                                        history.replace(
+                                            queryString({
+                                                project: project.id,
+                                                cycle: cycle.id === ongoingCycle?.id ? null : cycle.id,
+                                            }),
+                                        );
                                     }
                                 }}
                             >
