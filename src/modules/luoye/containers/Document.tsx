@@ -106,9 +106,9 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                                     <div>
                                         <strong>{doc.name}</strong>
                                     </div>
-                                    {slugs.map((slug) => (
-                                        <div key={slug.slug} className={styles.tocItem}>
-                                            <a href={`#${slug.slug}`}>{slug.title}</a>
+                                    {slugs.map((item) => (
+                                        <div key={item.slug} className={styles.tocItem}>
+                                            <a href={`#${item.slug}`}>{item.title}</a>
                                         </div>
                                     ))}
                                 </div>
