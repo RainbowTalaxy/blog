@@ -40,7 +40,7 @@ const ProjectTitle = ({
                     <SVG.Hamburger />
                 </span>
             )}
-            <span className={clsx(styles.pageIcon, className, !fold && styles.showIcon)} onClick={backToHome}>
+            <span className={clsx(styles.pageIcon, !fold && styles.showIcon)} onClick={backToHome}>
                 {PROJECT_ICON}
             </span>
             <h1 className={styles.pageName} onClick={backToHome}>
