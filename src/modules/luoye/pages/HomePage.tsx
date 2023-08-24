@@ -112,6 +112,7 @@ const HomePage = () => {
                                                     >
                                                         {(provided) => (
                                                             <SideBarListItem
+                                                                icon="🪴"
                                                                 ref={provided.innerRef}
                                                                 active={workspaceId === workspace.id}
                                                                 onClick={() =>
