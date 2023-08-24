@@ -1,6 +1,6 @@
 import API from '@site/src/api';
 import { Scope, WorkspaceItem } from '@site/src/api/luoye';
-import { Button, Input } from '@site/src/components/Form';
+import { Button, Input, TextArea } from '@site/src/components/Form';
 import Toggle from '@site/src/components/Form/Toggle';
 import useUser from '@site/src/hooks/useUser';
 import clsx from 'clsx';
@@ -16,7 +16,7 @@ interface Props {
 const WorkspaceForm = ({ workspace, onClose }: Props) => {
     const user = useUser();
     const nameRef = useRef<HTMLInputElement>(null);
-    const descriptionRef = useRef<HTMLInputElement>(null);
+    const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                 </div>
                 <div className={clsx(styles.formItem, isDefaultWorkspace && styles.hidden)}>
                     <label>描述：</label>
-                    <Input raf={descriptionRef} />
+                    <TextArea raf={descriptionRef} />
                 </div>
                 <div className={styles.formItem}>
                     <label>公开：</label>
