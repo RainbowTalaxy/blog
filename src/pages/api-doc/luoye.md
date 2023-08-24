@@ -101,6 +101,7 @@ interface DocDir {
 | Method | Path             | Description    |
 | ------ | ---------------- | -------------- |
 | GET    | `/workspaces`    | 获取工作区列表 |
+| PUT    | `/workspaces`    | 更新工作区列表 |
 | POST   | `/workspace`     | 创建工作区     |
 | GET    | `/workspace/:id` | 获取工作区信息 |
 | PUT    | `/workspace/:id` | 更新工作区信息 |
@@ -113,9 +114,27 @@ interface DocDir {
 ### `GET` 获取工作区列表
 
 ```
-
 /workspaces
+```
 
+**响应**
+
+```ts
+type Response = WorkspaceItem[];
+```
+
+### `PUT` 更新工作区列表
+
+```
+/workspaces
+```
+
+**参数**
+
+```ts
+interface Body {
+    workspaceIds: WorkspaceItem[];
+}
 ```
 
 **响应**

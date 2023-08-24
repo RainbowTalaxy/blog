@@ -4,7 +4,7 @@ import API from '@site/src/api';
 import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
-import { DEFAULT_WORKSPACE, DEFAULT_WORKSPACE_PLACEHOLDER, PROJECT_NAME } from '../constants';
+import { PROJECT_NAME, splitWorkspace } from '../constants';
 import { useHistory } from '@docusaurus/router';
 import ProjectTitle from '../containers/ProjectTitle';
 import useQuery from '@site/src/hooks/useQuery';
@@ -13,6 +13,7 @@ import DocList from '../containers/DocList';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import Head from '@docusaurus/Head';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 const HomePage = () => {
     const history = useHistory();
@@ -26,18 +27,9 @@ const HomePage = () => {
 
     const refetch = useCallback(async () => {
         try {
-            const [workspaces, docs] = await Promise.all([API.luoye.workspaces(), API.luoye.docs()]);
-            // 摘取默认工作区
-            const defaultWorkspaceIdx = workspaces.findIndex((workspace) => workspace.name === DEFAULT_WORKSPACE.name);
-            const defaultWorkspace = workspaces[defaultWorkspaceIdx] || workspaces[0];
-            if (defaultWorkspaceIdx !== -1) {
-                workspaces.splice(defaultWorkspaceIdx, 1);
-            }
-            defaultWorkspace.name = DEFAULT_WORKSPACE_PLACEHOLDER.name;
-            defaultWorkspace.description = DEFAULT_WORKSPACE_PLACEHOLDER.description;
+            const [workspaces, docs] = await Promise.all([API.luoye.workspaceItems(), API.luoye.docs()]);
             setData({
-                defaultWorkspace,
-                workspaces,
+                ...splitWorkspace(workspaces),
                 docs,
             });
             hideSidebar();
@@ -70,20 +62,79 @@ const HomePage = () => {
                                     <SideBarListItem active={!workspaceId} icon="🍄" onClick={() => history.push('?')}>
                                         开始
                                     </SideBarListItem>
+                                    <SideBarListItem
+                                        icon="🪴"
+                                        active={workspaceId === data.defaultWorkspace.id}
+                                        onClick={() => history.push(`?workspace=${data.defaultWorkspace.id}`)}
+                                    >
+                                        <span>{data.defaultWorkspace.name || <Placeholder>未命名</Placeholder>}</span>
+                                        {data.defaultWorkspace.scope === Scope.Private && <SVG.Lock />}
+                                    </SideBarListItem>
                                 </SideBarList>
                                 <h2>工作区</h2>
-                                <SideBarList>
-                                    {allWorkspaces.map((workspace) => (
-                                        <SideBarListItem
-                                            key={workspace.id}
-                                            active={workspaceId === workspace.id}
-                                            onClick={() => history.push(`?workspace=${workspace.id}`)}
-                                        >
-                                            <span>{workspace.name || <Placeholder>未命名</Placeholder>}</span>
-                                            {workspace.scope === Scope.Private && <SVG.Lock />}
-                                        </SideBarListItem>
-                                    ))}
-                                </SideBarList>
+                                <DragDropContext
+                                    onDragEnd={async (result) => {
+                                        const sourceIdx = result.source.index;
+                                        const destIdx = result.destination?.index ?? -1;
+                                        if (destIdx < 0 || sourceIdx === destIdx) return;
+                                        const reOrdered = Array.from(data.workspaces);
+                                        const [removed] = reOrdered.splice(sourceIdx, 1);
+                                        reOrdered.splice(destIdx, 0, removed);
+                                        // 先更新状态，避免回弹动画
+                                        setData({
+                                            ...data,
+                                            workspaces: reOrdered,
+                                        });
+                                        try {
+                                            const newWorkspaceItems = await API.luoye.updateWorkspaceItems(
+                                                reOrdered
+                                                    .map((workspace) => workspace.id)
+                                                    .concat(data.defaultWorkspace.id),
+                                            );
+                                            setData({
+                                                ...data,
+                                                ...splitWorkspace(newWorkspaceItems),
+                                            });
+                                        } catch (error) {
+                                            console.log(error);
+                                            setData(data);
+                                        }
+                                    }}
+                                >
+                                    <Droppable droppableId="droppable">
+                                        {(provided) => (
+                                            <SideBarList ref={provided.innerRef} {...provided.droppableProps}>
+                                                {data.workspaces.map((workspace, index) => (
+                                                    <Draggable
+                                                        key={workspace.id}
+                                                        draggableId={workspace.id}
+                                                        index={index}
+                                                    >
+                                                        {(provided) => (
+                                                            <SideBarListItem
+                                                                ref={provided.innerRef}
+                                                                active={workspaceId === workspace.id}
+                                                                onClick={() =>
+                                                                    history.push(`?workspace=${workspace.id}`)
+                                                                }
+                                                                draggableProps={provided.draggableProps}
+                                                                dragHandleProps={provided.dragHandleProps}
+                                                                style={provided.draggableProps.style}
+                                                            >
+                                                                <span>
+                                                                    {workspace.name || (
+                                                                        <Placeholder>未命名</Placeholder>
+                                                                    )}
+                                                                </span>
+                                                                {workspace.scope === Scope.Private && <SVG.Lock />}
+                                                            </SideBarListItem>
+                                                        )}
+                                                    </Draggable>
+                                                ))}
+                                            </SideBarList>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
                             </>
                         )}
                     </>

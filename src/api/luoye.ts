@@ -63,8 +63,12 @@ export interface Doc {
 }
 
 const LuoyeAPI = {
-    workspaces: () =>
+    workspaceItems: () =>
         rocketV2.get<WorkspaceItem[]>(`${SERVER_API}/luoye/workspaces`),
+    updateWorkspaceItems: (workspaceIds: string[]) =>
+        rocketV2.put<WorkspaceItem[]>(`${SERVER_API}/luoye/workspaces`, {
+            workspaceIds,
+        }),
     workspace: (id: string) =>
         rocketV2.get<Workspace>(`${SERVER_API}/luoye/workspace/${id}`),
     createWorkspace: (props: {
