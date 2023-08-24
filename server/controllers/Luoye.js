@@ -69,9 +69,14 @@ const FileController = {
         return userDir;
     },
     // 获取用户工作区列表
-    workspaces(userDir) {
+    userWorkspaceItems(userDir) {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         return readJSON(userWorkspacesPath);
+    },
+    updateUserWorkspaceItems(userDir, workspaces) {
+        if (!userDir) throw new Error('userDir is required');
+        const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
+        writeJSON(userWorkspacesPath, workspaces);
     },
     // 获取工作区信息
     workspace(workspaceId) {
@@ -335,6 +340,14 @@ const Utility = {
             if (!item.updatedAt) return false;
         }
         return true;
+    },
+    workspaceItems(workspaceItems, newWorkspaceIds) {
+        if (!Array.isArray(workspaceItems)) return false;
+        // 检查 id 是否完全匹配且完全命中
+        const ids = [...new Set(newWorkspaceIds)];
+        if (ids.length !== workspaceItems.length) return false;
+        if (workspaceItems.some((item) => !ids.includes(item.id))) return false;
+        return ids.map((id) => workspaceItems.find((item) => item.id === id));
     },
 };
 

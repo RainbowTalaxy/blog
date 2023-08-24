@@ -8,12 +8,41 @@ router.get('/workspaces', login, async (req, res) => {
     try {
         const userId = req.userId;
         const userDir = LuoyeCtr.userDir(userId);
-        const workspaces = LuoyeCtr.workspaces(userDir);
-        return res.send(workspaces);
+        const workspaceItems = LuoyeCtr.userWorkspaceItems(userDir);
+        return res.send(workspaceItems);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to get workspaces',
+        });
+    }
+});
+
+// 更新工作区列表顺序
+router.put('/workspaces', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { workspaceIds } = req.body;
+        if (!workspaceIds)
+            return res.status(400).send({
+                error: 'workspaceIds is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        const workspacesItems = LuoyeCtr.userWorkspaceItems(userDir);
+        const newWorkspaceItems = LuoyeUtl.workspaceItems(
+            workspacesItems,
+            workspaceIds,
+        );
+        if (!newWorkspaceItems)
+            return res.status(400).send({
+                error: 'workspaceIds is invalid',
+            });
+        LuoyeCtr.updateUserWorkspaceItems(userDir, newWorkspaceItems);
+        return res.send(newWorkspaceItems);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to update workspaces',
         });
     }
 });
@@ -139,7 +168,7 @@ router.get('/docs', login, async (req, res) => {
         const userId = req.userId;
         const userDir = LuoyeCtr.userDir(userId);
         const docs = LuoyeCtr.docs(userDir);
-        return res.send(docs);
+        return res.send(docs.slice(0, 10));
     } catch (error) {
         console.log(error);
         return res.status(500).send({

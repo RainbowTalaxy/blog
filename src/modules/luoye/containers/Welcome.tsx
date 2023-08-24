@@ -64,7 +64,7 @@ const Welcome = ({ data, refetch }: Props) => {
                 </p>
             ) : (
                 <div className={styles.docList}>
-                    {data.docs.slice(0, 10).map((doc) => (
+                    {data.docs.map((doc) => (
                         <div
                             className={styles.docItem}
                             key={doc.id}
