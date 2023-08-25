@@ -63,6 +63,7 @@ interface Doc {
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
     scope: 'private' | 'public'; // 可见范围
+    date: number; // 所属日期
     workspaces: string[]; // 所属工作区 id
     docType: 'markdown'; // 文档类型
     content: string; // 文档内容
@@ -236,6 +237,7 @@ type Response = Doc;
 interface Body {
     workspaceId: string;
     name?: string;
+    date?: number;
 }
 ```
 
@@ -258,6 +260,7 @@ interface Body {
     name?: string;
     content?: string;
     scope?: 'private' | 'public';
+    date?: number;
 }
 ```
 

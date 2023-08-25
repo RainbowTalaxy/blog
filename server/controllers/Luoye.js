@@ -190,6 +190,7 @@ const FileController = {
             admins: _.uniq([creator, ...workspace.admins]),
             members: workspace.members,
             scope: props.scope ?? workspace.scope,
+            date: props.date ?? now,
             workspaces: [workspace.id],
             docType: DocType.Markdown,
             content: '',
@@ -228,6 +229,7 @@ const FileController = {
             name: props.name ?? doc.name,
             content: props.content ?? doc.content,
             scope: props.scope ?? doc.scope,
+            date: props.date ?? doc.date,
             updatedAt: now,
         };
         writeJSON(docDir, updatedDoc);
