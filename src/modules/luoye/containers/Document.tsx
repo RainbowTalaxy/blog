@@ -137,8 +137,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                             {doc.content}
                         </Markdown>
                         <p className={styles.docInfo}>
-                            <span>{doc.creator.toUpperCase()}</span> 更新于{' '}
-                            {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')}
+                            <span>{doc.creator.toUpperCase()}</span> 落于 {dayjs(doc.date).format('YYYY年M月D日')} 。
                         </p>
                     </>
                 )}
