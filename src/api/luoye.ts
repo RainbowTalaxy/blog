@@ -55,6 +55,7 @@ export interface Doc {
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
     scope: Scope; // 可见范围
+    date: number; // 所属日期
     workspaces: string[]; // 所属工作区 id
     docType: DocType; // 文档类型
     content: string; // 文档内容
@@ -91,6 +92,7 @@ const LuoyeAPI = {
         workspaceId: string,
         props: {
             name?: string;
+            date?: number;
         },
     ) =>
         rocketV2.post<Doc>(`${SERVER_API}/luoye/doc`, {
@@ -103,6 +105,7 @@ const LuoyeAPI = {
             name?: string;
             content?: string;
             scope?: Scope;
+            date?: number;
         },
     ) => rocketV2.put<Doc>(`${SERVER_API}/luoye/doc/${id}`, props),
     deleteDoc: (id: string) =>

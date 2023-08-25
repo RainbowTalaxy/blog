@@ -4,7 +4,7 @@ import { ProjectInfo } from '@site/src/api/weaver';
 import { useEffect, useRef } from 'react';
 import { Button, Input } from '@site/src/components/Form';
 import API from '@site/src/api';
-import { formToday, time } from '@site/src/utils';
+import { formDate, time } from '@site/src/utils';
 import { useHistory } from '@docusaurus/router';
 
 interface Props {
@@ -36,7 +36,7 @@ const ProjectForm = ({ project, onClose }: Props) => {
                 {!project && (
                     <div className={styles.formItem}>
                         <label>开始时间：</label>
-                        <Input raf={dateRef} type="date" defaultValue={formToday()} />
+                        <Input raf={dateRef} type="date" defaultValue={formDate()} />
                     </div>
                 )}
                 <div className={styles.formItem}>
