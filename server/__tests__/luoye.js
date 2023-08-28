@@ -248,6 +248,11 @@ async function test() {
         await user.delete(`/doc/${doc.id}`);
     });
 
+    // 获取最近文档
+    await testCase.pos('recent doc list', async () => {
+        await user.get('/recent-docs');
+    });
+
     /**
      * - 公开工作区
      *     + 私有文档

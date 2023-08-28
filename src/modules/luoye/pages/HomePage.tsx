@@ -27,7 +27,7 @@ const HomePage = () => {
 
     const refetch = useCallback(async () => {
         try {
-            const [workspaces, docs] = await Promise.all([API.luoye.workspaceItems(), API.luoye.docs()]);
+            const [workspaces, docs] = await Promise.all([API.luoye.workspaceItems(), API.luoye.recentDocs()]);
             setData({
                 ...splitWorkspace(workspaces),
                 docs,

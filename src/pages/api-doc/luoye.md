@@ -106,6 +106,7 @@ interface DocDir {
 | POST   | `/workspace`     | 创建工作区     |
 | GET    | `/workspace/:id` | 获取工作区信息 |
 | PUT    | `/workspace/:id` | 更新工作区信息 |
+| GET    | `/recent-docs`   | 获取最近文档   |
 | GET    | `/docs`          | 获取文档列表   |
 | GET    | `/doc/:id`       | 获取文档信息   |
 | POST   | `/doc`           | 创建文档       |
@@ -199,6 +200,18 @@ interface Body {
 
 ```ts
 type Response = Workspace;
+```
+
+### `GET` 获取最近文档
+
+```
+/recent-docs
+```
+
+**响应**
+
+```ts
+type Response = DocItem[];
 ```
 
 ### `GET` 获取文档列表

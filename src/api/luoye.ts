@@ -86,6 +86,8 @@ const LuoyeAPI = {
             docs?: DocDir[];
         },
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
+    recentDocs: () =>
+        rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/recent-docs`),
     docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
     doc: (id: string) => rocketV2.get<Doc>(`${SERVER_API}/luoye/doc/${id}`),
     createDoc: (
