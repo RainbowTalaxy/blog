@@ -7,6 +7,7 @@ const _ = require('lodash');
 
 const USER_WORKSPACES_FILE = 'workspaces.json';
 const USER_DOCS_FILE = 'docs.json';
+const USER_RECENT_DOCS_FILE = 'recent-docs.json';
 const DEFAULT_WORKSPACE_NAME = 'default';
 
 class Scope {
@@ -358,4 +359,10 @@ module.exports = {
     LuoyeUtl: Utility,
     Scope,
     Access,
+    LuoyeFile: {
+        USER_WORKSPACES_FILE,
+        USER_DOCS_FILE,
+        USER_RECENT_DOCS_FILE,
+        DEFAULT_WORKSPACE_NAME,
+    },
 };
