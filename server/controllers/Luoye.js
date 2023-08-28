@@ -328,15 +328,27 @@ const FileController = {
         const doc = readJSON(docDir);
         // 删除文档
         fs.unlinkSync(docDir);
-        // 删除用户的文档信息
+        // 更新用户的文档信息
         doc.members.forEach((member) => {
             const memberDir = FileController.userDir(member);
+            // 更新用户的文档列表
             const userDocFile = path.join(memberDir, USER_DOCS_FILE);
             const userDocs = readJSON(userDocFile);
             const userDoc = userDocs.find((d) => d.id === docId);
             if (userDoc) {
                 userDocs.splice(userDocs.indexOf(userDoc), 1);
                 writeJSON(userDocFile, userDocs);
+            }
+            // 更新用户的最近编辑的文档列表
+            const userRecentDocsFile = path.join(
+                memberDir,
+                USER_RECENT_DOCS_FILE,
+            );
+            const userRecentDocs = readJSON(userRecentDocsFile);
+            const userRecentDoc = userRecentDocs.find((d) => d.id === docId);
+            if (userRecentDoc) {
+                userRecentDocs.splice(userRecentDocs.indexOf(userRecentDoc), 1);
+                writeJSON(userRecentDocsFile, userRecentDocs);
             }
         });
         // 删除工作区的文档信息
