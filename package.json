@@ -46,7 +46,6 @@
         "react-markdown": "^8.0.7",
         "rehype-katex": "5",
         "remark-math": "3",
-        "sha256": "^0.2.0",
         "smoothscroll-polyfill": "^0.4.4",
         "styled-components": "^5.3.3",
         "swiper": "^8.4.2",
