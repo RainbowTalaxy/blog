@@ -163,13 +163,28 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 获取用户最近文档列表
+router.get('/recent-docs', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.recentDocs(userDir);
+        return res.send(docs.slice(0, 10));
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get recent docs',
+        });
+    }
+});
+
 // 获取用户文档列表
 router.get('/docs', login, async (req, res) => {
     try {
         const userId = req.userId;
         const userDir = LuoyeCtr.userDir(userId);
         const docs = LuoyeCtr.docs(userDir);
-        return res.send(docs.slice(0, 10));
+        return res.send(docs);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
