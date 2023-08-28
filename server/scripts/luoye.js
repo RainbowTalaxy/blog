@@ -8,10 +8,11 @@ async function main() {
     // 读取 `docs` 目录下的所有文件
     const files = fs.readdirSync(docDir).map((file) => path.join(docDir, file));
     files.forEach((file) => {
-        console.log(file);
         const data = readJSON(file);
-        data.date = data.createdAt;
-        writeJSON(file, data);
+        if (data.date === undefined) {
+            data.date = data.createdAt;
+            writeJSON(file, data);
+        }
     });
 }
 
