@@ -54,13 +54,10 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
     }, [doc]);
 
     useEffect(() => {
-        if (isEditing) {
-            // 流畅滚动到顶部
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            });
-        }
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
     }, [isEditing]);
 
     const auth = checkAuth(doc);
