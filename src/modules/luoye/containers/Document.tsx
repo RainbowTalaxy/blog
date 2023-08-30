@@ -6,12 +6,13 @@ import dayjs from 'dayjs';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
-import Editor, { EditorRef } from '../components/Editor';
+import { EditorRef } from '../components/Editor/Editor';
 import { useHistory } from '@docusaurus/router';
 import { checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
+import MarkdownEditor from '../components/Editor/MarkdownEditor';
 
 interface Props {
     doc: Doc | null;
@@ -123,7 +124,9 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                     doc.creator.toUpperCase()
                 )}
             </header>
-            <main className={clsx(styles.document, !workspace && styles.centeredDoc)}>
+            <main
+                className={clsx(styles.document, !workspace && styles.centeredDoc, !isEditing && styles.hiddenEditor)}
+            >
                 {!isEditing && (
                     <>
                         <h1>{doc.name}</h1>
@@ -149,7 +152,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                         </p>
                     </>
                 )}
-                <Editor
+                <MarkdownEditor
                     ref={textRef}
                     visible={isEditing}
                     keyId={doc.id}

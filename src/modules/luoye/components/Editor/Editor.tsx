@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import styles from '../styles/document.module.css';
+import styles from '../../styles/document.module.css';
 import useKeyboard from '@site/src/hooks/useKeyboard';
 
-interface Props {
+export interface EditorProps {
     className?: string;
     visible: boolean;
     keyId: string;
@@ -18,7 +18,7 @@ export interface EditorRef {
 
 const PLACE_HOLDER = '点击此处直接输入正文';
 
-const Editor = forwardRef(({ className, visible, keyId, onSave }: Props, ref: ForwardedRef<EditorRef>) => {
+const Editor = forwardRef(({ className, visible, keyId, onSave }: EditorProps, ref: ForwardedRef<EditorRef>) => {
     const eleRef = useRef<HTMLPreElement>(null);
 
     useKeyboard('Tab', () => {

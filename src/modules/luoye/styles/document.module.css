@@ -4,6 +4,7 @@
     --toc-width: 160px;
     position: relative;
     width: 100%;
+    height: 100%;
 }
 
 .docNavBar {
@@ -54,6 +55,17 @@
 
 .docInfo > span {
     font-weight: bold;
+}
+
+/* 隐藏编辑器 */
+.document.hiddenEditor > section {
+    display: none !important;
+}
+
+.document:not(.hiddenEditor) {
+    height: 100%;
+    padding: var(--doc-nav-bar) 0 0 0;
+    max-width: 100%;
 }
 
 /* 编辑器 */
@@ -118,7 +130,7 @@
 }
 
 @media screen and (max-width: 1400px) and (min-width: 769px) {
-    .document:not(.centeredDoc) {
+    .document:not(.centeredDoc).hiddenEditor {
         margin-left: 4%;
     }
 }
@@ -134,7 +146,7 @@
 }
 
 @media screen and (min-width: 769px) {
-    .document {
+    .document.hiddenEditor {
         padding-right: calc(var(--toc-width) + var(--h-padding) + 12px);
     }
 }
@@ -144,8 +156,13 @@
         --h-padding: 22px;
     }
 
-    .document {
+    .document.hiddenEditor {
         padding: 24px var(--h-padding) 108px;
+    }
+
+    .document:not(.hiddenEditor) {
+        height: 100%;
+        padding: 0;
     }
 
     .docIcon {

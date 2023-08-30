@@ -1,0 +1,35 @@
+.container :global(.monaco-editor),
+.container :global(.monaco-editor-background) {
+    --vscode-editorGutter-background: var(--ly-page-background);
+    --vscode-editor-background: var(--ly-page-background);
+    --vscode-editor-wordHighlightTextBackground: none;
+    color: var(--ly-primary);
+}
+
+.container :global(.mtk1),
+.container :global(.mtk6) {
+    color: var(--ly-primary) !important;
+}
+
+.container :global(.mtk6) {
+    font-weight: bold !important;
+}
+
+.container :global(.mtk20),
+.container :global(.mtk23) {
+    color: var(--ly-secondary) !important;
+}
+
+.container
+    :global(.monaco-editor)
+    :global(.margin-view-overlays)
+    :global(.line-numbers) {
+    color: var(--ly-secondary);
+}
+
+.container
+    :global(.monaco-editor)
+    :global(.margin-view-overlays)
+    :global(.line-numbers):global(.active-line-number) {
+    color: var(--ly-primary);
+}
