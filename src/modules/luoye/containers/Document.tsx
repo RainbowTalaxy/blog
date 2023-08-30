@@ -8,7 +8,7 @@ import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
 import { EditorRef } from '../components/Editor/Editor';
 import { useHistory } from '@docusaurus/router';
-import { checkAuth } from '../constants';
+import { LEAVE_EDITING_TEXT, checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
@@ -33,7 +33,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
 
     const saveCheck = () => {
         if (!isEditing) return true;
-        return confirm('文档尚未保存，是否放弃编辑？');
+        return confirm(LEAVE_EDITING_TEXT);
     };
 
     useImperativeHandle(ref, () => {

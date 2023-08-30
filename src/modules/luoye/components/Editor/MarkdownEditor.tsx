@@ -1,11 +1,13 @@
 import Editor from '@monaco-editor/react';
 import styles from '../../styles/editor.module.css';
-import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import { EditorProps, EditorRef } from './Editor';
 import PlaceholderContentWidget from './PlaceholderContentWidget';
-import type * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import useKeyboard from '@site/src/hooks/useKeyboard';
 import clsx from 'clsx';
+import loader from '@monaco-editor/loader';
+import * as monaco from 'monaco-editor';
+import { MONACO_TOKEN_CONFIG, MONACO_COLOR_CONFIG } from '../../constants/monaco';
 
 const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     // 控制是否展示行号
@@ -25,6 +27,13 @@ const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     fontFamily:
         "'Fira Code', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif",
 
+    // 禁用括号匹配
+    matchBrackets: 'never',
+    // 问题：https://github.com/microsoft/monaco-editor/issues/3829
+    // @ts-ignore
+    'bracketPairColorization.enabled': false,
+    // 禁用菜单
+    contextmenu: false,
     // 光标宽度
     cursorWidth: 1,
     // 右侧 minimap
@@ -45,11 +54,26 @@ const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     unicodeHighlight: {
         ambiguousCharacters: false,
     },
+    // 禁用建议
+    quickSuggestions: {
+        other: false,
+        comments: false,
+        strings: false,
+    },
+    parameterHints: {
+        enabled: false,
+    },
+    wordBasedSuggestionsOnlySameLanguage: false,
+    suggestOnTriggerCharacters: false,
+    acceptSuggestionOnEnter: 'off',
+    tabCompletion: 'off',
+    wordBasedSuggestions: false,
 };
 
 const MarkdownEditor = forwardRef(
     ({ className, visible, keyId, onSave }: EditorProps, ref: ForwardedRef<EditorRef>) => {
         const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+        const editorMounted = useRef(false);
 
         useKeyboard(
             's',
@@ -64,6 +88,7 @@ const MarkdownEditor = forwardRef(
         useImperativeHandle(ref, () => ({
             focus: () => editorRef.current?.focus(),
             setText: (text: string) => {
+                if (!editorMounted.current) setTimeout(() => editorRef.current?.setValue(text), 500);
                 editorRef.current?.setValue(text);
             },
             getText: () => {
@@ -75,18 +100,30 @@ const MarkdownEditor = forwardRef(
             if (visible && !editorRef.current?.getValue()) editorRef.current?.focus();
         }, [visible, keyId]);
 
+        useLayoutEffect(() => {
+            loader.init().then((monaco) => {
+                monaco.editor.defineTheme('luoye', {
+                    base: 'vs',
+                    inherit: true,
+                    rules: MONACO_TOKEN_CONFIG,
+                    colors: MONACO_COLOR_CONFIG,
+                });
+            });
+        }, []);
+
         // 编辑器的 visible 样式由外层控制
         return (
             <Editor
                 className={clsx(styles.container, className)}
-                height="100%"
                 defaultLanguage="markdown"
                 defaultValue=""
+                theme="luoye"
                 loading="加载中..."
                 options={options}
                 onMount={(editor) => {
                     editorRef.current = editor;
                     new PlaceholderContentWidget('点击此处输入正文', editor);
+                    editorMounted.current = true;
                 }}
             />
         );

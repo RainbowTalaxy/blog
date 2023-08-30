@@ -15,6 +15,8 @@ export const DEFAULT_WORKSPACE_PLACEHOLDER = {
     description: '用于存放个人文档的工作区',
 };
 
+export const LEAVE_EDITING_TEXT = '确定离开当前正在编辑的文档？';
+
 export const splitWorkspace = (workspaces: WorkspaceItem[]) => {
     const defaultWorkspaceIdx = workspaces.findIndex(
         (workspace) => workspace.id === User.config.id,

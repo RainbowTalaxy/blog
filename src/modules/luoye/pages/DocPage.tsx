@@ -7,7 +7,7 @@ import useQuery from '@site/src/hooks/useQuery';
 import API from '@site/src/api';
 import Document, { DocRefProps } from '../containers/Document';
 import { useHistory } from '@docusaurus/router';
-import { PROJECT_NAME, checkAuth, workSpaceName } from '../constants';
+import { LEAVE_EDITING_TEXT, PROJECT_NAME, checkAuth, workSpaceName } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
@@ -28,7 +28,7 @@ const DocPage = () => {
 
     const saveCheck = useCallback(() => {
         if (!docRef.current?.isEditing) return true;
-        return confirm('文档尚未保存，是否放弃编辑？');
+        return confirm(LEAVE_EDITING_TEXT);
     }, []);
 
     const refetch = useCallback(async () => {
