@@ -33,6 +33,10 @@ export const MONACO_TOKEN_CONFIG: monaco.editor.ITokenThemeRule[] = [
         foreground: Colors.primary,
     },
     {
+        token: 'string.md',
+        foreground: Colors.primary,
+    },
+    {
         token: 'keyword.table.header.md',
         foreground: Colors.primary,
     },
