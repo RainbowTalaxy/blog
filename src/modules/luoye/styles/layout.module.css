@@ -3,7 +3,7 @@
 
     position: relative;
     display: flex;
-    min-height: 100%;
+    height: 100%;
 }
 
 .pageView.noSidebar {
@@ -67,6 +67,8 @@
     margin-bottom: 4px;
     padding: 6px 12px;
     cursor: pointer;
+    font-variant: tabular-nums;
+    font-feature-settings: 'tnum';
 }
 
 .sidebar h1,
@@ -80,6 +82,7 @@
 }
 
 .sidebarListItemIcon {
+    flex-shrink: 0;
     margin-right: 6px;
 }
 
@@ -89,7 +92,7 @@
     position: relative;
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
-    min-height: 100%;
+    height: 100%;
     background: #fffcf6;
 }
 
@@ -108,7 +111,10 @@
 }
 
 .content {
+    position: relative;
     padding-top: var(--navbar-height);
+    height: 100%;
+    overflow: auto;
 }
 
 .active {

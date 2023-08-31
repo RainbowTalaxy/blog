@@ -3,15 +3,16 @@ import { Doc, Workspace } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Markdown from '@site/src/components/Markdown';
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
-import Editor, { EditorRef } from '../components/Editor';
+import { EditorRef } from '../components/Editor/Editor';
 import { useHistory } from '@docusaurus/router';
-import { checkAuth } from '../constants';
+import { LEAVE_EDITING_TEXT, checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
+import MarkdownEditor from '../components/Editor/MarkdownEditor';
 
 interface Props {
     doc: Doc | null;
@@ -19,24 +20,46 @@ interface Props {
     onSave: () => Promise<void>;
 }
 
-const Document = ({ doc, workspace, onSave }: Props) => {
+export interface DocRefProps {
+    isEditing: boolean;
+}
+
+const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRef<DocRefProps>) => {
     const history = useHistory();
-    const [isEdit, setEdit] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const textRef = useRef<EditorRef>(null);
     const prevDoc = useRef<Doc | null>(null);
 
+    const saveCheck = () => {
+        if (!isEditing) return true;
+        return confirm(LEAVE_EDITING_TEXT);
+    };
+
+    useImperativeHandle(ref, () => {
+        return {
+            isEditing,
+        };
+    });
+
     useEffect(() => {
         if (!doc) return;
         if (prevDoc.current?.id !== doc.id) {
-            setEdit(false);
+            setIsEditing(false);
             prevDoc.current = doc;
         }
         if (doc.content === '') {
             textRef.current?.setText(doc.content);
-            setEdit(true);
+            setIsEditing(true);
         }
     }, [doc]);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, [isEditing]);
 
     const auth = checkAuth(doc);
 
@@ -59,45 +82,52 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                 {workspace ? (
                     <>
                         <div className={styles.docNavTitle}>{doc.name}</div>
-                        <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                        <ProjectTitle
+                            className={styles.docIcon}
+                            fold={Boolean(workspace)}
+                            showInfo={false}
+                            navigatePreCheck={saveCheck}
+                        />
                     </>
                 ) : (
-                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} />
+                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} navigatePreCheck={saveCheck} />
                 )}
                 {auth.editable ? (
                     <>
-                        {!isEdit && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
+                        {!isEditing && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
                         <Button
                             type="primary"
                             onClick={async () => {
-                                if (isEdit) {
+                                if (isEditing) {
                                     const text = textRef.current?.getText();
-                                    if (doc.content === '' && text === '') return setEdit(false);
+                                    if (doc.content === '' && text === '') return setIsEditing(false);
                                     try {
                                         await API.luoye.updateDoc(doc.id, {
                                             content: text,
                                         });
                                         await onSave();
-                                        setEdit(false);
+                                        setIsEditing(false);
                                     } catch (error: any) {
                                         return alert(`提交失败：${error.message}`);
                                     }
                                 } else {
                                     textRef.current?.setText(doc.content);
-                                    setEdit(true);
+                                    setIsEditing(true);
                                 }
                             }}
                         >
-                            {isEdit ? '保 存' : '编 辑'}
+                            {isEditing ? '保 存' : '编 辑'}
                         </Button>
-                        {isEdit && <Button onClick={() => setEdit(false)}>取 消</Button>}
+                        {isEditing && <Button onClick={() => setIsEditing(false)}>取 消</Button>}
                     </>
                 ) : (
                     doc.creator.toUpperCase()
                 )}
             </header>
-            <main className={clsx(styles.document, !workspace && styles.centeredDoc)}>
-                {!isEdit && (
+            <main
+                className={clsx(styles.document, !workspace && styles.centeredDoc, !isEditing && styles.hiddenEditor)}
+            >
+                {!isEditing && (
                     <>
                         <h1>{doc.name}</h1>
                         <Markdown
@@ -117,14 +147,14 @@ const Document = ({ doc, workspace, onSave }: Props) => {
                             {doc.content}
                         </Markdown>
                         <p className={styles.docInfo}>
-                            <span>{doc.creator.toUpperCase()}</span> 更新于{' '}
-                            {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')}
+                            <span>{doc.creator.toUpperCase()}</span> 落于 {dayjs(doc.date).format('YYYY年M月D日')}{' '}
+                            {auth.editable && <>，更新于 {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')} </>}。
                         </p>
                     </>
                 )}
-                <Editor
+                <MarkdownEditor
                     ref={textRef}
-                    visible={isEdit}
+                    visible={isEditing}
                     keyId={doc.id}
                     onSave={async () => {
                         const text = textRef.current?.getText();
@@ -154,6 +184,6 @@ const Document = ({ doc, workspace, onSave }: Props) => {
             )}
         </div>
     );
-};
+});
 
 export default Document;

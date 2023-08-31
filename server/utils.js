@@ -58,6 +58,11 @@ const enumCheck = (value, enumObj) => {
     return Object.values(enumObj).includes(value);
 };
 
+const PropCheck = {
+    enum: enumCheck,
+    date: (value) => typeof value === 'number',
+};
+
 module.exports = {
     uuid,
     downloadFile,
@@ -65,4 +70,5 @@ module.exports = {
     writeJSON,
     writeJSONIfNotExist,
     enumCheck,
+    PropCheck,
 };

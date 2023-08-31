@@ -1,6 +1,7 @@
 const express = require('express');
 const { login, weakLogin } = require('../middlewares');
 const { LuoyeCtr, Scope, Access, LuoyeUtl } = require('../controllers/Luoye');
+const { PropCheck } = require('../utils');
 const router = express.Router();
 
 // 获取工作区列表
@@ -8,12 +9,41 @@ router.get('/workspaces', login, async (req, res) => {
     try {
         const userId = req.userId;
         const userDir = LuoyeCtr.userDir(userId);
-        const workspaces = LuoyeCtr.workspaces(userDir);
-        return res.send(workspaces);
+        const workspaceItems = LuoyeCtr.userWorkspaceItems(userDir);
+        return res.send(workspaceItems);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to get workspaces',
+        });
+    }
+});
+
+// 更新工作区列表顺序
+router.put('/workspaces', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { workspaceIds } = req.body;
+        if (!workspaceIds)
+            return res.status(400).send({
+                error: 'workspaceIds is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        const workspacesItems = LuoyeCtr.userWorkspaceItems(userDir);
+        const newWorkspaceItems = LuoyeUtl.workspaceItems(
+            workspacesItems,
+            workspaceIds,
+        );
+        if (!newWorkspaceItems)
+            return res.status(400).send({
+                error: 'workspaceIds is invalid',
+            });
+        LuoyeCtr.updateUserWorkspaceItems(userDir, newWorkspaceItems);
+        return res.send(newWorkspaceItems);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to update workspaces',
         });
     }
 });
@@ -133,6 +163,21 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 获取用户最近文档列表
+router.get('/recent-docs', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.recentDocs(userDir);
+        return res.send(docs.slice(0, 10));
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get recent docs',
+        });
+    }
+});
+
 // 获取用户文档列表
 router.get('/docs', login, async (req, res) => {
     try {
@@ -179,7 +224,7 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
 router.post('/doc', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const { workspaceId, name, scope } = req.body;
+        const { workspaceId, name, scope, date } = req.body;
         if (!workspaceId)
             return res.status(400).send({
                 error: 'workspaceId is required',
@@ -188,6 +233,11 @@ router.post('/doc', login, async (req, res) => {
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
                 error: 'scope is invalid',
+            });
+        // `date` 参数校验
+        if (date && !PropCheck.date(date))
+            return res.status(400).send({
+                error: 'date is invalid',
             });
         const workspace = LuoyeCtr.workspace(workspaceId);
         if (!workspace)
@@ -202,7 +252,7 @@ router.post('/doc', login, async (req, res) => {
         const doc = LuoyeCtr.createDoc(
             userDir,
             workspace,
-            { name, scope },
+            { name, scope, date },
             userId,
         );
         return res.send(doc);
@@ -219,7 +269,7 @@ router.put('/doc/:docId', login, async (req, res) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
-        const { name, content, scope } = req.body;
+        const { name, content, scope, date } = req.body;
         if (!docId)
             return res.status(400).send({
                 error: 'docId is required',
@@ -228,6 +278,11 @@ router.put('/doc/:docId', login, async (req, res) => {
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
                 error: 'scope is invalid',
+            });
+        // `date` 参数校验
+        if (date && !PropCheck.date(date))
+            return res.status(400).send({
+                error: 'date is invalid',
             });
         const doc = LuoyeCtr.doc(docId);
         if (!doc)
@@ -243,6 +298,7 @@ router.put('/doc/:docId', login, async (req, res) => {
             name,
             content,
             scope,
+            date,
         };
         const updatedDoc = LuoyeCtr.updateDoc(docId, safeProps);
         return res.send(updatedDoc);

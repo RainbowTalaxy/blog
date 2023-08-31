@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Doc, Scope, Workspace } from '@site/src/api/luoye';
 import useQuery from '@site/src/hooks/useQuery';
 import API from '@site/src/api';
-import Document from '../containers/Document';
+import Document, { DocRefProps } from '../containers/Document';
 import { useHistory } from '@docusaurus/router';
-import { PROJECT_NAME, checkAuth, workSpaceName } from '../constants';
+import { LEAVE_EDITING_TEXT, PROJECT_NAME, checkAuth, workSpaceName } from '../constants';
 import ProjectTitle from '../containers/ProjectTitle';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
@@ -24,6 +24,12 @@ const DocPage = () => {
     const [workspace, setWorkspace] = useState<Workspace | null>();
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
+    const docRef = useRef<DocRefProps>(null);
+
+    const saveCheck = useCallback(() => {
+        if (!docRef.current?.isEditing) return true;
+        return confirm(LEAVE_EDITING_TEXT);
+    }, []);
 
     const refetch = useCallback(async () => {
         try {
@@ -68,12 +74,12 @@ const DocPage = () => {
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
-                navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold />}
+                navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold navigatePreCheck={saveCheck} />}
                 sidebarVisible={Boolean(workspace)}
                 sidebar={
                     workspace && (
                         <>
-                            <ProjectTitle className={styles.fixedTitle} />
+                            <ProjectTitle className={styles.fixedTitle} navigatePreCheck={saveCheck} />
                             <h2>
                                 <span>{workSpaceName(workspace.name)}</span>
                                 {workspace.scope === Scope.Private && <SVG.Lock />}
@@ -81,7 +87,11 @@ const DocPage = () => {
                             {spaceAuth.configurable && (
                                 <>
                                     <SideBarList>
-                                        <SideBarListItem onClick={() => setDocFormVisible(true)}>
+                                        <SideBarListItem
+                                            onClick={() => {
+                                                if (saveCheck()) setDocFormVisible(true);
+                                            }}
+                                        >
                                             新建文档
                                         </SideBarListItem>
                                         <SideBarListItem onClick={() => setWorkspaceFormVisible(true)}>
@@ -124,7 +134,9 @@ const DocPage = () => {
                                                         <SideBarListItem
                                                             ref={provided.innerRef}
                                                             active={docDir.docId === id}
-                                                            onClick={() => history.push(`?id=${docDir.docId}`)}
+                                                            onClick={() => {
+                                                                if (saveCheck()) history.push(`?id=${docDir.docId}`);
+                                                            }}
                                                             draggableProps={provided.draggableProps}
                                                             dragHandleProps={provided.dragHandleProps}
                                                             style={provided.draggableProps.style}
@@ -146,7 +158,7 @@ const DocPage = () => {
                     )
                 }
             >
-                <Document doc={doc} workspace={workspace} onSave={refetch} />
+                <Document ref={docRef} doc={doc} workspace={workspace} onSave={refetch} />
             </ContentWithSideBar>
             {workspace && isWorkspaceFormVisible && (
                 <WorkspaceForm
@@ -162,7 +174,7 @@ const DocPage = () => {
                     workspace={workspace}
                     onClose={async (success, id) => {
                         setDocFormVisible(false);
-                        if (success) history.push(`?id=${id}`);
+                        if (success && id) history.push(`?id=${id}`);
                     }}
                 />
             )}

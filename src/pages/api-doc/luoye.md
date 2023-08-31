@@ -63,6 +63,7 @@ interface Doc {
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
     scope: 'private' | 'public'; // 可见范围
+    date: number; // 所属日期
     workspaces: string[]; // 所属工作区 id
     docType: 'markdown'; // 文档类型
     content: string; // 文档内容
@@ -101,9 +102,11 @@ interface DocDir {
 | Method | Path             | Description    |
 | ------ | ---------------- | -------------- |
 | GET    | `/workspaces`    | 获取工作区列表 |
+| PUT    | `/workspaces`    | 更新工作区列表 |
 | POST   | `/workspace`     | 创建工作区     |
 | GET    | `/workspace/:id` | 获取工作区信息 |
 | PUT    | `/workspace/:id` | 更新工作区信息 |
+| GET    | `/recent-docs`   | 获取最近文档   |
 | GET    | `/docs`          | 获取文档列表   |
 | GET    | `/doc/:id`       | 获取文档信息   |
 | POST   | `/doc`           | 创建文档       |
@@ -113,9 +116,27 @@ interface DocDir {
 ### `GET` 获取工作区列表
 
 ```
-
 /workspaces
+```
 
+**响应**
+
+```ts
+type Response = WorkspaceItem[];
+```
+
+### `PUT` 更新工作区列表
+
+```
+/workspaces
+```
+
+**参数**
+
+```ts
+interface Body {
+    workspaceIds: WorkspaceItem[];
+}
 ```
 
 **响应**
@@ -181,6 +202,18 @@ interface Body {
 type Response = Workspace;
 ```
 
+### `GET` 获取最近文档
+
+```
+/recent-docs
+```
+
+**响应**
+
+```ts
+type Response = DocItem[];
+```
+
 ### `GET` 获取文档列表
 
 ```
@@ -217,6 +250,7 @@ type Response = Doc;
 interface Body {
     workspaceId: string;
     name?: string;
+    date?: number;
 }
 ```
 
@@ -239,6 +273,7 @@ interface Body {
     name?: string;
     content?: string;
     scope?: 'private' | 'public';
+    date?: number;
 }
 ```
 

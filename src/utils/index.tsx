@@ -42,12 +42,14 @@ export function uuid() {
     return uuidV4();
 }
 
+// 表单日期转为 number
 export function time(form: string) {
     return dayjs(form).valueOf();
 }
 
-export function formToday() {
-    return dayjs().format('YYYY-MM-DD');
+// 今日时间（表单用）
+export function formDate(date?: number) {
+    return dayjs(date).format('YYYY-MM-DD');
 }
 
 export function queryString(query: any) {

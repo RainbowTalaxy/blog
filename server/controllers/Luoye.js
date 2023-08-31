@@ -7,6 +7,7 @@ const _ = require('lodash');
 
 const USER_WORKSPACES_FILE = 'workspaces.json';
 const USER_DOCS_FILE = 'docs.json';
+const USER_RECENT_DOCS_FILE = 'recent-docs.json';
 const DEFAULT_WORKSPACE_NAME = 'default';
 
 class Scope {
@@ -36,6 +37,10 @@ const FileController = {
             mkdirp.sync(userDir);
             const userWorkspacesFile = path.join(userDir, USER_WORKSPACES_FILE);
             const userDocFile = path.join(userDir, USER_DOCS_FILE);
+            const userRecentDocsFile = path.join(
+                userDir,
+                USER_RECENT_DOCS_FILE,
+            );
             const now = Date.now();
             // 初始化用户的默认工作区
             const defaultWorkspace = {
@@ -65,13 +70,19 @@ const FileController = {
                 },
             ]);
             writeJSON(userDocFile, []);
+            writeJSON(userRecentDocsFile, []);
         }
         return userDir;
     },
     // 获取用户工作区列表
-    workspaces(userDir) {
+    userWorkspaceItems(userDir) {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         return readJSON(userWorkspacesPath);
+    },
+    updateUserWorkspaceItems(userDir, workspaces) {
+        if (!userDir) throw new Error('userDir is required');
+        const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
+        writeJSON(userWorkspacesPath, workspaces);
     },
     // 获取工作区信息
     workspace(workspaceId) {
@@ -160,6 +171,11 @@ const FileController = {
         }
         return updatedWorkspace;
     },
+    // 获取用户最近编辑的文档
+    recentDocs(userDir) {
+        const userRecentDocsFile = path.join(userDir, USER_RECENT_DOCS_FILE);
+        return readJSON(userRecentDocsFile);
+    },
     // 获取用户文档列表
     docs(userDir) {
         const userDocFile = path.join(userDir, USER_DOCS_FILE);
@@ -175,8 +191,6 @@ const FileController = {
     createDoc(userDir, workspace, props, creator) {
         if (!userDir || !workspace || !creator)
             throw new Error('userDir/workspace/creator is required');
-        const userDocFile = path.join(userDir, USER_DOCS_FILE);
-        const userDocs = readJSON(userDocFile);
         const now = Date.now();
         const newDoc = {
             id: uuid(),
@@ -185,6 +199,7 @@ const FileController = {
             admins: _.uniq([creator, ...workspace.admins]),
             members: workspace.members,
             scope: props.scope ?? workspace.scope,
+            date: props.date ?? now,
             workspaces: [workspace.id],
             docType: DocType.Markdown,
             content: '',
@@ -193,7 +208,7 @@ const FileController = {
         };
         const docFile = path.join(File.docs, `${newDoc.id}.json`);
         writeJSON(docFile, newDoc);
-        userDocs.unshift({
+        const docItem = {
             id: newDoc.id,
             name: newDoc.name,
             creator: newDoc.creator,
@@ -201,8 +216,18 @@ const FileController = {
             docType: newDoc.docType,
             updatedAt: newDoc.updatedAt,
             createdAt: newDoc.createdAt,
-        });
+        };
+        // 更新用户的文档列表
+        const userDocFile = path.join(userDir, USER_DOCS_FILE);
+        const userDocs = readJSON(userDocFile);
+        userDocs.unshift(docItem);
         writeJSON(userDocFile, userDocs);
+        // 更新用户的最近编辑的文档列表
+        const userRecentDocsFile = path.join(userDir, USER_RECENT_DOCS_FILE);
+        const userRecentDocs = readJSON(userRecentDocsFile);
+        userRecentDocs.unshift(docItem);
+        writeJSON(userRecentDocsFile, userRecentDocs);
+        // 更新工作区的文档列表
         const workspaceDir = path.join(File.workspaces, `${workspace.id}.json`);
         workspace.docs.unshift({
             docId: newDoc.id,
@@ -223,12 +248,23 @@ const FileController = {
             name: props.name ?? doc.name,
             content: props.content ?? doc.content,
             scope: props.scope ?? doc.scope,
+            date: props.date ?? doc.date,
             updatedAt: now,
         };
         writeJSON(docDir, updatedDoc);
+        const updatedDocItem = {
+            id: updatedDoc.id,
+            name: updatedDoc.name,
+            creator: updatedDoc.creator,
+            scope: updatedDoc.scope,
+            docType: updatedDoc.docType,
+            updatedAt: updatedDoc.updatedAt,
+            createdAt: updatedDoc.createdAt,
+        };
         // 更新所有成员的文档信息
         doc.members.forEach((member) => {
             const memberDir = FileController.userDir(member);
+            // 更新用户的文档列表信息
             const userDocFile = path.join(memberDir, USER_DOCS_FILE);
             const userDocs = readJSON(userDocFile);
             const userDoc = userDocs.find((d) => d.id === docId);
@@ -240,17 +276,27 @@ const FileController = {
                 userDocs.splice(userDocs.indexOf(userDoc), 1);
                 userDocs.unshift(userDoc);
             } else {
-                userDocs.unshift({
-                    id: updatedDoc.id,
-                    name: updatedDoc.name,
-                    creator: updatedDoc.creator,
-                    scope: updatedDoc.scope,
-                    docType: updatedDoc.docType,
-                    updatedAt: updatedDoc.updatedAt,
-                    createdAt: updatedDoc.createdAt,
-                });
+                userDocs.unshift(updatedDocItem);
             }
             writeJSON(userDocFile, userDocs);
+            // 更新用户的最近编辑的文档列表信息
+            const userRecentDocsFile = path.join(
+                memberDir,
+                USER_RECENT_DOCS_FILE,
+            );
+            const userRecentDocs = readJSON(userRecentDocsFile);
+            const userRecentDoc = userRecentDocs.find((d) => d.id === docId);
+            if (userRecentDoc) {
+                userRecentDoc.name = updatedDoc.name;
+                userRecentDoc.scope = updatedDoc.scope;
+                userRecentDoc.updatedAt = updatedDoc.updatedAt;
+                // 将更新后的文档信息置顶
+                userRecentDocs.splice(userRecentDocs.indexOf(userRecentDoc), 1);
+                userRecentDocs.unshift(userRecentDoc);
+            } else {
+                userRecentDocs.unshift(updatedDocItem);
+            }
+            writeJSON(userRecentDocsFile, userRecentDocs);
         });
         // 更新所有工作区的文档信息
         doc.workspaces.forEach((workspaceId) => {
@@ -282,15 +328,27 @@ const FileController = {
         const doc = readJSON(docDir);
         // 删除文档
         fs.unlinkSync(docDir);
-        // 删除用户的文档信息
+        // 更新用户的文档信息
         doc.members.forEach((member) => {
             const memberDir = FileController.userDir(member);
+            // 更新用户的文档列表
             const userDocFile = path.join(memberDir, USER_DOCS_FILE);
             const userDocs = readJSON(userDocFile);
             const userDoc = userDocs.find((d) => d.id === docId);
             if (userDoc) {
                 userDocs.splice(userDocs.indexOf(userDoc), 1);
                 writeJSON(userDocFile, userDocs);
+            }
+            // 更新用户的最近编辑的文档列表
+            const userRecentDocsFile = path.join(
+                memberDir,
+                USER_RECENT_DOCS_FILE,
+            );
+            const userRecentDocs = readJSON(userRecentDocsFile);
+            const userRecentDoc = userRecentDocs.find((d) => d.id === docId);
+            if (userRecentDoc) {
+                userRecentDocs.splice(userRecentDocs.indexOf(userRecentDoc), 1);
+                writeJSON(userRecentDocsFile, userRecentDocs);
             }
         });
         // 删除工作区的文档信息
@@ -336,6 +394,14 @@ const Utility = {
         }
         return true;
     },
+    workspaceItems(workspaceItems, newWorkspaceIds) {
+        if (!Array.isArray(workspaceItems)) return false;
+        // 检查 id 是否完全匹配且完全命中
+        const ids = [...new Set(newWorkspaceIds)];
+        if (ids.length !== workspaceItems.length) return false;
+        if (workspaceItems.some((item) => !ids.includes(item.id))) return false;
+        return ids.map((id) => workspaceItems.find((item) => item.id === id));
+    },
 };
 
 module.exports = {
@@ -343,4 +409,10 @@ module.exports = {
     LuoyeUtl: Utility,
     Scope,
     Access,
+    LuoyeFile: {
+        USER_WORKSPACES_FILE,
+        USER_DOCS_FILE,
+        USER_RECENT_DOCS_FILE,
+        DEFAULT_WORKSPACE_NAME,
+    },
 };

@@ -55,6 +55,7 @@ export interface Doc {
     admins: string[]; // 管理员列表
     members: string[]; // 成员列表
     scope: Scope; // 可见范围
+    date: number; // 所属日期
     workspaces: string[]; // 所属工作区 id
     docType: DocType; // 文档类型
     content: string; // 文档内容
@@ -63,8 +64,12 @@ export interface Doc {
 }
 
 const LuoyeAPI = {
-    workspaces: () =>
+    workspaceItems: () =>
         rocketV2.get<WorkspaceItem[]>(`${SERVER_API}/luoye/workspaces`),
+    updateWorkspaceItems: (workspaceIds: string[]) =>
+        rocketV2.put<WorkspaceItem[]>(`${SERVER_API}/luoye/workspaces`, {
+            workspaceIds,
+        }),
     workspace: (id: string) =>
         rocketV2.get<Workspace>(`${SERVER_API}/luoye/workspace/${id}`),
     createWorkspace: (props: {
@@ -81,12 +86,15 @@ const LuoyeAPI = {
             docs?: DocDir[];
         },
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
+    recentDocs: () =>
+        rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/recent-docs`),
     docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
     doc: (id: string) => rocketV2.get<Doc>(`${SERVER_API}/luoye/doc/${id}`),
     createDoc: (
         workspaceId: string,
         props: {
             name?: string;
+            date?: number;
         },
     ) =>
         rocketV2.post<Doc>(`${SERVER_API}/luoye/doc`, {
@@ -99,6 +107,7 @@ const LuoyeAPI = {
             name?: string;
             content?: string;
             scope?: Scope;
+            date?: number;
         },
     ) => rocketV2.put<Doc>(`${SERVER_API}/luoye/doc/${id}`, props),
     deleteDoc: (id: string) =>

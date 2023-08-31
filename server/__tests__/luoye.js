@@ -248,6 +248,11 @@ async function test() {
         await user.delete(`/doc/${doc.id}`);
     });
 
+    // 获取最近文档
+    await testCase.pos('recent doc list', async () => {
+        await user.get('/recent-docs');
+    });
+
     /**
      * - 公开工作区
      *     + 私有文档
@@ -274,6 +279,32 @@ async function test() {
     // 获取文档 - 访客
     await testCase.neg('private doc info - visitor', async () => {
         await visitor.get(`/doc/${doc2.id}`);
+    });
+
+    // ## 工作区顺序
+    testCase.title('workspace order');
+
+    // 更新工作区列表顺序
+    await testCase.pos('update workspace order', async () => {
+        const workspaceItems = await user.get('/workspaces');
+        const newWorkspaceIds = workspaceItems.map((item) => item.id).reverse();
+        await user.put('/workspaces', {
+            workspaceIds: newWorkspaceIds,
+        });
+    });
+
+    // 更新工作区列表顺序 - 虚假 id
+    await testCase.neg('update workspace order - fake id', async () => {
+        await user.put('/workspaces', {
+            workspaceIds: ['fake'],
+        });
+    });
+
+    // 更新工作区列表顺序 - 重复但缺省 id
+    await testCase.neg('update workspace order - same id', async () => {
+        await user.put('/workspaces', {
+            workspaceIds: [workspace.id, workspace.id],
+        });
     });
 }
 

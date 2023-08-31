@@ -5,6 +5,7 @@ import Toggle from '@site/src/components/Form/Toggle';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
+import { formDate, time } from '@site/src/utils';
 
 interface Props {
     workspace?: {
@@ -22,11 +23,13 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
     const nameRef = useRef<HTMLInputElement>(null);
     const workspaceRef = useRef<HTMLSelectElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
+    const dateRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (doc) {
             nameRef.current!.value = doc.name;
             scopeRef.current!.checked = doc.scope === Scope.Public;
+            dateRef.current!.value = formDate(doc.date);
         } else if (workspace) {
             scopeRef.current!.checked = workspace.scope === Scope.Public;
         }
@@ -53,6 +56,10 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                     <Input raf={nameRef} />
                 </div>
                 <div className={styles.formItem}>
+                    <label>日期：</label>
+                    <Input raf={dateRef} type="date" defaultValue={formDate()} />
+                </div>
+                <div className={styles.formItem}>
                     <label>公开：</label>
                     <Toggle raf={scopeRef} />
                 </div>
@@ -65,7 +72,9 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                 const props = {
                                     name: nameRef.current!.value,
                                     scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
+                                    date: time(dateRef.current!.value),
                                 };
+                                console.log(props);
                                 try {
                                     let newDoc: Doc | null = null;
                                     if (doc) {

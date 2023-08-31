@@ -1,6 +1,7 @@
-import { Doc, Workspace } from '@site/src/api/luoye';
+import { Doc, Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { getUser } from '@site/src/utils/user';
 import dayjs from 'dayjs';
+import { User } from '../../user/config';
 
 export const PROJECT_ICON = '🍂';
 export const PROJECT_NAME = '落页';
@@ -12,6 +13,26 @@ export const DEFAULT_WORKSPACE = {
 export const DEFAULT_WORKSPACE_PLACEHOLDER = {
     name: '个人工作区',
     description: '用于存放个人文档的工作区',
+};
+
+export const LEAVE_EDITING_TEXT = '确定离开当前正在编辑的文档？';
+
+export const splitWorkspace = (workspaces: WorkspaceItem[]) => {
+    const defaultWorkspaceIdx = workspaces.findIndex(
+        (workspace) => workspace.id === User.config.id,
+    );
+    let defaultWorkspace = workspaces[defaultWorkspaceIdx] || workspaces[0];
+    if (defaultWorkspaceIdx !== -1) {
+        workspaces.splice(defaultWorkspaceIdx, 1);
+    }
+    defaultWorkspace = {
+        ...defaultWorkspace,
+        ...DEFAULT_WORKSPACE_PLACEHOLDER,
+    };
+    return {
+        defaultWorkspace,
+        workspaces,
+    };
 };
 
 export const workSpaceName = (name: string) => {
