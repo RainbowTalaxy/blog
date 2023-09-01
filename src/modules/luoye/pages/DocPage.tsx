@@ -15,6 +15,7 @@ import WorkspaceForm from '../containers/WorkspaceForm';
 import DocForm from '../containers/DocForm';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import clsx from 'clsx';
 
 const DocPage = () => {
     const history = useHistory();
@@ -65,7 +66,7 @@ const DocPage = () => {
     const spaceAuth = checkAuth(workspace);
 
     return (
-        <div className={styles.container}>
+        <div className={clsx(styles.container)}>
             <Head>
                 <title>
                     {doc?.name || '文档不存在'} | {PROJECT_NAME}

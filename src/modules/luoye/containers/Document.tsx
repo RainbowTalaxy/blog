@@ -13,6 +13,7 @@ import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
 import MarkdownEditor from '../components/Editor/MarkdownEditor';
+import EditingModeGlobalStyle from '../styles/EditingModeGlobalStyle';
 
 interface Props {
     doc: Doc | null;
@@ -78,6 +79,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
 
     return (
         <div className={styles.docView}>
+            {isEditing && <EditingModeGlobalStyle />}
             <header className={styles.docNavBar}>
                 {workspace ? (
                     <>

@@ -14,6 +14,7 @@ import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import clsx from 'clsx';
 
 const HomePage = () => {
     const history = useHistory();
