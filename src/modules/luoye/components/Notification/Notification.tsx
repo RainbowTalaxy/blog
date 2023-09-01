@@ -6,7 +6,6 @@ const NOTIFICATION_CONTAINER_CLASS = 'notification-container';
 
 export interface NotificationOption {
     text?: ReactNode;
-    kill?: boolean;
     onEnd?: () => void;
 }
 

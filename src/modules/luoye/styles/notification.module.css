@@ -7,6 +7,7 @@
     bottom: 32px;
     padding: 5px 12px;
     border-radius: 5px;
+    color: var(--ly-primary);
     background: var(--ly-active-background);
     transition: transform 0.5s;
     transform: translateY(100px);
