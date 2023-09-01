@@ -6,6 +6,8 @@ const NOTIFICATION_CONTAINER_CLASS = 'notification-container';
 
 export interface NotificationOption {
     text?: ReactNode;
+    kill?: boolean;
+    onEnd?: () => void;
 }
 
 class Notification {
@@ -52,7 +54,11 @@ class Notification {
             this.type = options.name;
             if (duration) {
                 this.timerId = setTimeout(() => {
-                    this.close(options.name);
+                    if (options.onEnd) {
+                        options.onEnd();
+                    } else {
+                        this.close(options.name);
+                    }
                 }, duration);
             }
         }, 10);
