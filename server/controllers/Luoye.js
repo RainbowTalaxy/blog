@@ -127,8 +127,8 @@ const FileController = {
     // 更新工作区
     updateWorkspace(workspaceId, props) {
         if (!workspaceId) throw new Error('workspaceId is required');
-        const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
-        const workspace = readJSON(workspaceDir);
+        const workspaceFile = path.join(File.workspaces, `${workspaceId}.json`);
+        const workspace = readJSON(workspaceFile);
         const now = Date.now();
         const updatedWorkspace = {
             ...workspace,
@@ -138,7 +138,7 @@ const FileController = {
             docs: props.docs ?? workspace.docs,
             updatedAt: now,
         };
-        writeJSON(workspaceDir, updatedWorkspace);
+        writeJSON(workspaceFile, updatedWorkspace);
         // 条件更新用户工作区列表
         let flag = props.name || props.description || props.scope;
         if (flag) {
@@ -170,6 +170,32 @@ const FileController = {
             });
         }
         return updatedWorkspace;
+    },
+    // 删除工作区
+    deleteWorkspace(workspaceId) {
+        if (!workspaceId) throw new Error('workspaceId is required');
+        const workspaceFile = path.join(File.workspaces, `${workspaceId}.json`);
+        const workspace = readJSON(workspaceFile);
+        // 删除用户的工作区信息
+        workspace.members.forEach((member) => {
+            const memberDir = FileController.userDir(member);
+            const userWorkspacesPath = path.join(
+                memberDir,
+                USER_WORKSPACES_FILE,
+            );
+            const userWorkspaces = readJSON(userWorkspacesPath);
+            const userWorkspace = userWorkspaces.find(
+                (w) => w.id === workspaceId,
+            );
+            if (userWorkspace) {
+                userWorkspaces.splice(userWorkspaces.indexOf(userWorkspace), 1);
+                writeJSON(userWorkspacesPath, userWorkspaces);
+            }
+        });
+        // 删除工作区的文档信息
+        workspace.docs.forEach((doc) => this.deleteDoc(doc.docId));
+        // 删除工作区
+        fs.unlinkSync(workspaceFile);
     },
     // 获取用户最近编辑的文档
     recentDocs(userDir) {

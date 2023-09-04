@@ -191,6 +191,18 @@ interface Body {
 type Response = Workspace;
 ```
 
+### `DELETE` 删除工作区
+
+`/workspace/:id`
+
+**响应**
+
+```ts
+interface Response = {
+    success: boolean;
+};
+```
+
 ### `GET` 获取最近文档
 
 `/recent-docs`
@@ -269,5 +281,7 @@ type Response = Doc;
 **响应**
 
 ```ts
-type Response = Doc;
+interface Response = {
+    success: boolean;
+};
 ```

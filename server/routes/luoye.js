@@ -163,6 +163,37 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 删除工作区
+router.delete('/workspace/:workspaceId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { workspaceId } = req.params;
+        if (!workspaceId)
+            return res.status(400).send({
+                error: 'workspaceId is required',
+            });
+        const workspace = LuoyeCtr.workspace(workspaceId);
+        if (!workspace)
+            return res.status(404).send({
+                error: 'workspace not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        LuoyeCtr.deleteWorkspace(workspaceId);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to delete workspace',
+        });
+    }
+});
+
 // 获取用户最近文档列表
 router.get('/recent-docs', login, async (req, res) => {
     try {

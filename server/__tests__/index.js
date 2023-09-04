@@ -1,10 +1,13 @@
 const { Rocket, TestCase } = require('./utils');
 const user = require('./user');
 const luoye = require('./luoye');
+const luoye2 = require('./luoye2');
 const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
 const weaver = require('./weaver');
+
+require('../config');
 
 async function test() {
     try {
@@ -29,6 +32,7 @@ async function test() {
 
         // luoye 测试
         await luoye();
+        await luoye2();
     } catch (error) {
         console.log(error);
     }
