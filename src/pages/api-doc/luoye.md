@@ -21,6 +21,19 @@
     -   `{id}` 用户目录
         -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
         -   `docs.json` 文档列表 `DocItem[]`
+        -   `recent-docs.json` 最近文档列表 `DocItem[]`
+        -   `bin` 回收站
+
+### 权限管理
+
+-   工作区
+    -   管理员：读、更新、创建文档
+    -   成员：读、创建文档
+    -   访客：读
+-   文档
+    -   管理员：读、更新、删除
+    -   成员：读、更新
+    -   访客：读
 
 ## 数据类型
 
@@ -99,25 +112,9 @@ interface DocDir {
 
 ## 接口
 
-| Method | Path             | Description    |
-| ------ | ---------------- | -------------- |
-| GET    | `/workspaces`    | 获取工作区列表 |
-| PUT    | `/workspaces`    | 更新工作区列表 |
-| POST   | `/workspace`     | 创建工作区     |
-| GET    | `/workspace/:id` | 获取工作区信息 |
-| PUT    | `/workspace/:id` | 更新工作区信息 |
-| GET    | `/recent-docs`   | 获取最近文档   |
-| GET    | `/docs`          | 获取文档列表   |
-| GET    | `/doc/:id`       | 获取文档信息   |
-| POST   | `/doc`           | 创建文档       |
-| PUT    | `/doc/:id`       | 更新文档信息   |
-| DELETE | `/doc/:id`       | 删除文档       |
-
 ### `GET` 获取工作区列表
 
-```
-/workspaces
-```
+`/workspaces`
 
 **响应**
 
@@ -127,9 +124,7 @@ type Response = WorkspaceItem[];
 
 ### `PUT` 更新工作区列表
 
-```
-/workspaces
-```
+`/workspaces`
 
 **参数**
 
@@ -147,9 +142,7 @@ type Response = WorkspaceItem[];
 
 ### `GET` 获取工作区信息
 
-```
-/workspace/:id
-```
+`/workspace/:id`
 
 **响应**
 
@@ -159,9 +152,7 @@ type Response = Workspace;
 
 ### `POST` 创建工作区
 
-```
-/workspace/:id
-```
+`/workspace/:id`
 
 **参数**
 
@@ -181,9 +172,7 @@ type Response = Workspace;
 
 ### `PUT` 更新工作区信息
 
-```
-/workspace/:id
-```
+`/workspace/:id`
 
 **参数**
 
@@ -204,9 +193,7 @@ type Response = Workspace;
 
 ### `GET` 获取最近文档
 
-```
-/recent-docs
-```
+`/recent-docs`
 
 **响应**
 
@@ -216,9 +203,7 @@ type Response = DocItem[];
 
 ### `GET` 获取文档列表
 
-```
-/docs
-```
+`/docs`
 
 **响应**
 
@@ -228,9 +213,7 @@ type Response = DocItem[];
 
 ### `GET` 获取文档信息
 
-```
-/doc/:id
-```
+`/doc/:id`
 
 **响应**
 
@@ -240,9 +223,7 @@ type Response = Doc;
 
 ### `POST` 创建文档
 
-```
-/doc
-```
+`/doc`
 
 **参数**
 
@@ -262,9 +243,7 @@ type Response = Doc;
 
 ### `PUT` 更新文档信息
 
-```
-/doc/:id
-```
+`/doc/:id`
 
 **参数**
 
@@ -285,9 +264,7 @@ type Response = Doc;
 
 ### `DELETE` 删除文档
 
-```
-/doc/:id
-```
+`/doc/:id`
 
 **响应**
 

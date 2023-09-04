@@ -325,7 +325,7 @@ router.delete('/doc/:docId', login, async (req, res) => {
                 error: 'doc not found',
             });
         // 权限校验
-        if (LuoyeUtl.access(doc, userId) < Access.Member)
+        if (LuoyeUtl.access(doc, userId) < Access.Admin)
             return res.status(403).send({
                 error: 'Forbidden',
             });
