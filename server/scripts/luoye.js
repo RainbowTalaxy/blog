@@ -29,7 +29,7 @@ async function main() {
     });
     // 文档回收站数据补丁
     userDirs.forEach((userDir) => {
-        const binFile = path.join(userDir, LuoyeFile.USER_DOCS_FILE);
+        const binFile = path.join(userDir, LuoyeFile.USER_DOC_BIN_FILE);
         writeJSONIfNotExist(binFile, []);
     });
     const docFiles = fs

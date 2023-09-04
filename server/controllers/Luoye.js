@@ -8,7 +8,7 @@ const _ = require('lodash');
 const USER_WORKSPACES_FILE = 'workspaces.json'; // 用户工作区列表
 const USER_DOCS_FILE = 'docs.json'; // 用户文档列表
 const USER_RECENT_DOCS_FILE = 'recent-docs.json'; // 用户最近编辑的文档
-const USER_DOC_BIN = 'doc-bin.json'; // 用户文档回收站
+const USER_DOC_BIN_FILE = 'doc-bin.json'; // 用户文档回收站
 const DEFAULT_WORKSPACE_NAME = 'default'; // 默认工作区名称
 
 class Scope {
@@ -42,7 +42,7 @@ const FileController = {
                 userDir,
                 USER_RECENT_DOCS_FILE,
             );
-            const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+            const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
             const now = Date.now();
             // 初始化用户的默认工作区
             const defaultWorkspace = {
@@ -404,7 +404,7 @@ const FileController = {
                 doc.deletedAt = now;
                 writeJSON(docFile, doc);
                 const userDir = FileController.userDir(userId);
-                const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+                const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
                 const docBin = readJSON(userDocBinFile);
                 docBin.unshift({
                     docId: doc.id,
@@ -418,7 +418,7 @@ const FileController = {
     },
     // 获取用户文档回收站
     docBin(userDir) {
-        const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+        const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
         return readJSON(userDocBinFile);
     },
     // 从回收站恢复文档
@@ -455,7 +455,7 @@ const FileController = {
         // 清除用户回收站的记录
         doc.admins.forEach((userId) => {
             const userDir = FileController.userDir(userId);
-            const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+            const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
             const docBin = readJSON(userDocBinFile);
             const docBinItem = docBin.find((item) => item.docId === docId);
             if (docBinItem) {
@@ -515,7 +515,7 @@ module.exports = {
         USER_WORKSPACES_FILE,
         USER_DOCS_FILE,
         USER_RECENT_DOCS_FILE,
-        USER_DOC_BIN,
+        USER_DOC_BIN_FILE,
         DEFAULT_WORKSPACE_NAME,
     },
 };
