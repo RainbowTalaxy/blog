@@ -63,12 +63,14 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
     }, [isEditing]);
 
     const auth = checkAuth(doc);
+    const isDeleted = Boolean(doc?.deletedAt);
+    const isSidebarVisible = Boolean(workspace) && !isDeleted;
 
     if (!doc)
         return (
             <div className={styles.docView}>
                 <header className={styles.docNavBar}>
-                    <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                    <ProjectTitle className={styles.docIcon} fold={isSidebarVisible} showInfo={false} />
                     {`>_<`}
                 </header>
                 <main className={styles.document}>
@@ -81,53 +83,58 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
         <div className={styles.docView}>
             {isEditing && <EditingModeGlobalStyle />}
             <header className={styles.docNavBar}>
-                {workspace ? (
+                {isSidebarVisible ? (
                     <>
                         <div className={styles.docNavTitle}>{doc.name}</div>
                         <ProjectTitle
                             className={styles.docIcon}
-                            fold={Boolean(workspace)}
+                            fold={isSidebarVisible}
                             showInfo={false}
                             navigatePreCheck={saveCheck}
                         />
                     </>
                 ) : (
-                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} navigatePreCheck={saveCheck} />
+                    <ProjectTitle fold={isSidebarVisible} showInfo={false} navigatePreCheck={saveCheck} />
                 )}
-                {auth.editable ? (
-                    <>
-                        {!isEditing && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
-                        <Button
-                            type="primary"
-                            onClick={async () => {
-                                if (isEditing) {
-                                    const text = textRef.current?.getText();
-                                    if (doc.content === '' && text === '') return setIsEditing(false);
-                                    try {
-                                        await API.luoye.updateDoc(doc.id, {
-                                            content: text,
-                                        });
-                                        await onSave();
-                                        setIsEditing(false);
-                                    } catch (error: any) {
-                                        return alert(`提交失败：${error.message}`);
+                {!isDeleted &&
+                    (auth.editable ? (
+                        <>
+                            {!isEditing && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
+                            <Button
+                                type="primary"
+                                onClick={async () => {
+                                    if (isEditing) {
+                                        const text = textRef.current?.getText();
+                                        if (doc.content === '' && text === '') return setIsEditing(false);
+                                        try {
+                                            await API.luoye.updateDoc(doc.id, {
+                                                content: text,
+                                            });
+                                            await onSave();
+                                            setIsEditing(false);
+                                        } catch (error: any) {
+                                            return alert(`提交失败：${error.message}`);
+                                        }
+                                    } else {
+                                        textRef.current?.setText(doc.content);
+                                        setIsEditing(true);
                                     }
-                                } else {
-                                    textRef.current?.setText(doc.content);
-                                    setIsEditing(true);
-                                }
-                            }}
-                        >
-                            {isEditing ? '保 存' : '编 辑'}
-                        </Button>
-                        {isEditing && <Button onClick={() => setIsEditing(false)}>取 消</Button>}
-                    </>
-                ) : (
-                    doc.creator.toUpperCase()
-                )}
+                                }}
+                            >
+                                {isEditing ? '保 存' : '编 辑'}
+                            </Button>
+                            {isEditing && <Button onClick={() => setIsEditing(false)}>取 消</Button>}
+                        </>
+                    ) : (
+                        doc.creator.toUpperCase()
+                    ))}
             </header>
             <main
-                className={clsx(styles.document, !workspace && styles.centeredDoc, !isEditing && styles.hiddenEditor)}
+                className={clsx(
+                    styles.document,
+                    !isSidebarVisible && styles.centeredDoc,
+                    !isEditing && styles.hiddenEditor,
+                )}
             >
                 {!isEditing && (
                     <>

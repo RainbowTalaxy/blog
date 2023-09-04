@@ -61,6 +61,14 @@ export interface Doc {
     content: string; // 文档内容
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
+    deletedAt: number | null; // 删除时间
+}
+
+export interface DocBinItem {
+    docId: string; // 文档 id
+    name: string; // 文档名称
+    executor: string; // 执行者
+    deletedAt: number; // 删除时间
 }
 
 const LuoyeAPI = {
@@ -112,6 +120,7 @@ const LuoyeAPI = {
     ) => rocketV2.put<Doc>(`${SERVER_API}/luoye/doc/${id}`, props),
     deleteDoc: (id: string) =>
         rocketV2.delete<Doc>(`${SERVER_API}/luoye/doc/${id}`),
+    docBin: () => rocketV2.get<DocBinItem[]>(`${SERVER_API}/luoye/doc-bin`),
 };
 
 export default LuoyeAPI;

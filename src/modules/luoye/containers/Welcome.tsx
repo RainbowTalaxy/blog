@@ -73,7 +73,7 @@ const Welcome = ({ data, refetch }: Props) => {
                             <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
                             {doc.scope === Scope.Private && <SVG.Lock />}
                             <Spacer />
-                            <div className={styles.docCreator}>{doc.creator}</div>
+                            <div className={styles.docUser}>{doc.creator}</div>
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
                         </div>
                     ))}

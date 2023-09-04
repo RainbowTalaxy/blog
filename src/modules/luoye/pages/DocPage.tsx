@@ -64,6 +64,8 @@ const DocPage = () => {
     if (doc && workspace === undefined) return null;
 
     const spaceAuth = checkAuth(workspace);
+    const isDeleted = Boolean(doc?.deletedAt);
+    const isSidebarVisible = Boolean(workspace) && !isDeleted;
 
     return (
         <div className={clsx(styles.container)}>
@@ -76,7 +78,7 @@ const DocPage = () => {
             <GlobalStyle />
             <ContentWithSideBar
                 navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold navigatePreCheck={saveCheck} />}
-                sidebarVisible={Boolean(workspace)}
+                sidebarVisible={isSidebarVisible}
                 sidebar={
                     workspace && (
                         <>

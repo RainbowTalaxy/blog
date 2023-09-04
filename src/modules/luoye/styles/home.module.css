@@ -177,7 +177,7 @@
     color: var(--ly-primary);
 }
 
-.docCreator {
+.docUser {
     min-width: 10vw;
 }
 
@@ -185,7 +185,7 @@
     min-width: 10vw;
 }
 
-.docCreator,
+.docUser,
 .docDate {
     flex-shrink: 0;
     padding: 0 12px;
@@ -222,7 +222,7 @@
 .workspaceItem .description,
 .workspaceName > div,
 .docName,
-.docCreator {
+.docUser {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -256,7 +256,7 @@
         width: calc((100% - var(--item-gap)) / 2);
     }
 
-    .docCreator {
+    .docUser {
         display: none;
     }
 }
