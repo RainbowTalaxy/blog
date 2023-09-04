@@ -33,6 +33,10 @@ async function test() {
         await talaxy.delete(`/workspace/${workspaceId}`);
     });
 
+    const testWorkspace = await talaxy.post('/workspace', {
+        name: 'test workspace',
+    });
+
     // 删除工作区
     await testCase.pos('delete workspace', async () => {
         const { id: workspaceId } = await talaxy.post('/workspace', {
@@ -46,10 +50,31 @@ async function test() {
         const workspaces = await talaxy.get('/workspaces');
         if (workspaces.find((w) => w.id === workspaceId))
             throw new Error('workspace not deleted');
-        try {
-            await talaxy.get(`/doc/${docId}`);
-            throw new Error('doc not deleted');
-        } catch {}
+        // 检查文档是否还在
+        const deletedDoc = await talaxy.silentGet(`/doc/${docId}`);
+        if (deletedDoc) throw new Error('doc not deleted');
+    });
+
+    // 删除文档
+    await testCase.pos('delete doc', async () => {
+        const { id: docId } = await talaxy.post(`/doc`, {
+            workspaceId: testWorkspace.id,
+            name: 'test doc',
+        });
+        await talaxy.delete(`/doc/${docId}`);
+        const bin = await talaxy.get('/doc-bin');
+        // 检查回收站
+        if (!bin.find((d) => d.docId === docId))
+            throw new Error('doc not in bin');
+        // 检查工作区是否还有文档
+        const updatedWorkspace = await talaxy.get(
+            `/workspace/${testWorkspace.id}`,
+        );
+        if (updatedWorkspace.docs.find((d) => d.docId === docId))
+            throw new Error('doc not removed from workspace');
+        // 检查文档的删除标记
+        const deletedDoc = await talaxy.silentGet(`/doc/${docId}`);
+        if (!deletedDoc.deletedAt) throw new Error('doc not marked as deleted');
     });
 }
 

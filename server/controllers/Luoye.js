@@ -5,10 +5,11 @@ const { writeJSON, uuid, readJSON } = require('../utils');
 const path = require('path');
 const _ = require('lodash');
 
-const USER_WORKSPACES_FILE = 'workspaces.json';
-const USER_DOCS_FILE = 'docs.json';
-const USER_RECENT_DOCS_FILE = 'recent-docs.json';
-const DEFAULT_WORKSPACE_NAME = 'default';
+const USER_WORKSPACES_FILE = 'workspaces.json'; // 用户工作区列表
+const USER_DOCS_FILE = 'docs.json'; // 用户文档列表
+const USER_RECENT_DOCS_FILE = 'recent-docs.json'; // 用户最近编辑的文档
+const USER_DOC_BIN = 'doc-bin.json'; // 用户文档回收站
+const DEFAULT_WORKSPACE_NAME = 'default'; // 默认工作区名称
 
 class Scope {
     static Private = 'private';
@@ -41,6 +42,7 @@ const FileController = {
                 userDir,
                 USER_RECENT_DOCS_FILE,
             );
+            const userDocBinFile = path.join(userDir, USER_DOC_BIN);
             const now = Date.now();
             // 初始化用户的默认工作区
             const defaultWorkspace = {
@@ -71,6 +73,7 @@ const FileController = {
             ]);
             writeJSON(userDocFile, []);
             writeJSON(userRecentDocsFile, []);
+            writeJSON(userDocBinFile, []);
         }
         return userDir;
     },
@@ -172,7 +175,7 @@ const FileController = {
         return updatedWorkspace;
     },
     // 删除工作区
-    deleteWorkspace(workspaceId) {
+    deleteWorkspace(workspaceId, executor) {
         if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceFile = path.join(File.workspaces, `${workspaceId}.json`);
         const workspace = readJSON(workspaceFile);
@@ -193,7 +196,9 @@ const FileController = {
             }
         });
         // 删除工作区的文档信息
-        workspace.docs.forEach((doc) => this.deleteDoc(doc.docId));
+        workspace.docs.forEach((doc) =>
+            FileController.deleteDoc(doc.docId, executor, true),
+        );
         // 删除工作区
         fs.unlinkSync(workspaceFile);
     },
@@ -231,6 +236,7 @@ const FileController = {
             content: '',
             createdAt: now,
             updatedAt: now,
+            deletedAt: null,
         };
         const docFile = path.join(File.docs, `${newDoc.id}.json`);
         writeJSON(docFile, newDoc);
@@ -264,10 +270,9 @@ const FileController = {
         writeJSON(workspaceDir, workspace);
         return newDoc;
     },
-    updateDoc(docId, props) {
-        if (!docId) throw new Error('docId is required');
-        const docDir = path.join(File.docs, `${docId}.json`);
-        const doc = readJSON(docDir);
+    updateDoc(doc, props) {
+        if (!doc) throw new Error('doc is required');
+        if (doc.deletedAt) return;
         const now = Date.now();
         const updatedDoc = {
             ...doc,
@@ -277,6 +282,7 @@ const FileController = {
             date: props.date ?? doc.date,
             updatedAt: now,
         };
+        const docDir = path.join(File.docs, `${updatedDoc.id}.json`);
         writeJSON(docDir, updatedDoc);
         const updatedDocItem = {
             id: updatedDoc.id,
@@ -293,7 +299,7 @@ const FileController = {
             // 更新用户的文档列表信息
             const userDocFile = path.join(memberDir, USER_DOCS_FILE);
             const userDocs = readJSON(userDocFile);
-            const userDoc = userDocs.find((d) => d.id === docId);
+            const userDoc = userDocs.find((d) => d.id === doc.id);
             if (userDoc) {
                 userDoc.name = updatedDoc.name;
                 userDoc.scope = updatedDoc.scope;
@@ -311,7 +317,7 @@ const FileController = {
                 USER_RECENT_DOCS_FILE,
             );
             const userRecentDocs = readJSON(userRecentDocsFile);
-            const userRecentDoc = userRecentDocs.find((d) => d.id === docId);
+            const userRecentDoc = userRecentDocs.find((d) => d.id === doc.id);
             if (userRecentDoc) {
                 userRecentDoc.name = updatedDoc.name;
                 userRecentDoc.scope = updatedDoc.scope;
@@ -331,7 +337,7 @@ const FileController = {
                 `${workspaceId}.json`,
             );
             const workspace = readJSON(workspaceDir);
-            const workspaceDoc = workspace.docs.find((d) => d.docId === docId);
+            const workspaceDoc = workspace.docs.find((d) => d.docId === doc.id);
             if (workspaceDoc) {
                 workspaceDoc.name = updatedDoc.name;
                 workspaceDoc.scope = updatedDoc.scope;
@@ -348,19 +354,18 @@ const FileController = {
         });
         return updatedDoc;
     },
-    deleteDoc(docId) {
+    deleteDoc(docId, executor, isPermanent = false) {
         if (!docId) throw new Error('docId is required');
-        const docDir = path.join(File.docs, `${docId}.json`);
-        const doc = readJSON(docDir);
-        // 删除文档
-        fs.unlinkSync(docDir);
+        const docFile = path.join(File.docs, `${docId}.json`);
+        const doc = readJSON(docFile);
+        if (doc.deletedAt) return;
         // 更新用户的文档信息
         doc.members.forEach((member) => {
             const memberDir = FileController.userDir(member);
             // 更新用户的文档列表
             const userDocFile = path.join(memberDir, USER_DOCS_FILE);
             const userDocs = readJSON(userDocFile);
-            const userDoc = userDocs.find((d) => d.id === docId);
+            const userDoc = userDocs.find((d) => d.id === doc.id);
             if (userDoc) {
                 userDocs.splice(userDocs.indexOf(userDoc), 1);
                 writeJSON(userDocFile, userDocs);
@@ -371,7 +376,7 @@ const FileController = {
                 USER_RECENT_DOCS_FILE,
             );
             const userRecentDocs = readJSON(userRecentDocsFile);
-            const userRecentDoc = userRecentDocs.find((d) => d.id === docId);
+            const userRecentDoc = userRecentDocs.find((d) => d.id === doc.id);
             if (userRecentDoc) {
                 userRecentDocs.splice(userRecentDocs.indexOf(userRecentDoc), 1);
                 writeJSON(userRecentDocsFile, userRecentDocs);
@@ -384,12 +389,83 @@ const FileController = {
                 `${workspaceId}.json`,
             );
             const workspace = readJSON(workspaceDir);
-            const workspaceDoc = workspace.docs.find((d) => d.docId === docId);
+            const workspaceDoc = workspace.docs.find((d) => d.docId === doc.id);
             if (workspaceDoc) {
                 workspace.docs.splice(workspace.docs.indexOf(workspaceDoc), 1);
                 writeJSON(workspaceDir, workspace);
             }
         });
+        if (isPermanent) {
+            fs.unlinkSync(docFile);
+        } else {
+            const now = Date.now();
+            // 进入回收站
+            doc.admins.forEach((userId) => {
+                doc.deletedAt = now;
+                writeJSON(docFile, doc);
+                const userDir = FileController.userDir(userId);
+                const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+                const docBin = readJSON(userDocBinFile);
+                docBin.unshift({
+                    docId: doc.id,
+                    name: doc.name,
+                    executor,
+                    deletedAt: now,
+                });
+                writeJSON(userDocBinFile, docBin);
+            });
+        }
+    },
+    // 获取用户文档回收站
+    docBin(userDir) {
+        const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+        return readJSON(userDocBinFile);
+    },
+    // 从回收站恢复文档
+    restoreDoc(doc) {
+        if (!doc.deletedAt) return;
+        const docFile = path.join(File.docs, `${doc.id}.json`);
+        // 添加回工作区中
+        doc.workspaces.forEach((workspaceId) => {
+            const workspace = FileController.workspace(workspaceId);
+            workspace.docs.unshift({
+                docId: doc.id,
+                name: doc.name,
+                scope: doc.scope,
+                updatedAt: doc.updatedAt,
+            });
+            FileController.updateWorkspace(workspaceId, workspace);
+        });
+        // 添加回用户的文档列表
+        doc.members.forEach((member) => {
+            const memberDir = FileController.userDir(member);
+            const userDocFile = path.join(memberDir, USER_DOCS_FILE);
+            const userDocs = readJSON(userDocFile);
+            userDocs.unshift({
+                id: doc.id,
+                name: doc.name,
+                creator: doc.creator,
+                scope: doc.scope,
+                docType: doc.docType,
+                updatedAt: doc.updatedAt,
+                createdAt: doc.createdAt,
+            });
+            writeJSON(userDocFile, userDocs);
+        });
+        // 清除用户回收站的记录
+        doc.admins.forEach((userId) => {
+            const userDir = FileController.userDir(userId);
+            const userDocBinFile = path.join(userDir, USER_DOC_BIN);
+            const docBin = readJSON(userDocBinFile);
+            const docBinItem = docBin.find((item) => item.docId === docId);
+            if (docBinItem) {
+                docBin.splice(docBin.indexOf(docBinItem), 1);
+                writeJSON(userDocBinFile, docBin);
+            }
+        });
+        // 清除文档的删除时间
+        doc.deletedAt = null;
+        writeJSON(docFile, doc);
     },
 };
 
@@ -439,6 +515,7 @@ module.exports = {
         USER_WORKSPACES_FILE,
         USER_DOCS_FILE,
         USER_RECENT_DOCS_FILE,
+        USER_DOC_BIN,
         DEFAULT_WORKSPACE_NAME,
     },
 };

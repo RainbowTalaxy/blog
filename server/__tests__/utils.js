@@ -18,6 +18,17 @@ class Rocket {
         return data;
     }
 
+    async silentGet(url, params) {
+        const { data } = await axios.get(this.baseUrl + url, {
+            params,
+            headers: {
+                Authorization: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        return data.error ? null : data;
+    }
+
     async post(url, body) {
         const { data } = await axios.post(this.baseUrl + url, body, {
             headers: {

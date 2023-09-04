@@ -182,7 +182,7 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(403).send({
                 error: 'Forbidden',
             });
-        LuoyeCtr.deleteWorkspace(workspaceId);
+        LuoyeCtr.deleteWorkspace(workspaceId, userId);
         return res.send({
             success: true,
         });
@@ -331,7 +331,7 @@ router.put('/doc/:docId', login, async (req, res) => {
             scope,
             date,
         };
-        const updatedDoc = LuoyeCtr.updateDoc(docId, safeProps);
+        const updatedDoc = LuoyeCtr.updateDoc(doc, safeProps);
         return res.send(updatedDoc);
     } catch (error) {
         console.log(error);
@@ -360,7 +360,7 @@ router.delete('/doc/:docId', login, async (req, res) => {
             return res.status(403).send({
                 error: 'Forbidden',
             });
-        LuoyeCtr.deleteDoc(docId);
+        LuoyeCtr.deleteDoc(doc.id, userId);
         return res.send({
             success: true,
         });
@@ -368,6 +368,21 @@ router.delete('/doc/:docId', login, async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to delete doc',
+        });
+    }
+});
+
+// 获取文档回收站
+router.get('/doc-bin', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.docBin(userDir);
+        return res.send(docs);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get doc bin',
         });
     }
 });

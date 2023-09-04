@@ -22,7 +22,7 @@
         -   `workspaces.json` 工作区列表 `WorkspaceItem[]`
         -   `docs.json` 文档列表 `DocItem[]`
         -   `recent-docs.json` 最近文档列表 `DocItem[]`
-        -   `bin` 回收站
+        -   `doc-bin` 文档回收站
 
 ### 权限管理
 
@@ -82,6 +82,7 @@ interface Doc {
     content: string; // 文档内容
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
+    deletedAt: number | null; // 删除时间
 }
 ```
 
@@ -107,6 +108,17 @@ interface DocDir {
     name: string; // 文档名称
     scope: 'private' | 'public'; // 可见范围
     updatedAt: number; // 更新时间
+}
+```
+
+### DocBinItem
+
+```ts
+interface DocBinItem {
+    docId: string; // 文档 id
+    name: string; // 文档名称
+    executor: string; // 执行者
+    deletedAt: number; // 删除时间
 }
 ```
 
@@ -284,4 +296,14 @@ type Response = Doc;
 interface Response = {
     success: boolean;
 };
+```
+
+### `GET` 获取文档回收站
+
+`/doc-bin`
+
+**响应**
+
+```ts
+type Response = DocBinItem[];
 ```
