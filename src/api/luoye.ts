@@ -71,6 +71,10 @@ export interface DocBinItem {
     deletedAt: number; // 删除时间
 }
 
+interface Result {
+    success: boolean;
+}
+
 const LuoyeAPI = {
     workspaceItems: () =>
         rocketV2.get<WorkspaceItem[]>(`${SERVER_API}/luoye/workspaces`),
@@ -119,8 +123,10 @@ const LuoyeAPI = {
         },
     ) => rocketV2.put<Doc>(`${SERVER_API}/luoye/doc/${id}`, props),
     deleteDoc: (id: string) =>
-        rocketV2.delete<Doc>(`${SERVER_API}/luoye/doc/${id}`),
+        rocketV2.delete<Result>(`${SERVER_API}/luoye/doc/${id}`),
     docBin: () => rocketV2.get<DocBinItem[]>(`${SERVER_API}/luoye/doc-bin`),
+    restoreDoc: (id: string) =>
+        rocketV2.put<Result>(`${SERVER_API}/luoye/doc-bin/${id}/restore`),
 };
 
 export default LuoyeAPI;

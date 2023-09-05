@@ -128,6 +128,23 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                     ) : (
                         doc.creator.toUpperCase()
                     ))}
+                {isDeleted && (
+                    <Button
+                        type="primary"
+                        onClick={async () => {
+                            try {
+                                if (!confirm('确定要恢复该文档吗？')) return;
+                                await API.luoye.restoreDoc(doc.id);
+                                await onSave();
+                                Toast.notify('恢复成功');
+                            } catch {
+                                Toast.notify('恢复失败');
+                            }
+                        }}
+                    >
+                        恢 复
+                    </Button>
+                )}
             </header>
             <main
                 className={clsx(
@@ -172,7 +189,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                                 content: text,
                             });
                             Toast.notify('保存成功');
-                            onSave();
+                            await onSave();
                         } catch {
                             Toast.notify('保存失败');
                         }
