@@ -1,4 +1,4 @@
-const { TestCase, Rocket } = require('./utils');
+const { Rocket, TestCase } = require('../utils/test');
 const { uuid } = require('../utils');
 const { Server } = require('../config');
 

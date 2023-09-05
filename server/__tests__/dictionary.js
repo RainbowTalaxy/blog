@@ -1,5 +1,5 @@
 const { Server } = require('../config');
-const { TestCase, Rocket } = require('./utils');
+const { Rocket, TestCase } = require('../utils/test');
 
 async function test() {
     const testCase = new TestCase('Dictionary');

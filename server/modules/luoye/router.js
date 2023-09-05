@@ -1,7 +1,8 @@
 const express = require('express');
-const { login, weakLogin } = require('../middlewares');
-const { LuoyeCtr, Scope, Access, LuoyeUtl } = require('../controllers/Luoye');
-const { PropCheck } = require('../utils');
+const { login, weakLogin } = require('../../middlewares');
+const { Scope, Access } = require('./constants');
+const { PropCheck } = require('../../utils');
+const { LuoyeCtr, LuoyeUtl } = require('./controller');
 const router = express.Router();
 
 // 获取工作区列表

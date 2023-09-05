@@ -1,31 +1,16 @@
 const { mkdirp } = require('mkdirp');
-const { Dir } = require('../config');
+const { Dir } = require('../../config');
 const fs = require('fs');
-const { writeJSON, uuid, readJSON } = require('../utils');
+const { writeJSON, uuid, readJSON } = require('../../utils');
 const path = require('path');
 const _ = require('lodash');
+const { Scope, DocType, Access } = require('./constants');
 
 const USER_WORKSPACES_FILE = 'workspaces.json'; // 用户工作区列表
 const USER_DOCS_FILE = 'docs.json'; // 用户文档列表
 const USER_RECENT_DOCS_FILE = 'recent-docs.json'; // 用户最近编辑的文档
 const USER_DOC_BIN_FILE = 'doc-bin.json'; // 用户文档回收站
 const DEFAULT_WORKSPACE_NAME = 'default'; // 默认工作区名称
-
-class Scope {
-    static Private = 'private';
-    static Public = 'public';
-}
-
-class DocType {
-    static Markdown = 'markdown';
-}
-
-class Access {
-    static Forbidden = 0;
-    static Visitor = 10;
-    static Member = 50;
-    static Admin = 100;
-}
 
 const File = Dir.storage.luoye;
 
@@ -509,8 +494,6 @@ const Utility = {
 module.exports = {
     LuoyeCtr: FileController,
     LuoyeUtl: Utility,
-    Scope,
-    Access,
     LuoyeFile: {
         USER_WORKSPACES_FILE,
         USER_DOCS_FILE,
