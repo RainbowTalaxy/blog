@@ -1,6 +1,6 @@
 const { Rocket, TestCase } = require('../utils/test');
 const user = require('./user');
-const luoye = require('../modules/luoye/test');
+const luoye = require('../modules/luoye/tests');
 const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
