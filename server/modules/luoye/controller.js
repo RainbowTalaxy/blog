@@ -15,7 +15,7 @@ const DEFAULT_WORKSPACE_NAME = 'default'; // 默认工作区名称
 const File = Dir.storage.luoye;
 
 const FileController = {
-    // 获取用户目录
+    /** 获取用户目录 */
     userDir(userId) {
         if (!userId) throw new Error('userId is required');
         const userDir = path.join(File.users, userId);
@@ -62,7 +62,7 @@ const FileController = {
         }
         return userDir;
     },
-    // 获取用户工作区列表
+    /** 获取用户工作区列表 */
     userWorkspaceItems(userDir) {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         return readJSON(userWorkspacesPath);
@@ -72,13 +72,13 @@ const FileController = {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         writeJSON(userWorkspacesPath, workspaces);
     },
-    // 获取工作区信息
+    /** 获取工作区信息 */
     workspace(workspaceId) {
         if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceDir = path.join(File.workspaces, `${workspaceId}.json`);
         return readJSON(workspaceDir);
     },
-    // 创建工作区
+    /** 创建工作区 */
     createWorkspace(userDir, props, creator) {
         if (!userDir || !creator)
             throw new Error('userDir/creator is required');
@@ -112,7 +112,7 @@ const FileController = {
         writeJSON(userWorkspacesPath, userWorkspaces);
         return newWorkspace;
     },
-    // 更新工作区
+    /** 更新工作区 */
     updateWorkspace(workspaceId, props) {
         if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceFile = path.join(File.workspaces, `${workspaceId}.json`);
@@ -159,7 +159,7 @@ const FileController = {
         }
         return updatedWorkspace;
     },
-    // 删除工作区
+    /** 删除工作区 */
     deleteWorkspace(workspaceId, executor) {
         if (!workspaceId) throw new Error('workspaceId is required');
         const workspaceFile = path.join(File.workspaces, `${workspaceId}.json`);
@@ -187,23 +187,23 @@ const FileController = {
         // 删除工作区
         fs.unlinkSync(workspaceFile);
     },
-    // 获取用户最近编辑的文档
+    /** 获取用户最近编辑的文档 */
     recentDocs(userDir) {
         const userRecentDocsFile = path.join(userDir, USER_RECENT_DOCS_FILE);
         return readJSON(userRecentDocsFile);
     },
-    // 获取用户文档列表
+    /** 获取用户文档列表 */
     docs(userDir) {
         const userDocFile = path.join(userDir, USER_DOCS_FILE);
         return readJSON(userDocFile);
     },
-    // 获取文档信息
+    /** 获取文档信息 */
     doc(docId) {
         if (!docId) throw new Error('docId is required');
         const docDir = path.join(File.docs, `${docId}.json`);
         return readJSON(docDir);
     },
-    // 创建文档
+    /** 创建文档 */
     createDoc(userDir, workspace, props, creator) {
         if (!userDir || !workspace || !creator)
             throw new Error('userDir/workspace/creator is required');
@@ -255,6 +255,7 @@ const FileController = {
         writeJSON(workspaceDir, workspace);
         return newDoc;
     },
+    /** 更新文档 */
     updateDoc(doc, props) {
         if (!doc) throw new Error('doc is required');
         if (doc.deletedAt) return;
@@ -339,6 +340,7 @@ const FileController = {
         });
         return updatedDoc;
     },
+    /** 删除文档 */
     deleteDoc(docId, executor, isPermanent = false) {
         if (!docId) throw new Error('docId is required');
         const docFile = path.join(File.docs, `${docId}.json`);
@@ -401,12 +403,12 @@ const FileController = {
             });
         }
     },
-    // 获取用户文档回收站
+    /** 获取用户文档回收站 */
     docBin(userDir) {
         const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
         return readJSON(userDocBinFile);
     },
-    // 从回收站恢复文档
+    /** 从回收站恢复文档 */
     restoreDoc(doc) {
         if (!doc.deletedAt) return;
         const docFile = path.join(File.docs, `${doc.id}.json`);
@@ -455,6 +457,7 @@ const FileController = {
 };
 
 const Utility = {
+    /** 获取权限 */
     access(entity, visitor) {
         if (!entity) throw new Error('entity is required');
         if (entity.admins.includes(visitor)) return Access.Admin;
@@ -462,14 +465,17 @@ const Utility = {
         if (entity.scope === Scope.Public) return Access.Visitor;
         return Access.Forbidden;
     },
+    /** Scope 枚举检查 */
     scopeCheck(value) {
         return Object.values(Scope).includes(value);
     },
+    /** 过滤私人文档 */
     filterPrivate(workspace) {
         workspace.docs = workspace.docs.filter((doc) => {
             return doc.scope !== Scope.Private;
         });
     },
+    /** 工作区文档目录检查 */
     docDirCheck(dir, workspace) {
         if (!Array.isArray(dir)) return false;
         if (dir.length !== workspace.docs.length) return false;
@@ -481,6 +487,7 @@ const Utility = {
         }
         return true;
     },
+    /** 映射用户工作区项目 */
     workspaceItems(workspaceItems, newWorkspaceIds) {
         if (!Array.isArray(workspaceItems)) return false;
         // 检查 id 是否完全匹配且完全命中
