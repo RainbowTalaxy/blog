@@ -8,6 +8,10 @@ const GlobalStyle = createGlobalStyle`
     #__docusaurus {
         height: 100%;
     }
+
+    *::selection {
+        background-color: #ffedcc;
+    }
 `;
 
 export default GlobalStyle;
