@@ -67,6 +67,7 @@ const FileController = {
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
         return readJSON(userWorkspacesPath);
     },
+    /** 更新用户工作区列表 */
     updateUserWorkspaceItems(userDir, workspaces) {
         if (!userDir) throw new Error('userDir is required');
         const userWorkspacesPath = path.join(userDir, USER_WORKSPACES_FILE);
