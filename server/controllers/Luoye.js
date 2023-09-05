@@ -457,7 +457,7 @@ const FileController = {
             const userDir = FileController.userDir(userId);
             const userDocBinFile = path.join(userDir, USER_DOC_BIN_FILE);
             const docBin = readJSON(userDocBinFile);
-            const docBinItem = docBin.find((item) => item.docId === docId);
+            const docBinItem = docBin.find((item) => item.docId === doc.id);
             if (docBinItem) {
                 docBin.splice(docBin.indexOf(docBinItem), 1);
                 writeJSON(userDocBinFile, docBin);

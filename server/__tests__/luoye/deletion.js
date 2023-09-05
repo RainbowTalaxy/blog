@@ -1,13 +1,11 @@
-const { Server } = require('../config');
-const { Rocket, TestCase } = require('./utils');
+const { Server } = require('../../config');
+const { Rocket, TestCase } = require('../utils');
 
 async function test() {
-    const testCase = new TestCase('Luoye 2');
+    const testCase = new TestCase('Luoye - Deletion');
 
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
-    const allay = new Rocket(Server + '/luoye');
-    await allay.login('allay', 'allay');
 
     // 基本功能覆盖
     await testCase.pos('general tests', async () => {
@@ -55,12 +53,14 @@ async function test() {
         if (deletedDoc) throw new Error('doc not deleted');
     });
 
-    // 删除文档
-    await testCase.pos('delete doc', async () => {
+    // 删除 & 恢复文档
+    await testCase.pos('delete and restore doc', async () => {
         const { id: docId } = await talaxy.post(`/doc`, {
             workspaceId: testWorkspace.id,
             name: 'test doc',
         });
+
+        // 删除文档
         await talaxy.delete(`/doc/${docId}`);
         const bin = await talaxy.get('/doc-bin');
         // 检查回收站
@@ -75,6 +75,22 @@ async function test() {
         // 检查文档的删除标记
         const deletedDoc = await talaxy.silentGet(`/doc/${docId}`);
         if (!deletedDoc.deletedAt) throw new Error('doc not marked as deleted');
+
+        // 恢复文档
+        await talaxy.put(`/doc-bin/${docId}/restore`);
+        // 检查回收站是否还有文档
+        const updatedBin = await talaxy.get('/doc-bin');
+        if (updatedBin.find((d) => d.docId === docId))
+            throw new Error('doc not removed from bin');
+        // 检查工作区是否有文档
+        const updatedWorkspace2 = await talaxy.get(
+            `/workspace/${testWorkspace.id}`,
+        );
+        if (!updatedWorkspace2.docs.find((d) => d.docId === docId))
+            throw new Error('doc not restored to workspace');
+        // 检查文档的删除标记
+        const restoredDoc = await talaxy.silentGet(`/doc/${docId}`);
+        if (restoredDoc.deletedAt) throw new Error('doc not restored');
     });
 }
 

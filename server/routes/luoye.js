@@ -377,12 +377,51 @@ router.get('/doc-bin', login, async (req, res) => {
     try {
         const userId = req.userId;
         const userDir = LuoyeCtr.userDir(userId);
-        const docs = LuoyeCtr.docBin(userDir);
-        return res.send(docs);
+        const docBin = LuoyeCtr.docBin(userDir);
+        return res.send(docBin);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to get doc bin',
+        });
+    }
+});
+
+// 从文档回收站恢复文档
+router.put('/doc-bin/:docId/restore', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        // 检查文档是否在回收站
+        const docBin = LuoyeCtr.docBin(userDir);
+        if (!docBin.find((item) => item.docId === docId)) {
+            return res.status(404).send({
+                error: 'doc not found in doc bin',
+            });
+        }
+        const doc = LuoyeCtr.doc(docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(doc, userId) < Access.Admin)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        LuoyeCtr.restoreDoc(doc);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to restore doc',
         });
     }
 });

@@ -307,3 +307,15 @@ interface Response = {
 ```ts
 type Response = DocBinItem[];
 ```
+
+### `PUT` 恢复文档
+
+`/doc-bin/:docId/restore`
+
+**响应**
+
+```ts
+interface Response = {
+    success: boolean;
+};
+```
