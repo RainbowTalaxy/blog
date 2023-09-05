@@ -210,6 +210,34 @@ router.get('/recent-docs', login, async (req, res) => {
     }
 });
 
+// 删除用户最近文档
+router.delete('/recent-docs/:docId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        const docs = LuoyeCtr.recentDocs(userDir);
+        const doc = docs.find((item) => item.docId === docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        LuoyeCtr.deleteRecentDoc(userDir, docId);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to delete recent doc',
+        });
+    }
+});
+
 // 获取用户文档列表
 router.get('/docs', login, async (req, res) => {
     try {

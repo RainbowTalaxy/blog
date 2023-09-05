@@ -193,6 +193,17 @@ const FileController = {
         const userRecentDocsFile = path.join(userDir, USER_RECENT_DOCS_FILE);
         return readJSON(userRecentDocsFile);
     },
+    /** 删除最近编辑的文档 */
+    deleteRecentDoc(userDir, docId) {
+        if (!userDir || !docId) throw new Error('userDir/docId is required');
+        const userRecentDocsFile = path.join(userDir, USER_RECENT_DOCS_FILE);
+        const userRecentDocs = readJSON(userRecentDocsFile);
+        const doc = userRecentDocs.find((doc) => doc.id === docId);
+        if (doc) {
+            userRecentDocs.splice(userRecentDocs.indexOf(doc), 1);
+            writeJSON(userRecentDocsFile, userRecentDocs);
+        }
+    },
     /** 获取用户文档列表 */
     docs(userDir) {
         const userDocFile = path.join(userDir, USER_DOCS_FILE);
