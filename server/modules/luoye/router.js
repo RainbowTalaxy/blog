@@ -220,9 +220,9 @@ router.delete('/recent-docs/:docId', login, async (req, res) => {
                 error: 'docId is required',
             });
         const userDir = LuoyeCtr.userDir(userId);
-        const docs = LuoyeCtr.recentDocs(userDir);
-        const doc = docs.find((item) => item.docId === docId);
-        if (!doc)
+        const recentDocs = LuoyeCtr.recentDocs(userDir);
+        const recentDoc = recentDocs.find((item) => item.id === docId);
+        if (!recentDoc)
             return res.status(404).send({
                 error: 'doc not found',
             });
