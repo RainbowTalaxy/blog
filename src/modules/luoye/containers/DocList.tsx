@@ -41,7 +41,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
         return () => {
             isMounted = false;
         };
-    }, [workspaceId, allWorkspaces]);
+    }, [workspaceId]);
 
     if (workspace === undefined) return null;
     if (workspace === null) return <p>工作区不存在</p>;
