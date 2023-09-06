@@ -7,6 +7,12 @@ export interface GalleryCard {
 
 export const GALLERY_CARDS: Array<GalleryCard> = [
     {
+        title: '上海 南浦大桥',
+        subtitle: '2023年8月27日',
+        bg: 'http://r.photo.store.qq.com/psc?/V12to3FW3pMGpO/bqQfVz5yrrGYSXMvKr.cqTRMIUpusCBhqx2YT1NoDmowz*FifYCRnOiJ5LxOd.Mz2hDWJGjkBnkZk7GaTRoxfIYdJP3AQU..1Aabd0L8tVo!/r',
+        link: '/gallery/2023/2023-08-27',
+    },
+    {
         title: '黄山风景区',
         subtitle: '2023年4月30日',
         bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E3FJqkF/bqQfVz5yrrGYSXMvKr.cqblqn0BV4Et*dfhnSAShkaeGJS7RDGIv9tMIIQjwqmftHMkMsvY8Zuc5dJbGMSBrADZ0UJVbCM.XMSg*vvo3hVM!/r',
