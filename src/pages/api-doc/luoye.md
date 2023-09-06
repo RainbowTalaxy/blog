@@ -225,6 +225,16 @@ interface Response = {
 type Response = DocItem[];
 ```
 
+### `DELETE` 删除最近文档
+
+`/recent-docs/:docId`
+
+```ts
+interface Response = {
+    success: boolean;
+};
+```
+
 ### `GET` 获取文档列表
 
 `/docs`

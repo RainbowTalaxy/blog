@@ -186,8 +186,14 @@
     min-width: 10vw;
 }
 
+.docAction {
+    font-size: 16px;
+    color: rgb(198, 81, 81);
+}
+
 .docUser,
-.docDate {
+.docDate,
+.docAction {
     flex-shrink: 0;
     padding: 0 12px;
     font-variant: tabular-nums;
@@ -299,6 +305,10 @@
 @media (pointer: fine) {
     .docItem:hover {
         background: var(--ly-background);
+    }
+
+    .docAction:hover {
+        color: red;
     }
 
     .action:hover,

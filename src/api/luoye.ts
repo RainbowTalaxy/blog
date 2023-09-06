@@ -100,6 +100,8 @@ const LuoyeAPI = {
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
     recentDocs: () =>
         rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/recent-docs`),
+    deleteRecentDoc: (id: string) =>
+        rocketV2.delete<Result>(`${SERVER_API}/luoye/recent-docs/${id}`),
     docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
     doc: (id: string) => rocketV2.get<Doc>(`${SERVER_API}/luoye/doc/${id}`),
     createDoc: (

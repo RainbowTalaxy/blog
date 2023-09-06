@@ -4,25 +4,32 @@ import styles from '../../styles/notification.module.css';
 
 const Toast = {
     name: 'toast',
-    preMessage: null as string | null,
-    recover: false,
+    preMessage: null as ReactNode | null,
 
     notify(message: ReactNode, duration: number | false = 2000) {
         Notification.notify(
             typeof message === 'string' ? <div className={styles.toastText}>{message}</div> : message,
             duration,
             {
-                name: this.name,
+                name: Toast.name,
+            },
+        );
+        if (duration === false) {
+            Toast.preMessage = message;
+        }
+    },
+
+    cover(message: ReactNode, duration: number = 2000) {
+        Notification.notify(
+            typeof message === 'string' ? <div className={styles.toastText}>{message}</div> : message,
+            duration,
+            {
+                name: Toast.name,
                 onEnd: () => {
-                    if (this.recover) this.notify(this.preMessage, false);
+                    Toast.notify(this.preMessage, false);
                 },
             },
         );
-        if (this.preMessage !== null) this.recover = true;
-        if (typeof message === 'string' && duration === false) {
-            this.preMessage = message;
-            this.recover = false;
-        }
     },
 
     close() {

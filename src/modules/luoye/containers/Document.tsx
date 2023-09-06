@@ -188,10 +188,10 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                             await API.luoye.updateDoc(doc.id, {
                                 content: text,
                             });
-                            Toast.notify('保存成功');
+                            Toast.cover('保存成功');
                             await onSave();
                         } catch {
-                            Toast.notify('保存失败');
+                            Toast.cover('保存失败');
                         }
                     }}
                 />
