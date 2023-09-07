@@ -8,6 +8,8 @@ import clsx from 'clsx';
 import loader from '@monaco-editor/loader';
 import * as monaco from 'monaco-editor';
 import { MONACO_TOKEN_CONFIG, MONACO_COLOR_CONFIG } from '../../constants/monaco';
+import Toast from '../Notification/Toast';
+import { countText } from '../../constants/editor';
 
 const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     // 控制是否展示行号
@@ -98,6 +100,9 @@ const MarkdownEditor = forwardRef(
 
         useEffect(() => {
             if (visible && !editorRef.current?.getValue()) editorRef.current?.focus();
+            return () => {
+                if (visible) Toast.close();
+            };
         }, [visible, keyId]);
 
         useLayoutEffect(() => {
@@ -124,6 +129,9 @@ const MarkdownEditor = forwardRef(
                     editorRef.current = editor;
                     new PlaceholderContentWidget('点击此处输入正文', editor);
                     editorMounted.current = true;
+                }}
+                onChange={(value) => {
+                    if (value) Toast.notify('字数：' + countText(value), false);
                 }}
             />
         );

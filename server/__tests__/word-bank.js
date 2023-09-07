@@ -1,6 +1,6 @@
 const { Dir, Server } = require('../config');
 const { readJSON } = require('../utils');
-const { Rocket, TestCase } = require('./utils');
+const { Rocket, TestCase } = require('../utils/test');
 
 const BOOKS_DIR = Dir.storage.books;
 

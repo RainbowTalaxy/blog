@@ -14,11 +14,17 @@ import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import DocBin from '../containers/DocBin';
+
+enum Item {
+    DocBin = 'doc-bin',
+}
 
 const HomePage = () => {
     const history = useHistory();
     const query = useQuery();
     const workspaceId = query.get('workspace');
+    const item = query.get('item');
     const [data, setData] = useState<{
         defaultWorkspace: WorkspaceItem;
         workspaces: WorkspaceItem[];
@@ -59,7 +65,11 @@ const HomePage = () => {
                         {allWorkspaces && (
                             <>
                                 <SideBarList>
-                                    <SideBarListItem active={!workspaceId} icon="🍄" onClick={() => history.push('?')}>
+                                    <SideBarListItem
+                                        active={!workspaceId && !item}
+                                        icon="🍄"
+                                        onClick={() => history.push('?')}
+                                    >
                                         开始
                                     </SideBarListItem>
                                     <SideBarListItem
@@ -69,6 +79,13 @@ const HomePage = () => {
                                     >
                                         <span>{data.defaultWorkspace.name || <Placeholder>未命名</Placeholder>}</span>
                                         {data.defaultWorkspace.scope === Scope.Private && <SVG.Lock />}
+                                    </SideBarListItem>
+                                    <SideBarListItem
+                                        active={item === Item.DocBin}
+                                        icon="♻️"
+                                        onClick={() => history.push(`?item=${Item.DocBin}`)}
+                                    >
+                                        文档回收站
                                     </SideBarListItem>
                                 </SideBarList>
                                 <h2>工作区</h2>
@@ -143,10 +160,11 @@ const HomePage = () => {
                 navbar={<ProjectTitle fold />}
             >
                 <div className={styles.pageView}>
-                    {data && !workspaceId && <Welcome data={data} refetch={refetch} />}
+                    {data && !workspaceId && !item && <Welcome data={data} refetch={refetch} />}
                     {data && workspaceId && allWorkspaces && (
                         <DocList workspaceId={workspaceId} allWorkspaces={allWorkspaces} refetch={refetch} />
                     )}
+                    {data && item === Item.DocBin && <DocBin />}
                 </div>
             </ContentWithSideBar>
         </div>

@@ -12,7 +12,6 @@ import useUserEntry from '@site/src/hooks/useUserEntry';
 import ActionItem from './components/ActionItem';
 import useUser from '@site/src/hooks/useUser';
 import Path from '@site/src/utils/Path';
-import { LEAVE_EDITING_TEXT } from '../luoye/constants';
 
 const WordBank = () => {
     const titleRef = useRef<HTMLSpanElement>(null);
@@ -52,7 +51,7 @@ const WordBank = () => {
 
     const handleSwitchBook = (bookId: string) => {
         if (isEditing) {
-            const granted = confirm(LEAVE_EDITING_TEXT);
+            const granted = confirm('是否放弃当前编辑的内容？');
             if (!granted) return;
         }
         history.replace('?id=' + bookId);

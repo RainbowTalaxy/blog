@@ -1,7 +1,8 @@
 const express = require('express');
-const { login, weakLogin } = require('../middlewares');
-const { LuoyeCtr, Scope, Access, LuoyeUtl } = require('../controllers/Luoye');
-const { PropCheck } = require('../utils');
+const { login, weakLogin } = require('../../middlewares');
+const { Scope, Access } = require('./constants');
+const { PropCheck } = require('../../utils');
+const { LuoyeCtr, LuoyeUtl } = require('./controller');
 const router = express.Router();
 
 // 获取工作区列表
@@ -163,6 +164,37 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
+// 删除工作区
+router.delete('/workspace/:workspaceId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { workspaceId } = req.params;
+        if (!workspaceId)
+            return res.status(400).send({
+                error: 'workspaceId is required',
+            });
+        const workspace = LuoyeCtr.workspace(workspaceId);
+        if (!workspace)
+            return res.status(404).send({
+                error: 'workspace not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        LuoyeCtr.deleteWorkspace(workspaceId, userId);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to delete workspace',
+        });
+    }
+});
+
 // 获取用户最近文档列表
 router.get('/recent-docs', login, async (req, res) => {
     try {
@@ -174,6 +206,34 @@ router.get('/recent-docs', login, async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to get recent docs',
+        });
+    }
+});
+
+// 删除用户最近文档
+router.delete('/recent-docs/:docId', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        const recentDocs = LuoyeCtr.recentDocs(userDir);
+        const recentDoc = recentDocs.find((item) => item.id === docId);
+        if (!recentDoc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        LuoyeCtr.deleteRecentDoc(userDir, docId);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to delete recent doc',
         });
     }
 });
@@ -300,7 +360,7 @@ router.put('/doc/:docId', login, async (req, res) => {
             scope,
             date,
         };
-        const updatedDoc = LuoyeCtr.updateDoc(docId, safeProps);
+        const updatedDoc = LuoyeCtr.updateDoc(doc, safeProps);
         return res.send(updatedDoc);
     } catch (error) {
         console.log(error);
@@ -325,11 +385,11 @@ router.delete('/doc/:docId', login, async (req, res) => {
                 error: 'doc not found',
             });
         // 权限校验
-        if (LuoyeUtl.access(doc, userId) < Access.Member)
+        if (LuoyeUtl.access(doc, userId) < Access.Admin)
             return res.status(403).send({
                 error: 'Forbidden',
             });
-        LuoyeCtr.deleteDoc(docId);
+        LuoyeCtr.deleteDoc(doc.id, userId);
         return res.send({
             success: true,
         });
@@ -337,6 +397,60 @@ router.delete('/doc/:docId', login, async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to delete doc',
+        });
+    }
+});
+
+// 获取文档回收站
+router.get('/doc-bin', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userDir = LuoyeCtr.userDir(userId);
+        const docBin = LuoyeCtr.docBin(userDir);
+        return res.send(docBin);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to get doc bin',
+        });
+    }
+});
+
+// 从文档回收站恢复文档
+router.put('/doc-bin/:docId/restore', login, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        if (!docId)
+            return res.status(400).send({
+                error: 'docId is required',
+            });
+        const userDir = LuoyeCtr.userDir(userId);
+        // 检查文档是否在回收站
+        const docBin = LuoyeCtr.docBin(userDir);
+        if (!docBin.find((item) => item.docId === docId)) {
+            return res.status(404).send({
+                error: 'doc not found in doc bin',
+            });
+        }
+        const doc = LuoyeCtr.doc(docId);
+        if (!doc)
+            return res.status(404).send({
+                error: 'doc not found',
+            });
+        // 权限校验
+        if (LuoyeUtl.access(doc, userId) < Access.Admin)
+            return res.status(403).send({
+                error: 'Forbidden',
+            });
+        LuoyeCtr.restoreDoc(doc);
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: 'Failed to restore doc',
         });
     }
 });

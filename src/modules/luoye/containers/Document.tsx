@@ -13,6 +13,7 @@ import ProjectTitle from './ProjectTitle';
 import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
 import MarkdownEditor from '../components/Editor/MarkdownEditor';
+import EditingModeGlobalStyle from '../styles/EditingModeGlobalStyle';
 
 interface Props {
     doc: Doc | null;
@@ -31,6 +32,10 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
     const textRef = useRef<EditorRef>(null);
     const prevDoc = useRef<Doc | null>(null);
 
+    const auth = checkAuth(doc);
+    const isDeleted = Boolean(doc?.deletedAt);
+    const isSidebarVisible = Boolean(workspace) && !isDeleted;
+
     const saveCheck = () => {
         if (!isEditing) return true;
         return confirm(LEAVE_EDITING_TEXT);
@@ -48,7 +53,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
             setIsEditing(false);
             prevDoc.current = doc;
         }
-        if (doc.content === '') {
+        if (doc.content === '' && !isDeleted) {
             textRef.current?.setText(doc.content);
             setIsEditing(true);
         }
@@ -61,13 +66,11 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
         });
     }, [isEditing]);
 
-    const auth = checkAuth(doc);
-
     if (!doc)
         return (
             <div className={styles.docView}>
                 <header className={styles.docNavBar}>
-                    <ProjectTitle className={styles.docIcon} fold={Boolean(workspace)} showInfo={false} />
+                    <ProjectTitle className={styles.docIcon} fold={isSidebarVisible} showInfo={false} />
                     {`>_<`}
                 </header>
                 <main className={styles.document}>
@@ -78,54 +81,77 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
 
     return (
         <div className={styles.docView}>
+            {isEditing && <EditingModeGlobalStyle />}
             <header className={styles.docNavBar}>
-                {workspace ? (
+                {isSidebarVisible ? (
                     <>
                         <div className={styles.docNavTitle}>{doc.name}</div>
                         <ProjectTitle
                             className={styles.docIcon}
-                            fold={Boolean(workspace)}
+                            fold={isSidebarVisible}
                             showInfo={false}
                             navigatePreCheck={saveCheck}
                         />
                     </>
                 ) : (
-                    <ProjectTitle fold={Boolean(workspace)} showInfo={false} navigatePreCheck={saveCheck} />
+                    <ProjectTitle fold={isSidebarVisible} showInfo={false} navigatePreCheck={saveCheck} />
                 )}
-                {auth.editable ? (
-                    <>
-                        {!isEditing && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
-                        <Button
-                            type="primary"
-                            onClick={async () => {
-                                if (isEditing) {
-                                    const text = textRef.current?.getText();
-                                    if (doc.content === '' && text === '') return setIsEditing(false);
-                                    try {
-                                        await API.luoye.updateDoc(doc.id, {
-                                            content: text,
-                                        });
-                                        await onSave();
-                                        setIsEditing(false);
-                                    } catch (error: any) {
-                                        return alert(`提交失败：${error.message}`);
+                {!isDeleted &&
+                    (auth.editable ? (
+                        <>
+                            {!isEditing && <Button onClick={() => setDocFormVisible(true)}>设 置</Button>}
+                            <Button
+                                type="primary"
+                                onClick={async () => {
+                                    if (isEditing) {
+                                        const text = textRef.current?.getText();
+                                        if (doc.content === '' && text === '') return setIsEditing(false);
+                                        try {
+                                            await API.luoye.updateDoc(doc.id, {
+                                                content: text,
+                                            });
+                                            await onSave();
+                                            setIsEditing(false);
+                                        } catch (error: any) {
+                                            return alert(`提交失败：${error.message}`);
+                                        }
+                                    } else {
+                                        textRef.current?.setText(doc.content);
+                                        setIsEditing(true);
                                     }
-                                } else {
-                                    textRef.current?.setText(doc.content);
-                                    setIsEditing(true);
-                                }
-                            }}
-                        >
-                            {isEditing ? '保 存' : '编 辑'}
-                        </Button>
-                        {isEditing && <Button onClick={() => setIsEditing(false)}>取 消</Button>}
-                    </>
-                ) : (
-                    doc.creator.toUpperCase()
+                                }}
+                            >
+                                {isEditing ? '保 存' : '编 辑'}
+                            </Button>
+                            {isEditing && <Button onClick={() => setIsEditing(false)}>取 消</Button>}
+                        </>
+                    ) : (
+                        doc.creator.toUpperCase()
+                    ))}
+                {isDeleted && (
+                    <Button
+                        type="primary"
+                        onClick={async () => {
+                            try {
+                                if (!confirm('确定要恢复该文档吗？')) return;
+                                await API.luoye.restoreDoc(doc.id);
+                                await onSave();
+                                Toast.notify('恢复成功');
+                            } catch {
+                                Toast.notify('恢复失败');
+                            }
+                        }}
+                    >
+                        恢 复
+                    </Button>
                 )}
             </header>
             <main
-                className={clsx(styles.document, !workspace && styles.centeredDoc, !isEditing && styles.hiddenEditor)}
+                className={clsx(
+                    styles.document,
+                    !isSidebarVisible && styles.centeredDoc,
+                    !isEditing && styles.hiddenEditor,
+                )}
             >
                 {!isEditing && (
                     <>
@@ -162,10 +188,10 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                             await API.luoye.updateDoc(doc.id, {
                                 content: text,
                             });
-                            Toast.notify('保存成功');
-                            onSave();
+                            Toast.cover('保存成功');
+                            await onSave();
                         } catch {
-                            Toast.notify('保存失败');
+                            Toast.cover('保存失败');
                         }
                     }}
                 />

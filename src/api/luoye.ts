@@ -61,6 +61,18 @@ export interface Doc {
     content: string; // 文档内容
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
+    deletedAt: number | null; // 删除时间
+}
+
+export interface DocBinItem {
+    docId: string; // 文档 id
+    name: string; // 文档名称
+    executor: string; // 执行者
+    deletedAt: number; // 删除时间
+}
+
+interface Result {
+    success: boolean;
 }
 
 const LuoyeAPI = {
@@ -88,6 +100,8 @@ const LuoyeAPI = {
     ) => rocketV2.put<Workspace>(`${SERVER_API}/luoye/workspace/${id}`, props),
     recentDocs: () =>
         rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/recent-docs`),
+    deleteRecentDoc: (id: string) =>
+        rocketV2.delete<Result>(`${SERVER_API}/luoye/recent-docs/${id}`),
     docs: () => rocketV2.get<DocItem[]>(`${SERVER_API}/luoye/docs`),
     doc: (id: string) => rocketV2.get<Doc>(`${SERVER_API}/luoye/doc/${id}`),
     createDoc: (
@@ -111,7 +125,10 @@ const LuoyeAPI = {
         },
     ) => rocketV2.put<Doc>(`${SERVER_API}/luoye/doc/${id}`, props),
     deleteDoc: (id: string) =>
-        rocketV2.delete<Doc>(`${SERVER_API}/luoye/doc/${id}`),
+        rocketV2.delete<Result>(`${SERVER_API}/luoye/doc/${id}`),
+    docBin: () => rocketV2.get<DocBinItem[]>(`${SERVER_API}/luoye/doc-bin`),
+    restoreDoc: (id: string) =>
+        rocketV2.put<Result>(`${SERVER_API}/luoye/doc-bin/${id}/restore`),
 };
 
 export default LuoyeAPI;

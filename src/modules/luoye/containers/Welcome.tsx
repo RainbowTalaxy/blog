@@ -8,6 +8,8 @@ import WorkspaceForm from './WorkspaceForm';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';
 import Spacer from '@site/src/components/Spacer';
+import API from '@site/src/api';
+import Toast from '../components/Notification/Toast';
 
 interface Props {
     data: {
@@ -73,8 +75,25 @@ const Welcome = ({ data, refetch }: Props) => {
                             <div className={styles.docName}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
                             {doc.scope === Scope.Private && <SVG.Lock />}
                             <Spacer />
-                            <div className={styles.docCreator}>{doc.creator}</div>
+                            <div className={styles.docUser}>{doc.creator}</div>
                             <div className={styles.docDate}>{date(doc.updatedAt)}</div>
+                            <div
+                                className={styles.docAction}
+                                onClick={async (e) => {
+                                    e.stopPropagation();
+                                    const granted = confirm('确定删除该记录吗？');
+                                    if (!granted) return;
+                                    try {
+                                        await API.luoye.deleteRecentDoc(doc.id);
+                                        await refetch();
+                                        Toast.notify('删除成功');
+                                    } catch {
+                                        Toast.notify('删除失败');
+                                    }
+                                }}
+                            >
+                                删除
+                            </div>
                         </div>
                     ))}
                 </div>

@@ -9,7 +9,7 @@ const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
 const { weaverRouter } = require('./routes/weaver');
-const { luoyeRouter } = require('./routes/luoye');
+const { luoyeRouter } = require('./modules/luoye/router');
 
 const app = express();
 

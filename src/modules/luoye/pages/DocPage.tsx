@@ -15,6 +15,7 @@ import WorkspaceForm from '../containers/WorkspaceForm';
 import DocForm from '../containers/DocForm';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import clsx from 'clsx';
 
 const DocPage = () => {
     const history = useHistory();
@@ -63,9 +64,11 @@ const DocPage = () => {
     if (doc && workspace === undefined) return null;
 
     const spaceAuth = checkAuth(workspace);
+    const isDeleted = Boolean(doc?.deletedAt);
+    const isSidebarVisible = Boolean(workspace) && !isDeleted;
 
     return (
-        <div className={styles.container}>
+        <div className={clsx(styles.container)}>
             <Head>
                 <title>
                     {doc?.name || '文档不存在'} | {PROJECT_NAME}
@@ -75,7 +78,7 @@ const DocPage = () => {
             <GlobalStyle />
             <ContentWithSideBar
                 navbar={<ProjectTitle owner={doc?.creator ?? '404'} fold navigatePreCheck={saveCheck} />}
-                sidebarVisible={Boolean(workspace)}
+                sidebarVisible={isSidebarVisible}
                 sidebar={
                     workspace && (
                         <>

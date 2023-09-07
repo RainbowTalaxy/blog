@@ -1,5 +1,5 @@
 const { Server } = require('../config');
-const { Rocket, TestCase } = require('./utils');
+const { Rocket, TestCase } = require('../utils/test');
 
 const testDir = 'assets';
 
