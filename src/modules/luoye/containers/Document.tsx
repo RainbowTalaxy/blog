@@ -32,6 +32,10 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
     const textRef = useRef<EditorRef>(null);
     const prevDoc = useRef<Doc | null>(null);
 
+    const auth = checkAuth(doc);
+    const isDeleted = Boolean(doc?.deletedAt);
+    const isSidebarVisible = Boolean(workspace) && !isDeleted;
+
     const saveCheck = () => {
         if (!isEditing) return true;
         return confirm(LEAVE_EDITING_TEXT);
@@ -49,7 +53,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
             setIsEditing(false);
             prevDoc.current = doc;
         }
-        if (doc.content === '') {
+        if (doc.content === '' && !isDeleted) {
             textRef.current?.setText(doc.content);
             setIsEditing(true);
         }
@@ -61,10 +65,6 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
             behavior: 'smooth',
         });
     }, [isEditing]);
-
-    const auth = checkAuth(doc);
-    const isDeleted = Boolean(doc?.deletedAt);
-    const isSidebarVisible = Boolean(workspace) && !isDeleted;
 
     if (!doc)
         return (
