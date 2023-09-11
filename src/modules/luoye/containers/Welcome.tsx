@@ -38,7 +38,7 @@ const Welcome = ({ data, refetch }: Props) => {
     }, [allWorkspaces, isWorkspaceListFolded]);
 
     useEffect(() => {
-        if (allWorkspaces?.length <= WORKSPACE_FOLD_THRESHOLD) setWorkspaceListFolded(false);
+        if (allWorkspaces?.length <= WORKSPACE_FOLD_THRESHOLD + 1) setWorkspaceListFolded(false);
     }, [allWorkspaces]);
 
     return (
