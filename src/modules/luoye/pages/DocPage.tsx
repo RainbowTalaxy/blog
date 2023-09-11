@@ -16,6 +16,7 @@ import DocForm from '../containers/DocForm';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
+import Toast from '../components/Notification/Toast';
 
 const DocPage = () => {
     const history = useHistory();
@@ -36,8 +37,8 @@ const DocPage = () => {
         try {
             const docData = await API.luoye.doc(id);
             setDoc(docData);
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            Toast.notify(`获取文档数据失败：${error.message}`);
             setDoc(null);
         }
     }, [id]);
@@ -48,8 +49,7 @@ const DocPage = () => {
             try {
                 const workspaceData = await API.luoye.workspace(doc.workspaces[0]);
                 setWorkspace(workspaceData);
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
                 setWorkspace(null);
             }
             hideSidebar();
@@ -122,8 +122,8 @@ const DocPage = () => {
                                             docs: reOrdered,
                                         });
                                         setWorkspace(newWorkspace);
-                                    } catch (error) {
-                                        console.log(error);
+                                    } catch (error: any) {
+                                        Toast.notify(`更新失败：${error.message}`);
                                         setWorkspace(workspace);
                                     }
                                 }}

@@ -113,7 +113,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                                             await onSave();
                                             setIsEditing(false);
                                         } catch (error: any) {
-                                            return alert(`提交失败：${error.message}`);
+                                            return Toast.notify(`提交失败：${error.message}`);
                                         }
                                     } else {
                                         textRef.current?.setText(doc.content);
@@ -137,8 +137,8 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                                 await API.luoye.restoreDoc(doc.id);
                                 await onSave();
                                 Toast.notify('恢复成功');
-                            } catch {
-                                Toast.notify('恢复失败');
+                            } catch (error: any) {
+                                Toast.notify(`恢复失败：${error.message}`);
                             }
                         }}
                     >

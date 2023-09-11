@@ -15,6 +15,7 @@ import SVG from '../components/SVG';
 import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import DocBin from '../containers/DocBin';
+import Toast from '../components/Notification/Toast';
 
 enum Item {
     DocBin = 'doc-bin',
@@ -39,8 +40,8 @@ const HomePage = () => {
                 docs,
             });
             hideSidebar();
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            Toast.notify(`获取首页数据失败：${error.message}`);
             setData(null);
         }
     }, []);
@@ -112,8 +113,8 @@ const HomePage = () => {
                                                 ...data,
                                                 ...splitWorkspace(newWorkspaceItems),
                                             });
-                                        } catch (error) {
-                                            console.log(error);
+                                        } catch (error: any) {
+                                            Toast.notify(`更新失败：${error.message}`);
                                             setData(data);
                                         }
                                     }}

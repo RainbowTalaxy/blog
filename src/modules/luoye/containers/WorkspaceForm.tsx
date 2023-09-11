@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
+import Toast from '../components/Notification/Toast';
 
 interface Props {
     workspace?: Omit<WorkspaceItem, 'joinAt'>;
@@ -53,7 +54,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                         <Button
                             type="primary"
                             onClick={async () => {
-                                if (!nameRef.current!.value) return alert('请输入标题');
+                                if (!nameRef.current!.value) return Toast.notify('请输入标题');
                                 const props = {
                                     name: nameRef.current!.value,
                                     description: descriptionRef.current!.value,
@@ -67,7 +68,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                     }
                                     await onClose(true);
                                 } catch (error: any) {
-                                    alert(`提交失败：${error.message}`);
+                                    Toast.notify(`提交失败：${error.message}`);
                                 }
                             }}
                         >
