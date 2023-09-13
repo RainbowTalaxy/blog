@@ -7,16 +7,16 @@ async function test() {
 
     const adminInfo = {
         id: 'talaxy',
-        key: 'talaxy',
+        password: 'talaxy',
     };
 
     const userInfo = {
         id: 'test',
-        key: 'test_key',
+        password: 'test_password',
     };
 
     const admin = new Rocket(Server + '/user');
-    await admin.login(adminInfo.id, adminInfo.key);
+    await admin.login(adminInfo.id, adminInfo.password);
     const user = new Rocket(Server + '/user');
 
     // 测试登录
@@ -43,14 +43,17 @@ async function test() {
         });
     });
 
-    // 用户使用过短的 key 登记信息
-    await testCase.neg('user register by too short key length', async () => {
-        await user.post('/register', {
-            ...userInfo,
-            key: '12345',
-            token: uuid(),
-        });
-    });
+    // 用户使用过短的 password 登记信息
+    await testCase.neg(
+        'user register by too short password length',
+        async () => {
+            await user.post('/register', {
+                ...userInfo,
+                password: '12345',
+                token: uuid(),
+            });
+        },
+    );
 
     // 用户使用 token 登记信息
     await testCase.pos('user register by token', async () => {
@@ -60,7 +63,7 @@ async function test() {
         });
     });
 
-    await user.login(userInfo.id, userInfo.key);
+    await user.login(userInfo.id, userInfo.password);
 
     // 用户生成 token
     await testCase.neg('user generate token', async () => {
@@ -69,9 +72,9 @@ async function test() {
         });
     });
 
-    // 更改 key 流程
+    // 更改 password 流程
 
-    // 管理员再次生成 token 用于更改 key
+    // 管理员再次生成 token 用于更改 password
     const generatedToken2 = await testCase.pos(
         'admin generate token',
         async () => {
@@ -83,7 +86,7 @@ async function test() {
 
     const newUserInfo = {
         id: 'test',
-        key: 'another_key',
+        password: 'another_password',
     };
 
     // 用户使用 token 登记信息
@@ -95,14 +98,14 @@ async function test() {
     });
 
     // 用户用旧账号登录
-    await testCase.neg('user old key login', async () => {
+    await testCase.neg('user old password login', async () => {
         await user.get('/test');
     });
 
-    await user.login(newUserInfo.id, newUserInfo.key);
+    await user.login(newUserInfo.id, newUserInfo.password);
 
     // 用户用新账号登录
-    await testCase.pos('user new key login', async () => {
+    await testCase.pos('user new password login', async () => {
         await user.get('/test');
     });
 

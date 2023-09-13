@@ -63,12 +63,12 @@ class Rocket {
         return data;
     }
 
-    async login(id, key) {
+    async login(id, password) {
         const { data } = await axios.post(
             Server + '/user/login',
             {
                 id,
-                key,
+                password,
             },
             {
                 validateStatus: () => true,
