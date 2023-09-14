@@ -1,6 +1,6 @@
 import { useHistory } from '@docusaurus/router';
 import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { date } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
@@ -10,6 +10,7 @@ import SVG from '../components/SVG';
 import Spacer from '@site/src/components/Spacer';
 import API from '@site/src/api';
 import Toast from '../components/Notification/Toast';
+import clsx from 'clsx';
 
 interface Props {
     data: {
@@ -20,12 +21,25 @@ interface Props {
     refetch: () => Promise<void>;
 }
 
+const WORKSPACE_FOLD_THRESHOLD = 7;
+
 const Welcome = ({ data, refetch }: Props) => {
     const history = useHistory();
+    const [isWorkspaceListFolded, setWorkspaceListFolded] = useState(true);
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
     const [isDocFormVisible, setDocFormVisible] = useState(false);
 
-    const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];
+    const allWorkspaces = useMemo(() => {
+        return data && [data.defaultWorkspace, ...data.workspaces];
+    }, [data]);
+
+    const foldedWorkspaces = useMemo(() => {
+        return isWorkspaceListFolded ? allWorkspaces?.slice(0, WORKSPACE_FOLD_THRESHOLD) : allWorkspaces;
+    }, [allWorkspaces, isWorkspaceListFolded]);
+
+    useEffect(() => {
+        if (allWorkspaces?.length <= WORKSPACE_FOLD_THRESHOLD + 1) setWorkspaceListFolded(false);
+    }, [allWorkspaces]);
 
     return (
         <>
@@ -42,7 +56,7 @@ const Welcome = ({ data, refetch }: Props) => {
             </div>
             <h2>工作区</h2>
             <div className={styles.workspaceList}>
-                {allWorkspaces.map((workspace) => (
+                {foldedWorkspaces.map((workspace) => (
                     <div
                         className={styles.workspaceItem}
                         key={workspace.id}
@@ -58,6 +72,17 @@ const Welcome = ({ data, refetch }: Props) => {
                         </div>
                     </div>
                 ))}
+                {isWorkspaceListFolded && (
+                    <div
+                        className={clsx(styles.workspaceItem, styles.workspaceFolder)}
+                        onClick={() => setWorkspaceListFolded(false)}
+                    >
+                        <div className={styles.workspaceName}>
+                            <span>🌳</span>
+                            <div>展开更多</div>
+                        </div>
+                    </div>
+                )}
             </div>
             <h2>最近文档</h2>
             {data.docs.length === 0 ? (

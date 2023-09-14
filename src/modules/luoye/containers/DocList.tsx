@@ -12,6 +12,7 @@ import SVG from '../components/SVG';
 import WorkspaceForm from './WorkspaceForm';
 import useUser from '@site/src/hooks/useUser';
 import { hideSidebar } from '../components/SideBar';
+import Toast from '../components/Notification/Toast';
 
 interface Props {
     workspaceId: string;
@@ -32,8 +33,8 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
             try {
                 const workspace = await API.luoye.workspace(workspaceId);
                 if (isMounted) setWorkspace(workspace);
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                Toast.notify(`获取工作区数据失败：${error.message}`);
                 if (isMounted) setWorkspace(null);
             }
             hideSidebar();

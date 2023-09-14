@@ -7,6 +7,7 @@ import { date } from '../constants';
 import styles from '../styles/home.module.css';
 import Placeholder from '../components/PlaceHolder';
 import { hideSidebar } from '../components/SideBar';
+import Toast from '../components/Notification/Toast';
 
 const DocBin = () => {
     const history = useHistory();
@@ -18,8 +19,8 @@ const DocBin = () => {
             try {
                 const data = await API.luoye.docBin();
                 if (isMounted) setDocBin(data);
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                Toast.notify(`获取文档回收站失败：${error.message}`);
                 if (isMounted) setDocBin(null);
             }
             hideSidebar();

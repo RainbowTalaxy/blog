@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 import { formDate, time } from '@site/src/utils';
+import Toast from '../components/Notification/Toast';
 
 interface Props {
     workspace?: {
@@ -74,19 +75,18 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                     scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                     date: time(dateRef.current!.value),
                                 };
-                                console.log(props);
                                 try {
                                     let newDoc: Doc | null = null;
                                     if (doc) {
                                         await API.luoye.updateDoc(doc.id, props);
                                     } else {
                                         const wId = workspaceRef.current?.value ?? workspace?.id;
-                                        if (!wId) return alert('请选择工作区');
+                                        if (!wId) return Toast.notify('请选择工作区');
                                         newDoc = await API.luoye.createDoc(wId, props);
                                     }
                                     await onClose(true, doc ? doc.id : newDoc?.id);
                                 } catch (error: any) {
-                                    alert(`提交失败：${error.message}`);
+                                    Toast.notify(`提交失败：${error.message}`);
                                 }
                             }}
                         >
@@ -102,7 +102,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                         await API.luoye.deleteDoc(doc.id);
                                         onDelete();
                                     } catch (error: any) {
-                                        alert(`删除失败：${error.message}`);
+                                        Toast.notify(`删除失败：${error.message}`);
                                     }
                                 }}
                             >

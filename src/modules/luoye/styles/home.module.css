@@ -109,7 +109,7 @@
 .workspaceList {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
 }
 
 .action {
@@ -155,6 +155,14 @@
     margin-left: 4px;
     font-size: 16px;
     color: var(--ly-secondary);
+}
+
+.workspaceFolder {
+    display: flex;
+}
+
+.workspaceFolder > :first-child {
+    margin-bottom: 6px;
 }
 
 .docList {
