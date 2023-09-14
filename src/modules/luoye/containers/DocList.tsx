@@ -3,7 +3,7 @@ import API from '@site/src/api';
 import { Scope, Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Spacer from '@site/src/components/Spacer';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DEFAULT_WORKSPACE_PLACEHOLDER, date, workSpaceName } from '../constants';
 import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
@@ -27,22 +27,20 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
     const [isDocFormVisible, setDocFormVisible] = useState(false);
     const [isWorkspaceFormVisible, setWorkspaceFormVisible] = useState(false);
 
-    useEffect(() => {
-        let isMounted = true;
-        (async () => {
-            try {
-                const workspace = await API.luoye.workspace(workspaceId);
-                if (isMounted) setWorkspace(workspace);
-            } catch (error: any) {
-                Toast.notify(`获取工作区数据失败：${error.message}`);
-                if (isMounted) setWorkspace(null);
-            }
-            hideSidebar();
-        })();
-        return () => {
-            isMounted = false;
-        };
+    const refetchWorkspace = useCallback(async () => {
+        try {
+            const workspace = await API.luoye.workspace(workspaceId);
+            setWorkspace(workspace);
+        } catch (error: any) {
+            Toast.notify(`获取工作区数据失败：${error.message}`);
+            setWorkspace(null);
+        }
+        hideSidebar();
     }, [workspaceId]);
+
+    useEffect(() => {
+        refetchWorkspace();
+    }, [refetchWorkspace]);
 
     if (workspace === undefined) return null;
     if (workspace === null) return <p>工作区不存在</p>;
@@ -67,9 +65,11 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
             </h2>
 
             {workspace.docs.length === 0 ? (
-                <p>
-                    <Placeholder>暂无文档</Placeholder>
-                </p>
+                <div className={styles.docList}>
+                    <div className={styles.docItem}>
+                        <Placeholder>暂无文档</Placeholder>
+                    </div>
+                </div>
             ) : (
                 <div className={styles.docList}>
                     {workspace.docs.map((doc) => (
@@ -101,7 +101,10 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
                 <WorkspaceForm
                     workspace={workspace}
                     onClose={async (success) => {
-                        if (success) await refetch();
+                        if (success) {
+                            await refetchWorkspace();
+                            await refetch();
+                        }
                         setWorkspaceFormVisible(false);
                     }}
                 />
