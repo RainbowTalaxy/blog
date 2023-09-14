@@ -87,28 +87,22 @@ const encryptUserPassword = (id, password) => {
     return Buffer.from(str).toString('base64');
 };
 
-// const OLD_VERSION = '1.0.0';
 const NEW_VERSION = '1.1.0';
 
 // 默认用户配置
 const DEFAULT_USER_CONFIG = {
     version: NEW_VERSION,
     admin: ['talaxy'],
-    users: [
-        {
-            id: 'talaxy',
-            key: encryptUserPassword('talaxy', 'talaxy'),
-        },
-        {
-            id: 'allay',
-            key: encryptUserPassword('allay', 'allay'),
-        },
-    ],
+    users: ['talaxy', 'allay'].map((id) => ({
+        id,
+        key: encryptUserPassword(id, id),
+    })),
 };
 
 writeJSONIfNotExist(Dir.storage.user, DEFAULT_USER_CONFIG);
 
 const User = {
+    version: NEW_VERSION,
     config: readJSON(Dir.storage.user),
     tokenExpireInterval: 1000 * 60 * 60 * 24,
     tokens: readJSON(Dir.storage.token),

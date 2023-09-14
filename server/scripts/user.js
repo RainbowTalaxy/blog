@@ -5,6 +5,7 @@ const Version = require('../utils/version');
 async function main() {
     const config = { ...User.config };
     const version = new Version(config.version);
+    // origin: 1.0.0
     // migrate to 1.1.0
     if (version.isLessThan('1.1.0')) {
         config.users = config.users.map(({ id, key }) => {
@@ -13,6 +14,7 @@ async function main() {
         });
         config.version = '1.1.0';
     }
+    config.version = User.version;
     writeJSON(Dir.storage.user, config);
 }
 
