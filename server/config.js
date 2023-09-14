@@ -13,6 +13,7 @@ const SERVER_URL = 'https://blog.talaxy.cn';
 
 /** 暂存文件夹 */
 const TEMP_DIR = path.join(__dirname, '..', 'temp');
+const DEV_DIR = path.join(__dirname, '..', 'dev');
 
 /** 数据文件夹 */
 const STORAGE_PATH = '/home/ubuntu/storage';
@@ -42,9 +43,9 @@ const LOCAL_DIR = {
     temp: TEMP_DIR,
     static: path.join(__dirname, '..', 'static'),
     storage: {
-        user: path.join(TEMP_DIR, 'user.json'),
+        user: path.join(DEV_DIR, 'user.json'),
         token: path.join(TEMP_DIR, 'token.json'),
-        config: path.join(TEMP_DIR, 'config.json'),
+        config: path.join(DEV_DIR, 'config.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
         luoye: {
@@ -66,6 +67,7 @@ if (fs.existsSync(Dir.temp) && process.env.NODE_ENV === 'development') {
 }
 
 mkdirp.sync(Dir.temp);
+mkdirp.sync(DEV_DIR);
 mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
@@ -79,33 +81,35 @@ writeJSONIfNotExist(Dir.storage.config, {
 
 writeJSONIfNotExist(Dir.storage.token, []);
 
-// const OLD_VERSION = '0.0.0';
-const NEW_VERSION = '1.0.0';
+const encryptUserPassword = (id, password) => {
+    const { secret } = readJSON(Dir.storage.config);
+    const str = `${id}:${password}:${secret}`;
+    return Buffer.from(str).toString('base64');
+};
+
+const NEW_VERSION = '1.1.0';
 
 // 默认用户配置
 const DEFAULT_USER_CONFIG = {
     version: NEW_VERSION,
     admin: ['talaxy'],
-    users: [
-        {
-            id: 'talaxy',
-            key: 'talaxy',
-        },
-        {
-            id: 'allay',
-            key: 'allay',
-        },
-    ],
+    users: ['talaxy', 'allay'].map((id) => ({
+        id,
+        key: encryptUserPassword(id, id),
+    })),
 };
 
 writeJSONIfNotExist(Dir.storage.user, DEFAULT_USER_CONFIG);
 
 const User = {
+    version: NEW_VERSION,
     config: readJSON(Dir.storage.user),
     tokenExpireInterval: 1000 * 60 * 60 * 24,
     tokens: readJSON(Dir.storage.token),
+    encryptPassword: encryptUserPassword,
     // 验证用户
-    validate(id, key) {
+    validate(id, password) {
+        const key = this.encryptPassword(id, password);
         return this.config.users.some(
             (user) => user.id === id && user.key === key,
         );
@@ -114,6 +118,7 @@ const User = {
     isAdmin(id) {
         return this.config.admin.includes(id);
     },
+    // 生成注册 token
     generateToken(id) {
         const token = {
             id,
@@ -124,7 +129,7 @@ const User = {
         writeJSON(Dir.storage.token, this.tokens);
         return token;
     },
-    // 消耗 token ，登记用户的前置工作
+    // 消耗注册 token ，登记用户的前置工作
     digestToken(id, token) {
         this.clearOldTokens();
         const idx = this.tokens.findIndex(
@@ -136,8 +141,9 @@ const User = {
         return true;
     },
     // 登记用户
-    register(id, key) {
+    register(id, password) {
         const idx = this.config.users.findIndex((user) => user.id === id);
+        const key = this.encryptPassword(id, password);
         if (idx === -1) {
             this.config.users.push({
                 id,

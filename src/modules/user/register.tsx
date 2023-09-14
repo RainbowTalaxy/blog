@@ -19,14 +19,14 @@ const FORM_CONFIG = [
         placeholder: '请用字母数字或 _ 组合',
     },
     {
-        attr: 'key',
-        name: 'API Key',
+        attr: 'password',
+        name: '密码',
         type: 'password',
         placeholder: '请用字母数字等组合，不得少于 6 个字符',
     },
     {
-        attr: 'rekey',
-        name: '再次输入 API Key',
+        attr: 'rePassword',
+        name: '再次输入密码',
         type: 'password',
         placeholder: '请用字母数字等组合，不得少于 6 个字符',
     },
@@ -36,8 +36,8 @@ const RegisterPage = () => {
     const query = useQuery();
     const form = useRef<{
         id?: string;
-        key?: string;
-        rekey?: string;
+        password?: string;
+        rePassword?: string;
         token?: string;
     }>({});
 
@@ -78,21 +78,21 @@ const RegisterPage = () => {
                     onClick={async () => {
                         if (!form.current.token) return alert('请输入 Token');
                         if (!form.current.id) return alert('请输入 ID');
-                        if (!form.current.key) return alert('请输入 API Key');
-                        if (!form.current.rekey)
+                        if (!form.current.password) return alert('请输入密码');
+                        if (!form.current.rePassword)
                             return alert('请再次输入 API Key');
-                        if (form.current.key !== form.current.rekey)
-                            return alert('两次输入的 API Key 不一致');
+                        if (form.current.password !== form.current.rePassword)
+                            return alert('两次输入的密码不一致');
                         try {
                             await API.user.register(
                                 form.current.id,
-                                form.current.key,
+                                form.current.password,
                                 form.current.token,
                             );
                             alert('登记成功');
                             const { token } = await API.user.login(
                                 form.current.id,
-                                form.current.key,
+                                form.current.password,
                             );
                             User.config = {
                                 id: form.current.id,

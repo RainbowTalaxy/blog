@@ -11,16 +11,16 @@ const UserAPI = {
     generateToken: (userId: string) =>
         rocketV2.post<TokenInfo>(`${SERVER_API}/user/token`, { id: userId }),
     config: () => rocketV2.get(`${SERVER_API}/user/list`),
-    register: (id: string, key: string, token: string) =>
+    register: (id: string, password: string, token: string) =>
         rocketV2.post(`${SERVER_API}/user/register`, {
             id,
-            key,
+            password,
             token,
         }),
-    login: (id: string, key: string) =>
+    login: (id: string, password: string) =>
         rocketV2.post<{ token: string }>(`${SERVER_API}/user/login`, {
             id,
-            key,
+            password,
         }),
     test: () => rocketV2.get<{ id: string }>(`${SERVER_API}/user/test`),
 };

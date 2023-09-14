@@ -28,18 +28,18 @@ router.post('/token', login, async (req, res) => {
 
 // 登记用户, 参数为 token
 router.post('/register', async (req, res) => {
-    const { id, key, token } = req.body;
-    if (!id || !key)
+    const { id, password, token } = req.body;
+    if (!id || !password)
         return res.status(400).send({
-            error: 'id and key are required',
+            error: 'id and password are required',
         });
-    if (key.length < 6) {
-        return res.status(400).send({ error: 'key is too short' });
+    if (password.length < 6) {
+        return res.status(400).send({ error: 'password is too short' });
     }
     if (!User.digestToken(id, token))
         return res.status(403).send({ error: 'Unauthorized' });
     try {
-        User.register(id, key);
+        User.register(id, password);
         res.send({
             success: true,
         });
@@ -70,17 +70,17 @@ router.get('/list', login, async (req, res) => {
 const MAX_DAY = 120;
 
 router.post('/login', async (req, res) => {
-    const { id, key } = req.body;
-    if (!id || !key)
-        return res.status(400).send({ error: 'id and key are required' });
+    const { id, password } = req.body;
+    if (!id || !password)
+        return res.status(400).send({ error: 'id and password are required' });
     try {
-        const config = readJSON(Dir.storage.config);
-        if (!User.validate(id, key)) {
+        if (!User.validate(id, password)) {
             return res.status(401).send({
-                error: 'Wrong id or key',
+                error: 'Wrong id or password',
             });
         }
-        const token = jwt.sign({ id, key }, config.secret, {
+        const config = readJSON(Dir.storage.config);
+        const token = jwt.sign({ id, password }, config.secret, {
             expiresIn: `${MAX_DAY}d`,
         });
         return res.send({

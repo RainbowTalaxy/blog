@@ -13,10 +13,10 @@ const FORM_CONFIG = [
         placeholder: '请用字母数字或 _ 组合',
     },
     {
-        attr: 'key',
-        name: 'API Key',
+        attr: 'password',
+        name: '密码',
         type: 'password',
-        placeholder: '该 Key 需向管理员申请，且由个人保管',
+        placeholder: '需向管理员申请，且由个人保管',
     },
 ];
 
@@ -26,7 +26,7 @@ const UserPage = () => {
     const [userId, setUserId] = useState<string | null>();
     const form = {
         id: '',
-        key: '',
+        password: '',
         token: '',
     };
 
@@ -89,11 +89,11 @@ const UserPage = () => {
                                 onClick={async () => {
                                     try {
                                         if (!form.id) return alert('请输入 ID');
-                                        if (!form.key)
-                                            return alert('请输入 API Key');
+                                        if (!form.password)
+                                            return alert('请输入密码');
                                         const { token } = await API.user.login(
                                             form.id,
-                                            form.key,
+                                            form.password,
                                         );
                                         form.token = token;
                                         User.config = {
