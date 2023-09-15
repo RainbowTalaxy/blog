@@ -74,6 +74,7 @@ const DocPage = () => {
                     {doc?.name || '文档不存在'} | {PROJECT_NAME}
                 </title>
                 <meta name="theme-color" content="#fff8ed" />
+                <link rel="icon" href="https://blog.talaxy.cn/img/luoye.png" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar

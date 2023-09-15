@@ -50,11 +50,6 @@ const HomePage = () => {
         refetch();
     }, [refetch]);
 
-    useEffect(() => {
-        var link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-        link.href = '/img/luoye.png';
-    }, []);
-
     const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];
 
     return (
@@ -62,6 +57,7 @@ const HomePage = () => {
             <Head>
                 <title>{PROJECT_NAME}</title>
                 <meta name="theme-color" content="#fff8ed" />
+                <link rel="icon" href="https://blog.talaxy.cn/img/luoye.png" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
