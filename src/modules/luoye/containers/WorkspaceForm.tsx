@@ -68,7 +68,7 @@ const WorkspaceForm = ({ workspace, onClose }: Props) => {
                                     }
                                     await onClose(true);
                                 } catch (error: any) {
-                                    Toast.notify(`提交失败：${error.message}`);
+                                    Toast.notify(error.message);
                                 }
                             }}
                         >

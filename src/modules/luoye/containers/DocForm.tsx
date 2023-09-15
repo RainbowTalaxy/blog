@@ -86,7 +86,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                     }
                                     await onClose(true, doc ? doc.id : newDoc?.id);
                                 } catch (error: any) {
-                                    Toast.notify(`提交失败：${error.message}`);
+                                    Toast.notify(error.message);
                                 }
                             }}
                         >
@@ -102,7 +102,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                         await API.luoye.deleteDoc(doc.id);
                                         onDelete();
                                     } catch (error: any) {
-                                        Toast.notify(`删除失败：${error.message}`);
+                                        Toast.notify(error.message);
                                     }
                                 }}
                             >

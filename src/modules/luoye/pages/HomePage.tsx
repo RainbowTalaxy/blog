@@ -41,7 +41,7 @@ const HomePage = () => {
             });
             hideSidebar();
         } catch (error: any) {
-            Toast.notify(`获取首页数据失败：${error.message}`);
+            Toast.notify(error.message);
             setData(null);
         }
     }, []);
@@ -115,7 +115,7 @@ const HomePage = () => {
                                                 ...splitWorkspace(newWorkspaceItems),
                                             });
                                         } catch (error: any) {
-                                            Toast.notify(`更新失败：${error.message}`);
+                                            Toast.notify(error.message);
                                             setData(data);
                                         }
                                     }}

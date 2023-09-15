@@ -38,7 +38,7 @@ const DocPage = () => {
             const docData = await API.luoye.doc(id);
             setDoc(docData);
         } catch (error: any) {
-            Toast.notify(`获取文档数据失败：${error.message}`);
+            Toast.notify(error.message);
             setDoc(null);
         }
     }, [id]);
@@ -124,7 +124,7 @@ const DocPage = () => {
                                         });
                                         setWorkspace(newWorkspace);
                                     } catch (error: any) {
-                                        Toast.notify(`更新失败：${error.message}`);
+                                        Toast.notify(error.message);
                                         setWorkspace(workspace);
                                     }
                                 }}

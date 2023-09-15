@@ -91,17 +91,20 @@ export const rocketV2 = {
         );
         const result: Data = await res.json();
         if (!res.ok)
-            throw new Error((result as ResponseError).message || '其他错误');
+            throw new Error(
+                (result as ResponseError).message ||
+                    `请求失败：${(result as ResponseError).error}`,
+            );
         return result;
     },
 
     async post<Data>(url: string, data: any = {}, login: boolean = true) {
-        await request(url, 'POST', data, login);
+        return await request<Data>(url, 'POST', data, login);
     },
     async put<Data>(url: string, data: any = {}, login: boolean = true) {
-        await request(url, 'PUT', data, login);
+        return await request<Data>(url, 'PUT', data, login);
     },
     async delete<Data>(url: string, data: any = {}, login: boolean = true) {
-        await request(url, 'DELETE', data, login);
+        return await request<Data>(url, 'DELETE', data, login);
     },
 };

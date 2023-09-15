@@ -32,7 +32,7 @@ const DocList = ({ workspaceId, allWorkspaces, refetch }: Props) => {
             const workspace = await API.luoye.workspace(workspaceId);
             setWorkspace(workspace);
         } catch (error: any) {
-            Toast.notify(`获取工作区数据失败：${error.message}`);
+            Toast.notify(error.message);
             setWorkspace(null);
         }
         hideSidebar();
