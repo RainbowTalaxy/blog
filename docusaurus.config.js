@@ -16,7 +16,6 @@ const config = {
     favicon: 'img/mercy.png',
     organizationName: 'RainbowTalaxy', // Usually your GitHub org/user name.
     projectName: 'blog', // Usually your repo name.
-    trailingSlash: false,
 
     markdown: {
         mermaid: true,
