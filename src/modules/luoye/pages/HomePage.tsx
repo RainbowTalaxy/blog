@@ -50,6 +50,11 @@ const HomePage = () => {
         refetch();
     }, [refetch]);
 
+    useEffect(() => {
+        var link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+        link.href = '/img/luoye.png';
+    }, []);
+
     const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];
 
     return (
