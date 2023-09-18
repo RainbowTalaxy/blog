@@ -16,9 +16,12 @@ import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import DocBin from '../containers/DocBin';
 import Toast from '../components/Notification/Toast';
+import Settings from '../containers/Settings';
+import { User } from '../../user/config';
 
 enum Item {
     DocBin = 'doc-bin',
+    Settings = 'settings',
 }
 
 const HomePage = () => {
@@ -26,6 +29,7 @@ const HomePage = () => {
     const query = useQuery();
     const workspaceId = query.get('workspace');
     const item = query.get('item');
+    const token = query.get('token');
     const [data, setData] = useState<{
         defaultWorkspace: WorkspaceItem;
         workspaces: WorkspaceItem[];
@@ -47,6 +51,13 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
+        if (token) {
+            User.config = {
+                id: '临时账号',
+                token,
+            };
+            window.location.href = '/luoye';
+        }
         refetch();
     }, [refetch]);
 
@@ -73,6 +84,13 @@ const HomePage = () => {
                                         onClick={() => history.push('?')}
                                     >
                                         开始
+                                    </SideBarListItem>
+                                    <SideBarListItem
+                                        active={item === Item.Settings}
+                                        icon="⚙️"
+                                        onClick={() => history.push(`?item=${Item.Settings}`)}
+                                    >
+                                        设置
                                     </SideBarListItem>
                                     <SideBarListItem
                                         icon="🪴"
@@ -167,6 +185,7 @@ const HomePage = () => {
                         <DocList workspaceId={workspaceId} allWorkspaces={allWorkspaces} refetch={refetch} />
                     )}
                     {data && item === Item.DocBin && <DocBin />}
+                    {data && item === Item.Settings && <Settings />}
                 </div>
             </ContentWithSideBar>
         </div>
