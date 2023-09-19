@@ -1,6 +1,6 @@
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 import Toast from '../components/Notification/Toast';
@@ -8,12 +8,13 @@ import Toast from '../components/Notification/Toast';
 const SHARE_EXPIRE_TIME = 7;
 
 interface Props {
-    onClose: (success?: boolean) => Promise<void>;
+    onClose: () => Promise<void>;
 }
 
 const ShareAccountForm = ({ onClose }: Props) => {
     const idRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const [shareUrl, setShareUrl] = useState<string>('');
 
     useEffect(() => {
         (async () => {
@@ -39,6 +40,12 @@ const ShareAccountForm = ({ onClose }: Props) => {
                     <label>密码：</label>
                     <Input raf={passwordRef} type="password" />
                 </div>
+                {shareUrl && (
+                    <div className={styles.formItem}>
+                        <label>链接：</label>
+                        <Input value={shareUrl} />
+                    </div>
+                )}
                 <div className={styles.formItem}>
                     <label></label>
                     <div className={styles.options}>
@@ -53,17 +60,28 @@ const ShareAccountForm = ({ onClose }: Props) => {
                                         passwordRef.current.value,
                                         SHARE_EXPIRE_TIME,
                                     );
-                                    window.navigator.clipboard?.writeText(
-                                        `${window.location.origin}/luoye?token=${token}`,
-                                    );
-                                    onClose(true);
+                                    setShareUrl(`${window.location.origin}/luoye?token=${token}`);
                                 } catch (error: any) {
                                     Toast.notify(error.message);
                                 }
                             }}
                         >
-                            生成分享链接
+                            生成
                         </Button>
+                        {shareUrl && (
+                            <Button
+                                onClick={async () => {
+                                    try {
+                                        await navigator.clipboard.writeText(shareUrl);
+                                        Toast.notify('已复制到剪贴板');
+                                    } catch (error: any) {
+                                        Toast.notify('复制失败');
+                                    }
+                                }}
+                            >
+                                复制链接
+                            </Button>
+                        )}
                         <Button onClick={() => onClose()}>取消</Button>
                     </div>
                 </div>

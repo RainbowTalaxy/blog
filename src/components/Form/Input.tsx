@@ -7,6 +7,7 @@ interface Props {
     id?: string;
     className?: string;
     name?: string;
+    value?: string;
     placeholder?: string;
     type?: HTMLInputTypeAttribute;
     defaultValue?: string;
@@ -18,6 +19,7 @@ const Input = ({
     id,
     className,
     name,
+    value,
     placeholder,
     type,
     defaultValue,
@@ -30,6 +32,7 @@ const Input = ({
             ref={raf}
             type={type}
             name={name}
+            value={value}
             placeholder={placeholder}
             defaultValue={defaultValue}
             spellCheck={false}
