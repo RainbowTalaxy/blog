@@ -112,6 +112,13 @@ const HomePage = () => {
                                     </SideBarListItem>
                                 </SideBarList>
                                 <h2>工作区</h2>
+                                {data.workspaces.length === 0 && (
+                                    <SideBarList>
+                                        <SideBarListItem>
+                                            <Placeholder>暂无工作区</Placeholder>
+                                        </SideBarListItem>
+                                    </SideBarList>
+                                )}
                                 <DragDropContext
                                     onDragEnd={async (result) => {
                                         const sourceIdx = result.source.index;
