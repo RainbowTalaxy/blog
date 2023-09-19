@@ -51,14 +51,17 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        if (token) {
-            User.config = {
-                id: '临时账号',
-                token,
-            };
-            window.location.href = '/luoye';
-        }
-        refetch();
+        (async () => {
+            if (token) {
+                try {
+                    await User.update(token);
+                    window.location.href = '/luoye';
+                } catch (error: any) {
+                    Toast.notify(`登录失败：${error.message}`);
+                }
+            }
+            refetch();
+        })();
     }, [refetch]);
 
     const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];

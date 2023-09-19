@@ -30,6 +30,7 @@ const ShareAccountForm = ({ onClose }: Props) => {
         <div className={styles.container}>
             <div className={styles.form}>
                 <h2>临时账号共享</h2>
+                <p className={styles.formDescription}>生成一个7天有效的账号分享链接</p>
                 <div className={styles.formItem}>
                     <label>ID：</label>
                     <Input raf={idRef} />

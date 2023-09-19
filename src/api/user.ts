@@ -1,4 +1,4 @@
-import { LOCAL_API, SERVER_API } from '../constants/config';
+import { SERVER_API } from '../constants/config';
 import { rocketV2 } from './utils';
 
 export interface TokenInfo {

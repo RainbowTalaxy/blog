@@ -1,5 +1,7 @@
 import { User } from '../modules/user/config';
+import { rawFetch } from '../utils/fetch';
 
+/** @deprecated */
 export const rocket = {
     async get<Data>(url: string, query?: any) {
         const res = await fetch(
@@ -46,58 +48,29 @@ export const rocket = {
     },
 };
 
-const getAuth = () => {
-    const user = User.config;
-    return `token=${user.token}`;
-};
-
-interface ResponseError {
-    error: string;
-    message?: string;
-}
-
 async function request<Data>(
     url: string,
     method: string,
     data: any = {},
     login: boolean = true,
 ) {
-    const res = await fetch(url, {
+    return await rawFetch<Data>(
+        url,
         method,
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: login ? getAuth() : '',
-        },
-        body: JSON.stringify(data || {}),
-    });
-    const result: Data = await res.json();
-    if (!res.ok)
-        throw new Error((result as ResponseError).message || '其他错误');
-    return result;
+        data,
+        login ? User.config.token ?? '' : '',
+    );
 }
 
 export const rocketV2 = {
     async get<Data>(url: string, query?: any, login: boolean = true) {
-        const res = await fetch(
-            url + (query ? `?${new URLSearchParams(query)}` : ''),
-            {
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: login ? getAuth() : '',
-                },
-            },
+        return await rawFetch<Data>(
+            url,
+            'GET',
+            query,
+            login ? User.config.token ?? '' : '',
         );
-        const result: Data = await res.json();
-        if (!res.ok)
-            throw new Error(
-                (result as ResponseError).message ||
-                    `请求失败：${(result as ResponseError).error}`,
-            );
-        return result;
     },
-
     async post<Data>(url: string, data: any = {}, login: boolean = true) {
         return await request<Data>(url, 'POST', data, login);
     },
