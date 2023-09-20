@@ -16,9 +16,12 @@ import Head from '@docusaurus/Head';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import DocBin from '../containers/DocBin';
 import Toast from '../components/Notification/Toast';
+import Settings from '../containers/Settings';
+import { User } from '../../user/config';
 
 enum Item {
     DocBin = 'doc-bin',
+    Settings = 'settings',
 }
 
 const HomePage = () => {
@@ -26,6 +29,7 @@ const HomePage = () => {
     const query = useQuery();
     const workspaceId = query.get('workspace');
     const item = query.get('item');
+    const token = query.get('token');
     const [data, setData] = useState<{
         defaultWorkspace: WorkspaceItem;
         workspaces: WorkspaceItem[];
@@ -41,13 +45,23 @@ const HomePage = () => {
             });
             hideSidebar();
         } catch (error: any) {
-            Toast.notify(`获取首页数据失败：${error.message}`);
+            Toast.notify(error.message);
             setData(null);
         }
     }, []);
 
     useEffect(() => {
-        refetch();
+        (async () => {
+            if (token) {
+                try {
+                    await User.update(token);
+                    window.location.href = '/luoye';
+                } catch (error: any) {
+                    Toast.notify(`登录失败：${error.message}`);
+                }
+            }
+            refetch();
+        })();
     }, [refetch]);
 
     const allWorkspaces = data && [data.defaultWorkspace, ...data.workspaces];
@@ -57,6 +71,7 @@ const HomePage = () => {
             <Head>
                 <title>{PROJECT_NAME}</title>
                 <meta name="theme-color" content="#fff8ed" />
+                <link rel="icon" href="https://blog.talaxy.cn/img/luoye.png" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
@@ -72,6 +87,13 @@ const HomePage = () => {
                                         onClick={() => history.push('?')}
                                     >
                                         开始
+                                    </SideBarListItem>
+                                    <SideBarListItem
+                                        active={item === Item.Settings}
+                                        icon="⚙️"
+                                        onClick={() => history.push(`?item=${Item.Settings}`)}
+                                    >
+                                        设置
                                     </SideBarListItem>
                                     <SideBarListItem
                                         icon="🪴"
@@ -90,6 +112,13 @@ const HomePage = () => {
                                     </SideBarListItem>
                                 </SideBarList>
                                 <h2>工作区</h2>
+                                {data.workspaces.length === 0 && (
+                                    <SideBarList>
+                                        <SideBarListItem>
+                                            <Placeholder>暂无工作区</Placeholder>
+                                        </SideBarListItem>
+                                    </SideBarList>
+                                )}
                                 <DragDropContext
                                     onDragEnd={async (result) => {
                                         const sourceIdx = result.source.index;
@@ -114,7 +143,7 @@ const HomePage = () => {
                                                 ...splitWorkspace(newWorkspaceItems),
                                             });
                                         } catch (error: any) {
-                                            Toast.notify(`更新失败：${error.message}`);
+                                            Toast.notify(error.message);
                                             setData(data);
                                         }
                                     }}
@@ -166,6 +195,7 @@ const HomePage = () => {
                         <DocList workspaceId={workspaceId} allWorkspaces={allWorkspaces} refetch={refetch} />
                     )}
                     {data && item === Item.DocBin && <DocBin />}
+                    {data && item === Item.Settings && <Settings />}
                 </div>
             </ContentWithSideBar>
         </div>

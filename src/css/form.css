@@ -25,6 +25,11 @@
     border: 1px solid var(--border);
 }
 
+/* iOS Safari date picker */
+.input::-webkit-date-and-time-value {
+    text-align: start;
+}
+
 .input:focus,
 .textarea:focus,
 .select:focus {

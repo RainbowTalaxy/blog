@@ -11,7 +11,7 @@ const { User, Dir } = require('../config');
 const { readJSON } = require('../utils');
 const router = express.Router();
 
-// 生成 token
+// 生成注册 token
 router.post('/token', login, async (req, res) => {
     try {
         if (!req.isAdmin)
@@ -70,18 +70,34 @@ router.get('/list', login, async (req, res) => {
 const MAX_DAY = 120;
 
 router.post('/login', async (req, res) => {
-    const { id, password } = req.body;
+    const { id, password, expireTime = MAX_DAY } = req.body;
     if (!id || !password)
-        return res.status(400).send({ error: 'id and password are required' });
+        return res.status(400).send({
+            error: 'id and password are required',
+            message: '请提供 ID 或密码',
+        });
+    if (expireTime > MAX_DAY) {
+        return res.status(400).send({
+            error: 'expireTime is too long',
+            message: '过期时间太长',
+        });
+    }
+    if (expireTime < 1) {
+        return res.status(400).send({
+            error: 'expireTime is too short',
+            message: '过期时间太短',
+        });
+    }
     try {
         if (!User.validate(id, password)) {
             return res.status(401).send({
                 error: 'Wrong id or password',
+                message: 'ID 或密码错误',
             });
         }
         const config = readJSON(Dir.storage.config);
         const token = jwt.sign({ id, password }, config.secret, {
-            expiresIn: `${MAX_DAY}d`,
+            expiresIn: `${expireTime}d`,
         });
         return res.send({
             token,
@@ -90,6 +106,7 @@ router.post('/login', async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: error.message,
+            message: '登录失败',
         });
     }
 });

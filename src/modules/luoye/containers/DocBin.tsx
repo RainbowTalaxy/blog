@@ -20,7 +20,7 @@ const DocBin = () => {
                 const data = await API.luoye.docBin();
                 if (isMounted) setDocBin(data);
             } catch (error: any) {
-                Toast.notify(`获取文档回收站失败：${error.message}`);
+                Toast.notify(error.message);
                 if (isMounted) setDocBin(null);
             }
             hideSidebar();

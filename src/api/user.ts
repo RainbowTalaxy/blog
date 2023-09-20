@@ -1,4 +1,4 @@
-import { LOCAL_API, SERVER_API } from '../constants/config';
+import { SERVER_API } from '../constants/config';
 import { rocketV2 } from './utils';
 
 export interface TokenInfo {
@@ -17,10 +17,11 @@ const UserAPI = {
             password,
             token,
         }),
-    login: (id: string, password: string) =>
+    login: (id: string, password: string, expireTime?: number) =>
         rocketV2.post<{ token: string }>(`${SERVER_API}/user/login`, {
             id,
             password,
+            expireTime,
         }),
     test: () => rocketV2.get<{ id: string }>(`${SERVER_API}/user/test`),
 };

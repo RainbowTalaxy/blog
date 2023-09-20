@@ -38,7 +38,7 @@ const DocPage = () => {
             const docData = await API.luoye.doc(id);
             setDoc(docData);
         } catch (error: any) {
-            Toast.notify(`获取文档数据失败：${error.message}`);
+            Toast.notify(error.message);
             setDoc(null);
         }
     }, [id]);
@@ -74,6 +74,7 @@ const DocPage = () => {
                     {doc?.name || '文档不存在'} | {PROJECT_NAME}
                 </title>
                 <meta name="theme-color" content="#fff8ed" />
+                <link rel="icon" href="https://blog.talaxy.cn/img/luoye.png" />
             </Head>
             <GlobalStyle />
             <ContentWithSideBar
@@ -123,7 +124,7 @@ const DocPage = () => {
                                         });
                                         setWorkspace(newWorkspace);
                                     } catch (error: any) {
-                                        Toast.notify(`更新失败：${error.message}`);
+                                        Toast.notify(error.message);
                                         setWorkspace(workspace);
                                     }
                                 }}
