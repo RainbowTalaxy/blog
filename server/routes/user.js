@@ -76,19 +76,17 @@ router.post('/login', async (req, res) => {
             error: 'id and password are required',
             message: '请提供 ID 或密码',
         });
-    if (expireTime) {
-        if (expireTime > MAX_DAY) {
-            return res.status(400).send({
-                error: 'expireTime is too long',
-                message: '过期时间太长',
-            });
-        }
-        if (expireTime < 1) {
-            return res.status(400).send({
-                error: 'expireTime is too short',
-                message: '过期时间太短',
-            });
-        }
+    if (expireTime > MAX_DAY) {
+        return res.status(400).send({
+            error: 'expireTime is too long',
+            message: '过期时间太长',
+        });
+    }
+    if (expireTime < 1) {
+        return res.status(400).send({
+            error: 'expireTime is too short',
+            message: '过期时间太短',
+        });
     }
     try {
         if (!User.validate(id, password)) {
@@ -99,7 +97,7 @@ router.post('/login', async (req, res) => {
         }
         const config = readJSON(Dir.storage.config);
         const token = jwt.sign({ id, password }, config.secret, {
-            expiresIn: `${expireTime ?? MAX_DAY}d`,
+            expiresIn: `${expireTime}d`,
         });
         return res.send({
             token,

@@ -1,6 +1,6 @@
 const express = require('express');
 const { login, weakLogin } = require('../../middlewares');
-const { Scope, Access } = require('./constants');
+const { Scope, Access, ErrorMessage } = require('./constants');
 const { PropCheck } = require('../../utils');
 const { LuoyeCtr, LuoyeUtl } = require('./controller');
 const router = express.Router();
@@ -68,10 +68,7 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
             });
         const accessScope = LuoyeUtl.access(workspace, userId);
         if (accessScope === Access.Forbidden)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         if (accessScope === Access.Visitor) {
             LuoyeUtl.filterPrivate(workspace);
         }
@@ -144,10 +141,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             });
         // 权限校验
         if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         const safeProps = {
             name,
             description,
@@ -190,10 +184,7 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
             });
         // 权限校验
         if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         LuoyeCtr.deleteWorkspace(workspaceId, userId);
         return res.send({
             success: true,
@@ -285,10 +276,7 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
                 message: '未找到文档',
             });
         if (LuoyeUtl.access(doc, userId) === Access.Forbidden)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         return res.send(doc);
     } catch (error) {
         console.log(error);
@@ -325,10 +313,7 @@ router.post('/doc', login, async (req, res) => {
                 message: '未找到工作区',
             });
         if (LuoyeUtl.access(workspace, userId) < Access.Member)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         const userDir = LuoyeCtr.userDir(userId);
         const doc = LuoyeCtr.createDoc(
             userDir,
@@ -374,10 +359,7 @@ router.put('/doc/:docId', login, async (req, res) => {
             });
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Member)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         const safeProps = {
             name,
             content,
@@ -412,10 +394,7 @@ router.delete('/doc/:docId', login, async (req, res) => {
             });
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Admin)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         LuoyeCtr.deleteDoc(doc.id, userId);
         return res.send({
             success: true,
@@ -471,10 +450,7 @@ router.put('/doc-bin/:docId/restore', login, async (req, res) => {
             });
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Admin)
-            return res.status(403).send({
-                error: 'Forbidden',
-                message: '无权限',
-            });
+            return res.status(403).send(ErrorMessage.Forbidden);
         LuoyeCtr.restoreDoc(doc);
         return res.send({
             success: true,

@@ -14,8 +14,16 @@ class Access {
     static Admin = 100;
 }
 
+class ErrorMessage {
+    static Forbidden = {
+        error: 'Forbidden',
+        message: '无权限',
+    };
+}
+
 module.exports = {
     DocType,
     Scope,
     Access,
+    ErrorMessage,
 };
