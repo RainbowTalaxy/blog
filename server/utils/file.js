@@ -25,20 +25,25 @@ class File {
 
     /** 读取 json 文件 */
     static readJSON(path) {
-        if (!fs.existsSync(filePath)) {
-            throw new Error(`File not found: ${filePath}`);
+        if (!fs.existsSync(path)) {
+            throw new Error(`File not found: ${path}`);
         }
-        return fs.readFileSync(filePath);
+        return JSON.parse(fs.readFileSync(path));
     }
 
     /** 写入 json 文件 */
     static writeJSON(path, json) {
-        fs.writeFileSync(filePath, JSON.stringify(json));
+        fs.writeFileSync(path, JSON.stringify(json));
     }
 
     /** 删除文件 */
     static delete(path) {
         fs.unlinkSync(path);
+    }
+
+    /** 删除文件下所有文件 */
+    static rmdir(path) {
+        fs.rmSync(path, { recursive: true });
     }
 }
 

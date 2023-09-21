@@ -1,9 +1,21 @@
+const init = require('./init');
+const workspace = require('./workspace');
+const user = require('./user');
 const general = require('./general');
 const recentDocs = require('./recent-docs');
 const deletion = require('./deletion');
 
 async function test() {
     try {
+        // 初始化
+        await init();
+
+        // 工作区相关
+        await workspace();
+
+        // 用户相关
+        await user();
+
         // 通用测试
         await general();
 

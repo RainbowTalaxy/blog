@@ -3,14 +3,13 @@ const { login, weakLogin } = require('../../middlewares');
 const { Scope, Access, ErrorMessage } = require('./constants');
 const { PropCheck } = require('../../utils');
 const { LuoyeCtr, LuoyeUtl } = require('./controller');
+const Ctr = require('./controllerV2');
 const router = express.Router();
 
 // 获取工作区列表
 router.get('/workspaces', login, async (req, res) => {
     try {
-        const userId = req.userId;
-        const userDir = LuoyeCtr.userDir(userId);
-        const workspaceItems = LuoyeCtr.userWorkspaceItems(userDir);
+        const workspaceItems = Ctr.user(req.userId).workspace.items.content;
         return res.send(workspaceItems);
     } catch (error) {
         console.log(error);
@@ -28,19 +27,19 @@ router.put('/workspaces', login, async (req, res) => {
         const { workspaceIds } = req.body;
         if (!workspaceIds)
             return res.status(400).send({
-                error: 'workspaceIds is required',
+                error: '`workspaceIds` is required',
             });
-        const userDir = LuoyeCtr.userDir(userId);
-        const workspacesItems = LuoyeCtr.userWorkspaceItems(userDir);
+        const user = Ctr.user(userId);
+        const workspaceItems = user.workspace.items.content;
         const newWorkspaceItems = LuoyeUtl.workspaceItems(
-            workspacesItems,
+            workspaceItems,
             workspaceIds,
         );
         if (!newWorkspaceItems)
             return res.status(400).send({
-                error: 'workspaceIds is invalid',
+                error: '`workspaceIds` is invalid',
             });
-        LuoyeCtr.updateUserWorkspaceItems(userDir, newWorkspaceItems);
+        user.workspace.items.content = newWorkspaceItems;
         return res.send(newWorkspaceItems);
     } catch (error) {
         console.log(error);
@@ -58,14 +57,15 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
         const { workspaceId } = req.params;
         if (!workspaceId)
             return res.status(400).send({
-                error: 'workspaceId is required',
+                error: '`workspaceId` is required',
             });
-        const workspace = LuoyeCtr.workspace(workspaceId);
-        if (!workspace)
+        const workspaceCtr = Ctr.workspace.find(workspaceId);
+        if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
                 message: '未找到工作区',
             });
+        const workspace = workspaceCtr.content;
         const accessScope = LuoyeUtl.access(workspace, userId);
         if (accessScope === Access.Forbidden)
             return res.status(403).send(ErrorMessage.Forbidden);
@@ -77,6 +77,7 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
         console.log(error);
         return res.status(500).send({
             error: 'Failed to get workspace',
+            message: '获取工作区失败',
         });
     }
 });
@@ -88,22 +89,22 @@ router.post('/workspace', login, async (req, res) => {
         const { name, description = '', scope = Scope.Private } = req.body;
         if (!name)
             return res.status(400).send({
-                error: 'name is required',
+                error: '`name` is required',
                 message: '工作区名称不能为空',
             });
         // `scope` 参数校验
         if (!LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
-                error: 'scope is invalid',
+                error: '`scope` is invalid',
             });
-        const userDir = LuoyeCtr.userDir(userId);
-        // 限制入参
-        const safeProps = {
-            name,
-            description,
-            scope,
-        };
-        const workspace = LuoyeCtr.createWorkspace(userDir, safeProps, userId);
+        const workspace = Ctr.workspace.add(
+            {
+                name,
+                description,
+                scope,
+            },
+            userId,
+        );
         return res.send(workspace);
     } catch (error) {
         console.log(error);
@@ -129,12 +130,13 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(400).send({
                 error: '`scope` is invalid',
             });
-        const workspace = LuoyeCtr.workspace(workspaceId);
-        if (!workspace)
+        const workspaceCtr = Ctr.workspace.find(workspaceId);
+        if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
                 message: '未找到工作区',
             });
+        const workspace = workspaceCtr.content;
         if (docs && !LuoyeUtl.docDirCheck(docs, workspace))
             return res.status(400).send({
                 error: '`docs` is invalid',
@@ -142,7 +144,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
         // 权限校验
         if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
             return res.status(403).send(ErrorMessage.Forbidden);
-        const safeProps = {
+        const updatedWorkspace = workspaceCtr.update({
             name,
             description,
             scope,
@@ -152,11 +154,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
                 scope: docDir.scope,
                 updatedAt: docDir.updatedAt,
             })),
-        };
-        const updatedWorkspace = LuoyeCtr.updateWorkspace(
-            workspaceId,
-            safeProps,
-        );
+        });
         return res.send(updatedWorkspace);
     } catch (error) {
         console.log(error);

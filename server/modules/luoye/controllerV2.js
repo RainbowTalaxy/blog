@@ -50,6 +50,11 @@ const Controller = {
                     get content() {
                         return File.readJSON(userFile.workspaces);
                     },
+                    set content(newItems) {
+                        if (!newItems)
+                            throw new Error('`newItems` is required');
+                        File.writeJSON(userFile.workspaces, newItems);
+                    },
                     add(workspace) {
                         if (!workspace)
                             throw new Error('`workspace` is required');
@@ -173,6 +178,14 @@ const Controller = {
                 },
             };
         },
+    },
+    clear() {
+        File.rmdir(LuoyeDir.workspaces);
+        File.rmdir(LuoyeDir.docs);
+        File.rmdir(LuoyeDir.users);
+        File.mkdir(LuoyeDir.workspaces);
+        File.mkdir(LuoyeDir.docs);
+        File.mkdir(LuoyeDir.users);
     },
 };
 
