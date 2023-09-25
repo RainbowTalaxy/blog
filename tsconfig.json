@@ -6,5 +6,5 @@
         "jsx": "react-jsx",
         "strict": true
     },
-    "exclude": ["temp", "build", "server"]
+    "exclude": ["temp", "build"]
 }

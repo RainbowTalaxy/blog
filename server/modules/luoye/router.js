@@ -6,10 +6,10 @@ const { LuoyeCtr, LuoyeUtl } = require('./controller');
 const Ctr = require('./controllerV2');
 const router = express.Router();
 
-// 获取工作区列表
+// 获取工作区列表 V2
 router.get('/workspaces', login, async (req, res) => {
     try {
-        const workspaceItems = Ctr.user(req.userId).workspace.items.content;
+        const workspaceItems = Ctr.user(req.userId).workspaceItems.content;
         return res.send(workspaceItems);
     } catch (error) {
         console.log(error);
@@ -20,7 +20,7 @@ router.get('/workspaces', login, async (req, res) => {
     }
 });
 
-// 更新工作区列表顺序
+// 更新工作区列表顺序 V2
 router.put('/workspaces', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -30,7 +30,7 @@ router.put('/workspaces', login, async (req, res) => {
                 error: '`workspaceIds` is required',
             });
         const user = Ctr.user(userId);
-        const workspaceItems = user.workspace.items.content;
+        const workspaceItems = user.workspaceItems.content;
         const newWorkspaceItems = LuoyeUtl.workspaceItems(
             workspaceItems,
             workspaceIds,
@@ -39,7 +39,7 @@ router.put('/workspaces', login, async (req, res) => {
             return res.status(400).send({
                 error: '`workspaceIds` is invalid',
             });
-        user.workspace.items.content = newWorkspaceItems;
+        user.workspaceItems.content = newWorkspaceItems;
         return res.send(newWorkspaceItems);
     } catch (error) {
         console.log(error);
@@ -50,7 +50,7 @@ router.put('/workspaces', login, async (req, res) => {
     }
 });
 
-// 获取工作区信息
+// 获取工作区信息 V2
 router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
     try {
         const userId = req.userId;
@@ -59,7 +59,7 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
             return res.status(400).send({
                 error: '`workspaceId` is required',
             });
-        const workspaceCtr = Ctr.workspace.find(workspaceId);
+        const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
@@ -82,7 +82,7 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
     }
 });
 
-// 创建工作区
+// 创建工作区 V2
 router.post('/workspace', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -115,7 +115,7 @@ router.post('/workspace', login, async (req, res) => {
     }
 });
 
-// 更新工作区信息
+// 更新工作区信息 V2
 router.put('/workspace/:workspaceId', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -130,7 +130,7 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(400).send({
                 error: '`scope` is invalid',
             });
-        const workspaceCtr = Ctr.workspace.find(workspaceId);
+        const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
