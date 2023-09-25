@@ -410,7 +410,7 @@ router.get('/doc-bin', login, async (req, res) => {
 });
 
 // 从文档回收站恢复文档
-router.put('/doc-bin/:docId/restore', login, async (req, res) => {
+router.put('/doc/:docId/restore', login, async (req, res) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -425,6 +425,12 @@ router.put('/doc-bin/:docId/restore', login, async (req, res) => {
                 message: '未找到文档',
             });
         const doc = docCtr.content;
+        if (doc.deletedAt === null) {
+            return res.status(400).send({
+                error: 'doc not removed',
+                message: '文档未被移除',
+            });
+        }
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Admin)
             return res.status(403).send(ErrorMessage.Forbidden);

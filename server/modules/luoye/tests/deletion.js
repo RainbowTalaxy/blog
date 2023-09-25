@@ -76,7 +76,7 @@ async function test() {
         if (!deletedDoc.deletedAt) throw new Error('doc not marked as deleted');
 
         // 恢复文档
-        await talaxy.put(`/doc-bin/${docId}/restore`);
+        await talaxy.put(`/doc/${docId}/restore`);
         // 检查回收站是否还有文档
         const updatedBin = await talaxy.get('/doc-bin');
         if (updatedBin.find((d) => d.docId === docId))

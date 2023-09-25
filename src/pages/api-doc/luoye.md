@@ -320,7 +320,7 @@ type Response = DocBinItem[];
 
 ### `PUT` 恢复文档
 
-`/doc-bin/:docId/restore`
+`/doc/:docId/restore`
 
 **响应**
 

@@ -14,6 +14,21 @@ const PropList = {
         'createdAt',
         'updatedAt',
     ],
+    doc: [
+        'id',
+        'name',
+        'creator',
+        'admins',
+        'members',
+        'scope',
+        'date',
+        'workspaces',
+        'docType',
+        'content',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+    ],
 };
 
 module.exports = PropList;

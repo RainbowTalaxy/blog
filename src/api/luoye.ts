@@ -128,7 +128,7 @@ const LuoyeAPI = {
         rocketV2.delete<Result>(`${SERVER_API}/luoye/doc/${id}`),
     docBin: () => rocketV2.get<DocBinItem[]>(`${SERVER_API}/luoye/doc-bin`),
     restoreDoc: (id: string) =>
-        rocketV2.put<Result>(`${SERVER_API}/luoye/doc-bin/${id}/restore`),
+        rocketV2.put<Result>(`${SERVER_API}/luoye/doc/${id}/restore`),
 };
 
 export default LuoyeAPI;

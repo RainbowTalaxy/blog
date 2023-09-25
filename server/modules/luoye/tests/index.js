@@ -1,5 +1,6 @@
 const init = require('./init');
 const workspace = require('./workspace');
+const doc = require('./doc');
 const user = require('./user');
 const scope = require('./scope');
 const general = require('./general');
@@ -16,6 +17,9 @@ async function test() {
 
         // 工作区相关
         testCase.merge(await workspace());
+
+        // 文档相关
+        testCase.merge(await doc());
 
         // 用户相关
         testCase.merge(await user());

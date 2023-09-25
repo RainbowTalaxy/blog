@@ -84,8 +84,6 @@ async function test() {
         });
     });
 
-    Controller.clear();
-
     return testCase;
 }
 

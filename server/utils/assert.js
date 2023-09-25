@@ -5,6 +5,12 @@ class Assert {
             Assert.throw(`value not match: ${value} !== ${expected}`);
     }
 
+    /** 否定检查 */
+    static negExpect(value, expected) {
+        if (value === expected)
+            Assert.throw(`value not match: ${value} === ${expected}`);
+    }
+
     /** 检查对象属性 */
     static props(obj, props) {
         if (!Array.isArray(props)) throw new Error('props must be an array');

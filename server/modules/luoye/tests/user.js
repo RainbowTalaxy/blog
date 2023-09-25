@@ -10,6 +10,8 @@ async function test() {
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
 
+    Controller.clear();
+
     await testCase.pos('update workspaceItems', async () => {
         await talaxy.post('/workspace', {
             name: 'workspace1',
@@ -53,8 +55,6 @@ async function test() {
             ),
         });
     });
-
-    Controller.clear();
 
     return testCase;
 }

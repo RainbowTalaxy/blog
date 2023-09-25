@@ -10,6 +10,8 @@ async function test() {
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
 
+    Controller.clear();
+
     await testCase.pos('init file check', async () => {
         const workspaceItems = await talaxy.get('/workspaces');
         Assert.array(workspaceItems, 1);
@@ -21,8 +23,6 @@ async function test() {
         const docBin = await talaxy.get('/doc-bin');
         Assert.array(docBin, 0);
     });
-
-    Controller.clear();
 
     return testCase;
 }
