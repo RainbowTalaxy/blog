@@ -13,7 +13,7 @@ async function test() {
     await testCase.pos('init file check', async () => {
         const workspaceItems = await talaxy.get('/workspaces');
         Assert.array(workspaceItems, 1);
-        Assert.prop(workspaceItems[0], PropList.user.workspaceItems);
+        Assert.props(workspaceItems[0], PropList.user.workspaceItems);
         const docItems = await talaxy.get('/docs');
         Assert.array(docItems, 0);
         const recentDocs = await talaxy.get('/recent-docs');

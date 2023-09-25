@@ -6,7 +6,7 @@ class Assert {
     }
 
     /** 检查对象属性 */
-    static prop(obj, props) {
+    static props(obj, props) {
         if (!Array.isArray(props)) throw new Error('props must be an array');
         if (Object.keys(obj).length !== props.length)
             Assert.throw('props count not match');

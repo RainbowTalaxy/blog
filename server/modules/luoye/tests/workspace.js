@@ -8,7 +8,8 @@ const PropList = require('./constant');
 async function test() {
     const testCase = new TestCase('Luoye - Workspace');
 
-    const user = new Rocket(Server + '/luoye');
+    const baseUrl = Server + '/luoye';
+    const user = new Rocket(baseUrl);
     await user.login('talaxy', 'talaxy');
 
     await testCase.pos('create workspace', async () => {
@@ -17,7 +18,7 @@ async function test() {
             scope: Scope.Public,
         });
         const workspace = await user.get(`/workspace/${data.id}`);
-        Assert.prop(workspace, PropList.workspace);
+        Assert.props(workspace, PropList.workspace);
         Assert.array(workspace.admins, 1);
         Assert.array(workspace.members, 1);
         Assert.array(workspace.docs, 0);
@@ -35,14 +36,14 @@ async function test() {
 
     await testCase.neg('create workspace - invalid scope', async () => {
         await user.post('/workspace', {
-            name: 'workspace1',
+            name: 'workspace',
             scope: 'invalid-scope',
         });
     });
 
     await testCase.pos('create workspace - extra props', async () => {
         const workspace = await user.post('/workspace', {
-            name: 'workspace1',
+            name: 'workspace',
             extra: 'extra',
         });
         Assert.expect(workspace.extra, undefined);
@@ -58,7 +59,7 @@ async function test() {
             scope: Scope.Public,
             // TODO: 文档内容
         });
-        Assert.prop(workspace2, PropList.workspace);
+        Assert.props(workspace2, PropList.workspace);
         Assert.expect(workspace2.name, 'workspace2');
         Assert.expect(workspace2.description, 'description');
         Assert.expect(workspace2.scope, Scope.Public);
@@ -66,12 +67,21 @@ async function test() {
 
     await testCase.pos('update workspace - extra props', async () => {
         const workspace = await user.post('/workspace', {
-            name: 'workspace1',
+            name: 'workspace',
         });
         const workspace2 = await user.put(`/workspace/${workspace.id}`, {
             extra: 'extra',
         });
         Assert.expect(workspace2.extra, undefined);
+    });
+
+    await testCase.neg('update workspace - invalid scope', async () => {
+        const workspace = await user.post('/workspace', {
+            name: 'workspace',
+        });
+        await user.put(`/workspace/${workspace.id}`, {
+            scope: 'invalid-scope',
+        });
     });
 
     Controller.clear();

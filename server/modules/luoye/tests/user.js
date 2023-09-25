@@ -20,7 +20,7 @@ async function test() {
         const workspaceItems = await talaxy.get('/workspaces');
         Assert.array(workspaceItems, 3);
         workspaceItems.forEach((wItem) =>
-            Assert.prop(wItem, PropList.user.workspaceItems),
+            Assert.props(wItem, PropList.user.workspaceItems),
         );
         await talaxy.put('/workspaces', {
             workspaceIds: workspaceItems.map((wItem) => wItem.id).reverse(),
@@ -28,7 +28,7 @@ async function test() {
         const workspaceItems2 = await talaxy.get('/workspaces');
         Assert.array(workspaceItems2, 3);
         workspaceItems2.forEach((wItem) =>
-            Assert.prop(wItem, PropList.user.workspaceItems),
+            Assert.props(wItem, PropList.user.workspaceItems),
         );
         Assert.expect(workspaceItems[0].id, workspaceItems2[2].id);
         Assert.expect(workspaceItems[1].id, workspaceItems2[1].id);
