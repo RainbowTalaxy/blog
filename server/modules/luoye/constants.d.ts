@@ -7,6 +7,17 @@ export enum DocType {
     Markdown = 'markdown',
 }
 
+export enum Access {
+    Forbidden = 0,
+    Visitor = 10,
+    Member = 50,
+    Admin = 100,
+}
+
+export enum ErrorMessage {
+    Forbidden,
+}
+
 interface DocDir {
     docId: string; // 文档 id
     name: string; // 文档名称

@@ -18,6 +18,19 @@ class Rocket {
         return data;
     }
 
+    async negGet(url, params) {
+        const { data } = await axios.get(this.baseUrl + url, {
+            params,
+            headers: {
+                Authorization: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) return null;
+        throw new Error('Expect "error"');
+    }
+
+    /** @deprecated */
     async silentGet(url, params) {
         const { data } = await axios.get(this.baseUrl + url, {
             params,
@@ -40,6 +53,17 @@ class Rocket {
         return data;
     }
 
+    async negPost(url, body) {
+        const { data } = await axios.post(this.baseUrl + url, body, {
+            headers: {
+                Authorization: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) return null;
+        throw new Error('Expect "error"');
+    }
+
     async put(url, body) {
         const { data } = await axios.put(this.baseUrl + url, body, {
             headers: {
@@ -49,6 +73,17 @@ class Rocket {
         });
         if (data.error) throw new Error(data.error);
         return data;
+    }
+
+    async negPut(url, body) {
+        const { data } = await axios.put(this.baseUrl + url, body, {
+            headers: {
+                Authorization: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) return null;
+        throw new Error('Expect "error"');
     }
 
     async delete(url, params) {
@@ -61,6 +96,17 @@ class Rocket {
         });
         if (data.error) throw new Error(data.error);
         return data;
+    }
+
+    async negDelete(url, body) {
+        const { data } = await axios.delete(this.baseUrl + url, body, {
+            headers: {
+                Authorization: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) return null;
+        throw new Error('Expect "error"');
     }
 
     async login(id, password) {

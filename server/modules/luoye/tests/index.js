@@ -1,6 +1,7 @@
 const init = require('./init');
 const workspace = require('./workspace');
 const user = require('./user');
+const scope = require('./scope');
 const general = require('./general');
 const recentDocs = require('./recent-docs');
 const deletion = require('./deletion');
@@ -15,6 +16,9 @@ async function test() {
 
         // 用户相关
         await user();
+
+        // 权限相关
+        await scope();
 
         // 通用测试
         await general();
