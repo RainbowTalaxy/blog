@@ -2,7 +2,7 @@ const { Server } = require('../../../config');
 const { Rocket, TestCase } = require('../../../utils/test');
 
 async function test() {
-    const testCase = new TestCase('Luoye - Recent Docs');
+    const testCase = new TestCase('Luoye - Recent Docs', true);
 
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
@@ -27,6 +27,8 @@ async function test() {
         if (updatedRecentDocs.find((d) => d.id === docId))
             throw new Error('recent doc not deleted');
     });
+
+    return testCase;
 }
 
 module.exports = test;

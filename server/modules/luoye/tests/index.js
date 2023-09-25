@@ -5,29 +5,34 @@ const scope = require('./scope');
 const general = require('./general');
 const recentDocs = require('./recent-docs');
 const deletion = require('./deletion');
+const { TestCase } = require('../../../utils/test');
 
 async function test() {
     try {
+        const testCase = new TestCase('Luoye');
+
         // 初始化
-        await init();
+        testCase.merge(await init());
 
         // 工作区相关
-        await workspace();
+        testCase.merge(await workspace());
 
         // 用户相关
-        await user();
+        testCase.merge(await user());
 
         // 权限相关
-        await scope();
+        testCase.merge(await scope());
 
         // 通用测试
-        await general();
+        testCase.merge(await general());
 
         // 最近文档测试
-        await recentDocs();
+        testCase.merge(await recentDocs());
 
         // 删除操作测试
-        await deletion();
+        testCase.merge(await deletion());
+
+        return testCase.stat();
     } catch (error) {
         console.log(error);
     }

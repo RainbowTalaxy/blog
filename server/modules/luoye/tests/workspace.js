@@ -6,7 +6,7 @@ const Controller = require('../controllerV2');
 const PropList = require('./constant');
 
 async function test() {
-    const testCase = new TestCase('Luoye - Workspace');
+    const testCase = new TestCase('Luoye - Workspace', true);
 
     const baseUrl = Server + '/luoye';
     const user = new Rocket(baseUrl);
@@ -85,6 +85,8 @@ async function test() {
     });
 
     Controller.clear();
+
+    return testCase;
 }
 
 module.exports = test;

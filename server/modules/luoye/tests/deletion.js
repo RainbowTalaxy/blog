@@ -2,7 +2,7 @@ const { Server } = require('../../../config');
 const { Rocket, TestCase } = require('../../../utils/test');
 
 async function test() {
-    const testCase = new TestCase('Luoye - Deletion');
+    const testCase = new TestCase('Luoye - Deletion', true);
 
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
@@ -49,8 +49,7 @@ async function test() {
         if (workspaces.find((w) => w.id === workspaceId))
             throw new Error('workspace not deleted');
         // 检查文档是否还在
-        const deletedDoc = await talaxy.silentGet(`/doc/${docId}`);
-        if (deletedDoc) throw new Error('doc not deleted');
+        await talaxy.negGet(`/doc/${docId}`);
     });
 
     // 删除 & 恢复文档
@@ -73,7 +72,7 @@ async function test() {
         if (updatedWorkspace.docs.find((d) => d.docId === docId))
             throw new Error('doc not removed from workspace');
         // 检查文档的删除标记
-        const deletedDoc = await talaxy.silentGet(`/doc/${docId}`);
+        const deletedDoc = await talaxy.get(`/doc/${docId}`);
         if (!deletedDoc.deletedAt) throw new Error('doc not marked as deleted');
 
         // 恢复文档
@@ -89,9 +88,11 @@ async function test() {
         if (!updatedWorkspace2.docs.find((d) => d.docId === docId))
             throw new Error('doc not restored to workspace');
         // 检查文档的删除标记
-        const restoredDoc = await talaxy.silentGet(`/doc/${docId}`);
+        const restoredDoc = await talaxy.get(`/doc/${docId}`);
         if (restoredDoc.deletedAt) throw new Error('doc not restored');
     });
+
+    return testCase;
 }
 
 module.exports = test;

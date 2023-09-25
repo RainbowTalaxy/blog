@@ -114,6 +114,8 @@ async function test() {
     await testCase.pos('delete project', async () => {
         await rocket.delete(`/project/${project.id}`);
     });
+
+    return testCase.stat();
 }
 
 module.exports = test;

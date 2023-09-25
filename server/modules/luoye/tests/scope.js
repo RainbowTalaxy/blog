@@ -3,10 +3,9 @@ const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const { Scope } = require('../constants');
 const Controller = require('../controllerV2');
-const PropList = require('./constant');
 
 async function test() {
-    const testCase = new TestCase('Luoye - Scope');
+    const testCase = new TestCase('Luoye - Scope', true);
 
     const baseUrl = Server + '/luoye';
     const user = new Rocket(baseUrl);
@@ -39,6 +38,8 @@ async function test() {
     });
 
     Controller.clear();
+
+    return testCase;
 }
 
 module.exports = test;

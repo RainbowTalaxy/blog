@@ -23,6 +23,8 @@ async function test() {
     await testCase.neg('invalid path', async () => {
         await rocket.get('/../invalid');
     });
+
+    return testCase.stat();
 }
 
 module.exports = test;

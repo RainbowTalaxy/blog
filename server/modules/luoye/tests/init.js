@@ -5,7 +5,7 @@ const Controller = require('../controllerV2');
 const PropList = require('./constant');
 
 async function test() {
-    const testCase = new TestCase('Luoye - Init');
+    const testCase = new TestCase('Luoye - Init', true);
 
     const talaxy = new Rocket(Server + '/luoye');
     await talaxy.login('talaxy', 'talaxy');
@@ -23,6 +23,8 @@ async function test() {
     });
 
     Controller.clear();
+
+    return testCase;
 }
 
 module.exports = test;

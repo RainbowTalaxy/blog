@@ -10,9 +10,11 @@ require('../config');
 
 async function test() {
     try {
-        await new TestCase('Echo').pos('echo', async () => {
+        const testCase = new TestCase('Echo');
+        await testCase.pos('echo', async () => {
             await new Rocket().post('/echo', { data: 'hello' });
         });
+        testCase.stat();
 
         // user 测试
         await user();
