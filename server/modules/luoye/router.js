@@ -9,7 +9,8 @@ const router = express.Router();
 // 获取工作区列表 V2
 router.get('/workspaces', login, async (req, res) => {
     try {
-        const workspaceItems = Ctr.user(req.userId).workspaceItems.content;
+        const userId = req.userId;
+        const workspaceItems = Ctr.user(userId).workspaceItems.content;
         return res.send(workspaceItems);
     } catch (error) {
         console.log(error);
@@ -172,7 +173,7 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
         const { workspaceId } = req.params;
         if (!workspaceId)
             return res.status(400).send({
-                error: 'workspaceId is required',
+                error: '`workspaceId` is required',
             });
         const workspace = LuoyeCtr.workspace(workspaceId);
         if (!workspace)
@@ -196,13 +197,12 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
     }
 });
 
-// 获取用户最近文档列表
+// 获取用户最近文档列表 V2
 router.get('/recent-docs', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const userDir = LuoyeCtr.userDir(userId);
-        const docs = LuoyeCtr.recentDocs(userDir);
-        return res.send(docs.slice(0, 10));
+        const recentDoc = Ctr.user(userId).recentDocs.content;
+        return res.send(recentDoc.slice(0, 10));
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -212,24 +212,16 @@ router.get('/recent-docs', login, async (req, res) => {
     }
 });
 
-// 删除用户最近文档
+// 删除用户最近文档 V2
 router.delete('/recent-docs/:docId', login, async (req, res) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
         if (!docId)
             return res.status(400).send({
-                error: 'docId is required',
+                error: '`docId` is required',
             });
-        const userDir = LuoyeCtr.userDir(userId);
-        const recentDocs = LuoyeCtr.recentDocs(userDir);
-        const recentDoc = recentDocs.find((item) => item.id === docId);
-        if (!recentDoc)
-            return res.status(404).send({
-                error: 'doc not found',
-                message: '未找到文档',
-            });
-        LuoyeCtr.deleteRecentDoc(userDir, docId);
+        Ctr.user(userId).recentDocs.remove(docId);
         return res.send({
             success: true,
         });
@@ -242,12 +234,11 @@ router.delete('/recent-docs/:docId', login, async (req, res) => {
     }
 });
 
-// 获取用户文档列表
+// 获取用户文档列表 V2
 router.get('/docs', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const userDir = LuoyeCtr.userDir(userId);
-        const docs = LuoyeCtr.docs(userDir);
+        const docs = Ctr.user(userId).docItems.content;
         return res.send(docs);
     } catch (error) {
         console.log(error);
@@ -258,7 +249,7 @@ router.get('/docs', login, async (req, res) => {
     }
 });
 
-// 获取文档信息
+// 获取文档信息 V2
 router.get('/doc/:docId', weakLogin, async (req, res) => {
     try {
         const userId = req.userId;
@@ -267,12 +258,13 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
             return res.status(400).send({
                 error: 'docId is required',
             });
-        const doc = LuoyeCtr.doc(docId);
-        if (!doc)
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
             return res.status(404).send({
                 error: 'doc not found',
                 message: '未找到文档',
             });
+        const doc = docCtr.content;
         if (LuoyeUtl.access(doc, userId) === Access.Forbidden)
             return res.status(403).send(ErrorMessage.Forbidden);
         return res.send(doc);
@@ -285,7 +277,7 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
     }
 });
 
-// 创建文档
+// 创建文档 V2
 router.post('/doc', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -304,21 +296,16 @@ router.post('/doc', login, async (req, res) => {
             return res.status(400).send({
                 error: 'date is invalid',
             });
-        const workspace = LuoyeCtr.workspace(workspaceId);
-        if (!workspace)
+        const workspaceCtr = Ctr.workspace.ctr(workspaceId);
+        if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
                 message: '未找到工作区',
             });
+        const workspace = workspaceCtr.content;
         if (LuoyeUtl.access(workspace, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
-        const userDir = LuoyeCtr.userDir(userId);
-        const doc = LuoyeCtr.createDoc(
-            userDir,
-            workspace,
-            { name, scope, date },
-            userId,
-        );
+        const doc = Ctr.doc.add({ name, scope, date }, workspaceCtr, userId);
         return res.send(doc);
     } catch (error) {
         console.log(error);
@@ -329,7 +316,7 @@ router.post('/doc', login, async (req, res) => {
     }
 });
 
-// 更新文档信息
+// 更新文档信息 V2
 router.put('/doc/:docId', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -349,22 +336,22 @@ router.put('/doc/:docId', login, async (req, res) => {
             return res.status(400).send({
                 error: 'date is invalid',
             });
-        const doc = LuoyeCtr.doc(docId);
-        if (!doc)
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
             return res.status(404).send({
                 error: 'doc not found',
                 message: '未找到文档',
             });
+        const doc = docCtr.content;
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
-        const safeProps = {
+        const updatedDoc = docCtr.update({
             name,
             content,
             scope,
             date,
-        };
-        const updatedDoc = LuoyeCtr.updateDoc(doc, safeProps);
+        });
         return res.send(updatedDoc);
     } catch (error) {
         console.log(error);
@@ -375,7 +362,7 @@ router.put('/doc/:docId', login, async (req, res) => {
     }
 });
 
-// 删除文档
+// 删除文档 V2
 router.delete('/doc/:docId', login, async (req, res) => {
     try {
         const userId = req.userId;
@@ -384,16 +371,17 @@ router.delete('/doc/:docId', login, async (req, res) => {
             return res.status(400).send({
                 error: 'docId is required',
             });
-        const doc = LuoyeCtr.doc(docId);
-        if (!doc)
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
             return res.status(404).send({
                 error: 'doc not found',
                 message: '未找到文档',
             });
+        const doc = docCtr.content;
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Admin)
             return res.status(403).send(ErrorMessage.Forbidden);
-        LuoyeCtr.deleteDoc(doc.id, userId);
+        docCtr.remove(userId);
         return res.send({
             success: true,
         });
@@ -406,13 +394,12 @@ router.delete('/doc/:docId', login, async (req, res) => {
     }
 });
 
-// 获取文档回收站
+// 获取文档回收站 V2
 router.get('/doc-bin', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const userDir = LuoyeCtr.userDir(userId);
-        const docBin = LuoyeCtr.docBin(userDir);
-        return res.send(docBin);
+        const docBinItems = Ctr.user(userId).docBinItems.content;
+        return res.send(docBinItems);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -431,25 +418,17 @@ router.put('/doc-bin/:docId/restore', login, async (req, res) => {
             return res.status(400).send({
                 error: 'docId is required',
             });
-        const userDir = LuoyeCtr.userDir(userId);
-        // 检查文档是否在回收站
-        const docBin = LuoyeCtr.docBin(userDir);
-        if (!docBin.find((item) => item.docId === docId)) {
-            return res.status(404).send({
-                error: 'doc not found in doc bin',
-                message: '未在回收站中找到文档',
-            });
-        }
-        const doc = LuoyeCtr.doc(docId);
-        if (!doc)
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
             return res.status(404).send({
                 error: 'doc not found',
                 message: '未找到文档',
             });
+        const doc = docCtr.content;
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Admin)
             return res.status(403).send(ErrorMessage.Forbidden);
-        LuoyeCtr.restoreDoc(doc);
+        docCtr.restore();
         return res.send({
             success: true,
         });

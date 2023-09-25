@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 const LuoyeDir = Dir.storage.luoye;
 
-/** @type {import('./controllerV2').Controller} */
+/** @type {import('./controllerV2')} */
 const Controller = {
     /** 用户文件 */
     userFile(userId) {
@@ -288,15 +288,13 @@ const Controller = {
         },
     },
     doc: {
-        add(props, workspaceId, creator) {
-            if (!props || !workspaceId || !creator)
+        add(props, workspaceCtr, creator) {
+            if (!props || !workspaceCtr || !creator)
                 throw new Error(
                     '`props` or `workspaceId` or `creator` is required',
                 );
-            const now = Date.now();
-            const workspaceCtr = Controller.workspace.ctr(workspaceId);
-            if (!workspaceCtr) throw new Error('`workspaceId` is not exist');
             const workspace = workspaceCtr.content;
+            const now = Date.now();
             const doc = {
                 id: uuid(),
                 name: props.name ?? '',
@@ -341,6 +339,7 @@ const Controller = {
                     slice.name = props.name ?? slice.name;
                     slice.scope = props.scope ?? slice.scope;
                     slice.date = props.date ?? slice.date;
+                    slice.content = props.content ?? slice.content;
                     slice.updatedAt = now;
                     // ---
                     // 更新用户的文档列表
@@ -355,6 +354,7 @@ const Controller = {
                     return slice;
                 },
                 remove(executor) {
+                    if (!executor) throw new Error('`executor` is required');
                     const slice = this.content;
                     if (slice.deletedAt) return;
                     slice.deletedAt = Date.now();

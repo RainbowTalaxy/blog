@@ -8,7 +8,7 @@ import {
     WorkspaceItem,
 } from './constants';
 
-export interface Controller {
+declare const Controller: {
     userFile: (userId: string) => {
         workspaces: string;
         docs: string;
@@ -69,7 +69,7 @@ export interface Controller {
                 scope?: Scope;
                 date?: number;
             },
-            workspaceId: string,
+            workspaceCtr: ReturnType<(typeof Controller)['workspace']['ctr']>,
             creator: string,
         ) => Doc;
         ctr: (docId: string) => {
@@ -78,10 +78,13 @@ export interface Controller {
                 name?: string;
                 scope?: Scope;
                 date?: number;
+                content?: string;
             }) => Doc;
             remove: (executor: string) => void;
             restore: () => void;
         } | null;
     };
     clear: () => void;
-}
+};
+
+export = Controller;
