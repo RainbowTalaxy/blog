@@ -23,6 +23,7 @@ const PropList = {
         'createdAt',
         'updatedAt',
     ],
+    docDir: ['docId', 'name', 'scope', 'updatedAt'],
     doc: [
         'id',
         'name',

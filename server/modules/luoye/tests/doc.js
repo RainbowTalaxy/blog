@@ -2,7 +2,6 @@ const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const { DocType, Scope } = require('../constants');
-const Controller = require('../controllerV2');
 const PropList = require('./constant');
 
 async function test() {

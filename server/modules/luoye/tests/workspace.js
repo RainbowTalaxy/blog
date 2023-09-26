@@ -2,7 +2,6 @@ const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const { Scope } = require('../constants');
-const Controller = require('../controllerV2');
 const PropList = require('./constant');
 
 async function test() {
@@ -57,7 +56,6 @@ async function test() {
             name: 'workspace2',
             description: 'description',
             scope: Scope.Public,
-            // TODO: 文档内容
         });
         Assert.props(workspace2, PropList.workspace);
         Assert.expect(workspace2.name, 'workspace2');
@@ -83,6 +81,79 @@ async function test() {
             scope: 'invalid-scope',
         });
     });
+
+    // ## 更新工作区的文档列表顺序
+
+    await testCase.pos('update workspace docs sequence', async () => {
+        const workspace = await user.post('/workspace', {
+            name: 'workspace',
+        });
+        await user.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc1',
+        });
+        await user.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc2',
+        });
+        await user.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc3',
+        });
+        const workspace2 = await user.get(`/workspace/${workspace.id}`);
+        Assert.array(workspace2.docs, 3);
+        Assert.expect(workspace2.docs[0].name, 'doc1');
+        Assert.expect(workspace2.docs[1].name, 'doc2');
+        Assert.expect(workspace2.docs[2].name, 'doc3');
+        await user.put(`/workspace/${workspace.id}`, {
+            docs: workspace2.docs.slice().reverse(),
+        });
+        const workspace3 = await user.get(`/workspace/${workspace.id}`);
+        Assert.array(workspace3.docs, 3);
+        Assert.expect(workspace3.docs[0].name, workspace2.docs[2].name);
+        Assert.expect(workspace3.docs[1].name, workspace2.docs[1].name);
+        Assert.expect(workspace3.docs[2].name, workspace2.docs[0].name);
+    });
+
+    await testCase.neg(
+        'update workspace docs sequence - invalid doc',
+        async () => {
+            const workspace = await user.post('/workspace', {
+                name: 'workspace',
+            });
+            await user.post('/doc', {
+                workspaceId: workspace.id,
+                name: 'doc',
+            });
+            const workspace2 = await user.get(`/workspace/${workspace.id}`);
+            Assert.array(workspace2.docs, 3);
+            Assert.expect(workspace2.docs[0].name, 'doc');
+            await user.put(`/workspace/${workspace.id}`, {
+                docs: workspace2.docs.slice().reverse().concat({
+                    id: 'invalid-doc-id',
+                }),
+            });
+        },
+    );
+
+    await testCase.neg(
+        'update workspace docs sequence - lack of docs',
+        async () => {
+            const workspace = await user.post('/workspace', {
+                name: 'workspace',
+            });
+            await user.post('/doc', {
+                workspaceId: workspace.id,
+                name: 'doc',
+            });
+            const workspace2 = await user.get(`/workspace/${workspace.id}`);
+            Assert.array(workspace2.docs, 3);
+            Assert.expect(workspace2.docs[0].name, 'doc');
+            await user.put(`/workspace/${workspace.id}`, {
+                docs: workspace2.docs.slice(1),
+            });
+        },
+    );
 
     return testCase;
 }
