@@ -57,6 +57,7 @@ declare const Controller: {
                 scope?: Scope;
                 docs?: DocDir[];
             }) => Workspace;
+            delete: () => void;
             addDoc: (doc: Doc) => void;
             updateDoc: (doc: Doc) => void;
             removeDoc: (docId: string) => void;
@@ -82,6 +83,7 @@ declare const Controller: {
             }) => Doc;
             remove: (executor: string) => void;
             restore: () => void;
+            delete: () => void;
         } | null;
     };
     clear: () => void;

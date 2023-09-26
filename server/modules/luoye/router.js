@@ -175,16 +175,17 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
             return res.status(400).send({
                 error: '`workspaceId` is required',
             });
-        const workspace = LuoyeCtr.workspace(workspaceId);
-        if (!workspace)
+        const workspaceCtr = Ctr.workspace.ctr(workspaceId);
+        if (!workspaceCtr)
             return res.status(404).send({
                 error: 'workspace not found',
                 message: '未找到工作区',
             });
+        const workspace = workspaceCtr.content;
         // 权限校验
         if (LuoyeUtl.access(workspace, userId) !== Access.Admin)
             return res.status(403).send(ErrorMessage.Forbidden);
-        LuoyeCtr.deleteWorkspace(workspaceId, userId);
+        workspaceCtr.delete();
         return res.send({
             success: true,
         });

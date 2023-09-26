@@ -250,6 +250,18 @@ const Controller = {
                     this.content = slice;
                     return slice;
                 },
+                delete() {
+                    const slice = this.content;
+                    slice.docs.forEach((docDir) =>
+                        Controller.doc.ctr(docDir.docId)?.delete(),
+                    );
+                    slice.members.forEach((memberId) =>
+                        Controller.user(memberId).workspaceItems.remove(
+                            workspaceId,
+                        ),
+                    );
+                    File.delete(workspaceFile);
+                },
                 addDoc(doc) {
                     if (!doc) throw new Error('`doc` is required');
                     const slice = this.content;
@@ -391,6 +403,18 @@ const Controller = {
                         Controller.user(adminId).docBinItems.remove(docId),
                     );
                     this.content = slice;
+                },
+                delete() {
+                    const slice = this.content;
+                    slice.members.forEach((memberId) =>
+                        Controller.user(memberId).docItems.remove(docId),
+                    );
+                    slice.workspaces.forEach((workspaceId) => {
+                        Controller.workspace
+                            .ctr(workspaceId)
+                            ?.removeDoc(slice.id);
+                    });
+                    File.delete(docFile);
                 },
             };
         },

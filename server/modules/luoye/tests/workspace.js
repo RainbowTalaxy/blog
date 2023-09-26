@@ -2,6 +2,7 @@ const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const { Scope } = require('../constants');
+const Controller = require('../controllerV2');
 const PropList = require('./constant');
 
 async function test() {
@@ -154,6 +155,32 @@ async function test() {
             });
         },
     );
+
+    Controller.clear();
+
+    // ## 删除工作区
+
+    await testCase.pos('delete workspace', async () => {
+        const workspace = await user.post('/workspace', {
+            name: 'workspace',
+        });
+        const doc = await user.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc',
+        });
+        await user.delete(`/workspace/${workspace.id}`);
+        await user.negGet(`/workspace/${workspace.id}`);
+        await user.negGet(`/doc/${doc.id}`);
+        const workspaceItems = await user.get('/workspaces');
+        const docItems = await user.get('/docs');
+        Assert.array(workspaceItems, 1);
+        Assert.expect(workspaceItems[0].id, 'talaxy');
+        Assert.array(docItems, 0);
+    });
+
+    await testCase.neg('delete workspace - invalid id', async () => {
+        await user.delete('/workspace/invalid-id');
+    });
 
     return testCase;
 }
