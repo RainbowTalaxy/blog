@@ -202,8 +202,8 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
 router.get('/recent-docs', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const recentDoc = Ctr.user(userId).recentDocs.content;
-        return res.send(recentDoc.slice(0, 10));
+        const recentDocs = Ctr.user(userId).recentDocs.content;
+        return res.send(recentDocs.slice(0, 10));
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -239,8 +239,8 @@ router.delete('/recent-docs/:docId', login, async (req, res) => {
 router.get('/docs', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const docs = Ctr.user(userId).docItems.content;
-        return res.send(docs);
+        const docsItems = Ctr.user(userId).docItems.content;
+        return res.send(docsItems);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
