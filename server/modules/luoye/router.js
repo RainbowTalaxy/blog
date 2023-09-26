@@ -409,7 +409,7 @@ router.get('/doc-bin', login, async (req, res) => {
     }
 });
 
-// 从文档回收站恢复文档
+// 从文档回收站恢复文档 V2
 router.put('/doc/:docId/restore', login, async (req, res) => {
     try {
         const userId = req.userId;

@@ -121,7 +121,7 @@ class TestCase {
             success: 0,
             failure: 0,
         };
-        if (!silent) console.log(this.name);
+        if (!silent) console.log('🐰', this.name);
     }
 
     async pos(title, task) {
