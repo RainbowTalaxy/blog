@@ -86,8 +86,9 @@ class Rocket {
         return data;
     }
 
-    async negDelete(url, body) {
-        const { data } = await axios.delete(this.baseUrl + url, body, {
+    async negDelete(url, params) {
+        const { data } = await axios.delete(this.baseUrl + url, {
+            params,
             headers: {
                 Authorization: `token=${this.token}`,
             },
