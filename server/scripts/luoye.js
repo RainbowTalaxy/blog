@@ -2,7 +2,7 @@ const path = require('path');
 const { Dir } = require('../config');
 const fs = require('fs');
 const { readJSON, writeJSON, writeJSONIfNotExist } = require('../utils');
-const { LuoyeFile } = require('../modules/luoye/controller');
+const { LuoyeFile } = require('../modules/luoye/utility');
 
 async function main() {
     const docDir = Dir.storage.luoye.docs;

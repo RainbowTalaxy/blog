@@ -1,7 +1,7 @@
 const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
-const Controller = require('../controllerV2');
+const Controller = require('../controller');
 const PropList = require('./constant');
 
 async function test() {
@@ -15,7 +15,7 @@ async function test() {
     await testCase.pos('init file check', async () => {
         const workspaceItems = await talaxy.get('/workspaces');
         Assert.array(workspaceItems, 1);
-        Assert.props(workspaceItems[0], PropList.user.workspaceItems);
+        Assert.props(workspaceItems[0], PropList.user.workspaceItem);
         const docItems = await talaxy.get('/docs');
         Assert.array(docItems, 0);
         const recentDocs = await talaxy.get('/recent-docs');

@@ -1,7 +1,7 @@
 const PropList = {
     user: {
-        workspaceItems: ['id', 'name', 'description', 'scope', 'joinAt'],
-        docItems: [
+        workspaceItem: ['id', 'name', 'description', 'scope', 'joinAt'],
+        docItem: [
             'id',
             'name',
             'creator',
@@ -10,6 +10,7 @@ const PropList = {
             'createdAt',
             'updatedAt',
         ],
+        docBinItem: ['docId', 'name', 'executor', 'deletedAt'],
     },
     workspace: [
         'id',

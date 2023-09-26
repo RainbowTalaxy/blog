@@ -1,7 +1,7 @@
 const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
-const Controller = require('../controllerV2');
+const Controller = require('../controller');
 const PropList = require('./constant');
 
 async function test() {
@@ -22,7 +22,7 @@ async function test() {
         const workspaceItems = await talaxy.get('/workspaces');
         Assert.array(workspaceItems, 3);
         workspaceItems.forEach((wItem) =>
-            Assert.props(wItem, PropList.user.workspaceItems),
+            Assert.props(wItem, PropList.user.workspaceItem),
         );
         Assert.expect(workspaceItems[0].name, 'workspace2');
         Assert.expect(workspaceItems[1].name, 'workspace1');
@@ -32,7 +32,7 @@ async function test() {
         const workspaceItems2 = await talaxy.get('/workspaces');
         Assert.array(workspaceItems2, 3);
         workspaceItems2.forEach((wItem) =>
-            Assert.props(wItem, PropList.user.workspaceItems),
+            Assert.props(wItem, PropList.user.workspaceItem),
         );
         Assert.expect(workspaceItems[0].id, workspaceItems2[2].id);
         Assert.expect(workspaceItems[1].id, workspaceItems2[1].id);
@@ -70,9 +70,7 @@ async function test() {
         });
         const docItems = await talaxy.get('/docs');
         Assert.array(docItems, 1);
-        docItems.forEach((dItem) =>
-            Assert.props(dItem, PropList.user.docItems),
-        );
+        docItems.forEach((dItem) => Assert.props(dItem, PropList.user.docItem));
         Assert.expect(docItems[0].name, 'doc');
         await talaxy.post('/doc', {
             workspaceId: workspace.id,
