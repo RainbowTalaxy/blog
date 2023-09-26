@@ -1,6 +1,7 @@
 const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
+const { DocType, Scope } = require('../constants');
 const Controller = require('../controller');
 const PropList = require('./constant');
 
@@ -83,6 +84,52 @@ async function test() {
         const docItems3 = await talaxy.get('/docs');
         Assert.array(docItems3, 1);
         Assert.expect(docItems3[0].name, 'doc');
+    });
+
+    Controller.clear();
+
+    await testCase.pos('check recent doc update', async () => {
+        const workspace = await talaxy.post('/workspace', {
+            name: 'workspace',
+        });
+        const doc = await talaxy.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc',
+        });
+        const recentDocs = await talaxy.get('/recent-docs');
+        Assert.array(recentDocs, 1);
+        recentDocs.forEach((dItem) =>
+            Assert.props(dItem, PropList.user.docItem),
+        );
+        Assert.expect(recentDocs[0].name, 'doc');
+        Assert.expect(recentDocs[0].creator, 'talaxy');
+        Assert.expect(recentDocs[0].scope, Scope.Private);
+        Assert.expect(recentDocs[0].docType, DocType.Markdown);
+        await talaxy.delete(`/doc/${doc.id}`);
+        const recentDocs2 = await talaxy.get('/recent-docs');
+        Assert.array(recentDocs2, 0);
+    });
+
+    Controller.clear();
+
+    await testCase.pos('check doc bin update', async () => {
+        const workspace = await talaxy.post('/workspace', {
+            name: 'workspace',
+        });
+        const doc = await talaxy.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'doc',
+        });
+        const docBin = await talaxy.get('/doc-bin');
+        Assert.array(docBin, 0);
+        await talaxy.delete(`/doc/${doc.id}`);
+        const docBin2 = await talaxy.get('/doc-bin');
+        Assert.array(docBin2, 1);
+        docBin2.forEach((dItem) =>
+            Assert.props(dItem, PropList.user.docBinItem),
+        );
+        Assert.expect(docBin2[0].name, 'doc');
+        Assert.expect(docBin2[0].executor, 'talaxy');
     });
 
     return testCase;
