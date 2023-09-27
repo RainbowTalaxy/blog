@@ -64,20 +64,22 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                     <label>日期：</label>
                     <Input raf={dateRef} type="date" defaultValue={formDate()} />
                 </div>
-                <div className={styles.formItem}>
-                    <label>类型：</label>
-                    <div className={styles.options}>
-                        {DOCTYPE_OPTIONS.map((t) => (
-                            <div
-                                key={t}
-                                className={clsx(styles.option, t === docType && styles.selected)}
-                                onClick={() => setDocType(t)}
-                            >
-                                {DOCTYPE_OPTIONS_NAME[t]}
-                            </div>
-                        ))}
+                {!doc && (
+                    <div className={styles.formItem}>
+                        <label>类型：</label>
+                        <div className={styles.options}>
+                            {DOCTYPE_OPTIONS.map((t) => (
+                                <div
+                                    key={t}
+                                    className={clsx(styles.option, t === docType && styles.selected)}
+                                    onClick={() => setDocType(t)}
+                                >
+                                    {DOCTYPE_OPTIONS_NAME[t]}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className={styles.formItem}>
                     <label>公开：</label>
                     <Toggle raf={scopeRef} />
