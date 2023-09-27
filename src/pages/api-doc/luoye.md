@@ -265,8 +265,9 @@ type Response = Doc;
 interface Body {
     workspaceId: string;
     name?: string;
+    scope?: 'private' | 'public';
     date?: number;
-    docType: 'text' | 'markdown';
+    docType?: 'text' | 'markdown';
 }
 ```
 

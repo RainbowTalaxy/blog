@@ -7,6 +7,7 @@ export enum Scope {
 }
 
 export enum DocType {
+    Text = 'text',
     Markdown = 'markdown',
 }
 
@@ -108,7 +109,9 @@ const LuoyeAPI = {
         workspaceId: string,
         props: {
             name?: string;
+            scope?: Scope;
             date?: number;
+            docType?: DocType;
         },
     ) =>
         rocketV2.post<Doc>(`${SERVER_API}/luoye/doc`, {

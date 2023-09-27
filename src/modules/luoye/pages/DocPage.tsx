@@ -71,7 +71,7 @@ const DocPage = () => {
         <div className={clsx(styles.container)}>
             <Head>
                 <title>
-                    {doc?.name || '文档不存在'} | {PROJECT_NAME}
+                    {doc ? doc.name || '未命名' : '文档不存在'} | {PROJECT_NAME}
                 </title>
                 <meta name="theme-color" content="#fff8ed" />
                 <link rel="icon" href="https://blog.talaxy.cn/img/luoye.png" />
