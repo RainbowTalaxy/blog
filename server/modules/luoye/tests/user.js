@@ -104,7 +104,7 @@ async function test() {
         Assert.expect(recentDocs[0].name, 'doc');
         Assert.expect(recentDocs[0].creator, 'talaxy');
         Assert.expect(recentDocs[0].scope, Scope.Private);
-        Assert.expect(recentDocs[0].docType, DocType.Markdown);
+        Assert.expect(recentDocs[0].docType, DocType.Text);
         await talaxy.delete(`/doc/${doc.id}`);
         const recentDocs2 = await talaxy.get('/recent-docs');
         Assert.array(recentDocs2, 0);

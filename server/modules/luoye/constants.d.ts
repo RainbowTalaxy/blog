@@ -4,6 +4,7 @@ export enum Scope {
 }
 
 export enum DocType {
+    Text = 'text',
     Markdown = 'markdown',
 }
 

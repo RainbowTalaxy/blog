@@ -21,6 +21,7 @@ async function test() {
             workspaceId: workspace.id,
             name: 'doc',
             date: now,
+            docType: DocType.Markdown,
         });
         const doc = await user.get(`/doc/${data.id}`);
         Assert.props(doc, PropList.doc);

@@ -3,6 +3,7 @@ import {
     DocBinItem,
     DocDir,
     DocItem,
+    DocType,
     Scope,
     Workspace,
     WorkspaceItem,
@@ -69,6 +70,7 @@ declare const Controller: {
                 name?: string;
                 scope?: Scope;
                 date?: number;
+                docType: DocType;
             },
             workspaceCtr: ReturnType<(typeof Controller)['workspace']['ctr']>,
             creator: string,

@@ -1,4 +1,4 @@
-const { Scope, Access } = require('./constants');
+const { Scope, Access, DocType } = require('./constants');
 
 const USER_WORKSPACES_FILE = 'workspaces.json'; // 用户工作区列表
 const USER_DOCS_FILE = 'docs.json'; // 用户文档列表
@@ -18,6 +18,10 @@ const Utility = {
     /** Scope 枚举检查 */
     scopeCheck(value) {
         return Object.values(Scope).includes(value);
+    },
+    /** DocType 枚举检查 */
+    docTypeCheck(value) {
+        return Object.values(DocType).includes(value);
     },
     /** 过滤私人文档 */
     filterPrivate(workspace) {

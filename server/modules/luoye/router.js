@@ -29,6 +29,7 @@ router.put('/workspaces', login, async (req, res) => {
         if (!workspaceIds)
             return res.status(400).send({
                 error: '`workspaceIds` is required',
+                message: '工作区 ID 列表不能为空',
             });
         const user = Ctr.user(userId);
         const workspaceItems = user.workspaceItems.content;
@@ -39,6 +40,7 @@ router.put('/workspaces', login, async (req, res) => {
         if (!newWorkspaceItems)
             return res.status(400).send({
                 error: '`workspaceIds` is invalid',
+                message: '非法的工作区 ID 列表',
             });
         user.workspaceItems.content = newWorkspaceItems;
         return res.send(newWorkspaceItems);
@@ -59,6 +61,7 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
         if (!workspaceId)
             return res.status(400).send({
                 error: '`workspaceId` is required',
+                message: '工作区 ID 不能为空',
             });
         const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
@@ -97,6 +100,7 @@ router.post('/workspace', login, async (req, res) => {
         if (!LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
                 error: '`scope` is invalid',
+                message: '非法的权限参数',
             });
         const workspace = Ctr.workspace.add(
             {
@@ -125,11 +129,13 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
         if (!workspaceId)
             return res.status(400).send({
                 error: '`workspaceId` is required',
+                message: '工作区 ID 不能为空',
             });
         // `scope` 参数校验
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
                 error: '`scope` is invalid',
+                message: '非法的权限参数',
             });
         const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
@@ -174,6 +180,7 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
         if (!workspaceId)
             return res.status(400).send({
                 error: '`workspaceId` is required',
+                message: '工作区 ID 不能为空',
             });
         const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
@@ -221,6 +228,7 @@ router.delete('/recent-docs/:docId', login, async (req, res) => {
         if (!docId)
             return res.status(400).send({
                 error: '`docId` is required',
+                message: '文档 ID 不能为空',
             });
         Ctr.user(userId).recentDocs.remove(docId);
         return res.send({
@@ -257,7 +265,8 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
         const { docId } = req.params;
         if (!docId)
             return res.status(400).send({
-                error: 'docId is required',
+                error: '`docId` is required',
+                message: '文档 ID 不能为空',
             });
         const docCtr = Ctr.doc.ctr(docId);
         if (!docCtr)
@@ -282,20 +291,29 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
 router.post('/doc', login, async (req, res) => {
     try {
         const userId = req.userId;
-        const { workspaceId, name, scope, date } = req.body;
+        const { workspaceId, name, scope, date, docType } = req.body;
         if (!workspaceId)
             return res.status(400).send({
-                error: 'workspaceId is required',
+                error: '`workspaceId` is required',
+                message: '工作区 ID 不能为空',
             });
         // `scope` 参数校验
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
-                error: 'scope is invalid',
+                error: '`scope` is invalid',
+                message: '非法的权限参数',
+            });
+        // `docType` 参数校验
+        if (docType && !LuoyeUtl.docTypeCheck(docType))
+            return res.status(400).send({
+                error: '`docType` is invalid',
+                message: '非法的文档类型参数',
             });
         // `date` 参数校验
         if (date && !PropCheck.date(date))
             return res.status(400).send({
-                error: 'date is invalid',
+                error: '`date` is invalid',
+                message: '非法的日期参数',
             });
         const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
@@ -306,7 +324,11 @@ router.post('/doc', login, async (req, res) => {
         const workspace = workspaceCtr.content;
         if (LuoyeUtl.access(workspace, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
-        const doc = Ctr.doc.add({ name, scope, date }, workspaceCtr, userId);
+        const doc = Ctr.doc.add(
+            { name, scope, date, docType },
+            workspaceCtr,
+            userId,
+        );
         return res.send(doc);
     } catch (error) {
         console.log(error);
@@ -325,17 +347,20 @@ router.put('/doc/:docId', login, async (req, res) => {
         const { name, content, scope, date } = req.body;
         if (!docId)
             return res.status(400).send({
-                error: 'docId is required',
+                error: '`docId` is required',
+                message: '文档 ID 不能为空',
             });
         // `scope` 参数校验
         if (scope && !LuoyeUtl.scopeCheck(scope))
             return res.status(400).send({
-                error: 'scope is invalid',
+                error: '`scope` is invalid',
+                message: '非法的权限参数',
             });
         // `date` 参数校验
         if (date && !PropCheck.date(date))
             return res.status(400).send({
-                error: 'date is invalid',
+                error: '`date` is invalid',
+                message: '非法的日期参数',
             });
         const docCtr = Ctr.doc.ctr(docId);
         if (!docCtr)
@@ -370,7 +395,8 @@ router.delete('/doc/:docId', login, async (req, res) => {
         const { docId } = req.params;
         if (!docId)
             return res.status(400).send({
-                error: 'docId is required',
+                error: '`docId` is required',
+                message: '文档 ID 不能为空',
             });
         const docCtr = Ctr.doc.ctr(docId);
         if (!docCtr)
@@ -417,7 +443,8 @@ router.put('/doc/:docId/restore', login, async (req, res) => {
         const { docId } = req.params;
         if (!docId)
             return res.status(400).send({
-                error: 'docId is required',
+                error: '`docId` is required',
+                message: '文档 ID 不能为空',
             });
         const docCtr = Ctr.doc.ctr(docId);
         if (!docCtr)

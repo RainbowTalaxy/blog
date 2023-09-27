@@ -316,7 +316,7 @@ const Controller = {
                 scope: props.scope ?? workspace.scope,
                 date: props.date ?? now,
                 workspaces: [workspace.id],
-                docType: DocType.Markdown,
+                docType: props.docType ?? DocType.Text,
                 content: '',
                 createdAt: now,
                 updatedAt: now,
