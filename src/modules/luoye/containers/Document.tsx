@@ -1,12 +1,12 @@
 import API from '@site/src/api';
-import { Doc, Workspace } from '@site/src/api/luoye';
+import { Doc, DocType, Workspace } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Markdown from '@site/src/components/Markdown';
 import dayjs from 'dayjs';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
-import { EditorRef } from '../components/Editor/Editor';
+import Editor, { EditorRef } from '../components/Editor/Editor';
 import { useHistory } from '@docusaurus/router';
 import { LEAVE_EDITING_TEXT, checkAuth } from '../constants';
 import ProjectTitle from './ProjectTitle';
@@ -14,6 +14,7 @@ import Toast from '../components/Notification/Toast';
 import clsx from 'clsx';
 import MarkdownEditor from '../components/Editor/MarkdownEditor';
 import EditingModeGlobalStyle from '../styles/EditingModeGlobalStyle';
+import Placeholder from '../components/PlaceHolder';
 
 interface Props {
     doc: Doc | null;
@@ -66,6 +67,20 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
         });
     }, [isEditing]);
 
+    const onSaveContent = async () => {
+        if (!doc) return;
+        const text = textRef.current?.getText();
+        try {
+            await API.luoye.updateDoc(doc.id, {
+                content: text,
+            });
+            Toast.cover('保存成功');
+            await onSave();
+        } catch {
+            Toast.cover('保存失败');
+        }
+    };
+
     if (!doc)
         return (
             <div className={styles.docView}>
@@ -85,7 +100,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
             <header className={styles.docNavBar}>
                 {isSidebarVisible ? (
                     <>
-                        <div className={styles.docNavTitle}>{doc.name}</div>
+                        <div className={styles.docNavTitle}>{doc.name || <Placeholder>未命名文档</Placeholder>}</div>
                         <ProjectTitle
                             className={styles.docIcon}
                             fold={isSidebarVisible}
@@ -155,46 +170,44 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
             >
                 {!isEditing && (
                     <>
-                        <h1>{doc.name}</h1>
-                        <Markdown
-                            toc={(slugs) => (
-                                <div className={styles.toc}>
-                                    <div>
-                                        <strong>{doc.name}</strong>
-                                    </div>
-                                    {slugs.map((item) => (
-                                        <div key={item.slug} className={styles.tocItem}>
-                                            <a href={`#${item.slug}`}>{item.title}</a>
+                        <h1>{doc.name || <Placeholder>无标题</Placeholder>}</h1>
+                        {doc.docType === DocType.Text &&
+                            doc.content.split('\n').map((item, index) => <p key={index}>{item}</p>)}
+                        {doc.docType === DocType.Markdown && (
+                            <Markdown
+                                toc={(slugs) => (
+                                    <div className={styles.toc}>
+                                        <div>
+                                            <strong>{doc.name || <Placeholder>无标题</Placeholder>}</strong>
                                         </div>
-                                    ))}
-                                </div>
-                            )}
-                        >
-                            {doc.content}
-                        </Markdown>
+                                        {slugs.map((item) => (
+                                            <div key={item.slug} className={styles.tocItem}>
+                                                <a href={`#${item.slug}`}>{item.title}</a>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            >
+                                {doc.content}
+                            </Markdown>
+                        )}
                         <p className={styles.docInfo}>
-                            <span>{doc.creator.toUpperCase()}</span> 落于 {dayjs(doc.date).format('YYYY年M月D日')}{' '}
-                            {auth.editable && <>，更新于 {dayjs(doc.updatedAt).format('YYYY年M月D日 HH:mm')} </>}。
+                            <span>{doc.creator.toUpperCase()}</span>
+                            {auth.editable ? (
+                                <> 于 {dayjs(doc.updatedAt).format('YYYY年M月D日 H:m')} 更新</>
+                            ) : (
+                                <> 落于 {dayjs(doc.date).format('YYYY年M月D日')} </>
+                            )}
+                            。
                         </p>
                     </>
                 )}
-                <MarkdownEditor
-                    ref={textRef}
-                    visible={isEditing}
-                    keyId={doc.id}
-                    onSave={async () => {
-                        const text = textRef.current?.getText();
-                        try {
-                            await API.luoye.updateDoc(doc.id, {
-                                content: text,
-                            });
-                            Toast.cover('保存成功');
-                            await onSave();
-                        } catch {
-                            Toast.cover('保存失败');
-                        }
-                    }}
-                />
+                {doc.docType === DocType.Text && (
+                    <Editor ref={textRef} visible={isEditing} keyId={doc.id} onSave={onSaveContent} />
+                )}
+                {doc.docType === DocType.Markdown && (
+                    <MarkdownEditor ref={textRef} visible={isEditing} keyId={doc.id} onSave={onSaveContent} />
+                )}
             </main>
             {isDocFormVisible && (
                 <DocForm

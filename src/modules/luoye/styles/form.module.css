@@ -92,6 +92,22 @@
     padding: 4px 0;
 }
 
+.option {
+    margin-right: 12px;
+    padding: 3px 14px;
+    border-radius: 0.25em;
+    border: 1px solid var(--shadow);
+    font-size: 16px;
+    text-align: center;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.option.selected {
+    border: 1px solid var(--primary);
+}
+
 @media screen and (max-width: 850px) {
     .form {
         padding: calc(16px + 2vw);
@@ -107,5 +123,11 @@
 
     .formItem > label {
         text-align: left;
+    }
+}
+
+@media (pointer: fine) {
+    .option:hover {
+        border: 1px solid var(--primary);
     }
 }
