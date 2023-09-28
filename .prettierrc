@@ -8,7 +8,8 @@
             "files": [
                 "src/ow/docs/*.md",
                 "docs/js/dg7/*.md",
-                "docs/js/pj3/*.md"
+                "docs/js/pj3/*.md",
+                "docs/js/ryf/*.md"
             ],
             "options": {
                 "requirePragma": true
