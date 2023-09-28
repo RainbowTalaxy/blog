@@ -9,7 +9,8 @@
                 "src/ow/docs/*.md",
                 "docs/js/dg7/*.md",
                 "docs/js/pj3/*.md",
-                "docs/js/ryf/*.md"
+                "docs/js/ryf/*.md",
+                "docs/react/**/*.md"
             ],
             "options": {
                 "requirePragma": true
