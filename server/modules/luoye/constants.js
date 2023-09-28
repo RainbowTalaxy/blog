@@ -4,6 +4,7 @@ class Scope {
 }
 
 class DocType {
+    static Text = 'text';
     static Markdown = 'markdown';
 }
 

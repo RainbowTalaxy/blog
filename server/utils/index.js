@@ -59,8 +59,12 @@ const enumCheck = (value, enumObj) => {
 };
 
 const PropCheck = {
+    str: (value) => typeof value === 'string',
     enum: enumCheck,
     date: (value) => typeof value === 'number',
+    some: (...props) => {
+        return props.some((prop) => prop !== undefined && prop !== null);
+    },
 };
 
 module.exports = {

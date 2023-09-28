@@ -78,7 +78,7 @@ interface Doc {
     scope: 'private' | 'public'; // 可见范围
     date: number; // 所属日期
     workspaces: string[]; // 所属工作区 id
-    docType: 'markdown'; // 文档类型
+    docType: 'text' | 'markdown'; // 文档类型
     content: string; // 文档内容
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
@@ -94,7 +94,7 @@ interface DocItem {
     name: string; // 文档名称
     creator: string; // 创建者
     scope: 'private' | 'public'; // 可见范围
-    docType: 'markdown'; // 文档类型
+    docType: 'text' | 'markdown'; // 文档类型
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
 }
@@ -265,7 +265,9 @@ type Response = Doc;
 interface Body {
     workspaceId: string;
     name?: string;
+    scope?: 'private' | 'public';
     date?: number;
+    docType?: 'text' | 'markdown';
 }
 ```
 
@@ -320,7 +322,7 @@ type Response = DocBinItem[];
 
 ### `PUT` 恢复文档
 
-`/doc-bin/:docId/restore`
+`/doc/:docId/restore`
 
 **响应**
 

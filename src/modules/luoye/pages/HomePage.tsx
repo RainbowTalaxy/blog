@@ -84,14 +84,20 @@ const HomePage = () => {
                                     <SideBarListItem
                                         active={!workspaceId && !item}
                                         icon="🍄"
-                                        onClick={() => history.push('?')}
+                                        onClick={() => {
+                                            history.push('?');
+                                            hideSidebar();
+                                        }}
                                     >
                                         开始
                                     </SideBarListItem>
                                     <SideBarListItem
                                         active={item === Item.Settings}
                                         icon="⚙️"
-                                        onClick={() => history.push(`?item=${Item.Settings}`)}
+                                        onClick={() => {
+                                            history.push(`?item=${Item.Settings}`);
+                                            hideSidebar();
+                                        }}
                                     >
                                         设置
                                     </SideBarListItem>
@@ -106,7 +112,10 @@ const HomePage = () => {
                                     <SideBarListItem
                                         active={item === Item.DocBin}
                                         icon="♻️"
-                                        onClick={() => history.push(`?item=${Item.DocBin}`)}
+                                        onClick={() => {
+                                            history.push(`?item=${Item.DocBin}`);
+                                            hideSidebar();
+                                        }}
                                     >
                                         文档回收站
                                     </SideBarListItem>

@@ -8,6 +8,8 @@ async function test() {
     await testCase.neg('query', async () => {
         await user.get('/', { word: "government's" });
     });
+
+    return testCase.stat();
 }
 
 module.exports = test;

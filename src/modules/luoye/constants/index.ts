@@ -1,4 +1,4 @@
-import { Doc, Workspace, WorkspaceItem } from '@site/src/api/luoye';
+import { Doc, DocType, Workspace, WorkspaceItem } from '@site/src/api/luoye';
 import { getUser } from '@site/src/utils/user';
 import dayjs from 'dayjs';
 import { User } from '../../user/config';
@@ -16,6 +16,13 @@ export const DEFAULT_WORKSPACE_PLACEHOLDER = {
 };
 
 export const LEAVE_EDITING_TEXT = '确定离开当前正在编辑的文档？';
+
+export const DOCTYPE_OPTIONS = Object.values(DocType);
+
+export const DOCTYPE_OPTIONS_NAME = {
+    [DocType.Text]: '文本',
+    [DocType.Markdown]: 'Markdown',
+};
 
 export const splitWorkspace = (workspaces: WorkspaceItem[]) => {
     const defaultWorkspaceIdx = workspaces.findIndex(

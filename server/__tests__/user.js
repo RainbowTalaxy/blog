@@ -113,6 +113,8 @@ async function test() {
     await testCase.pos('admin list users', async () => {
         await admin.get('/list');
     });
+
+    return testCase.stat();
 }
 
 module.exports = test;

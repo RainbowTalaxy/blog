@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import styles from '../../styles/document.module.css';
 import useKeyboard from '@site/src/hooks/useKeyboard';
+import Toast from '../Notification/Toast';
+import { countText } from '../../constants/editor';
 
 export interface EditorProps {
     className?: string;
@@ -50,27 +52,36 @@ const Editor = forwardRef(({ className, visible, keyId, onSave }: EditorProps, r
     }));
 
     useEffect(() => {
-        if (visible && !eleRef.current?.innerText) eleRef.current?.focus();
+        if (visible) {
+            eleRef.current?.focus();
+            Toast.notify('字数：' + countText(eleRef.current?.innerText ?? ''), false);
+        }
+        return () => {
+            if (visible) Toast.close();
+        };
     }, [visible, keyId]);
 
     return (
-        <pre
-            ref={eleRef}
-            className={clsx(styles.docInput, className)}
-            style={{ display: visible ? '' : 'none' }}
-            contentEditable
-            spellCheck={false}
-            data-placeholder={PLACE_HOLDER}
-            onInput={(e) => {
-                const text = e.currentTarget.innerText.trim();
-                e.currentTarget.dataset.placeholder = text ? '' : PLACE_HOLDER;
-            }}
-            onPaste={(e) => {
-                e.preventDefault();
-                const text = e.clipboardData.getData('text/plain');
-                document.execCommand('insertText', false, text);
-            }}
-        ></pre>
+        <div className={styles.docInputContainer}>
+            <pre
+                ref={eleRef}
+                className={clsx(styles.docInput, className)}
+                style={{ display: visible ? '' : 'none' }}
+                contentEditable
+                spellCheck={false}
+                data-placeholder={PLACE_HOLDER}
+                onInput={(e) => {
+                    const text = e.currentTarget.innerText;
+                    e.currentTarget.dataset.placeholder = text ? '' : PLACE_HOLDER;
+                    if (text) Toast.notify('字数：' + countText(text), false);
+                }}
+                onPaste={(e) => {
+                    e.preventDefault();
+                    const text = e.clipboardData.getData('text/plain');
+                    document.execCommand('insertText', false, text);
+                }}
+            ></pre>
+        </div>
     );
 });
 

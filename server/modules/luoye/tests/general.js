@@ -2,7 +2,7 @@ const { Server } = require('../../../config');
 const { Rocket, TestCase } = require('../../../utils/test');
 
 async function test() {
-    const testCase = new TestCase('Luoye');
+    const testCase = new TestCase('Luoye - General', true);
 
     const user = new Rocket(Server + '/luoye');
     await user.login('talaxy', 'talaxy');
@@ -10,8 +10,6 @@ async function test() {
     await visitor.login('allay', 'allay');
     // 游客（未登录）
     const viewer = new Rocket(Server + '/luoye');
-
-    testCase.title('general tests');
 
     // 获取工作区列表
     await testCase.pos('workspace list', async () => {
@@ -259,7 +257,6 @@ async function test() {
      */
 
     // ## 工作区与文档 `scope` 一致性测试
-    testCase.title('workspace & doc scope consistency');
 
     // 更新工作区 `scope`
     await testCase.pos('update workspace scope to private', async () => {
@@ -282,7 +279,6 @@ async function test() {
     });
 
     // ## 工作区顺序
-    testCase.title('workspace order');
 
     // 更新工作区列表顺序
     await testCase.pos('update workspace order', async () => {
@@ -306,6 +302,8 @@ async function test() {
             workspaceIds: [workspace.id, workspace.id],
         });
     });
+
+    return testCase;
 }
 
 module.exports = test;

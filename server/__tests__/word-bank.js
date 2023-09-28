@@ -117,6 +117,8 @@ async function test() {
         );
         if (userMeta.length !== 0) return reject('Expect 0 book');
     });
+
+    return testCase.stat();
 }
 
 module.exports = test;

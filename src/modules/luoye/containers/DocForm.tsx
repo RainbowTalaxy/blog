@@ -1,12 +1,14 @@
 import API from '@site/src/api';
-import { Doc, Scope, WorkspaceItem } from '@site/src/api/luoye';
+import { Doc, DocType, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { Button, Input, Select } from '@site/src/components/Form';
 import Toggle from '@site/src/components/Form/Toggle';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/form.module.css';
 import { formDate, time } from '@site/src/utils';
 import Toast from '../components/Notification/Toast';
+import { DOCTYPE_OPTIONS, DOCTYPE_OPTIONS_NAME } from '../constants';
+import clsx from 'clsx';
 
 interface Props {
     workspace?: {
@@ -25,12 +27,14 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
     const workspaceRef = useRef<HTMLSelectElement>(null);
     const scopeRef = useRef<HTMLInputElement>(null);
     const dateRef = useRef<HTMLInputElement>(null);
+    const [docType, setDocType] = useState<DocType>(DocType.Text);
 
     useEffect(() => {
         if (doc) {
             nameRef.current!.value = doc.name;
             scopeRef.current!.checked = doc.scope === Scope.Public;
             dateRef.current!.value = formDate(doc.date);
+            setDocType(doc.docType);
         } else if (workspace) {
             scopeRef.current!.checked = workspace.scope === Scope.Public;
         }
@@ -60,6 +64,22 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                     <label>日期：</label>
                     <Input raf={dateRef} type="date" defaultValue={formDate()} />
                 </div>
+                {!doc && (
+                    <div className={styles.formItem}>
+                        <label>类型：</label>
+                        <div className={styles.options}>
+                            {DOCTYPE_OPTIONS.map((t) => (
+                                <div
+                                    key={t}
+                                    className={clsx(styles.option, t === docType && styles.selected)}
+                                    onClick={() => setDocType(t)}
+                                >
+                                    {DOCTYPE_OPTIONS_NAME[t]}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className={styles.formItem}>
                     <label>公开：</label>
                     <Toggle raf={scopeRef} />
@@ -74,6 +94,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                     name: nameRef.current!.value,
                                     scope: scopeRef.current!.checked ? Scope.Public : Scope.Private,
                                     date: time(dateRef.current!.value),
+                                    docType,
                                 };
                                 try {
                                     let newDoc: Doc | null = null;
@@ -90,9 +111,9 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                 }
                             }}
                         >
-                            {doc ? '保存' : '创建'}
+                            {doc ? '保 存' : '创 建'}
                         </Button>
-                        <Button onClick={() => onClose()}>取消</Button>
+                        <Button onClick={() => onClose()}>取 消</Button>
                         {doc && onDelete && (
                             <Button
                                 type="danger"
@@ -106,7 +127,7 @@ const DocForm = ({ workspace, workspaceItems, doc, onClose, onDelete }: Props) =
                                     }
                                 }}
                             >
-                                删除
+                                删 除
                             </Button>
                         )}
                     </div>
