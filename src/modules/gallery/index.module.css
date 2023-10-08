@@ -1,11 +1,11 @@
 .main-body {
-    padding-top: 5.5vh;
+    padding: 5.5vh 0 1vh;
     min-height: calc(100vh - 60px);
 }
 
 .title {
     position: relative;
-    padding: 0 6vw;
+    padding: 0 6vw 0 calc(6vw + 0.1em);
     font-size: max(7vh, 30px);
     font-weight: bold;
 }
@@ -18,7 +18,7 @@
 }
 
 .card-list {
-    padding: max(2vw, 3vh) 0 max(4vw, 6vh) 6vw;
+    padding: max(2vw, 3vh) 0 max(2vw, 3vh) 6vw;
     position: relative;
     display: flex;
     align-items: center;
@@ -122,6 +122,7 @@
 }
 
 .card-subtitle {
+    margin-left: 2px;
     color: #fff;
     font-size: max(1.8vh, 12px);
 }
@@ -140,6 +141,10 @@
 }
 
 @media screen and (max-width: 450px) {
+    .main-body {
+        padding: 2.6vh 0;
+    }
+
     .title {
         font-size: max(11vw, 30px);
     }
@@ -151,15 +156,5 @@
     .card {
         width: 40vh;
         height: 58vh;
-    }
-}
-
-@media screen and (max-height: 850px) {
-    .main-body {
-        padding-top: 2.6vh;
-    }
-
-    .card-list {
-        padding-top: 2.3vh;
     }
 }

@@ -1,3 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 const { Rocket, TestCase } = require('../utils/test');
 const user = require('./user');
 const luoye = require('../modules/luoye/tests');
