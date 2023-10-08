@@ -14,68 +14,67 @@ interface Props {
     configs: GalleryCard[];
 }
 
+const scrollThreshold = 5;
+
 const CardList = ({ id, configs }: Props) => {
     const cardCls = id + '-card';
     const cardListCls = id + '-card-list';
     const scroll = useRef(0);
     const [scrollWidth, setScrollWidth] = useState(0);
+    const cardListRef = useRef<HTMLDivElement>(null);
     const leftArrowRef = useRef<SVGSVGElement>(null);
     const rightArrowRef = useRef<SVGSVGElement>(null);
 
+    const toggleArrow = () => {
+        leftArrowRef.current?.classList.toggle(
+            style.hidden,
+            scroll.current <= scrollThreshold,
+        );
+        rightArrowRef.current?.classList.toggle(
+            style.hidden,
+            scroll.current >= scrollWidth - scrollThreshold,
+        );
+    };
+
     const scrollContent = useMemo(() => {
+        if (!cardListRef.current) return () => {};
+        const targetEle = cardListRef.current;
         return throttle((plus: boolean) => {
             const cardElements = document.getElementsByClassName(cardCls);
             const refEle = cardElements[cardElements.length - 1];
             const { width, marginLeft } = window.getComputedStyle(refEle);
             const offsetX =
                 (getValue(width) + getValue(marginLeft)) * (plus ? 1 : -1);
-            const targetEle = document.getElementsByClassName(cardListCls)[0];
             targetEle.scrollBy({
                 left: offsetX,
                 behavior: 'smooth',
             });
-            const handleFloat = plus ? Math.ceil : Math.floor;
-            scroll.current = handleFloat(
-                targetEle.scrollLeft + offsetX + (plus ? 100 : -100),
-            );
-            if (leftArrowRef.current) {
-                leftArrowRef.current.classList.toggle(
-                    style.hidden,
-                    scroll.current <= 0,
-                );
-            }
-            if (rightArrowRef.current) {
-                rightArrowRef.current.classList.toggle(
-                    style.hidden,
-                    scroll.current >= scrollWidth,
-                );
-            }
-        }, 400);
+        }, 200);
     }, [scrollWidth]);
 
     useLayoutEffect(() => {
         smoothscroll.polyfill();
-        const targetEle = document.getElementsByClassName(cardListCls)[0];
-        setScrollWidth(targetEle.scrollWidth - targetEle.clientWidth);
-        window.addEventListener('resize', () => {
-            const targetEle = document.getElementsByClassName(cardListCls)[0];
+        if (!cardListRef.current) return;
+        const targetEle = cardListRef.current;
+        const cb = () =>
             setScrollWidth(targetEle.scrollWidth - targetEle.clientWidth);
-        });
+        cb();
+        window.addEventListener('resize', cb);
+        return () => window.removeEventListener('resize', cb);
     }, []);
 
+    useEffect(toggleArrow, [scrollWidth]);
+
     useEffect(() => {
-        if (leftArrowRef.current) {
-            leftArrowRef.current.classList.toggle(
-                style.hidden,
-                scroll.current <= 0,
-            );
-        }
-        if (rightArrowRef.current) {
-            rightArrowRef.current.classList.toggle(
-                style.hidden,
-                scroll.current >= scrollWidth,
-            );
-        }
+        if (!cardListRef.current) return;
+        const targetEle = cardListRef.current;
+        const cb = () => {
+            scroll.current = targetEle.scrollLeft;
+            toggleArrow();
+        };
+        cb();
+        targetEle.addEventListener('scroll', cb);
+        return () => targetEle.removeEventListener('scroll', cb);
     }, [scrollWidth]);
 
     return (
@@ -101,7 +100,10 @@ const CardList = ({ id, configs }: Props) => {
 	C236.878,322.03,238.221,312.628,233.25,306.001z"
                 />
             </svg>
-            <div className={clsx(style['card-list'], cardListCls)}>
+            <div
+                ref={cardListRef}
+                className={clsx(style['card-list'], cardListCls)}
+            >
                 {configs.map((card) => (
                     <div
                         key={card.title}
