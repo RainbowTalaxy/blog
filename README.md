@@ -11,11 +11,11 @@
 ### 应用
 
 -   [Overwatch v1.0](https://blog.talaxy.cn/ow)
--   [WordBank v1.3](https://blog.talaxy.cn/word-bank)
+-   [WordBank v1.3.1](https://blog.talaxy.cn/word-bank)
 -   [图书馆 v1.0](https://blog.talaxy.cn/bookshelf)
 -   [英文分词 v1.3](https://blog.talaxy.cn/playground/tokenize)
 -   [Weaver v1.7.0](https://blog.talaxy.cn/weaver)
--   [落页 v0.9.0](https://blog.talaxy.cn/luoye)
+-   [落页 v0.9.1](https://blog.talaxy.cn/luoye)
 
 ### 工具
 
