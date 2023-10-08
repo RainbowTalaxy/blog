@@ -18,7 +18,6 @@ const scrollThreshold = 5;
 
 const CardList = ({ id, configs }: Props) => {
     const cardCls = id + '-card';
-    const cardListCls = id + '-card-list';
     const scroll = useRef(0);
     const [scrollWidth, setScrollWidth] = useState(0);
     const cardListRef = useRef<HTMLDivElement>(null);
@@ -84,7 +83,6 @@ const CardList = ({ id, configs }: Props) => {
                 className={clsx(style.leftArrow, style.hidden)}
                 onClick={() => scrollContent(false)}
                 version="1.1"
-                id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
                 x="0px"
@@ -100,10 +98,7 @@ const CardList = ({ id, configs }: Props) => {
 	C236.878,322.03,238.221,312.628,233.25,306.001z"
                 />
             </svg>
-            <div
-                ref={cardListRef}
-                className={clsx(style['card-list'], cardListCls)}
-            >
+            <div ref={cardListRef} className={style['card-list']}>
                 {configs.map((card) => (
                     <div
                         key={card.title}
@@ -129,7 +124,6 @@ const CardList = ({ id, configs }: Props) => {
                 className={clsx(style.rightArrow, style.hidden)}
                 onClick={() => scrollContent(true)}
                 version="1.1"
-                id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
                 x="0px"
