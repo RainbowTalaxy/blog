@@ -122,9 +122,9 @@
     position: fixed;
     top: calc(var(--doc-nav-bar) + 36px);
     right: var(--h-padding);
-    bottom: 36px;
     padding: 2px 10px 2px 16px;
     width: var(--toc-width);
+    max-height: calc(100% - var(--doc-nav-bar) - 72px);
     border-left: 1px solid var(--ly-primary);
     color: var(--ly-primary);
     overflow: auto;
