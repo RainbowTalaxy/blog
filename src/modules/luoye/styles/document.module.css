@@ -122,10 +122,12 @@
     position: fixed;
     top: calc(var(--doc-nav-bar) + 36px);
     right: var(--h-padding);
-    padding: 2px 0 2px 16px;
+    padding: 2px 10px 2px 16px;
     width: var(--toc-width);
+    max-height: calc(100% - var(--doc-nav-bar) - 72px);
     border-left: 1px solid var(--ly-primary);
     color: var(--ly-primary);
+    overflow: auto;
 }
 
 .tocItem {
@@ -148,6 +150,12 @@
     }
 }
 
+@media screen and (min-width: 1201px) {
+    .document.hiddenEditor {
+        padding-right: calc(var(--toc-width) + var(--h-padding) + 12px);
+    }
+}
+
 @media screen and (max-width: 1200px) and (min-width: 769px) {
     .document {
         max-width: 100%;
@@ -156,11 +164,9 @@
     .centeredDoc {
         padding-left: calc(var(--h-padding) + 24% - 100px);
     }
-}
 
-@media screen and (min-width: 769px) {
-    .document.hiddenEditor {
-        padding-right: calc(var(--toc-width) + var(--h-padding) + 12px);
+    .toc {
+        display: none;
     }
 }
 
