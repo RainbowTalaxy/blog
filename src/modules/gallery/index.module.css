@@ -1,11 +1,11 @@
 .main-body {
-    padding: 5.5vh 0;
+    padding: 5.5vh 0 1vh;
     min-height: calc(100vh - 60px);
 }
 
 .title {
     position: relative;
-    padding: 0 6vw;
+    padding: 0 6vw 0 calc(6vw + 0.1em);
     font-size: max(7vh, 30px);
     font-weight: bold;
 }
@@ -141,6 +141,10 @@
 }
 
 @media screen and (max-width: 450px) {
+    .main-body {
+        padding: 2.6vh 0;
+    }
+
     .title {
         font-size: max(11vw, 30px);
     }
@@ -152,15 +156,5 @@
     .card {
         width: 40vh;
         height: 58vh;
-    }
-}
-
-@media screen and (max-height: 850px) {
-    .main-body {
-        padding-top: 2.6vh;
-    }
-
-    .card-list {
-        padding-top: 2.3vh;
     }
 }
