@@ -74,11 +74,13 @@ async function test() {
         const doc2 = await user.put(`/doc/${doc.id}`, {
             name: 'doc2',
             date: now,
+            scope: Scope.Public,
             content: 'content',
         });
         Assert.props(doc2, PropList.doc);
         Assert.expect(doc2.name, 'doc2');
         Assert.expect(doc2.date, now);
+        Assert.expect(doc2.scope, Scope.Public);
         Assert.expect(doc2.content, 'content');
     });
 
