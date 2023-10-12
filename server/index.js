@@ -49,7 +49,8 @@ app.use('*', (_, res) => {
 app.use((error, _, res, __) => {
     console.log(error);
     res.status(500).send({
-        error: 'Internal Server Error',
+        error: res.error || 'Internal Server Error',
+        message: res.message || '服务器错误',
     });
 });
 
