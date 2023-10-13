@@ -7,22 +7,20 @@ const Ctr = require('./controller');
 const router = express.Router();
 
 // 获取工作区列表 V2
-router.get('/workspaces', login, async (req, res) => {
+router.get('/workspaces', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const workspaceItems = Ctr.user(userId).workspaceItems.content;
         return res.send(workspaceItems);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get workspaces',
-            message: '获取工作区列表失败',
-        });
+        res.error = 'Failed to get workspaces';
+        res.message = '获取工作区列表失败';
+        next(error);
     }
 });
 
 // 更新工作区列表顺序 V2
-router.put('/workspaces', login, async (req, res) => {
+router.put('/workspaces', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { workspaceIds } = req.body;
@@ -45,16 +43,14 @@ router.put('/workspaces', login, async (req, res) => {
         user.workspaceItems.content = newWorkspaceItems;
         return res.send(newWorkspaceItems);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to update workspaces',
-            message: '更新工作区列表失败',
-        });
+        res.error = 'Failed to update workspaces';
+        res.message = '更新工作区列表失败';
+        next(error);
     }
 });
 
 // 获取工作区信息 V2
-router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
+router.get('/workspace/:workspaceId', weakLogin, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
@@ -78,16 +74,14 @@ router.get('/workspace/:workspaceId', weakLogin, async (req, res) => {
         }
         return res.send(workspace);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get workspace',
-            message: '获取工作区失败',
-        });
+        res.error = 'Failed to get workspace';
+        res.message = '获取工作区失败';
+        next(error);
     }
 });
 
 // 创建工作区 V2
-router.post('/workspace', login, async (req, res) => {
+router.post('/workspace', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { name, description = '', scope = Scope.Private } = req.body;
@@ -112,16 +106,14 @@ router.post('/workspace', login, async (req, res) => {
         );
         return res.send(workspace);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to create workspace',
-            message: '创建工作区失败',
-        });
+        res.error = 'Failed to create workspace';
+        res.message = '创建工作区失败';
+        next(error);
     }
 });
 
 // 更新工作区信息 V2
-router.put('/workspace/:workspaceId', login, async (req, res) => {
+router.put('/workspace/:workspaceId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
@@ -164,16 +156,14 @@ router.put('/workspace/:workspaceId', login, async (req, res) => {
         });
         return res.send(updatedWorkspace);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to update workspace',
-            message: '更新工作区失败',
-        });
+        res.error = 'Failed to update workspace';
+        res.message = '更新工作区失败';
+        next(error);
     }
 });
 
 // 删除工作区
-router.delete('/workspace/:workspaceId', login, async (req, res) => {
+router.delete('/workspace/:workspaceId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { workspaceId } = req.params;
@@ -197,31 +187,27 @@ router.delete('/workspace/:workspaceId', login, async (req, res) => {
             success: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to delete workspace',
-            message: '删除工作区失败',
-        });
+        res.error = 'Failed to delete workspace';
+        res.message = '删除工作区失败';
+        next(error);
     }
 });
 
 // 获取用户最近文档列表 V2
-router.get('/recent-docs', login, async (req, res) => {
+router.get('/recent-docs', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const recentDocs = Ctr.user(userId).recentDocs.content;
         return res.send(recentDocs.slice(0, 10));
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get recent docs',
-            message: '获取最近文档失败',
-        });
+        res.error = 'Failed to get recent docs';
+        res.message = '获取最近文档失败';
+        next(error);
     }
 });
 
 // 删除用户最近文档 V2
-router.delete('/recent-docs/:docId', login, async (req, res) => {
+router.delete('/recent-docs/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -235,31 +221,27 @@ router.delete('/recent-docs/:docId', login, async (req, res) => {
             success: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to delete recent doc',
-            message: '删除记录失败',
-        });
+        res.error = 'Failed to delete recent doc';
+        res.message = '删除记录失败';
+        next(error);
     }
 });
 
 // 获取用户文档列表 V2
-router.get('/docs', login, async (req, res) => {
+router.get('/docs', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const docsItems = Ctr.user(userId).docItems.content;
         return res.send(docsItems);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get docs',
-            message: '获取文档列表失败',
-        });
+        res.error = 'Failed to get docs';
+        res.message = '获取文档列表失败';
+        next(error);
     }
 });
 
 // 获取文档信息 V2
-router.get('/doc/:docId', weakLogin, async (req, res) => {
+router.get('/doc/:docId', weakLogin, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -279,16 +261,14 @@ router.get('/doc/:docId', weakLogin, async (req, res) => {
             return res.status(403).send(ErrorMessage.Forbidden);
         return res.send(doc);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get doc',
-            message: '获取文档失败',
-        });
+        res.error = 'Failed to get doc';
+        res.message = '获取文档失败';
+        next(error);
     }
 });
 
 // 创建文档 V2
-router.post('/doc', login, async (req, res) => {
+router.post('/doc', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { workspaceId, name, scope, date, docType } = req.body;
@@ -331,16 +311,14 @@ router.post('/doc', login, async (req, res) => {
         );
         return res.send(doc);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to create doc',
-            message: '创建文档失败',
-        });
+        res.error = 'Failed to create doc';
+        res.message = '创建文档失败';
+        next(error);
     }
 });
 
 // 更新文档信息 V2
-router.put('/doc/:docId', login, async (req, res) => {
+router.put('/doc/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -380,16 +358,14 @@ router.put('/doc/:docId', login, async (req, res) => {
         });
         return res.send(updatedDoc);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to update doc',
-            message: '更新文档失败',
-        });
+        res.error = 'Failed to update doc';
+        res.message = '更新文档失败';
+        next(error);
     }
 });
 
 // 删除文档 V2
-router.delete('/doc/:docId', login, async (req, res) => {
+router.delete('/doc/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -413,31 +389,27 @@ router.delete('/doc/:docId', login, async (req, res) => {
             success: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to delete doc',
-            message: '删除文档失败',
-        });
+        res.error = 'Failed to delete doc';
+        res.message = '删除文档失败';
+        next(error);
     }
 });
 
 // 获取文档回收站 V2
-router.get('/doc-bin', login, async (req, res) => {
+router.get('/doc-bin', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const docBinItems = Ctr.user(userId).docBinItems.content;
         return res.send(docBinItems);
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to get doc bin',
-            message: '获取文档回收站失败',
-        });
+        res.error = 'Failed to get doc bin';
+        res.message = '获取文档回收站失败';
+        next(error);
     }
 });
 
 // 从文档回收站恢复文档 V2
-router.put('/doc/:docId/restore', login, async (req, res) => {
+router.put('/doc/:docId/restore', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
@@ -467,11 +439,9 @@ router.put('/doc/:docId/restore', login, async (req, res) => {
             success: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            error: 'Failed to restore doc',
-            message: '恢复文档失败',
-        });
+        res.error = 'Failed to restore doc';
+        res.message = '恢复文档失败';
+        next(error);
     }
 });
 
