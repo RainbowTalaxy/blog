@@ -194,7 +194,7 @@ const Document = forwardRef(({ doc, workspace, onSave }: Props, ref: ForwardedRe
                         <p className={styles.docInfo}>
                             <span>{doc.creator.toUpperCase()}</span>
                             {auth.editable ? (
-                                <> 于 {dayjs(doc.updatedAt).format('YYYY年M月D日 H:m')} 更新</>
+                                <> 于 {dayjs(doc.updatedAt).format('YYYY年M月D日 H:mm')} 更新</>
                             ) : (
                                 <> 落于 {dayjs(doc.date).format('YYYY年M月D日')} </>
                             )}
