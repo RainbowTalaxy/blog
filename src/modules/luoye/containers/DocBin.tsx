@@ -1,10 +1,10 @@
+import styles from '../styles/home.module.css';
 import { useHistory } from '@docusaurus/router';
 import API from '@site/src/api';
 import { DocBinItem } from '@site/src/api/luoye';
 import Spacer from '@site/src/components/Spacer';
 import { useEffect, useState } from 'react';
 import { date } from '../constants';
-import styles from '../styles/home.module.css';
 import Placeholder from '../components/PlaceHolder';
 import { hideSidebar } from '../components/SideBar';
 import Toast from '../components/Notification/Toast';

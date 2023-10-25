@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { TEAM_LEADER_RANK } from '../Result';
 import { Hero, HERO_DATA } from '../Hero';
 import Spacer from '@site/src/components/Spacer';
-import { PLAYER_DATA } from '../Player';
 import { Row } from './BanPick';
 
 const Container = styled.div`

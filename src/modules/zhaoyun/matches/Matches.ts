@@ -9,7 +9,7 @@ import MATCH_2022_12_04 from './2022-12-04';
 import MATCH_2022_12_10 from './2022-12-10';
 import MATCH_2022_12_11 from './2022-12-11';
 
-export const MATCHES: typeof MATCH_2022_11_18[] = [
+export const MATCHES: (typeof MATCH_2022_11_18)[] = [
     MATCH_2022_12_11,
     MATCH_2022_12_10,
     MATCH_2022_12_04,

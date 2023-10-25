@@ -22,7 +22,6 @@ export const TASK_STATUS_NAMES = {
     [TaskStatus.Done]: '已完成',
 };
 
-// 生成一个 0-100 的数组，stop 为 5 。
 export const PROGRESS_STOPS = Array.from({ length: 105 / 5 }, (_, i) => i * 5);
 
 export const TASK_POOL_NAME = 'pool';

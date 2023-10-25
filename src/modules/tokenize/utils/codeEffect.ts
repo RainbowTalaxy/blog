@@ -48,16 +48,22 @@ const ccompFilter = (tokens: Token[]) => {
     });
 };
 
+interface Span {
+    root: number;
+    count: number;
+    head?: number;
+}
+
 // 计算同 flatHead 的 token 的数量
 const calcSpans = (tokens: Token[]) => {
-    const spans: Array<{ root: number; count: number; head?: number }> = [];
+    const spans: Span[] = [];
     tokens.forEach((token) => {
         const { flatHead } = token;
         let span = spans.find((span) => span.root === flatHead);
         if (span) {
             span.count += 1;
         } else {
-            span = { root: flatHead, count: 1 };
+            span = { root: flatHead!, count: 1 };
             spans.push(span);
         }
         if (token.id === span.root && token.head !== token.id) {
@@ -73,7 +79,7 @@ const spanCombine = (tokens: Token[], minLength: number) => {
     const spans = calcSpans(tokens);
     console.log(spans);
     let preLength = 0;
-    let preSpans = [];
+    let preSpans: Span[] = [];
     spans.forEach((span) => {
         if (preLength + span.count > minLength) {
             preLength = span.count;

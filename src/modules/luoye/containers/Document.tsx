@@ -1,10 +1,10 @@
+import styles from '../styles/document.module.css';
 import API from '@site/src/api';
 import { Doc, DocType, Workspace } from '@site/src/api/luoye';
 import { Button } from '@site/src/components/Form';
 import Markdown from '@site/src/components/Markdown';
 import dayjs from 'dayjs';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import styles from '../styles/document.module.css';
 import DocForm from './DocForm';
 import Editor, { EditorRef } from '../components/Editor/Editor';
 import { useHistory } from '@docusaurus/router';

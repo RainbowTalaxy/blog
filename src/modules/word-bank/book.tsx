@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import styles from './index.module.css';
 import bookStyles from './book.module.css';
+import clsx from 'clsx';
 import { useHistory } from '@docusaurus/router';
 import { useCallback, useEffect, useState } from 'react';
 import useQuery from '@site/src/hooks/useQuery';

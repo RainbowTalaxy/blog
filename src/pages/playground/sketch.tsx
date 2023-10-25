@@ -34,13 +34,14 @@ const Page = () => {
                     if (!canvasRef.current) return;
                     if (!ctxRef.current) {
                         ctxRef.current = canvasRef.current.getContext('2d');
-                        ctxRef.current.fillStyle = '#000';
+                        ctxRef.current!.fillStyle = '#000';
                     }
                     if (!boundRef.current) {
                         boundRef.current =
                             canvasRef.current.getBoundingClientRect();
                     }
                     const ctx = ctxRef.current;
+                    if (!ctx) return;
                     const point = {
                         x: e.clientX - boundRef.current.left,
                         y: e.clientY - boundRef.current.top,

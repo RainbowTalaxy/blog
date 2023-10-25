@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import '../styles/operator.css';
+import clsx from 'clsx';
 
 interface Props {
     className?: string;

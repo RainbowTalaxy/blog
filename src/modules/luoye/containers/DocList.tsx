@@ -1,3 +1,4 @@
+import styles from '../styles/home.module.css';
 import { useHistory } from '@docusaurus/router';
 import API from '@site/src/api';
 import { Scope, Workspace, WorkspaceItem } from '@site/src/api/luoye';
@@ -5,7 +6,6 @@ import { Button } from '@site/src/components/Form';
 import Spacer from '@site/src/components/Spacer';
 import { useCallback, useEffect, useState } from 'react';
 import { DEFAULT_WORKSPACE_PLACEHOLDER, date, workSpaceName } from '../constants';
-import styles from '../styles/home.module.css';
 import DocForm from './DocForm';
 import Placeholder from '../components/PlaceHolder';
 import SVG from '../components/SVG';

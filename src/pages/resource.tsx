@@ -1,7 +1,7 @@
+import styles from './index.module.css';
 import { useEffect, useState } from 'react';
 import API from '@site/src/api';
 import { FileData } from '../api/statics';
-import styles from './index.module.css';
 import Layout from '@theme/Layout';
 import useQuery from '../hooks/useQuery';
 import { STATICS_URL } from '../constants/config';

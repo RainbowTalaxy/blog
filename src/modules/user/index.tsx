@@ -1,5 +1,5 @@
-import useQuery from '@site/src/hooks/useQuery';
 import styles from './index.module.css';
+import useQuery from '@site/src/hooks/useQuery';
 import { User } from './config';
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';

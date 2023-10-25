@@ -1,13 +1,14 @@
+import '../styles/nav-bar.css';
 import Link from '@docusaurus/Link';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import Menu from '/svg/menu.svg';
-import '../styles/nav-bar.css';
-import { PageContext, Router } from '../models/context';
+import { PageContext } from '../models/context';
 import clsx from 'clsx';
 import { Screen } from '@site/src/hooks/useScreen';
 import Spacer from '@site/src/components/Spacer';
+import { useLocalStorage } from 'usehooks-ts';
 
 enum UserStatus {
     Online = '#7cff00',
@@ -26,12 +27,13 @@ const OW_USER_STATUS = 'ow-user-status';
 
 const NavBar = () => {
     const { state, screen, history } = useContext(PageContext);
-    const [statusIdx, setStatusIdx] = useState<number>();
+    const [statusIdx, setStatusIdx] = useLocalStorage<number>(
+        OW_USER_STATUS,
+        0,
+    );
     const [isMenuVisible, setMenuVisible] = useState(false);
 
-    useEffect(() => {
-        setStatusIdx(Number(localStorage.getItem(OW_USER_STATUS)) || 0);
-    }, []);
+    if (!screen) return null;
 
     return (
         <>
@@ -102,8 +104,9 @@ const NavBar = () => {
                         className="ow-nav-user-status"
                         style={{
                             backgroundColor:
-                                statusIdx !== undefined &&
-                                STATUS_LIST[statusIdx],
+                                statusIdx !== undefined
+                                    ? STATUS_LIST[statusIdx]
+                                    : '',
                         }}
                     />
                     <img

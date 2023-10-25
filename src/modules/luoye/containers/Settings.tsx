@@ -1,5 +1,5 @@
-import { Button } from '@site/src/components/Form';
 import styles from '../styles/home.module.css';
+import { Button } from '@site/src/components/Form';
 import { useState } from 'react';
 import ShareAccountForm from './ShareAccountForm';
 

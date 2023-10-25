@@ -10,6 +10,7 @@ const useUserEntry = () => {
         const element = document.querySelector<HTMLAnchorElement>(
             '.header-placeholder',
         );
+        if (!element) return;
         element.innerHTML = user.id || '设置用户';
         element.removeAttribute('target');
         element.removeAttribute('rel');

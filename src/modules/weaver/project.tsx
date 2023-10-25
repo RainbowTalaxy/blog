@@ -1,6 +1,6 @@
-import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
 import styles from './styles/project.module.css';
 import commonStyles from './styles/index.module.css';
+import { CycleInfo, ProjectInfo } from '@site/src/api/weaver';
 import { useCallback, useEffect, useState } from 'react';
 import API from '@site/src/api';
 import ContentWithSidebar from '@site/src/components/ContentWithSidebar';

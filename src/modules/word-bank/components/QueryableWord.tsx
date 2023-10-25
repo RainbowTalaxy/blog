@@ -1,6 +1,6 @@
+import bookStyles from '../book.module.css';
 import { Word } from '@site/src/api/word-bank';
 import QueryPanel from './QueryPanel';
-import bookStyles from '../book.module.css';
 import clsx from 'clsx';
 
 function split(phrase: string): [number, string][] {

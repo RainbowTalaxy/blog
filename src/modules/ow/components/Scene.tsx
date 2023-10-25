@@ -1,9 +1,9 @@
+import '../styles/scene.css';
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { PageContext, SceneLevel } from '../models/context';
-import '../styles/scene.css';
 import { OrangeButton } from './Button';
 
 const SCENES = [
@@ -101,7 +101,7 @@ const Scene = () => {
             {context.setting.time && <div className="ow-time">{time}</div>}
             {isLoaded && context.state.scene === SceneLevel.Zero && (
                 <div className="ow-scene-desc">
-                    {screen > Screen.Small && (
+                    {screen && screen > Screen.Small && (
                         <div className="ow-scene-desc-title">{scene.title}</div>
                     )}
                     <OrangeButton onClick={switchImage}>切换壁纸</OrangeButton>

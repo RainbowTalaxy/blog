@@ -1,6 +1,6 @@
-import { Word } from '@site/src/api/word-bank';
 import styles from '../index.module.css';
 import bookStyles from '../book.module.css';
+import { Word } from '@site/src/api/word-bank';
 import QueryableWord from './QueryableWord';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';

@@ -6,12 +6,11 @@
  * 4. 查词框后面有一个透明的蒙层，点击蒙层可以关闭查词框，但是蒙层不会阻止事件冒泡。
  */
 
+import './QueryPanel.css';
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import API from '@site/src/api';
 import { YouDaoResponse } from '@site/src/api/dictionary';
-
-import './QueryPanel.css';
 
 const QUERY_CONTAINER_CLASSNAME = 'query-container';
 

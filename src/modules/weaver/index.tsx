@@ -1,9 +1,9 @@
+import styles from './styles/index.module.css';
 import API from '@site/src/api';
 import { ProjectInfo } from '@site/src/api/weaver';
 import useUserEntry from '@site/src/hooks/useUserEntry';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
-import styles from './styles/index.module.css';
 import useQuery from '@site/src/hooks/useQuery';
 import ProjectView from './project';
 import { useHistory } from '@docusaurus/router';

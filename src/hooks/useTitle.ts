@@ -21,7 +21,7 @@ const useTitle = (name: string, url?: string) => {
         return () => {
             if (titleEle) {
                 titleEle.removeEventListener('click', handler);
-                textEle!.textContent = oldText;
+                textEle!.textContent = oldText ?? '';
             }
         };
     }, []);

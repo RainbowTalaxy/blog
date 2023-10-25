@@ -1,12 +1,12 @@
+import styles from './index.module.css';
 import API from '@site/src/api';
 import { SentenceData } from '@site/src/api/azalea';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import styles from './index.module.css';
 import { Token } from './types';
 import { Dependency } from './constants/Dependency';
 import clsx from 'clsx';
 import { CodeEffect, codeEffect } from './utils/codeEffect';
-import { colorToken, flattenTokenHead, linkToken } from './utils';
+import { colorToken, linkToken } from './utils';
 
 interface Props {
     sentence: string;
@@ -15,8 +15,8 @@ interface Props {
 }
 
 const SentenceParser = ({ sentence, relations, codeEffects }: Props) => {
-    const [activeToken, setActiveToken] = useState<Token>(null);
-    const [data, setData] = useState<SentenceData>(null);
+    const [activeToken, setActiveToken] = useState<Token | null>(null);
+    const [data, setData] = useState<SentenceData | null>(null);
 
     useEffect(() => {
         API.azalea.sentence(sentence).then(({ data }) => setData(data));

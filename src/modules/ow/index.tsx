@@ -1,3 +1,6 @@
+import './styles/index.css';
+import './styles/post.css';
+import './styles/section.css';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Home from './pages/Home';
 import {
@@ -17,16 +20,15 @@ import useKeyboard from '../../hooks/useKeyboard';
 import Gallery from './pages/Gallery';
 import Alert from './components/Alert';
 import Document from './pages/Document';
-import CHANGELOG from './docs/CHANGELOG.md';
-import TODO from './docs/TODO.md';
 import useScreen from '../../hooks/useScreen';
 import LiveList from './pages/LiveList';
 import SettingPage from './pages/Setting';
 import { useLocalStorage } from 'usehooks-ts';
 import Docs from './pages/Docs';
-import './styles/index.css';
-import './styles/post.css';
-import './styles/section.css';
+// @ts-ignore
+import CHANGELOG from './docs/CHANGELOG.md';
+// @ts-ignore
+import TODO from './docs/TODO.md';
 
 const UPDATE_KEY = 'ow-update';
 const SETTING_KEY = 'ow-setting';
@@ -71,7 +73,7 @@ const Overwatch = () => {
     }, []);
 
     useEffect(() => {
-        view.current.style.setProperty('--cursor-img', setting.cursor);
+        view.current?.style.setProperty('--cursor-img', setting.cursor);
     }, [setting.cursor]);
 
     return (

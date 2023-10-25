@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import style from './index.module.css';
 import Layout from '@theme/Layout';
 import Emoji from '../components/Emoji';
-import style from './index.module.css';
 
 export default function Home(): JSX.Element {
     return (

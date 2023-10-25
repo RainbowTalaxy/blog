@@ -26,7 +26,8 @@
         "themer",
         "usehooks",
         "yari",
-        "YOUDAO"
+        "YOUDAO",
+        "zhaoyun"
     ],
     "typescript.tsdk": "node_modules/typescript/lib",
     "VSCodeCounter.exclude": [

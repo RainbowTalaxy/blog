@@ -1,7 +1,7 @@
-import { CycleDetail, CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import commonStyles from '../styles/index.module.css';
 import projectStyles from '../styles/project.module.css';
 import styles from '../styles/cycle.module.css';
+import { CycleDetail, CycleInfo, ProjectInfo, Task, TaskProps } from '@site/src/api/weaver';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import API from '@site/src/api';
 import { TaskStatus } from '../types';
