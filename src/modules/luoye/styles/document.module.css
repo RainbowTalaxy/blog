@@ -140,6 +140,7 @@
     text-overflow: ellipsis;
 }
 
+/* 当文档只读时 */
 .centeredDoc {
     padding-left: calc(var(--toc-width) + var(--h-padding) + 12px);
 }
@@ -154,6 +155,11 @@
     .document.hiddenEditor {
         padding-right: calc(var(--toc-width) + var(--h-padding) + 12px);
     }
+
+    .document.centeredDoc {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 @media screen and (max-width: 1200px) and (min-width: 769px) {
@@ -163,6 +169,7 @@
 
     .centeredDoc {
         padding-left: calc(var(--h-padding) + 24% - 100px);
+        padding-right: calc(var(--h-padding) + 24% - 100px);
     }
 
     .toc {
