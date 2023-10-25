@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { debounce, update } from 'lodash';
+import { debounce } from 'lodash';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -160,7 +160,7 @@ const Page = () => {
                 case UpdateType.ShowPrevious:
                     console.log('[Calc scroll]');
                     scrollView.scrollTop +=
-                        scrollView.scrollHeight - lastScrollHeight;
+                        scrollView.scrollHeight - (lastScrollHeight ?? 0);
             }
             page.current.updateType = undefined;
         }
@@ -196,8 +196,6 @@ const Page = () => {
             );
     }, []);
 
-    console.log('[Render]');
-
     return (
         <>
             <GlobalStyle />
@@ -211,7 +209,7 @@ const Page = () => {
                                 page.current.updateType =
                                     UpdateType.ShowPrevious;
                                 page.current.lastScrollHeight =
-                                    scrollView.scrollHeight;
+                                    scrollView?.scrollHeight;
                                 setAttachBottom(false);
                                 setRecords((prev) => OLD_MESSAGES.concat(prev));
                             }}

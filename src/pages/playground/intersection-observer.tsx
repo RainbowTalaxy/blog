@@ -65,7 +65,7 @@ const Page = () => {
                 threshold: [0, 0.25, 0.5, 0.75, 1],
             },
         );
-        observer.observe(document.querySelector('.' + TARGET_CARD));
+        observer.observe(document.querySelector('.' + TARGET_CARD)!);
     }, []);
 
     return (

@@ -46,13 +46,14 @@ const Page = () => {
                     if (!canvasRef.current) return;
                     if (!ctxRef.current) {
                         ctxRef.current = canvasRef.current.getContext('2d');
-                        ctxRef.current.fillStyle = '#000';
+                        ctxRef.current!.fillStyle = '#000';
                     }
                     if (!boundRef.current) {
                         boundRef.current =
                             canvasRef.current.getBoundingClientRect();
                     }
                     const ctx = ctxRef.current;
+                    if (!ctx) return;
                     const point = {
                         x: e.touches[0].clientX - boundRef.current.left,
                         y: e.touches[0].clientY - boundRef.current.top,
@@ -71,10 +72,10 @@ const Page = () => {
                     }
                     prevPointRef.current = point;
                 }}
-                onTouchEnd={(e) => {
+                onTouchEnd={() => {
                     prevPointRef.current = null;
                 }}
-                onTouchCancel={(e) => {
+                onTouchCancel={() => {
                     prevPointRef.current = null;
                 }}
             ></canvas>

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from '../styles/home.module.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Doc, Scope, Workspace } from '@site/src/api/luoye';

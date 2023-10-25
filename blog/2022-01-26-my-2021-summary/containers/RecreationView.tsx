@@ -73,7 +73,7 @@ const NumberMark = styled.div`
 const RecreationView = ({}: Props) => {
     const favoriteSong = APPLE_MUSIC_DATA.find(
         (song) => song.name === 'Good Days',
-    );
+    )!;
 
     return (
         <Container>

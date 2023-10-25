@@ -1,3 +1,4 @@
+import styles from '../styles/form.module.css';
 import API from '@site/src/api';
 import { Scope, WorkspaceItem } from '@site/src/api/luoye';
 import { Button, Input, TextArea } from '@site/src/components/Form';
@@ -6,7 +7,6 @@ import useUser from '@site/src/hooks/useUser';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../styles/form.module.css';
 import Toast from '../components/Notification/Toast';
 
 interface Props {

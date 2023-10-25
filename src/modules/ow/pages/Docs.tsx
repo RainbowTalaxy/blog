@@ -1,8 +1,8 @@
+import '../styles/gallery.css';
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
 import { DOCS_DATA } from '../constants/docs';
 import { PageContext } from '../models/context';
-import '../styles/gallery.css';
 
 const Docs = () => {
     const context = useContext(PageContext);

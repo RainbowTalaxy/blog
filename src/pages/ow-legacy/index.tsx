@@ -1,6 +1,6 @@
+import styles from './index.module.css';
 import useScreen, { Screen } from '@site/src/hooks/useScreen';
 import clsx from 'clsx';
-import styles from './index.module.css';
 import Github from '/svg/github-fill.svg';
 import Unsplash from '/svg/unsplash-fill.svg';
 import Menu from '/svg/menu.svg';
@@ -76,6 +76,8 @@ const Overwatch = ({ children }: Props) => {
         const tab = TABS.find((tab) => tab.path == location.pathname);
         setCurretTab(tab);
     }, [location]);
+
+    if (!screen) return null;
 
     return (
         <div className={container}>

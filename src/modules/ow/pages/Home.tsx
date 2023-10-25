@@ -1,8 +1,8 @@
-import useQuery from '@site/src/hooks/useQuery';
-import useScreen, { Screen } from '@site/src/hooks/useScreen';
-import { useContext } from 'react';
-import { PageContext, Router, SceneLevel, TabState } from '../models/context';
 import '../styles/home.css';
+import useQuery from '@site/src/hooks/useQuery';
+import { Screen } from '@site/src/hooks/useScreen';
+import { useContext } from 'react';
+import { PageContext, Router, SceneLevel } from '../models/context';
 
 const WEB_ATTR = `© ${new Date().getFullYear()} TALAXY · 苏 ICP 备 19075978 号`;
 
@@ -34,6 +34,8 @@ const Home = () => {
             scene: SceneLevel.Fill,
         });
     }
+
+    if (!context.screen) return null;
 
     return (
         <main className="ow-home-content">

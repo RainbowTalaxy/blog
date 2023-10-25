@@ -1,5 +1,5 @@
-import { ReactNode, RefObject } from 'react';
 import '@site/src/css/form.css';
+import { RefObject } from 'react';
 
 interface Props {
     raf?: RefObject<HTMLInputElement>;

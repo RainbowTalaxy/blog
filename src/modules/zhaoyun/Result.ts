@@ -18,7 +18,7 @@ export const RANK = (() => {
     >();
     const days = MATCHES;
     days.forEach((day) => {
-        day.matchs.forEach((match) => {
+        day.matches.forEach((match) => {
             let AScore = 0;
             let BScore = 0;
             let tbdFlag = 1;
@@ -118,7 +118,7 @@ export const BAN_PICK = (() => {
     >();
     const days = MATCHES;
     days.forEach((day) => {
-        day.matchs.forEach((match) => {
+        day.matches.forEach((match) => {
             match.rounds.forEach((round) => {
                 round.ban.forEach((ban) => {
                     if (ban === Hero.TBD) return;
@@ -154,7 +154,7 @@ export const TEAM_LEADER_RANK = (() => {
     >();
     const days = MATCHES;
     days.forEach((day) => {
-        day.matchs.forEach((match) => {
+        day.matches.forEach((match) => {
             let AScore = 0;
             let BScore = 0;
             let tbdFlag = 1;

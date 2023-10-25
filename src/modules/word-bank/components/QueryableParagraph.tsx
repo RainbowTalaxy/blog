@@ -1,7 +1,7 @@
+import styles from '../book.module.css';
 import { Fragment } from 'react';
 import QueryPanel from './QueryPanel';
 import { sentenceSplit, tokenize } from '../utils';
-import styles from '../book.module.css';
 
 interface Props {
     query?: (word: string) => void;

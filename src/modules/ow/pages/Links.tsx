@@ -1,8 +1,8 @@
+import '../styles/links.css';
 import { useContext } from 'react';
 import OperatorButton from '../components/OperatorButton';
 import { LINKS_DATA } from '../constants/links';
 import { PageContext } from '../models/context';
-import '../styles/links.css';
 
 const Links = () => {
     const context = useContext(PageContext);

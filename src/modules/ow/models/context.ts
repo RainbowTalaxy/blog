@@ -43,7 +43,7 @@ export interface Setting {
 
 export interface Page {
     state: PageState;
-    screen: Screen;
+    screen?: Screen;
     setting: Setting;
     history: ReturnType<typeof useStack<PageState>>['history'];
     setSetting: <Key extends keyof Setting>(

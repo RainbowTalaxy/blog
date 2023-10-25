@@ -1,6 +1,6 @@
+import styles from '../styles/home.module.css';
 import { useHistory } from '@docusaurus/router';
 import { PROJECT_ICON, PROJECT_NAME } from '../constants';
-import styles from '../styles/home.module.css';
 import useUser from '@site/src/hooks/useUser';
 import Spacer from '@site/src/components/Spacer';
 import Path from '@site/src/utils/Path';

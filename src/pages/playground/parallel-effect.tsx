@@ -48,7 +48,7 @@ const lorem =
 const handleParallel = () => {
     document.querySelectorAll('.parallel-item').forEach((el) => {
         const position =
-            el.parentElement.offsetTop - window.scrollY - window.innerHeight;
+            el.parentElement!.offsetTop - window.scrollY - window.innerHeight;
         (el as HTMLElement).style.setProperty(
             '--parallel-y',
             position * 0.1 + 'px',

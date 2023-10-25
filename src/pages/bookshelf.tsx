@@ -1,5 +1,5 @@
-import Layout from '@theme/Layout';
 import styles from './index.module.css';
+import Layout from '@theme/Layout';
 
 const books = [
     'Harry Potter and the Half-Blood Prince',

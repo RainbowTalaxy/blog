@@ -1,8 +1,8 @@
+import style from '../index.module.css';
 import { GalleryCard } from '../gallery';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { throttle } from 'lodash';
 import smoothscroll from 'smoothscroll-polyfill';
-import style from '../index.module.css';
 import clsx from 'clsx';
 
 const getValue = (s: string) => {

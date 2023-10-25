@@ -1,4 +1,3 @@
-import React from 'react';
 import ActivityView from './containers/ActivityView';
 import RecreationView from './containers/RecreationView';
 import TravelingView from './containers/TravelingView';
@@ -15,9 +14,11 @@ export const SECTION_NAME = {
     [Section.Recreation]: '休闲',
 };
 
-export const TabBarItems = [Section.Activity, Section.Traveling, Section.Recreation].map(
-    (section) => SECTION_NAME[section],
-);
+export const TabBarItems = [
+    Section.Activity,
+    Section.Traveling,
+    Section.Recreation,
+].map((section) => SECTION_NAME[section]);
 
 export const SECTION_ITEMS = {
     [Section.Activity]: <ActivityView />,
@@ -85,7 +86,11 @@ export const APPLE_MUSIC_DATA: SongDetail[] = [
 
 export const WATCHED = {
     films: ['速度与激情 9', '长津湖', '我和我的父辈'],
-    animations: ['五等分的新娘', '灵笼', '辉夜大小姐想让我告白～天才们的恋爱头脑战～'],
+    animations: [
+        '五等分的新娘',
+        '灵笼',
+        '辉夜大小姐想让我告白～天才们的恋爱头脑战～',
+    ],
     TVs: ['赘婿', '旺达幻视', '洛基', '觉醒年代', '扫黑风暴'],
     games: ['烟火', 'Fragile', '生化危机 村庄'],
 };

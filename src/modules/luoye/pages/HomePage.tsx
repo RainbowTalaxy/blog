@@ -1,7 +1,7 @@
+import styles from '../styles/home.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import { DocItem, Scope, WorkspaceItem } from '@site/src/api/luoye';
 import API from '@site/src/api';
-import styles from '../styles/home.module.css';
 import ContentWithSideBar, { SideBarList, SideBarListItem, hideSidebar } from '../components/SideBar';
 import GlobalStyle from '../styles/GlobalStyle';
 import { PROJECT_NAME, splitWorkspace } from '../constants';

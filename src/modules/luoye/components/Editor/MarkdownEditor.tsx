@@ -1,5 +1,5 @@
-import Editor from '@monaco-editor/react';
 import styles from '../../styles/editor.module.css';
+import Editor from '@monaco-editor/react';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import { EditorProps, EditorRef } from './Editor';
 import PlaceholderContentWidget from './PlaceholderContentWidget';

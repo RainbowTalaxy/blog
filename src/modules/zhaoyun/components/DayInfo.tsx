@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import dayjs from 'dayjs';
 import { Fragment } from 'react';
 import styled from 'styled-components';
 import { MATCHES } from '../matches/Matches';
@@ -100,7 +99,7 @@ const Round = styled.div`
     }
 `;
 
-type DayMatch = typeof MATCHES[number];
+type DayMatch = (typeof MATCHES)[number];
 
 interface Props {
     day: DayMatch;
@@ -109,7 +108,7 @@ interface Props {
 const DayInfo = ({ day }: Props) => {
     return (
         <Container>
-            {day.matchs.map((match, idx) => (
+            {day.matches.map((match, idx) => (
                 <MatchCard key={idx}>
                     <h4>第{idx + 1}局</h4>
                     <h5>队伍</h5>

@@ -1,8 +1,8 @@
+import styles from '../styles/form.module.css';
 import API from '@site/src/api';
 import { Button, Input } from '@site/src/components/Form';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../styles/form.module.css';
 import Toast from '../components/Notification/Toast';
 
 const SHARE_EXPIRE_TIME = 7;

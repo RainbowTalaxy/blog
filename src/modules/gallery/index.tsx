@@ -1,5 +1,5 @@
-import Layout from '@theme/Layout';
 import style from './index.module.css';
+import Layout from '@theme/Layout';
 import CardList from '@site/src/modules/gallery/components/CardList';
 import { GALLERY_2021, GALLERY_2022, LATEST_CARDS } from './gallery';
 

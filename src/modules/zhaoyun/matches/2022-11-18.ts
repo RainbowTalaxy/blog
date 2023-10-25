@@ -4,7 +4,7 @@ import { Player } from '../Player';
 
 export default {
     date: '2022/11/18',
-    matchs: [
+    matches: [
         {
             teams: {
                 A: {

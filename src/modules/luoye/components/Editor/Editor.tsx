@@ -1,6 +1,6 @@
+import styles from '../../styles/document.module.css';
 import clsx from 'clsx';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import styles from '../../styles/document.module.css';
 import useKeyboard from '@site/src/hooks/useKeyboard';
 import Toast from '../Notification/Toast';
 import { countText } from '../../constants/editor';

@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import styles from './styles.module.css';
+import clsx from 'clsx';
 function transformImgClassName(className) {
     return clsx(className, styles.img);
 }

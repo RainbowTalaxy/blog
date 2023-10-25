@@ -1,6 +1,6 @@
+import styles from '../styles/layout.module.css';
 import clsx from 'clsx';
 import { CSSProperties, ForwardedRef, ReactNode, forwardRef } from 'react';
-import styles from '../styles/layout.module.css';
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from 'react-beautiful-dnd';
 
 interface ListProps {

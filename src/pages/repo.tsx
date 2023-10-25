@@ -1,5 +1,6 @@
-import Layout from '@theme/Layout';
 import styles from './index.module.css';
+import Layout from '@theme/Layout';
+// @ts-ignore
 import README from '../../README.md';
 
 const Page = () => {

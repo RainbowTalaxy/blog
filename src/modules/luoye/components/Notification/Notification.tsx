@@ -1,6 +1,6 @@
+import styles from '../../styles/notification.module.css';
 import { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../../styles/notification.module.css';
 
 const NOTIFICATION_CONTAINER_CLASS = 'notification-container';
 

@@ -86,10 +86,11 @@ const DaySelect = styled.div`
 
 export default function Home(): JSX.Element {
     const [dayIdx, setDayIdx] = useState(0);
-    const scrollBar = useRef<HTMLDivElement>();
+    const scrollBar = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const bar = scrollBar.current;
+        if (!bar) return;
         if (bar.scrollWidth > bar.clientWidth) {
             (
                 document.querySelector('.left-arrow') as HTMLElement
@@ -125,7 +126,7 @@ export default function Home(): JSX.Element {
                     <LeftArrow
                         className="left-arrow"
                         onClick={() => {
-                            scrollBar.current.scrollBy({
+                            scrollBar.current?.scrollBy({
                                 top: 0,
                                 left: -300,
                                 behavior: 'smooth',
@@ -146,7 +147,7 @@ export default function Home(): JSX.Element {
                     <RightArrow
                         className="right-arrow"
                         onClick={() => {
-                            scrollBar.current.scrollBy({
+                            scrollBar.current?.scrollBy({
                                 top: 0,
                                 left: 300,
                                 behavior: 'smooth',

@@ -1,5 +1,5 @@
-import Overwatch from '..';
 import styles from './index.module.css';
+import Overwatch from '..';
 
 const { info, avatar, label, nickname, topBg, secondary, bg } = styles;
 

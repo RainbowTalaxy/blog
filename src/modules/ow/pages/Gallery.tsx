@@ -1,9 +1,9 @@
+import '../styles/gallery.css';
 import { useContext, useState } from 'react';
 import Alert from '../components/Alert';
 import OperatorButton from '../components/OperatorButton';
 import { GALLERY_DATA } from '../constants/gallery';
 import { PageContext } from '../models/context';
-import '../styles/gallery.css';
 
 const Gallery = () => {
     const [isAlertVisible, setAlertVisible] = useState(false);

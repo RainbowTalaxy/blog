@@ -1,7 +1,7 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore from 'swiper';
 import '../../styles/setting/index.css';
 import '../../styles/setting/toggle.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
 import SVG from '../SVG';
 import 'swiper/css';
 import { useRef } from 'react';
@@ -57,14 +57,14 @@ const Toggle = function <Value extends OptionValue>({
                 </Swiper>
                 <div className="ow-setting-toggle-tap">
                     <SVG.arrow.left
-                        onClick={() => swiperRef.current.slidePrev()}
+                        onClick={() => swiperRef.current?.slidePrev()}
                     />
                     <div
                         className="ow-spacer-h"
-                        onClick={() => swiperRef.current.slideNext()}
+                        onClick={() => swiperRef.current?.slideNext()}
                     />
                     <SVG.arrow.right
-                        onClick={() => swiperRef.current.slideNext()}
+                        onClick={() => swiperRef.current?.slideNext()}
                     />
                 </div>
             </div>

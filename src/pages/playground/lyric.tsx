@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import styles from './lyric.module.css';
+import { useEffect } from 'react';
 
 // yield a time(milliseconds), increase by 1000 then yield again
 function* timeGenerator() {
