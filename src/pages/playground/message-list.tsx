@@ -196,8 +196,6 @@ const Page = () => {
             );
     }, []);
 
-    console.log('[Render]');
-
     return (
         <>
             <GlobalStyle />
