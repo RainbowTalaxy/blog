@@ -12,10 +12,12 @@ import clsx from 'clsx';
 import { Button } from '@site/src/components/Form';
 import ProjectForm from './components/ProjectForm';
 import { queryString } from '@site/src/utils';
+import { User } from '../user/config';
 
 const Weaver = () => {
     const query = useQuery();
     const history = useHistory();
+    const token = query.get('token');
     const [list, setList] = useState<ProjectInfo[] | null>();
     const [isFormVisible, setFormVisible] = useState(false);
 
@@ -34,7 +36,17 @@ const Weaver = () => {
     useUserEntry();
 
     useEffect(() => {
-        refetch();
+        (async () => {
+            if (token) {
+                try {
+                    await User.update(token);
+                    window.location.href = window.location.pathname;
+                } catch (error: any) {
+                    alert(`登录失败：${error.message}`);
+                }
+            }
+            refetch();
+        })();
     }, [refetch]);
 
     const project = list?.find((project) => project.id === projectId);
