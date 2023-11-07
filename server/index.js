@@ -12,6 +12,7 @@ const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
 const { weaverRouter } = require('./routes/weaver');
 const { luoyeRouter } = require('./modules/luoye/router');
+const { demoRouter } = require('./routes/demo');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/dictionary', dictionaryRouter);
 app.use('/statics', staticsRouter);
 app.use('/weaver', weaverRouter);
 app.use('/luoye', luoyeRouter);
+app.use('/demo', demoRouter);
 
 app.use('*', (_, res) => {
     res.status(404).send({

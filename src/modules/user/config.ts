@@ -28,7 +28,6 @@ export class User {
             null,
             token,
         );
-        console.log(token, id);
         User.config = { id, token };
     }
 }
