@@ -7,6 +7,7 @@ const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
 const weaver = require('./weaver');
+const zhaoyun = require('../modules/zhaoyun/tests');
 
 require('../config');
 
@@ -35,6 +36,9 @@ async function test() {
 
         // luoye 测试
         await luoye();
+
+        // zhaoyun 测试
+        await zhaoyun();
     } catch (error) {
         console.log(error);
     }

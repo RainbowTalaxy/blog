@@ -18,6 +18,11 @@ class File {
         return fs.existsSync(path);
     }
 
+    /** 获取文件夹下所有文件 */
+    static files(path) {
+        return fs.readdirSync(path).map((file) => File.join(path, file));
+    }
+
     /** 创建文件夹 */
     static mkdir(path) {
         mkdirp.sync(path);
