@@ -210,9 +210,9 @@ type Response = Workspace;
 **响应**
 
 ```ts
-interface Response = {
+interface Response {
     success: boolean;
-};
+}
 ```
 
 ### `GET` 获取最近文档
@@ -305,9 +305,9 @@ type Response = Doc;
 **响应**
 
 ```ts
-interface Response = {
+interface Response {
     success: boolean;
-};
+}
 ```
 
 ### `GET` 获取文档回收站
@@ -327,7 +327,7 @@ type Response = DocBinItem[];
 **响应**
 
 ```ts
-interface Response = {
+interface Response {
     success: boolean;
-};
+}
 ```

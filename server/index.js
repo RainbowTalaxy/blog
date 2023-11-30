@@ -13,6 +13,7 @@ const { staticsRouter } = require('./routes/statics');
 const { weaverRouter } = require('./routes/weaver');
 const { luoyeRouter } = require('./modules/luoye/router');
 const { demoRouter } = require('./routes/demo');
+const zhaoyunRouter = require('./modules/zhaoyun/router');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/statics', staticsRouter);
 app.use('/weaver', weaverRouter);
 app.use('/luoye', luoyeRouter);
 app.use('/demo', demoRouter);
+app.use('/zhaoyun', zhaoyunRouter);
 
 app.use('*', (_, res) => {
     res.status(404).send({

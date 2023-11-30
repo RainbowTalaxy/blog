@@ -36,6 +36,10 @@ const SERVER_DIR = {
             docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
             users: path.join(STORAGE_PATH, 'luoye', 'users'),
         },
+        zhaoyun: {
+            matchDays: path.join(STORAGE_PATH, 'zhaoyun', 'days'),
+            statistics: path.join(STORAGE_PATH, 'zhaoyun', 'statistics.json'),
+        },
     },
 };
 
@@ -52,6 +56,10 @@ const LOCAL_DIR = {
             workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
             docs: path.join(TEMP_DIR, 'luoye', 'docs'),
             users: path.join(TEMP_DIR, 'luoye', 'users'),
+        },
+        zhaoyun: {
+            matchDays: path.join(TEMP_DIR, 'zhaoyun', 'match-days'),
+            statistics: path.join(TEMP_DIR, 'zhaoyun', 'statistics.json'),
         },
     },
 };
@@ -74,6 +82,7 @@ mkdirp.sync(Dir.storage.projects);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
+mkdirp.sync(Dir.storage.zhaoyun.matchDays);
 
 writeJSONIfNotExist(Dir.storage.config, {
     secret: uuid(),
