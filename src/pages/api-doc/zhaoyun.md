@@ -11,8 +11,8 @@ interface Team {
 ```ts
 interface Round {
     map: string;
-    team_a_score: number;
-    team_b_score: number;
+    score_a: number;
+    score_b: number;
 }
 ```
 
@@ -64,7 +64,7 @@ type Response = Statistics;
 
 ### `GET` 获取比赛日信息
 
-`/days/:id`
+`/match-day/:id`
 
 **响应**
 
@@ -74,7 +74,7 @@ type Response = MatchDay;
 
 ### `POST` 创建比赛日
 
-`/days`
+`/match-day`
 
 **参数**
 
@@ -94,7 +94,7 @@ type Response = MatchDay;
 
 ### `PUT` 更新比赛日
 
-`/days/:id`
+`/match-day/:id`
 
 **参数**
 
@@ -114,7 +114,7 @@ type Response = MatchDay;
 
 ### `DELETE` 删除比赛日
 
-`/days/:id`
+`/match-day/:id`
 
 **响应**
 
