@@ -1,14 +1,28 @@
+type Player = string;
+type Hero = string;
+type MatchMode = string;
+
 interface Team {
-    players: string[];
+    players: Player[];
+    wolf?: {
+        real: Player;
+        fake: Player;
+    };
 }
 
 interface Round {
     map: string;
     score_a: number;
     score_b: number;
+    ban: Hero[];
+    wolf?: {
+        vote_a: Player;
+        vote_b: Player;
+    };
 }
 
 interface Match {
+    mode: MatchMode;
     team_a: Team;
     team_b: Team;
     rounds: Round[];

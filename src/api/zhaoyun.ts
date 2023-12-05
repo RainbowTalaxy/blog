@@ -1,19 +1,31 @@
 import { SERVER_API } from '../constants/config';
+import { Hero } from '../constants/zhaoyun/Hero';
 import { GameMap } from '../constants/zhaoyun/Map';
 import { Player } from '../constants/zhaoyun/Player';
+import { MatchMode } from '../modules/zhaoyun/constants';
 import { rocketV2 } from './utils';
 
 interface Team {
     players: Player[];
+    wolf?: {
+        real: Player;
+        fake: Player;
+    };
 }
 
 interface Round {
     map: GameMap;
     score_a: number;
     score_b: number;
+    ban: Hero[];
+    wolf?: {
+        vote_a: Player;
+        vote_b: Player;
+    };
 }
 
 interface Match {
+    mode: MatchMode;
     team_a: Team;
     team_b: Team;
     rounds: Round[];

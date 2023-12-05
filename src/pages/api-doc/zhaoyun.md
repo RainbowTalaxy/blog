@@ -3,8 +3,19 @@
 ## 数据结构
 
 ```ts
+// 枚举类型
+type Player = string;
+type Hero = string;
+type MatchMode = string;
+```
+
+```ts
 interface Team {
-    players: string[];
+    players: Player[];
+    wolf?: {
+        real: Player;
+        fake: Player;
+    };
 }
 ```
 
@@ -13,11 +24,17 @@ interface Round {
     map: string;
     score_a: number;
     score_b: number;
+    ban: Hero[];
+    wolf?: {
+        vote_a: Player;
+        vote_b: Player;
+    };
 }
 ```
 
 ```ts
 interface Match {
+    mode: MatchMode;
     team_a: Team;
     team_b: Team;
     rounds: Round[];
