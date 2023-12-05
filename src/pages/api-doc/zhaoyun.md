@@ -18,8 +18,8 @@ interface Round {
 
 ```ts
 interface Match {
-    team_a: Team[];
-    team_b: Team[];
+    team_a: Team;
+    team_b: Team;
     rounds: Round[];
 }
 ```

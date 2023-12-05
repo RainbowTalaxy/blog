@@ -14,12 +14,12 @@ interface Round {
 }
 
 interface Match {
-    team_a: Team[];
-    team_b: Team[];
+    team_a: Team;
+    team_b: Team;
     rounds: Round[];
 }
 
-interface MatchDay {
+export interface MatchDay {
     id: string;
     date: number;
     description: string;
@@ -31,7 +31,7 @@ interface MatchDay {
     updater: string;
 }
 
-interface Statistics {
+export interface Statistics {
     updated_at: number;
     match_days: Array<{
         id: string;
