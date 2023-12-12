@@ -74,8 +74,8 @@ const DaySelect = styled.div`
 
 interface Props {
     statistics: Statistics;
-    selectedMatchDay?: Statistics['match_days'][number];
-    onSelect: (matchDay: Statistics['match_days'][number]) => void;
+    selectedMatchDay?: Statistics['matchDays'][number];
+    onSelect: (matchDay: Statistics['matchDays'][number]) => void;
 }
 
 const DayBar = ({ statistics, selectedMatchDay, onSelect }: Props) => {
@@ -108,7 +108,7 @@ const DayBar = ({ statistics, selectedMatchDay, onSelect }: Props) => {
                 }}
             />
             <DaySelect ref={scrollBar}>
-                {statistics?.match_days.map((matchDay) => (
+                {statistics?.matchDays.map((matchDay) => (
                     <div
                         key={matchDay.id}
                         className={clsx(

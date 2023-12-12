@@ -12,7 +12,7 @@ import MatchForm from '../components/MatchForm';
 const Page = () => {
     const [statistics, setStatistics] = useState<Statistics | null>();
     const [selectedMatchDay, setMatchDay] =
-        useState<Statistics['match_days'][number]>();
+        useState<Statistics['matchDays'][number]>();
     const [isEditing, setEditing] = useState(true);
 
     const user = useUser();
@@ -21,8 +21,8 @@ const Page = () => {
         try {
             const statistics = await API.zhaoyun.statistics();
             setStatistics(statistics);
-            if (statistics.match_days.length === 0) return;
-            setMatchDay(statistics.match_days[0]);
+            if (statistics.matchDays.length === 0) return;
+            setMatchDay(statistics.matchDays[0]);
         } catch {
             setStatistics(null);
         }

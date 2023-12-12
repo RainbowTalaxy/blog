@@ -102,7 +102,7 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
                     <TeamCard>
                         <Team>
                             <span>A</span>
-                            {match.team_a.players.map((player, idx) => (
+                            {match.teamA.players.map((player, idx) => (
                                 <div
                                     key={idx}
                                     className={clsx(idx === 0 && 'first')}
@@ -113,7 +113,7 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
                         </Team>
                         <Team>
                             <span>B</span>
-                            {match.team_b.players.map((player, idx) => (
+                            {match.teamB.players.map((player, idx) => (
                                 <div
                                     key={idx}
                                     className={clsx(idx === 0 && 'first')}
@@ -134,19 +134,19 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
                                     <div className="map">{round.map}</div>
                                     <div
                                         className={clsx(
-                                            round.score_a > round.score_b &&
+                                            round.scoreA > round.scoreB &&
                                                 'hint',
                                         )}
                                     >
-                                        {round.score_a}
+                                        {round.scoreA}
                                     </div>
                                     <div
                                         className={clsx(
-                                            round.score_b > round.score_a &&
+                                            round.scoreB > round.scoreA &&
                                                 'hint',
                                         )}
                                     >
-                                        {round.score_b}
+                                        {round.scoreB}
                                     </div>
                                 </Fragment>
                             ))}

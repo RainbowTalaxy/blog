@@ -7,6 +7,7 @@
 type Player = string;
 type Hero = string;
 type MatchMode = string;
+type GameMap = string;
 ```
 
 ```ts
@@ -21,13 +22,13 @@ interface Team {
 
 ```ts
 interface Round {
-    map: string;
-    score_a: number;
-    score_b: number;
+    map: GameMap;
+    scoreA: number;
+    scoreB: number;
     ban: Hero[];
     wolf?: {
-        vote_a: Player;
-        vote_b: Player;
+        voteA: Player;
+        voteB: Player;
     };
 }
 ```
@@ -35,8 +36,8 @@ interface Round {
 ```ts
 interface Match {
     mode: MatchMode;
-    team_a: Team;
-    team_b: Team;
+    teamA: Team;
+    teamB: Team;
     rounds: Round[];
 }
 ```
@@ -47,8 +48,8 @@ interface MatchDay {
     date: number;
     description: string;
     matches: Match[];
-    created_at: number;
-    updated_at: number;
+    createdAt: number;
+    updatedAt: number;
     removed: boolean;
     creator: string;
     updater: string;
@@ -57,8 +58,8 @@ interface MatchDay {
 
 ```ts
 interface Statistics {
-    updated_at: number;
-    match_days: Array<{
+    updatedAt: number;
+    matchDays: Array<{
         id: string;
         date: number;
         description: string;

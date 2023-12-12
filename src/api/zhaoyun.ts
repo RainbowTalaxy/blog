@@ -15,19 +15,19 @@ interface Team {
 
 interface Round {
     map: GameMap;
-    score_a: number;
-    score_b: number;
+    scoreA: number;
+    scoreB: number;
     ban: Hero[];
     wolf?: {
-        vote_a: Player;
-        vote_b: Player;
+        voteA: Player;
+        voteB: Player;
     };
 }
 
 interface Match {
     mode: MatchMode;
-    team_a: Team;
-    team_b: Team;
+    teamA: Team;
+    teamB: Team;
     rounds: Round[];
 }
 
@@ -36,16 +36,16 @@ export interface MatchDay {
     date: number;
     description: string;
     matches: Match[];
-    created_at: number;
-    updated_at: number;
+    createdAt: number;
+    updatedAt: number;
     removed: boolean;
     creator: string;
     updater: string;
 }
 
 export interface Statistics {
-    updated_at: number;
-    match_days: Array<{
+    updatedAt: number;
+    matchDays: Array<{
         id: string;
         date: number;
         description: string;

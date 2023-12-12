@@ -12,7 +12,7 @@ async function test() {
     await testCase.pos('init statistic check', async () => {
         const statistics = await talaxy.get('/statistics');
         Assert.props(statistics, PropList.statistics.self);
-        Assert.array(statistics.match_days, 0);
+        Assert.array(statistics.matchDays, 0);
     });
 
     const matchDayId = await testCase.pos('add and get match day', async () => {
@@ -28,7 +28,7 @@ async function test() {
         Assert.expect(matchDay.date, props.date);
         Assert.expect(matchDay.description, props.description);
         Assert.array(matchDay.matches, props.matches.length);
-        Assert.expect(matchDay.created_at, matchDay.updated_at);
+        Assert.expect(matchDay.createdAt, matchDay.updatedAt);
         Assert.expect(matchDay.removed, false);
         Assert.expect(matchDay.creator, 'talaxy');
         Assert.expect(matchDay.updater, 'talaxy');
@@ -41,10 +41,10 @@ async function test() {
             description: 'test2',
             matches: [
                 {
-                    team_a: {
+                    teamA: {
                         players: [],
                     },
-                    team_b: {
+                    teamB: {
                         players: [],
                     },
                     rounds: [],
@@ -57,7 +57,7 @@ async function test() {
         Assert.expect(matchDay.date, props.date);
         Assert.expect(matchDay.description, props.description);
         Assert.array(matchDay.matches, props.matches.length);
-        Assert.expect(matchDay.updated_at > matchDay.created_at, true);
+        Assert.expect(matchDay.updatedAt > matchDay.createdAt, true);
         Assert.expect(matchDay.removed, false);
         Assert.expect(matchDay.creator, 'talaxy');
         Assert.expect(matchDay.updater, 'talaxy');

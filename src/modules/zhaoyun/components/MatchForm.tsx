@@ -1,7 +1,8 @@
 import API from '@site/src/api';
 import { MatchDay, Statistics } from '@site/src/api/zhaoyun';
 import { Input } from '@site/src/components/Form';
-import { useEffect, useState } from 'react';
+import { formDate, time } from '@site/src/utils';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div``;
@@ -38,6 +39,8 @@ const MatchForm = ({ matchDayId }: Props) => {
         })();
     }, [matchDayId]);
 
+    if (!matchDay) return null;
+
     return (
         <Container>
             <FormItem>
@@ -46,11 +49,18 @@ const MatchForm = ({ matchDayId }: Props) => {
             </FormItem>
             <FormItem>
                 <label>日期：</label>
-                <Input type="date" />
+                <Input
+                    type="date"
+                    defaultValue={formDate(matchDay.date)}
+                    onChange={(e) => (matchDay.date = time(e.target.value))}
+                />
             </FormItem>
             <FormItem>
                 <label>描述：</label>
-                <Input />
+                <Input
+                    defaultValue={matchDay.description}
+                    onChange={(e) => (matchDay.description = e.target.value)}
+                />
             </FormItem>
             <FormItem>
                 <label>比赛数据：</label>

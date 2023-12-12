@@ -12,8 +12,8 @@ const Controller = {
         get content() {
             if (!File.exists(ZhaoyunDir.statistics)) {
                 File.writeJSON(ZhaoyunDir.statistics, {
-                    updated_at: Date.now(),
-                    match_days: [],
+                    updatedAt: Date.now(),
+                    matchDays: [],
                 });
             }
             return File.readJSON(ZhaoyunDir.statistics);
@@ -21,7 +21,7 @@ const Controller = {
         update() {
             const newStatistic = {};
             const now = Date.now();
-            newStatistic.match_days = File.files(ZhaoyunDir.matchDays)
+            newStatistic.matchDays = File.files(ZhaoyunDir.matchDays)
                 .map((dayFile) => File.readJSON(dayFile))
                 .filter((day) => !day.removed)
                 .map((matchDay) => {
@@ -32,7 +32,7 @@ const Controller = {
                         matches: matchDay.matches,
                     };
                 });
-            newStatistic.updated_at = now;
+            newStatistic.updatedAt = now;
             File.writeJSON(ZhaoyunDir.statistics, newStatistic);
         },
     },
@@ -46,8 +46,8 @@ const Controller = {
                 date: props.date ?? 0,
                 description: props.description ?? '',
                 matches: props.matches ?? [],
-                created_at: now,
-                updated_at: now,
+                createdAt: now,
+                updatedAt: now,
                 removed: false,
                 creator,
                 updater: creator,
@@ -80,7 +80,7 @@ const Controller = {
                     slice.date = props.date ?? slice.date;
                     slice.description = props.description ?? slice.description;
                     slice.matches = props.matches ?? slice.matches;
-                    slice.updated_at = now;
+                    slice.updatedAt = now;
                     slice.updater = updater ?? slice.updater;
                     // ---
                     this.content = slice;
@@ -93,7 +93,7 @@ const Controller = {
                     const slice = this.content;
                     // ---
                     slice.removed = true;
-                    slice.updated_at = now;
+                    slice.updatedAt = now;
                     slice.updater = remover ?? slice.updater;
                     // ---
                     this.content = slice;
