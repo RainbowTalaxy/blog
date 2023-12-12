@@ -1,6 +1,6 @@
 const PropList = {
     statistics: {
-        self: ['updated_at', 'match_days'],
+        self: ['updatedAt', 'matchDays'],
         matchDay: ['id', 'date', 'description', 'matches'],
     },
     matchDay: [
@@ -8,14 +8,14 @@ const PropList = {
         'date',
         'description',
         'matches',
-        'created_at',
-        'updated_at',
+        'createdAt',
+        'updatedAt',
         'removed',
         'creator',
         'updater',
     ],
-    match: ['team_a', 'team_b', 'rounds'],
-    round: ['map', 'score_a', 'score_b'],
+    match: ['teamA', 'teamB', 'rounds'],
+    round: ['map', 'scoreA', 'scoreB'],
     team: ['player'],
 };
 

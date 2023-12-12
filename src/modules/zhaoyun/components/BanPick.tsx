@@ -1,8 +1,8 @@
 import Spacer from '@site/src/components/Spacer';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { HERO_DATA } from '../Hero';
-import { BAN_PICK } from '../Result';
+import { HERO_DATA } from '../../../constants/zhaoyun/Hero';
+import { BAN_PICK } from '../../../constants/zhaoyun/Result';
 
 const Container = styled.div`
     margin-bottom: 24px;

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import styled from 'styled-components';
-import { RANK } from '../Result';
+import { RANK } from '../../../constants/zhaoyun/Result';
 
 const Table = styled.div`
     margin-bottom: 20px;

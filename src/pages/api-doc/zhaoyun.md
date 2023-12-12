@@ -3,23 +3,41 @@
 ## 数据结构
 
 ```ts
+// 枚举类型
+type Player = string;
+type Hero = string;
+type MatchMode = string;
+type GameMap = string;
+```
+
+```ts
 interface Team {
-    players: string[];
+    players: Player[];
+    wolf?: {
+        real: Player;
+        fake: Player;
+    };
 }
 ```
 
 ```ts
 interface Round {
-    map: string;
-    team_a_score: number;
-    team_b_score: number;
+    map: GameMap;
+    scoreA: number;
+    scoreB: number;
+    ban: Hero[];
+    wolf?: {
+        voteA: Player;
+        voteB: Player;
+    };
 }
 ```
 
 ```ts
 interface Match {
-    team_a: Team[];
-    team_b: Team[];
+    mode: MatchMode;
+    teamA: Team;
+    teamB: Team;
     rounds: Round[];
 }
 ```
@@ -30,8 +48,8 @@ interface MatchDay {
     date: number;
     description: string;
     matches: Match[];
-    created_at: number;
-    updated_at: number;
+    createdAt: number;
+    updatedAt: number;
     removed: boolean;
     creator: string;
     updater: string;
@@ -40,8 +58,8 @@ interface MatchDay {
 
 ```ts
 interface Statistics {
-    updated_at: number;
-    match_days: Array<{
+    updatedAt: number;
+    matchDays: Array<{
         id: string;
         date: number;
         description: string;
@@ -64,7 +82,7 @@ type Response = Statistics;
 
 ### `GET` 获取比赛日信息
 
-`/days/:id`
+`/match-day/:id`
 
 **响应**
 
@@ -74,7 +92,7 @@ type Response = MatchDay;
 
 ### `POST` 创建比赛日
 
-`/days`
+`/match-day`
 
 **参数**
 
@@ -94,7 +112,7 @@ type Response = MatchDay;
 
 ### `PUT` 更新比赛日
 
-`/days/:id`
+`/match-day/:id`
 
 **参数**
 
@@ -114,7 +132,7 @@ type Response = MatchDay;
 
 ### `DELETE` 删除比赛日
 
-`/days/:id`
+`/match-day/:id`
 
 **响应**
 

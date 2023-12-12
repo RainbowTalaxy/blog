@@ -1,6 +1,6 @@
 import { Hero } from './Hero';
 import { GameMap } from './Map';
-import { MATCHES } from './matches/Matches';
+import { MATCHES } from '../../modules/zhaoyun/matches/Matches';
 import { Player } from './Player';
 
 export const RANK = (() => {

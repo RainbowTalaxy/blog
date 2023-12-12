@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { TEAM_LEADER_RANK } from '../Result';
-import { Hero, HERO_DATA } from '../Hero';
+import { TEAM_LEADER_RANK } from '../../../constants/zhaoyun/Result';
+import { Hero, HERO_DATA } from '../../../constants/zhaoyun/Hero';
 import Spacer from '@site/src/components/Spacer';
 import { Row } from './BanPick';
 

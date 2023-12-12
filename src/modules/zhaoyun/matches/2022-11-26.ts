@@ -1,6 +1,6 @@
-import { Hero } from '../Hero';
-import { GameMap } from '../Map';
-import { Player } from '../Player';
+import { Hero } from '../../../constants/zhaoyun/Hero';
+import { GameMap } from '../../../constants/zhaoyun/Map';
+import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
     date: '2022/11/26',
