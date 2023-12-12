@@ -11,14 +11,23 @@ interface Props {
     }>;
     children?: ReactNode;
     defaultValue?: string;
+    onSelect: (value: string) => void;
 }
 
-const Select = ({ raf, className, options, children, defaultValue }: Props) => {
+const Select = ({
+    raf,
+    className,
+    options,
+    children,
+    defaultValue,
+    onSelect,
+}: Props) => {
     return (
         <select
             className={clsx('select', className)}
             ref={raf}
             defaultValue={defaultValue}
+            onChange={(e) => onSelect(e.target.value)}
         >
             {options?.map((option) => (
                 <option key={option.value} value={option.value}>

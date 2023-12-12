@@ -52,6 +52,10 @@ export function formDate(date?: number) {
     return dayjs(date).format('YYYY-MM-DD');
 }
 
+export function clone(data: any) {
+    return JSON.parse(JSON.stringify(data));
+}
+
 export function queryString(query: any) {
     const queryStr = Object.keys(query)
         .filter((key) => query[key] !== undefined && query[key] !== null)

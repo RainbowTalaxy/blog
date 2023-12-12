@@ -54,6 +54,7 @@ const Page = () => {
                         )}
                     </>
                 )}
+                <MatchForm />
                 {selectedMatchDay && (
                     <>
                         {isEditing ? (

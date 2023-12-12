@@ -1,5 +1,3 @@
-import { Hero } from './Hero';
-
 export enum Player {
     Ameng = 'Ameng',
     Apr1ta = 'Apr1ta',
@@ -20,4 +18,5 @@ export enum Player {
     Pineapple = 'Pineapple',
     ShowCheng = 'ShowCheng',
     Superich = 'Superich',
+    TBD = 'TBD',
 }
