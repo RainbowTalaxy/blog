@@ -3,7 +3,8 @@ import { Fragment } from 'react';
 import styled from 'styled-components';
 import { Statistics } from '@site/src/api/zhaoyun';
 import { Player } from '@site/src/constants/zhaoyun/Player';
-import { GameMap } from '@site/src/constants/zhaoyun/Map';
+import { GameMapName } from '@site/src/constants/zhaoyun/Map';
+import { MatchModeName } from '../constants';
 
 const Container = styled.div``;
 
@@ -99,7 +100,9 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
         <Container>
             {day.matches.map((match, idx) => (
                 <MatchCard key={idx}>
-                    <h4>第{idx + 1}场</h4>
+                    <h4>
+                        第{idx + 1}场：{MatchModeName[match.mode]}
+                    </h4>
                     <h5>队伍</h5>
                     <TeamCard>
                         <Team>
@@ -127,7 +130,7 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
                             <div className="table-header">B</div>
                             {match.rounds.map((round, idx) => (
                                 <Fragment key={idx}>
-                                    <div className="map">{GameMap[round.map]}</div>
+                                    <div className="map">{GameMapName[round.map]}</div>
                                     <div className={clsx(round.scoreA > round.scoreB && 'hint')}>{round.scoreA}</div>
                                     <div className={clsx(round.scoreB > round.scoreA && 'hint')}>{round.scoreB}</div>
                                 </Fragment>

@@ -1,5 +1,5 @@
-import { Hero } from '../../../constants/zhaoyun/Hero';
-import { GameMap } from '../../../constants/zhaoyun/Map';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
 import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
@@ -28,36 +28,36 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.BlizzardWorld,
+                    map: GameMapName.BlizzardWorld,
                     A: 2,
                     B: 1,
                     ban: [
-                        Hero.WreckingBall,
-                        Hero.Sojourn,
-                        Hero.Zarya,
-                        Hero.Genji,
+                        HeroName.WreckingBall,
+                        HeroName.Sojourn,
+                        HeroName.Zarya,
+                        HeroName.Genji,
                     ],
                 },
                 {
-                    map: GameMap.LijiangTower,
+                    map: GameMapName.LijiangTower,
                     A: 0,
                     B: 2,
                     ban: [
-                        Hero.WreckingBall,
-                        Hero.Pharah,
-                        Hero.Zarya,
-                        Hero.Lucio,
+                        HeroName.WreckingBall,
+                        HeroName.Pharah,
+                        HeroName.Zarya,
+                        HeroName.Lucio,
                     ],
                 },
                 {
-                    map: GameMap.Rialto,
+                    map: GameMapName.Rialto,
                     A: 1,
                     B: 3,
                     ban: [
-                        Hero.WreckingBall,
-                        Hero.Sojourn,
-                        Hero.Winston,
-                        Hero.DVA,
+                        HeroName.WreckingBall,
+                        HeroName.Sojourn,
+                        HeroName.Winston,
+                        HeroName.DVA,
                     ],
                 },
             ],
@@ -85,21 +85,26 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Nepal,
+                    map: GameMapName.Nepal,
                     A: 1,
                     B: 2,
                     ban: [
-                        Hero.WreckingBall,
-                        Hero.Kiriko,
-                        Hero.Winston,
-                        Hero.Lucio,
+                        HeroName.WreckingBall,
+                        HeroName.Kiriko,
+                        HeroName.Winston,
+                        HeroName.Lucio,
                     ],
                 },
                 {
-                    map: GameMap.KingsRow,
+                    map: GameMapName.KingsRow,
                     A: 3,
                     B: 4,
-                    ban: [Hero.WreckingBall, Hero.Mei, Hero.Zarya, Hero.Lucio],
+                    ban: [
+                        HeroName.WreckingBall,
+                        HeroName.Mei,
+                        HeroName.Zarya,
+                        HeroName.Lucio,
+                    ],
                 },
             ],
         },
@@ -126,32 +131,37 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Busan,
+                    map: GameMapName.Busan,
                     A: 0,
                     B: 2,
                     ban: [
-                        Hero.DoomFist,
-                        Hero.Sojourn,
-                        Hero.Soldier,
-                        Hero.Genji,
+                        HeroName.DoomFist,
+                        HeroName.Sojourn,
+                        HeroName.Soldier,
+                        HeroName.Genji,
                     ],
                 },
                 {
-                    map: GameMap.Junkertown,
+                    map: GameMapName.Junkertown,
                     A: 1,
                     B: 0,
                     ban: [
-                        Hero.Sombra,
-                        Hero.Sojourn,
-                        Hero.Tracer,
-                        Hero.WidowMaker,
+                        HeroName.Sombra,
+                        HeroName.Sojourn,
+                        HeroName.Tracer,
+                        HeroName.WidowMaker,
                     ],
                 },
                 {
-                    map: GameMap.Paraiso,
+                    map: GameMapName.Paraiso,
                     A: 3,
                     B: 2,
-                    ban: [Hero.Ashe, Hero.Sojourn, Hero.Winston, Hero.Lucio],
+                    ban: [
+                        HeroName.Ashe,
+                        HeroName.Sojourn,
+                        HeroName.Winston,
+                        HeroName.Lucio,
+                    ],
                 },
             ],
         },

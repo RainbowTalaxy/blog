@@ -1,5 +1,5 @@
-import { Hero } from './Hero';
-import { GameMap } from './Map';
+import { HeroName } from './Hero';
+import { GameMapName } from './Map';
 import { MATCHES } from '../../modules/zhaoyun/matches/Matches';
 import { Player } from './Player';
 
@@ -23,7 +23,7 @@ export const RANK = (() => {
             let BScore = 0;
             let tbdFlag = 1;
             match.rounds.forEach((round) => {
-                if (round.map === GameMap.TBD) {
+                if (round.map === GameMapName.TBD) {
                     tbdFlag = 0;
                     return;
                 }
@@ -111,7 +111,7 @@ export const RANK = (() => {
 
 export const BAN_PICK = (() => {
     const stat = new Map<
-        Hero,
+        HeroName,
         {
             times: number;
         }
@@ -121,7 +121,7 @@ export const BAN_PICK = (() => {
         day.matches.forEach((match) => {
             match.rounds.forEach((round) => {
                 round.ban.forEach((ban) => {
-                    if (ban === Hero.TBD) return;
+                    if (ban === HeroName.TBD) return;
                     const hero = stat.get(ban);
                     if (hero) {
                         hero.times += 1;
@@ -159,7 +159,7 @@ export const TEAM_LEADER_RANK = (() => {
             let BScore = 0;
             let tbdFlag = 1;
             match.rounds.forEach((round) => {
-                if (round.map === GameMap.TBD) {
+                if (round.map === GameMapName.TBD) {
                     tbdFlag = 0;
                     return;
                 }

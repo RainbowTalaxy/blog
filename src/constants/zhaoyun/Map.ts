@@ -1,4 +1,4 @@
-export enum GameMap {
+export enum GameMapName {
     AntarcticPeninsula = '南极半岛',
     Busan = '釜山',
     Ilios = '伊里奥斯',

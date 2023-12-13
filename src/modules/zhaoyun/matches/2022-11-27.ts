@@ -1,5 +1,5 @@
-import { Hero } from '../../../constants/zhaoyun/Hero';
-import { GameMap } from '../../../constants/zhaoyun/Map';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
 import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
@@ -28,23 +28,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.LijiangTower,
+                    map: GameMapName.LijiangTower,
                     A: 2,
                     B: 0,
                     ban: [
-                        Hero.DoomFist,
-                        Hero.Orisa,
-                        Hero.Brigitte,
-                        Hero.Sombra,
+                        HeroName.DoomFist,
+                        HeroName.Orisa,
+                        HeroName.Brigitte,
+                        HeroName.Sombra,
                     ],
-                    protect: [Hero.Tracer, Hero.Lucio],
+                    protect: [HeroName.Tracer, HeroName.Lucio],
                 },
                 {
-                    map: GameMap.KingsRow,
+                    map: GameMapName.KingsRow,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Ana, Hero.Lucio, Hero.Tracer, Hero.Genji],
-                    protect: [Hero.DoomFist, Hero.Orisa],
+                    ban: [
+                        HeroName.Ana,
+                        HeroName.Lucio,
+                        HeroName.Tracer,
+                        HeroName.Genji,
+                    ],
+                    protect: [HeroName.DoomFist, HeroName.Orisa],
                 },
             ],
         },
@@ -71,18 +76,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Oasis,
+                    map: GameMapName.Oasis,
                     A: 0,
                     B: 2,
-                    ban: [Hero.Kiriko, Hero.DoomFist, Hero.Genji, Hero.Winston],
-                    protect: [Hero.Lucio, Hero.Tracer],
+                    ban: [
+                        HeroName.Kiriko,
+                        HeroName.DoomFist,
+                        HeroName.Genji,
+                        HeroName.Winston,
+                    ],
+                    protect: [HeroName.Lucio, HeroName.Tracer],
                 },
                 {
-                    map: GameMap.CircuitRoyal,
+                    map: GameMapName.CircuitRoyal,
                     A: 2,
                     B: 3,
-                    ban: [Hero.WidowMaker, Hero.Sigma, Hero.Baptiste, Hero.Mei],
-                    protect: [Hero.Genji, Hero.Zenyatta],
+                    ban: [
+                        HeroName.WidowMaker,
+                        HeroName.Sigma,
+                        HeroName.Baptiste,
+                        HeroName.Mei,
+                    ],
+                    protect: [HeroName.Genji, HeroName.Zenyatta],
                 },
             ],
         },

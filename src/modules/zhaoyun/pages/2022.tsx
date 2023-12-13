@@ -1,14 +1,14 @@
 import Layout from '@theme/Layout';
 import styled from 'styled-components';
 import { MATCHES } from '@site/src/modules/zhaoyun/matches/Matches';
-import RankList from '@site/src/modules/zhaoyun/components/RankList';
-import DayInfo from '@site/src/modules/zhaoyun/components/DayInfo';
-import BanPick from '@site/src/modules/zhaoyun/components/BanPick';
+import RankList from '@site/src/modules/zhaoyun/components/2022/RankList';
+import DayInfo from '@site/src/modules/zhaoyun/components/2022/DayInfo';
+import BanPick from '@site/src/modules/zhaoyun/components/2022/BanPick';
 import { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import LeftArrow from '@site/static/svg/left-arrow.svg';
 import RightArrow from '@site/static/svg/right-arrow.svg';
-import LeaderRank from '@site/src/modules/zhaoyun/components/LeaderRank';
+import LeaderRank from '@site/src/modules/zhaoyun/components/2022/LeaderRank';
 
 const Container = styled.div`
     margin: 0 auto;
@@ -92,14 +92,9 @@ export default function Home(): JSX.Element {
         const bar = scrollBar.current;
         if (!bar) return;
         if (bar.scrollWidth > bar.clientWidth) {
-            (
-                document.querySelector('.left-arrow') as HTMLElement
-            ).style.display = 'initial';
-            (
-                document.querySelector('.right-arrow') as HTMLElement
-            ).style.display = 'initial';
-            (document.querySelector('.day-bar') as HTMLElement).style.padding =
-                '0 45px';
+            (document.querySelector('.left-arrow') as HTMLElement).style.display = 'initial';
+            (document.querySelector('.right-arrow') as HTMLElement).style.display = 'initial';
+            (document.querySelector('.day-bar') as HTMLElement).style.padding = '0 45px';
         }
     }, []);
 

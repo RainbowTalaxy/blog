@@ -1,5 +1,5 @@
-import { Hero } from '../../../constants/zhaoyun/Hero';
-import { GameMap } from '../../../constants/zhaoyun/Map';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
 import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
@@ -28,18 +28,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.LijiangTower,
+                    map: GameMapName.LijiangTower,
                     A: 2,
                     B: 0,
-                    ban: [Hero.Genji, Hero.Ana, Hero.Tracer, Hero.Kiriko],
-                    protect: [Hero.Sojourn, Hero.Sombra],
+                    ban: [
+                        HeroName.Genji,
+                        HeroName.Ana,
+                        HeroName.Tracer,
+                        HeroName.Kiriko,
+                    ],
+                    protect: [HeroName.Sojourn, HeroName.Sombra],
                 },
                 {
-                    map: GameMap.CircuitRoyal,
+                    map: GameMapName.CircuitRoyal,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Sojourn, Hero.Sigma, Hero.Zenyatta, Hero.Zarya],
-                    protect: [Hero.Genji, Hero.WidowMaker],
+                    ban: [
+                        HeroName.Sojourn,
+                        HeroName.Sigma,
+                        HeroName.Zenyatta,
+                        HeroName.Zarya,
+                    ],
+                    protect: [HeroName.Genji, HeroName.WidowMaker],
                 },
             ],
         },
@@ -66,18 +76,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Oasis,
+                    map: GameMapName.Oasis,
                     A: 1,
                     B: 2,
-                    ban: [Hero.Sojourn, Hero.Lucio, Hero.Sigma, Hero.Winston],
-                    protect: [Hero.Ana, Hero.Ashe],
+                    ban: [
+                        HeroName.Sojourn,
+                        HeroName.Lucio,
+                        HeroName.Sigma,
+                        HeroName.Winston,
+                    ],
+                    protect: [HeroName.Ana, HeroName.Ashe],
                 },
                 {
-                    map: GameMap.Junkertown,
+                    map: GameMapName.Junkertown,
                     A: 2,
                     B: 3,
-                    ban: [Hero.Sigma, Hero.Sombra, Hero.Zenyatta, Hero.Lucio],
-                    protect: [Hero.WreckingBall, Hero.Sojourn],
+                    ban: [
+                        HeroName.Sigma,
+                        HeroName.Sombra,
+                        HeroName.Zenyatta,
+                        HeroName.Lucio,
+                    ],
+                    protect: [HeroName.WreckingBall, HeroName.Sojourn],
                 },
             ],
         },
@@ -104,18 +124,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Busan,
+                    map: GameMapName.Busan,
                     A: 0,
                     B: 2,
-                    ban: [Hero.Ana, Hero.Sojourn, Hero.Zenyatta, Hero.Genji],
-                    protect: [Hero.Lucio, Hero.DoomFist],
+                    ban: [
+                        HeroName.Ana,
+                        HeroName.Sojourn,
+                        HeroName.Zenyatta,
+                        HeroName.Genji,
+                    ],
+                    protect: [HeroName.Lucio, HeroName.DoomFist],
                 },
                 {
-                    map: GameMap.Numbani,
+                    map: GameMapName.Numbani,
                     A: 0,
                     B: 3,
-                    ban: [Hero.Winston, Hero.Genji, Hero.Sigma, Hero.Lucio],
-                    protect: [Hero.Sojourn, Hero.Ana],
+                    ban: [
+                        HeroName.Winston,
+                        HeroName.Genji,
+                        HeroName.Sigma,
+                        HeroName.Lucio,
+                    ],
+                    protect: [HeroName.Sojourn, HeroName.Ana],
                 },
             ],
         },
