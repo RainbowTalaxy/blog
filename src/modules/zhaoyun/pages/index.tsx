@@ -9,8 +9,10 @@ import useUser from '@site/src/hooks/useUser';
 import DayBar from '../components/DayBar';
 import MatchForm from '../components/MatchForm';
 import useQuery from '@site/src/hooks/useQuery';
+import { useHistory } from '@docusaurus/router';
 
 const Page = () => {
+    const history = useHistory();
     const query = useQuery();
     const editId = query.get('edit');
     const [statistics, setStatistics] = useState<Statistics | null>();
@@ -53,7 +55,7 @@ const Page = () => {
                                     <Button
                                         style={{ marginBottom: 24 }}
                                         onClick={() => {
-                                            window.location.href = '/zhaoyun?edit=new';
+                                            history.push('?edit=new');
                                         }}
                                     >
                                         新建比赛
@@ -81,7 +83,7 @@ const Page = () => {
                                         <Button
                                             type="primary"
                                             onClick={() => {
-                                                window.location.href = `/zhaoyun?edit=${selectedMatchDay.id}`;
+                                                history.push(`?edit=${selectedMatchDay.id}`);
                                             }}
                                         >
                                             编 辑
