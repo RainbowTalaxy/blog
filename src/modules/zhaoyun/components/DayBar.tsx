@@ -106,15 +106,17 @@ const DayBar = ({ statistics, selectedMatchDay, onSelect }: Props) => {
                     }}
                 />
                 <DaySelect ref={scrollBar}>
-                    {statistics?.matchDays.map((matchDay) => (
-                        <div
-                            key={matchDay.id}
-                            className={clsx(selectedMatchDay?.id === matchDay.id && 'active')}
-                            onClick={() => onSelect(matchDay)}
-                        >
-                            {dayjs(matchDay.date).format('YYYY/MM/DD')}
-                        </div>
-                    ))}
+                    {statistics?.matchDays
+                        .sort((a, b) => b.date - a.date)
+                        .map((matchDay) => (
+                            <div
+                                key={matchDay.id}
+                                className={clsx(selectedMatchDay?.id === matchDay.id && 'active')}
+                                onClick={() => onSelect(matchDay)}
+                            >
+                                {dayjs(matchDay.date).format('YYYY/MM/DD')}
+                            </div>
+                        ))}
                 </DaySelect>
                 <RightArrow
                     className="right-arrow"

@@ -23,5 +23,6 @@ export enum Player {
     ShowCheng = 'ShowCheng',
     Superich = 'Superich',
     shy = 'shy',
+    Yaoxie = 'Yaoxie',
     TBD = 'TBD',
 }

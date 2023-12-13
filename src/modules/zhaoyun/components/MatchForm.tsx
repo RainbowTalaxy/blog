@@ -8,6 +8,7 @@ import { MatchMode } from '../constants';
 import { Player } from '@site/src/constants/zhaoyun/Player';
 import { GameMap } from '@site/src/constants/zhaoyun/Map';
 import { Hero } from '@site/src/constants/zhaoyun/Hero';
+import { useHistory } from '@docusaurus/router';
 
 const Container = styled.div``;
 
@@ -149,6 +150,7 @@ interface Props {
 }
 
 const MatchForm = ({ matchDayId }: Props) => {
+    const history = useHistory();
     const [matchDay, setMatchDay] = useState<FormData>();
     const [selectedMatchIdx, setSelectedMatchIdx] = useState(0);
     const [selectedRoundIdx, setSelectedRoundIdx] = useState(0);
@@ -234,9 +236,12 @@ const MatchForm = ({ matchDayId }: Props) => {
                         <Button
                             key={match.id}
                             type={selectedMatchIdx === mIdx ? 'primary' : undefined}
-                            onClick={() => setSelectedMatchIdx(mIdx)}
+                            onClick={() => {
+                                setSelectedMatchIdx(mIdx);
+                                setSelectedRoundIdx(0);
+                            }}
                         >
-                            第{mIdx + 1}场：{match.mode.toUpperCase()}
+                            第{mIdx + 1}场
                         </Button>
                     ))}
                     <Button
@@ -459,7 +464,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                                 await API.zhaoyun.createMatchDay(data);
                             }
                             alert('保存成功');
-                            window.location.href = '/zhaoyun';
+                            history.push('?');
                         }}
                     >
                         保 存
