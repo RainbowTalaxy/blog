@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import styled from 'styled-components';
-import { RANK } from '../../../constants/zhaoyun/Result';
+import { RANK } from '../../../../constants/zhaoyun/Result';
 
 const Table = styled.div`
     margin-bottom: 20px;
@@ -49,12 +49,7 @@ const RankList = () => {
                         <div>{data.win}</div>
                         <div>{data.loss}</div>
                         <div>{data.matchTotal}</div>
-                        <div
-                            className={clsx(
-                                data.mapScore > 0 && 'green',
-                                data.mapScore < 0 && 'red',
-                            )}
-                        >
+                        <div className={clsx(data.mapScore > 0 && 'green', data.mapScore < 0 && 'red')}>
                             {data.mapScore > 0 && '+'}
                             {data.mapScore}
                         </div>

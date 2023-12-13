@@ -10,6 +10,7 @@ import DayBar from '../components/DayBar';
 import MatchForm from '../components/MatchForm';
 import useQuery from '@site/src/hooks/useQuery';
 import { useHistory } from '@docusaurus/router';
+import BanPick from '../components/BanPick';
 
 const Page = () => {
     const history = useHistory();
@@ -51,6 +52,12 @@ const Page = () => {
                                         → 第一届赵云杯 ←
                                     </a>
                                 </p>
+                                {statistics && (
+                                    <>
+                                        <h2>英雄 Ban 率</h2>
+                                        <BanPick statistics={statistics} />
+                                    </>
+                                )}
                                 {user.id && (
                                     <Button
                                         style={{ marginBottom: 24 }}

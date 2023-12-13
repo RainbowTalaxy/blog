@@ -1,13 +1,13 @@
 import API from '@site/src/api';
-import { MatchDay } from '@site/src/api/zhaoyun';
+import { Match, MatchDay, Round } from '@site/src/api/zhaoyun';
 import { Button, ButtonGroup, Input, Select } from '@site/src/components/Form';
 import { clone, formDate, time, uuid } from '@site/src/utils';
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { MatchMode } from '../constants';
+import { Hero, MatchMode, MatchModeName } from '../constants';
 import { Player } from '@site/src/constants/zhaoyun/Player';
-import { GameMap } from '@site/src/constants/zhaoyun/Map';
-import { Hero } from '@site/src/constants/zhaoyun/Hero';
+import { GameMapName } from '@site/src/constants/zhaoyun/Map';
+import { HeroName } from '@site/src/constants/zhaoyun/Hero';
 import { useHistory } from '@docusaurus/router';
 
 const Container = styled.div``;
@@ -48,32 +48,32 @@ const InputGroup = styled.div`
     }
 `;
 
-const MATCH_MODE_OPTIONS = Object.keys(MatchMode).map((mode) => ({
-    label: mode,
+const MATCH_MODE_OPTIONS = Object.keys(MatchModeName).map((mode) => ({
+    label: MatchModeName[mode],
     value: mode,
 }));
 
 const PLAYER_OPTIONS = Object.keys(Player).map((player) => ({
     label: Player[player],
-    value: player,
+    value: Player[player],
 }));
 
-const GAME_MAP_OPTIONS = Object.keys(GameMap).map((map) => ({
-    label: GameMap[map],
+const GAME_MAP_OPTIONS = Object.keys(GameMapName).map((map) => ({
+    label: GameMapName[map],
     value: map,
 }));
 
-const HERO_OPTIONS = Object.keys(Hero).map((hero) => ({
-    label: Hero[hero],
+const HERO_OPTIONS = Object.keys(HeroName).map((hero) => ({
+    label: HeroName[hero],
     value: hero,
 }));
 
 const MAX_PLAYER_COUNT = 6;
 const MAX_BAN_COUNT = 4;
 
-const createDefaultMatch = () => ({
+const createDefaultMatch: () => Match = () => ({
     id: uuid(),
-    mode: MatchMode.FT2,
+    mode: 'FT2',
     teamA: {
         players: Array(MAX_PLAYER_COUNT).fill(Player.TBD),
         wolf: {
@@ -91,12 +91,12 @@ const createDefaultMatch = () => ({
     rounds: [],
 });
 
-const createDefaultRound = () => ({
+const createDefaultRound: () => Round = () => ({
     id: uuid(),
-    map: GameMap.TBD,
+    map: 'TBD',
     scoreA: 0,
     scoreB: 0,
-    ban: Array(MAX_BAN_COUNT).fill(Hero.TBD),
+    ban: Array(MAX_BAN_COUNT).fill('TBD'),
     wolf: {
         voteA: Player.TBD,
         voteB: Player.TBD,
@@ -129,12 +129,12 @@ const formatFormData = (data: FormData) => {
             },
             rounds: match.rounds.map((round) => ({
                 ...round,
-                ban: customTrimEnd(round.ban, Hero.TBD),
+                ban: customTrimEnd(round.ban, HeroName.TBD),
             })),
         })),
     };
     result.matches.forEach((match) => {
-        if (match.mode !== MatchMode.Wolf) {
+        if (match.mode !== 'Wolf') {
             delete match.teamA.wolf;
             delete match.teamB.wolf;
             match.rounds.forEach((round) => delete round.wolf);
@@ -192,7 +192,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                     rounds: match.rounds.map((round) => ({
                         ...round,
                         id: uuid(),
-                        ban: round.ban.concat(Array(MAX_BAN_COUNT - round.ban.length).fill(Hero.TBD)),
+                        ban: round.ban.concat(Array(MAX_BAN_COUNT - round.ban.length).fill(HeroName.TBD)),
                         wolf: round.wolf ?? {
                             voteA: Player.TBD,
                             voteB: Player.TBD,
@@ -281,7 +281,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                             ))}
                         </InputGroup>
                     </FormItem>
-                    {selectedMatch.mode === MatchMode.Wolf && (
+                    {selectedMatch.mode === 'Wolf' && (
                         <FormItem>
                             <label>队伍 A 狼人：</label>
                             <InputGroup>
@@ -311,7 +311,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                             ))}
                         </InputGroup>
                     </FormItem>
-                    {selectedMatch.mode === MatchMode.Wolf && (
+                    {selectedMatch.mode === 'Wolf' && (
                         <FormItem>
                             <label>队伍 B 狼人：</label>
                             <InputGroup>
@@ -373,7 +373,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                                     <Select
                                         defaultValue={selectedRound.map}
                                         options={GAME_MAP_OPTIONS}
-                                        onSelect={(value) => (selectedRound.map = value as GameMap)}
+                                        onSelect={(value) => (selectedRound.map = value as keyof typeof GameMapName)}
                                     />
                                 </FormItem>
                                 <FormItem>
@@ -392,7 +392,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                                         onChange={(e) => (selectedRound.scoreB = Number(e.target.value))}
                                     />
                                 </FormItem>
-                                {selectedMatch.mode === MatchMode.Wolf && (
+                                {selectedMatch.mode === 'Wolf' && (
                                     <>
                                         <FormItem>
                                             <label>队伍 A 投票：</label>

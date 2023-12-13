@@ -1,5 +1,5 @@
-import { Hero } from '../../../constants/zhaoyun/Hero';
-import { GameMap } from '../../../constants/zhaoyun/Map';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
 import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
@@ -28,23 +28,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Busan,
+                    map: GameMapName.Busan,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Orisa, Hero.Kiriko, Hero.TBD, Hero.Winston],
-                    protect: [Hero.Tracer, Hero.Ana],
+                    ban: [
+                        HeroName.Orisa,
+                        HeroName.Kiriko,
+                        HeroName.TBD,
+                        HeroName.Winston,
+                    ],
+                    protect: [HeroName.Tracer, HeroName.Ana],
                 },
                 {
-                    map: GameMap.Hollywood,
+                    map: GameMapName.Hollywood,
                     A: 5,
                     B: 4,
                     ban: [
-                        Hero.Zenyatta,
-                        Hero.Ana,
-                        Hero.Pharah,
-                        Hero.WidowMaker,
+                        HeroName.Zenyatta,
+                        HeroName.Ana,
+                        HeroName.Pharah,
+                        HeroName.WidowMaker,
                     ],
-                    protect: [Hero.Mei, Hero.Winston],
+                    protect: [HeroName.Mei, HeroName.Winston],
                 },
             ],
         },
@@ -71,18 +76,28 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Nepal,
+                    map: GameMapName.Nepal,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Winston, Hero.Orisa, Hero.Echo, Hero.Ana],
-                    protect: [Hero.Pharah, Hero.Kiriko],
+                    ban: [
+                        HeroName.Winston,
+                        HeroName.Orisa,
+                        HeroName.Echo,
+                        HeroName.Ana,
+                    ],
+                    protect: [HeroName.Pharah, HeroName.Kiriko],
                 },
                 {
-                    map: GameMap.Junkertown,
+                    map: GameMapName.Junkertown,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Genji, Hero.Tracer, Hero.Ana, Hero.Kiriko],
-                    protect: [Hero.Sigma, Hero.Orisa],
+                    ban: [
+                        HeroName.Genji,
+                        HeroName.Tracer,
+                        HeroName.Ana,
+                        HeroName.Kiriko,
+                    ],
+                    protect: [HeroName.Sigma, HeroName.Orisa],
                 },
             ],
         },

@@ -1,5 +1,5 @@
-import { Hero } from '../../../constants/zhaoyun/Hero';
-import { GameMap } from '../../../constants/zhaoyun/Map';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
 import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
@@ -28,44 +28,64 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.Oasis,
+                    map: GameMapName.Oasis,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Orisa, Hero.Ana, Hero.RoadHog, Hero.Kiriko],
-                    protect: [Hero.Sojourn, Hero.Tracer],
+                    ban: [
+                        HeroName.Orisa,
+                        HeroName.Ana,
+                        HeroName.RoadHog,
+                        HeroName.Kiriko,
+                    ],
+                    protect: [HeroName.Sojourn, HeroName.Tracer],
                 },
                 {
-                    map: GameMap.Junkertown,
+                    map: GameMapName.Junkertown,
                     A: 1,
                     B: 3,
                     ban: [
-                        Hero.WidowMaker,
-                        Hero.Genji,
-                        Hero.Zenyatta,
-                        Hero.Brigitte,
+                        HeroName.WidowMaker,
+                        HeroName.Genji,
+                        HeroName.Zenyatta,
+                        HeroName.Brigitte,
                     ],
-                    protect: [Hero.Orisa, Hero.Sigma],
+                    protect: [HeroName.Orisa, HeroName.Sigma],
                 },
                 {
-                    map: GameMap.Colosseo,
+                    map: GameMapName.Colosseo,
                     A: 0,
                     B: 1,
-                    ban: [Hero.Orisa, Hero.Ana, Hero.Kiriko, Hero.Hanzo],
-                    protect: [Hero.Tracer, Hero.Mei],
+                    ban: [
+                        HeroName.Orisa,
+                        HeroName.Ana,
+                        HeroName.Kiriko,
+                        HeroName.Hanzo,
+                    ],
+                    protect: [HeroName.Tracer, HeroName.Mei],
                 },
                 {
-                    map: GameMap.TempleOfAnubis,
+                    map: GameMapName.TempleOfAnubis,
                     A: 2,
                     B: 1,
-                    ban: [Hero.Genji, Hero.Lucio, Hero.Kiriko, Hero.WidowMaker],
-                    protect: [Hero.Ana, Hero.Orisa],
+                    ban: [
+                        HeroName.Genji,
+                        HeroName.Lucio,
+                        HeroName.Kiriko,
+                        HeroName.WidowMaker,
+                    ],
+                    protect: [HeroName.Ana, HeroName.Orisa],
                 },
                 {
-                    map: GameMap.Busan,
+                    map: GameMapName.Busan,
                     A: 0,
                     B: 2,
-                    ban: [Hero.RoadHog, Hero.Orisa, Hero.Lucio, Hero.Kiriko],
-                    protect: [Hero.Tracer, Hero.Ana],
+                    ban: [
+                        HeroName.RoadHog,
+                        HeroName.Orisa,
+                        HeroName.Lucio,
+                        HeroName.Kiriko,
+                    ],
+                    protect: [HeroName.Tracer, HeroName.Ana],
                 },
             ],
         },

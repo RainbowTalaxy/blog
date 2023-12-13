@@ -1,9 +1,8 @@
 import Spacer from '@site/src/components/Spacer';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Statistics } from '@site/src/api/zhaoyun';
-import { calcBanRank } from '../constants/calc';
-import { HERO_DATA, HeroName } from '@site/src/constants/zhaoyun/Hero';
+import { HERO_DATA } from '../../../../constants/zhaoyun/Hero';
+import { BAN_PICK } from '../../../../constants/zhaoyun/Result';
 
 const Container = styled.div`
     margin-bottom: 24px;
@@ -31,27 +30,21 @@ export const Row = styled.div`
     }
 `;
 
-interface Props {
-    statistics: Statistics;
-}
-
-const BanPick = ({ statistics }: Props) => {
+const BanPick = () => {
     const [fold, setFold] = useState(true);
-
-    const banPick = calcBanRank(statistics);
 
     return (
         <Container>
-            {banPick.list.slice(0, fold ? 7 : banPick.list.length).map(([hero, data]) => (
+            {BAN_PICK.list.slice(0, fold ? 7 : BAN_PICK.list.length).map(([hero, data]) => (
                 <Row
                     key={hero}
                     style={{
-                        background: `linear-gradient(${HERO_DATA[HeroName[hero]].color}, ${
-                            HERO_DATA[HeroName[hero]].color
-                        }) left/${(data.times * 100) / banPick.highest}% 100% no-repeat,#e1e7ed`,
+                        background: `linear-gradient(${HERO_DATA[hero].color}, ${HERO_DATA[hero].color}) left/${
+                            (data.times * 100) / BAN_PICK.highest
+                        }% 100% no-repeat,#e1e7ed`,
                     }}
                 >
-                    <div className="hero-label">{HeroName[hero]}</div>
+                    <div className="hero-label">{hero}</div>
                     <Spacer />
                     <div>{data.times} 次</div>
                 </Row>
