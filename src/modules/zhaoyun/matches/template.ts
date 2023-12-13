@@ -1,6 +1,6 @@
-import { Hero } from '../Hero';
-import { GameMap } from '../Map';
-import { Player } from '../Player';
+import { HeroName } from '../../../constants/zhaoyun/Hero';
+import { GameMapName } from '../../../constants/zhaoyun/Map';
+import { Player } from '../../../constants/zhaoyun/Player';
 
 export default {
     date: '',
@@ -16,25 +16,40 @@ export default {
             },
             rounds: [
                 {
-                    map: GameMap.TBD,
+                    map: GameMapName.TBD,
                     A: 0,
                     B: 0,
-                    ban: [Hero.TBD, Hero.TBD, Hero.TBD, Hero.TBD],
-                    protect: [Hero.TBD, Hero.TBD],
+                    ban: [
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                    ],
+                    protect: [HeroName.TBD, HeroName.TBD],
                 },
                 {
-                    map: GameMap.TBD,
+                    map: GameMapName.TBD,
                     A: 0,
                     B: 0,
-                    ban: [Hero.TBD, Hero.TBD, Hero.TBD, Hero.TBD],
-                    protect: [Hero.TBD, Hero.TBD],
+                    ban: [
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                    ],
+                    protect: [HeroName.TBD, HeroName.TBD],
                 },
                 {
-                    map: GameMap.TBD,
+                    map: GameMapName.TBD,
                     A: 0,
                     B: 0,
-                    ban: [Hero.TBD, Hero.TBD, Hero.TBD, Hero.TBD],
-                    protect: [Hero.TBD, Hero.TBD],
+                    ban: [
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                        HeroName.TBD,
+                    ],
+                    protect: [HeroName.TBD, HeroName.TBD],
                 },
             ],
         },

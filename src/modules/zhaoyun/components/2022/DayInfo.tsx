@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import styled from 'styled-components';
-import { MATCHES } from '../matches/Matches';
+import { MATCHES } from '../../matches/Matches';
 
 const Container = styled.div``;
 
@@ -116,10 +116,7 @@ const DayInfo = ({ day }: Props) => {
                         <Team>
                             <span>A</span>
                             {match.teams.A.players.map((player, idx) => (
-                                <div
-                                    key={idx}
-                                    className={clsx(idx === 0 && 'first')}
-                                >
+                                <div key={idx} className={clsx(idx === 0 && 'first')}>
                                     {player}
                                 </div>
                             ))}
@@ -127,10 +124,7 @@ const DayInfo = ({ day }: Props) => {
                         <Team>
                             <span>B</span>
                             {match.teams.B.players.map((player, idx) => (
-                                <div
-                                    key={idx}
-                                    className={clsx(idx === 0 && 'first')}
-                                >
+                                <div key={idx} className={clsx(idx === 0 && 'first')}>
                                     {player}
                                 </div>
                             ))}
@@ -146,20 +140,8 @@ const DayInfo = ({ day }: Props) => {
                             {match.rounds.map((round, idx) => (
                                 <Fragment key={idx}>
                                     <div className="map">{round.map}</div>
-                                    <div
-                                        className={clsx(
-                                            round.A > round.B && 'hint',
-                                        )}
-                                    >
-                                        {round.A}
-                                    </div>
-                                    <div
-                                        className={clsx(
-                                            round.B > round.A && 'hint',
-                                        )}
-                                    >
-                                        {round.B}
-                                    </div>
+                                    <div className={clsx(round.A > round.B && 'hint')}>{round.A}</div>
+                                    <div className={clsx(round.B > round.A && 'hint')}>{round.B}</div>
                                     {round.ban.map((hero, idx) => (
                                         <div key={idx} className="ban-hero">
                                             {hero}

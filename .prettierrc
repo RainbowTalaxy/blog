@@ -20,7 +20,8 @@
             "files": [
                 "src/modules/weaver/**/*.tsx",
                 "src/modules/word-bank/**/*.tsx",
-                "src/modules/luoye/**/*.tsx"
+                "src/modules/luoye/**/*.tsx",
+                "src/modules/zhaoyun/**/*.tsx"
             ],
             "options": {
                 "printWidth": 120
