@@ -1,5 +1,3 @@
-import { Hero } from './Hero';
-
 export enum Player {
     Ameng = 'Ameng',
     Apr1ta = 'Apr1ta',
@@ -8,16 +6,22 @@ export enum Player {
     Eileen = 'Eileen',
     Farway1987 = 'Farway1987',
     GA9A = 'GA9A',
+    Guxue = 'Guxue',
     Jimmy = 'Jimmy',
     JinMu = 'JinMu',
     Kaneki = 'Kaneki',
     Kyo = 'Kyo',
+    LateYoung = 'LateYoung',
+    Leave = 'Leave',
     Lengsa = 'Lengsa',
     MinSea = 'MinSea',
+    Mmonk = 'Mmonk',
     MoLanran = 'MoLanran',
     Molly = 'Molly',
     Nisha = 'Nisha',
     Pineapple = 'Pineapple',
     ShowCheng = 'ShowCheng',
     Superich = 'Superich',
+    shy = 'shy',
+    TBD = 'TBD',
 }

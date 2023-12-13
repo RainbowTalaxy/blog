@@ -14,6 +14,7 @@ interface Team {
 }
 
 interface Round {
+    id?: string;
     map: GameMap;
     scoreA: number;
     scoreB: number;
@@ -25,6 +26,7 @@ interface Round {
 }
 
 interface Match {
+    id?: string;
     mode: MatchMode;
     teamA: Team;
     teamB: Team;

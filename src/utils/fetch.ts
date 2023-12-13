@@ -6,7 +6,7 @@ export interface ResponseError {
 export async function rawFetch<Data>(
     url: string,
     method: string,
-    data: any = {},
+    data: any = null,
     token: string,
 ) {
     const isGET = method === 'GET' || method === 'HEAD';

@@ -2,7 +2,9 @@ export enum Hero {
     DVA = 'D.VA',
     DoomFist = '末日铁拳',
     JunkerQueen = '渣克女王',
+    Mauga = '毛加',
     Orisa = '奥丽莎',
+    Ramattra = '拉玛刹',
     Reinhardt = '莱因哈特',
     RoadHog = '路霸',
     Sigma = '西格玛',
@@ -29,12 +31,14 @@ export enum Hero {
     Ana = '安娜',
     Baptiste = '巴蒂斯特',
     Brigitte = '布里吉塔',
+    Illari = '伊拉锐',
     Kiriko = '雾子',
+    LifeWeaver = '生命之梭',
     Lucio = '卢西奥',
     Mercy = '天使',
     Moira = '莫伊拉',
     Zenyatta = '禅雅塔',
-    TBD = '-',
+    TBD = 'TBD',
 }
 
 export const HERO_DATA = {
