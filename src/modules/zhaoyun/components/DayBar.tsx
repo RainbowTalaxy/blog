@@ -4,6 +4,7 @@ import RightArrow from '@site/static/svg/right-arrow.svg';
 import { useEffect, useRef } from 'react';
 import { Statistics } from '@site/src/api/zhaoyun';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 
 const GlobalStyle = createGlobalStyle`
     @media (pointer: coarse) {
@@ -84,53 +85,49 @@ const DayBar = ({ statistics, selectedMatchDay, onSelect }: Props) => {
     useEffect(() => {
         const bar = scrollBar.current;
         if (bar && bar.scrollWidth > bar.clientWidth) {
-            (
-                document.querySelector('.left-arrow') as HTMLElement
-            ).style.display = 'initial';
-            (
-                document.querySelector('.right-arrow') as HTMLElement
-            ).style.display = 'initial';
-            (document.querySelector(`.day-bar`) as HTMLElement).style.padding =
-                '0 45px';
+            (document.querySelector('.left-arrow') as HTMLElement).style.display = 'initial';
+            (document.querySelector('.right-arrow') as HTMLElement).style.display = 'initial';
+            (document.querySelector(`.day-bar`) as HTMLElement).style.padding = '0 45px';
         }
     }, [statistics]);
 
     return (
-        <Container className="day-bar">
-            <LeftArrow
-                className="left-arrow"
-                onClick={() => {
-                    scrollBar.current?.scrollBy({
-                        top: 0,
-                        left: -300,
-                        behavior: 'smooth',
-                    });
-                }}
-            />
-            <DaySelect ref={scrollBar}>
-                {statistics?.matchDays.map((matchDay) => (
-                    <div
-                        key={matchDay.id}
-                        className={clsx(
-                            selectedMatchDay?.id === matchDay.id && 'active',
-                        )}
-                        onClick={() => onSelect(matchDay)}
-                    >
-                        {matchDay.description}
-                    </div>
-                ))}
-            </DaySelect>
-            <RightArrow
-                className="right-arrow"
-                onClick={() => {
-                    scrollBar.current?.scrollBy({
-                        top: 0,
-                        left: 300,
-                        behavior: 'smooth',
-                    });
-                }}
-            />
-        </Container>
+        <>
+            <GlobalStyle />
+            <Container className="day-bar">
+                <LeftArrow
+                    className="left-arrow"
+                    onClick={() => {
+                        scrollBar.current?.scrollBy({
+                            top: 0,
+                            left: -300,
+                            behavior: 'smooth',
+                        });
+                    }}
+                />
+                <DaySelect ref={scrollBar}>
+                    {statistics?.matchDays.map((matchDay) => (
+                        <div
+                            key={matchDay.id}
+                            className={clsx(selectedMatchDay?.id === matchDay.id && 'active')}
+                            onClick={() => onSelect(matchDay)}
+                        >
+                            {dayjs(matchDay.date).format('YYYY/MM/DD')}
+                        </div>
+                    ))}
+                </DaySelect>
+                <RightArrow
+                    className="right-arrow"
+                    onClick={() => {
+                        scrollBar.current?.scrollBy({
+                            top: 0,
+                            left: 300,
+                            behavior: 'smooth',
+                        });
+                    }}
+                />
+            </Container>
+        </>
     );
 };
 

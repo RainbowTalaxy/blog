@@ -49,37 +49,107 @@ const InputGroup = styled.div`
 
 const MATCH_MODE_OPTIONS = Object.keys(MatchMode).map((mode) => ({
     label: mode,
-    value: MatchMode[mode],
+    value: mode,
 }));
 
 const PLAYER_OPTIONS = Object.keys(Player).map((player) => ({
     label: Player[player],
-    value: Player[player],
+    value: player,
 }));
 
 const GAME_MAP_OPTIONS = Object.keys(GameMap).map((map) => ({
     label: GameMap[map],
-    value: GameMap[map],
+    value: map,
 }));
 
 const HERO_OPTIONS = Object.keys(Hero).map((hero) => ({
     label: Hero[hero],
-    value: Hero[hero],
+    value: hero,
 }));
 
 const MAX_PLAYER_COUNT = 6;
 const MAX_BAN_COUNT = 4;
+
+const createDefaultMatch = () => ({
+    id: uuid(),
+    mode: MatchMode.FT2,
+    teamA: {
+        players: Array(MAX_PLAYER_COUNT).fill(Player.TBD),
+        wolf: {
+            real: Player.TBD,
+            fake: Player.TBD,
+        },
+    },
+    teamB: {
+        players: Array(MAX_PLAYER_COUNT).fill(Player.TBD),
+        wolf: {
+            real: Player.TBD,
+            fake: Player.TBD,
+        },
+    },
+    rounds: [],
+});
+
+const createDefaultRound = () => ({
+    id: uuid(),
+    map: GameMap.TBD,
+    scoreA: 0,
+    scoreB: 0,
+    ban: Array(MAX_BAN_COUNT).fill(Hero.TBD),
+    wolf: {
+        voteA: Player.TBD,
+        voteB: Player.TBD,
+    },
+});
+
+type FormData = Pick<MatchDay, 'date' | 'description' | 'matches'> & {
+    id?: string;
+};
+
+function customTrimEnd<T>(arr: T[], value: T) {
+    let i = arr.length;
+    while (i-- && arr[i] === value) {}
+    return arr.slice(0, i + 1);
+}
+
+const formatFormData = (data: FormData) => {
+    const formData = clone(data);
+    const result = {
+        ...formData,
+        matches: formData.matches.map((match) => ({
+            ...match,
+            teamA: {
+                ...match.teamA,
+                players: customTrimEnd(match.teamA.players, Player.TBD),
+            },
+            teamB: {
+                ...match.teamB,
+                players: customTrimEnd(match.teamB.players, Player.TBD),
+            },
+            rounds: match.rounds.map((round) => ({
+                ...round,
+                ban: customTrimEnd(round.ban, Hero.TBD),
+            })),
+        })),
+    };
+    result.matches.forEach((match) => {
+        if (match.mode !== MatchMode.Wolf) {
+            delete match.teamA.wolf;
+            delete match.teamB.wolf;
+            match.rounds.forEach((round) => delete round.wolf);
+        }
+        delete match.id;
+        match.rounds.forEach((round) => delete round.id);
+    });
+    return result;
+};
 
 interface Props {
     matchDayId?: string;
 }
 
 const MatchForm = ({ matchDayId }: Props) => {
-    const [matchDay, setMatchDay] = useState<
-        Pick<MatchDay, 'date' | 'description' | 'matches'> & {
-            id?: string;
-        }
-    >();
+    const [matchDay, setMatchDay] = useState<FormData>();
     const [selectedMatchIdx, setSelectedMatchIdx] = useState(0);
     const [selectedRoundIdx, setSelectedRoundIdx] = useState(0);
 
@@ -141,7 +211,7 @@ const MatchForm = ({ matchDayId }: Props) => {
             {matchDay.id && (
                 <FormItem>
                     <label>ID：</label>
-                    <Input value={matchDay?.id} />
+                    <Input value={matchDay?.id} onChange={() => {}} />
                 </FormItem>
             )}
             <FormItem>
@@ -162,7 +232,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                 <ButtonGroup>
                     {matchDay.matches.map((match, mIdx) => (
                         <Button
-                            key={mIdx}
+                            key={match.id}
                             type={selectedMatchIdx === mIdx ? 'primary' : undefined}
                             onClick={() => setSelectedMatchIdx(mIdx)}
                         >
@@ -170,26 +240,9 @@ const MatchForm = ({ matchDayId }: Props) => {
                         </Button>
                     ))}
                     <Button
+                        type="primary"
                         onClick={() => {
-                            matchDay.matches.push({
-                                id: uuid(),
-                                mode: MatchMode.FT2,
-                                teamA: {
-                                    players: Array(MAX_PLAYER_COUNT).fill(Player.TBD),
-                                    wolf: {
-                                        real: Player.TBD,
-                                        fake: Player.TBD,
-                                    },
-                                },
-                                teamB: {
-                                    players: Array(MAX_PLAYER_COUNT).fill(Player.TBD),
-                                    wolf: {
-                                        real: Player.TBD,
-                                        fake: Player.TBD,
-                                    },
-                                },
-                                rounds: [],
-                            });
+                            matchDay.matches.push(createDefaultMatch());
                             setMatchDay(clone(matchDay));
                         }}
                     >
@@ -204,7 +257,10 @@ const MatchForm = ({ matchDayId }: Props) => {
                         <Select
                             defaultValue={selectedMatch.mode}
                             options={MATCH_MODE_OPTIONS}
-                            onSelect={(value) => (selectedMatch.mode = value as MatchMode)}
+                            onSelect={(value) => {
+                                selectedMatch.mode = value as MatchMode;
+                                setMatchDay(clone(matchDay));
+                            }}
                         />
                     </FormItem>
                     <FormItem>
@@ -212,6 +268,7 @@ const MatchForm = ({ matchDayId }: Props) => {
                         <InputGroup>
                             {selectedMatch.teamA.players.map((player, pIdx) => (
                                 <Select
+                                    key={pIdx}
                                     defaultValue={player}
                                     options={PLAYER_OPTIONS}
                                     onSelect={(value) => (selectedMatch.teamA.players[pIdx] = value as Player)}
@@ -219,6 +276,23 @@ const MatchForm = ({ matchDayId }: Props) => {
                             ))}
                         </InputGroup>
                     </FormItem>
+                    {selectedMatch.mode === MatchMode.Wolf && (
+                        <FormItem>
+                            <label>队伍 A 狼人：</label>
+                            <InputGroup>
+                                <Select
+                                    defaultValue={selectedMatch.teamA.wolf!.real}
+                                    options={PLAYER_OPTIONS}
+                                    onSelect={(value) => (selectedMatch.teamA.wolf!.real = value as Player)}
+                                />
+                                <Select
+                                    defaultValue={selectedMatch.teamA.wolf!.fake}
+                                    options={PLAYER_OPTIONS}
+                                    onSelect={(value) => (selectedMatch.teamA.wolf!.fake = value as Player)}
+                                />
+                            </InputGroup>
+                        </FormItem>
+                    )}
                     <FormItem>
                         <label>队伍 B ：</label>
                         <InputGroup>
@@ -232,6 +306,23 @@ const MatchForm = ({ matchDayId }: Props) => {
                             ))}
                         </InputGroup>
                     </FormItem>
+                    {selectedMatch.mode === MatchMode.Wolf && (
+                        <FormItem>
+                            <label>队伍 B 狼人：</label>
+                            <InputGroup>
+                                <Select
+                                    defaultValue={selectedMatch.teamB.wolf!.real}
+                                    options={PLAYER_OPTIONS}
+                                    onSelect={(value) => (selectedMatch.teamB.wolf!.real = value as Player)}
+                                />
+                                <Select
+                                    defaultValue={selectedMatch.teamB.wolf!.fake}
+                                    options={PLAYER_OPTIONS}
+                                    onSelect={(value) => (selectedMatch.teamB.wolf!.fake = value as Player)}
+                                />
+                            </InputGroup>
+                        </FormItem>
+                    )}
                     <FormItem>
                         <label></label>
                         <Button
@@ -250,9 +341,9 @@ const MatchForm = ({ matchDayId }: Props) => {
                         <FormItem>
                             <label></label>
                             <ButtonGroup>
-                                {selectedMatch.rounds.map((_, rIdx) => (
+                                {selectedMatch.rounds.map((round, rIdx) => (
                                     <Button
-                                        key={rIdx}
+                                        key={round.id}
                                         type={selectedRoundIdx === rIdx ? 'primary' : undefined}
                                         onClick={() => setSelectedRoundIdx(rIdx)}
                                     >
@@ -260,14 +351,9 @@ const MatchForm = ({ matchDayId }: Props) => {
                                     </Button>
                                 ))}
                                 <Button
+                                    type="primary"
                                     onClick={() => {
-                                        selectedMatch.rounds.push({
-                                            id: uuid(),
-                                            map: GameMap.TBD,
-                                            scoreA: 0,
-                                            scoreB: 0,
-                                            ban: Array(MAX_BAN_COUNT).fill(Hero.TBD),
-                                        });
+                                        selectedMatch.rounds.push(createDefaultRound());
                                         setMatchDay(clone(matchDay));
                                     }}
                                 >
@@ -355,9 +441,30 @@ const MatchForm = ({ matchDayId }: Props) => {
             <Gap />
             <FormItem>
                 <label></label>
-                <Button type="primary" onClick={async () => {}}>
-                    保存
-                </Button>
+                <ButtonGroup>
+                    <Button
+                        onClick={async () => {
+                            console.log(formatFormData(matchDay));
+                        }}
+                    >
+                        预 览
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={async () => {
+                            const data = formatFormData(matchDay);
+                            if (matchDay.id) {
+                                await API.zhaoyun.updateMatchDay(matchDay.id, data);
+                            } else {
+                                await API.zhaoyun.createMatchDay(data);
+                            }
+                            alert('保存成功');
+                            window.location.href = '/zhaoyun';
+                        }}
+                    >
+                        保 存
+                    </Button>
+                </ButtonGroup>
             </FormItem>
         </Container>
     );

@@ -4,16 +4,17 @@ import API from '@site/src/api';
 import Layout from '@theme/Layout';
 import { useCallback, useEffect, useState } from 'react';
 import MatchDayInfo from '../components/MatchDayInfo';
-import { Button } from '@site/src/components/Form';
+import { Button, ButtonGroup } from '@site/src/components/Form';
 import useUser from '@site/src/hooks/useUser';
 import DayBar from '../components/DayBar';
 import MatchForm from '../components/MatchForm';
+import useQuery from '@site/src/hooks/useQuery';
 
 const Page = () => {
+    const query = useQuery();
+    const editId = query.get('edit');
     const [statistics, setStatistics] = useState<Statistics | null>();
-    const [selectedMatchDay, setMatchDay] =
-        useState<Statistics['matchDays'][number]>();
-    const [isEditing, setEditing] = useState(true);
+    const [selectedMatchDay, setMatchDay] = useState<Statistics['matchDays'][number]>();
 
     const user = useUser();
 
@@ -35,37 +36,70 @@ const Page = () => {
     return (
         <Layout title="赵云杯">
             <div className={styles.page}>
-                {!isEditing && (
+                {editId === 'new' ? (
+                    <MatchForm />
+                ) : (
                     <>
-                        <h1>赵云杯</h1>
-                        <p>
-                            统计榜正在开发中。
-                            <a target="_blank" href="/zhaoyun/2022">
-                                → 第一届赵云杯 ←
-                            </a>
-                        </p>
-                        <h2>近期比赛</h2>
-                        {statistics && (
-                            <DayBar
-                                statistics={statistics}
-                                selectedMatchDay={selectedMatchDay}
-                                onSelect={setMatchDay}
-                            />
+                        {!editId && (
+                            <>
+                                <h1>赵云杯</h1>
+                                <p>
+                                    统计榜正在开发中。
+                                    <a target="_blank" href="/zhaoyun/2022">
+                                        → 第一届赵云杯 ←
+                                    </a>
+                                </p>
+                                {user.id && (
+                                    <Button
+                                        style={{ marginBottom: 24 }}
+                                        onClick={() => {
+                                            window.location.href = '/zhaoyun?edit=new';
+                                        }}
+                                    >
+                                        新建比赛
+                                    </Button>
+                                )}
+                                <h2>近期比赛</h2>
+                                {statistics && (
+                                    <DayBar
+                                        statistics={statistics}
+                                        selectedMatchDay={selectedMatchDay}
+                                        onSelect={setMatchDay}
+                                    />
+                                )}
+                            </>
                         )}
-                    </>
-                )}
-                <MatchForm />
-                {selectedMatchDay && (
-                    <>
-                        {isEditing ? (
-                            <MatchForm matchDayId={selectedMatchDay.id} />
-                        ) : (
-                            <MatchDayInfo matchDay={selectedMatchDay} />
-                        )}
-                        {user.id && !isEditing && (
-                            <Button type="primary" style={{ marginBottom: 16 }}>
-                                编 辑
-                            </Button>
+                        {selectedMatchDay && (
+                            <>
+                                {editId ? (
+                                    <MatchForm matchDayId={selectedMatchDay.id} />
+                                ) : (
+                                    <MatchDayInfo matchDay={selectedMatchDay} />
+                                )}
+                                {user.id && !editId && (
+                                    <ButtonGroup>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                window.location.href = `/zhaoyun?edit=${selectedMatchDay.id}`;
+                                            }}
+                                        >
+                                            编 辑
+                                        </Button>
+                                        <Button
+                                            type="danger"
+                                            onClick={async () => {
+                                                const granted = confirm('确认删除？');
+                                                if (!granted) return;
+                                                await API.zhaoyun.deleteMatchDay(selectedMatchDay.id);
+                                                refetch();
+                                            }}
+                                        >
+                                            删 除
+                                        </Button>
+                                    </ButtonGroup>
+                                )}
+                            </>
                         )}
                     </>
                 )}

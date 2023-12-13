@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { Fragment } from 'react';
 import styled from 'styled-components';
 import { Statistics } from '@site/src/api/zhaoyun';
+import { Player } from '@site/src/constants/zhaoyun/Player';
+import { GameMap } from '@site/src/constants/zhaoyun/Map';
 
 const Container = styled.div``;
 
@@ -89,7 +91,7 @@ const Round = styled.div`
 `;
 
 interface Props {
-    matchDay: Statistics['match_days'][number];
+    matchDay: Statistics['matchDays'][number];
 }
 
 const MatchDayInfo = ({ matchDay: day }: Props) => {
@@ -97,28 +99,22 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
         <Container>
             {day.matches.map((match, idx) => (
                 <MatchCard key={idx}>
-                    <h4>第{idx + 1}局</h4>
+                    <h4>第{idx + 1}场</h4>
                     <h5>队伍</h5>
                     <TeamCard>
                         <Team>
                             <span>A</span>
                             {match.teamA.players.map((player, idx) => (
-                                <div
-                                    key={idx}
-                                    className={clsx(idx === 0 && 'first')}
-                                >
-                                    {player}
+                                <div key={idx} className={clsx(idx === 0 && 'first')}>
+                                    {Player[player]}
                                 </div>
                             ))}
                         </Team>
                         <Team>
                             <span>B</span>
                             {match.teamB.players.map((player, idx) => (
-                                <div
-                                    key={idx}
-                                    className={clsx(idx === 0 && 'first')}
-                                >
-                                    {player}
+                                <div key={idx} className={clsx(idx === 0 && 'first')}>
+                                    {Player[player]}
                                 </div>
                             ))}
                         </Team>
@@ -131,23 +127,9 @@ const MatchDayInfo = ({ matchDay: day }: Props) => {
                             <div className="table-header">B</div>
                             {match.rounds.map((round, idx) => (
                                 <Fragment key={idx}>
-                                    <div className="map">{round.map}</div>
-                                    <div
-                                        className={clsx(
-                                            round.scoreA > round.scoreB &&
-                                                'hint',
-                                        )}
-                                    >
-                                        {round.scoreA}
-                                    </div>
-                                    <div
-                                        className={clsx(
-                                            round.scoreB > round.scoreA &&
-                                                'hint',
-                                        )}
-                                    >
-                                        {round.scoreB}
-                                    </div>
+                                    <div className="map">{GameMap[round.map]}</div>
+                                    <div className={clsx(round.scoreA > round.scoreB && 'hint')}>{round.scoreA}</div>
+                                    <div className={clsx(round.scoreB > round.scoreA && 'hint')}>{round.scoreB}</div>
                                 </Fragment>
                             ))}
                         </Round>
