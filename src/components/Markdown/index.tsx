@@ -8,11 +8,11 @@ interface Slug {
     slug: string;
 }
 
-const toSlug = (str: string, prev: Array<Slug>) => {
+const toSlug = (str: string | undefined, prev: Array<Slug>) => {
     const count = prev.filter((item) => item.title === str).length;
     return (
         str
-            .toString()
+            ?.toString()
             .toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[/?:=&]/g, '') + (count ? `-${count}` : '')
@@ -42,7 +42,8 @@ const Markdown = ({ children, toc }: Props) => {
                     <ReactMarkdown
                         components={{
                             h2: ({ node, ...props }) => {
-                                const title = props.children[0] as string;
+                                const title = (props.children?.[0] ??
+                                    props.children) as string;
                                 const slug = toSlug(title, slugsRef.current);
                                 slugsRef.current.push({ title, slug });
 
