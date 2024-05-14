@@ -18,7 +18,7 @@ router.post('/token', login, async (req, res) => {
             return res.status(403).send({ error: 'Unauthorized' });
         const { id } = req.body;
         if (!id) return res.status(400).send({ error: 'id is required' });
-        const token = User.generateToken(id);
+        const token = User.generateRegisterToken(id);
         res.send(token);
     } catch (error) {
         console.log(error);
@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
     if (password.length < 6) {
         return res.status(400).send({ error: 'password is too short' });
     }
-    if (!User.digestToken(id, token))
+    if (!User.digestRegisterToken(id, token))
         return res.status(403).send({ error: 'Unauthorized' });
     try {
         User.register(id, password);

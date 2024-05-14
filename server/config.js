@@ -119,7 +119,7 @@ const User = {
         return this.config.admin.includes(id);
     },
     // 生成注册 token
-    generateToken(id) {
+    generateRegisterToken(id) {
         const token = {
             id,
             token: uuid(),
@@ -130,8 +130,8 @@ const User = {
         return token;
     },
     // 消耗注册 token ，登记用户的前置工作
-    digestToken(id, token) {
-        this.clearOldTokens();
+    digestRegisterToken(id, token) {
+        this.clearOldRegisterTokens();
         const idx = this.tokens.findIndex(
             (item) => item.id === id && item.token === token,
         );
@@ -160,7 +160,7 @@ const User = {
         );
     },
     // 清理过期 token
-    clearOldTokens() {
+    clearOldRegisterTokens() {
         this.tokens = this.tokens.filter((item) => {
             return Date.now() - item.time < this.tokenExpireInterval;
         });

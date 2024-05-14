@@ -2,20 +2,6 @@ const jwt = require('jsonwebtoken');
 const { Dir, User } = require('./config');
 const { readJSON } = require('./utils');
 
-function parseKeyValueString(str) {
-    const result = {};
-    if (!str) {
-        return result;
-    }
-    str.split(';').forEach((item) => {
-        const [key, value] = item.split('=');
-        if (key && value) {
-            result[key.trim()] = value.trim();
-        }
-    });
-    return result;
-}
-
 // 帮我写一个中间件，用来校验用户 id 和 key 是否匹配
 const login = (req, res, next) => {
     const token = req.cookies.token;
