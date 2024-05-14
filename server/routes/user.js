@@ -99,6 +99,9 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id, password }, config.secret, {
             expiresIn: `${expireTime}d`,
         });
+        res.cookie('token', token, {
+            httpOnly: true,
+        });
         return res.send({
             token,
         });

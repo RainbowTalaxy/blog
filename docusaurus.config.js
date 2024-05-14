@@ -30,6 +30,31 @@ const config = {
                 return postcssOptions;
             },
         }),
+        () => ({
+            name: 'custom-webpack',
+            configureWebpack(config, isServer, utils) {
+                return {
+                    mergeStrategy: { 'devServer.proxy': 'replace' },
+                    devServer: {
+                        proxy: {
+                            // '/api': {
+                            //     target: 'https://blog.talaxy.cn/',
+                            //     secure: false,
+                            //     changeOrigin: true,
+                            //     logLevel: 'debug',
+                            // },
+                            '/api': {
+                                target: 'http://localhost:4000/',
+                                secure: false,
+                                changeOrigin: true,
+                                logLevel: 'debug',
+                                pathRewrite: { '^/api': '' },
+                            },
+                        },
+                    },
+                };
+            },
+        }),
         [
             '@docusaurus/plugin-content-docs',
             {
@@ -43,6 +68,7 @@ const config = {
     presets: [
         [
             'classic',
+            // @ts-ignore
             /** @type {import('@docusaurus/preset-classic').Options} */
             ({
                 docs: {

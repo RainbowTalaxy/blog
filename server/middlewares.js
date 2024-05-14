@@ -18,15 +18,14 @@ function parseKeyValueString(str) {
 
 // 帮我写一个中间件，用来校验用户 id 和 key 是否匹配
 const login = (req, res, next) => {
-    const authorization = req.headers.authorization;
-    const keys = parseKeyValueString(authorization);
-    if (!keys.token)
+    const token = req.cookies.token;
+    if (!token)
         return res
             .status(401)
             .send({ error: 'Please login first', message: '请先登录' });
     const config = readJSON(Dir.storage.config);
     try {
-        const { id, password } = jwt.verify(keys.token, config.secret);
+        const { id, password } = jwt.verify(token, config.secret);
         if (!User.validate(id, password))
             return res
                 .status(401)
@@ -42,12 +41,11 @@ const login = (req, res, next) => {
 };
 
 const weakLogin = (req, _, next) => {
-    const authorization = req.headers.authorization;
-    const keys = parseKeyValueString(authorization);
-    if (!keys.token) return next();
+    const token = req.cookies.token;
+    if (!token) return next();
     const config = readJSON(Dir.storage.config);
     try {
-        const { id } = jwt.verify(keys.token, config.secret);
+        const { id } = jwt.verify(token, config.secret);
         req.userId = id;
         if (User.isAdmin(id)) req.isAdmin = true;
     } catch (error) {}
