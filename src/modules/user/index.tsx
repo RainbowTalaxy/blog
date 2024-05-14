@@ -51,10 +51,10 @@ const UserPage = () => {
                     <>
                         <p>当前用户：{userId}</p>
                         <Button
-                            onClick={() => {
+                            onClick={async () => {
                                 const granted = confirm('确定要退出登录吗？');
                                 if (granted) {
-                                    User.config = {};
+                                    await User.logout();
                                     window.location.reload();
                                 }
                             }}

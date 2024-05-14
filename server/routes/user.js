@@ -114,6 +114,13 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.delete('/logout', login, async (req, res) => {
+    res.clearCookie('token');
+    res.send({
+        success: true,
+    });
+});
+
 router.get('/test', login, async (req, res) => {
     res.send({ id: req.userId });
 });
