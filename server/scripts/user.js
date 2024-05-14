@@ -14,6 +14,14 @@ async function main() {
         });
         config.version = '1.1.0';
     }
+    if (version.isLessThan('2.0.0')) {
+        const now = Date.now();
+        config.users = config.users.map((user) => ({
+            ...user,
+            updateTime: now,
+        }));
+        config.version = '2.0.0';
+    }
     config.version = User.version;
     writeJSON(Dir.storage.user, config);
 }

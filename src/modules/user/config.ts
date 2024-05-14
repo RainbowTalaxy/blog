@@ -29,9 +29,8 @@ export class User {
         try {
             await API.user.logout();
             User.config = {};
-        } catch (error) {
-            console.error(error);
-            alert(`登出失败：${error}`);
+        } catch (error: any) {
+            alert(`登出失败：${error?.message ?? '未知错误'}`);
         }
     }
 }

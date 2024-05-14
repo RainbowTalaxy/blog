@@ -11,12 +11,14 @@ const login = (req, res, next) => {
             .send({ error: 'Please login first', message: '请先登录' });
     const config = readJSON(Dir.storage.config);
     try {
-        const { id, password } = jwt.verify(token, config.secret);
-        if (!User.validate(id, password))
+        const { id, updateTime } = jwt.verify(token, config.secret);
+        const user = User.find(id);
+        const invalid = !user || user.updateTime !== updateTime;
+        if (invalid)
             return res
                 .status(401)
                 .send({ error: 'Please login again', message: '请重新登录' });
-        req.userId = id;
+        req.userId = user.id;
         if (User.isAdmin(id)) req.isAdmin = true;
         next();
     } catch (error) {

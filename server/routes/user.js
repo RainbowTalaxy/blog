@@ -89,16 +89,21 @@ router.post('/login', async (req, res) => {
         });
     }
     try {
-        if (!User.validate(id, password)) {
+        const user = User.validate(id, password);
+        if (!user) {
             return res.status(401).send({
                 error: 'Wrong id or password',
                 message: 'ID 或密码错误',
             });
         }
         const config = readJSON(Dir.storage.config);
-        const token = jwt.sign({ id, password }, config.secret, {
-            expiresIn: `${expireTime}d`,
-        });
+        const token = jwt.sign(
+            { id, updateTime: user.updateTime },
+            config.secret,
+            {
+                expiresIn: `${expireTime}d`,
+            },
+        );
         res.cookie('token', token, {
             httpOnly: true,
         });

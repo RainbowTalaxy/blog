@@ -87,7 +87,8 @@ const encryptUserPassword = (id, password) => {
     return Buffer.from(str).toString('base64');
 };
 
-const NEW_VERSION = '1.1.0';
+const NEW_VERSION = '2.0.0';
+const now = Date.now();
 
 // 默认用户配置
 const DEFAULT_USER_CONFIG = {
@@ -96,6 +97,7 @@ const DEFAULT_USER_CONFIG = {
     users: ['talaxy', 'allay'].map((id) => ({
         id,
         key: encryptUserPassword(id, id),
+        updateTime: now,
     })),
 };
 
@@ -110,9 +112,12 @@ const User = {
     // 验证用户
     validate(id, password) {
         const key = this.encryptPassword(id, password);
-        return this.config.users.some(
+        return this.config.users.find(
             (user) => user.id === id && user.key === key,
         );
+    },
+    find(id) {
+        return this.config.users.find((user) => user.id === id);
     },
     // 是否为管理员
     isAdmin(id) {
@@ -144,13 +149,16 @@ const User = {
     register(id, password) {
         const idx = this.config.users.findIndex((user) => user.id === id);
         const key = this.encryptPassword(id, password);
+        const timestamp = Date.now();
         if (idx === -1) {
             this.config.users.push({
                 id,
                 key,
+                updateTime: timestamp,
             });
         } else {
             this.config.users[idx].key = key;
+            this.config.users[idx].updateTime = timestamp;
         }
         fs.writeFileSync(
             Dir.storage.user,

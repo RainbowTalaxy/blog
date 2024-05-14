@@ -105,8 +105,12 @@ const UserPage = () => {
                                         } else {
                                             window.location.reload();
                                         }
-                                    } catch {
-                                        alert('登录失败');
+                                    } catch (error: any) {
+                                        alert(
+                                            `登录失败：${
+                                                error?.message ?? '未知错误'
+                                            }`,
+                                        );
                                     }
                                 }}
                             >
