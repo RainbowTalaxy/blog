@@ -119,7 +119,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.delete('/logout', login, async (req, res) => {
+router.post('/logout', login, async (req, res) => {
     res.clearCookie('token');
     res.send({
         success: true,
@@ -127,6 +127,10 @@ router.delete('/logout', login, async (req, res) => {
 });
 
 router.get('/test', login, async (req, res) => {
+    res.send({ id: req.userId });
+});
+
+router.get('/', login, async (req, res) => {
     res.send({ id: req.userId });
 });
 

@@ -23,8 +23,9 @@ const UserAPI = {
             password,
             expireTime,
         }),
+    info: () => rocketV2.get<{ id: string }>(`${SERVER_API}/user`),
     test: () => rocketV2.get<{ id: string }>(`${SERVER_API}/user/test`),
-    logout: () => rocketV2.delete(`${SERVER_API}/user/logout`),
+    logout: () => rocketV2.post(`${SERVER_API}/user/logout`),
 };
 
 export default UserAPI;
