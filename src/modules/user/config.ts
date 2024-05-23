@@ -1,5 +1,4 @@
-import { SERVER_API } from '@site/src/constants/config';
-import { rawFetch } from '@site/src/utils/fetch';
+import API from '@site/src/api';
 
 export interface UserInfo {
     id?: string;
@@ -22,13 +21,16 @@ export class User {
 
     static async update(token: string) {
         User.config = { token };
-        const { id } = await rawFetch<{ id: string }>(
-            `${SERVER_API}/user/test`,
-            'GET',
-            null,
-            token,
-        );
-        console.log(token, id);
+        const { id } = await API.user.test();
         User.config = { id, token };
+    }
+
+    static async logout() {
+        try {
+            await API.user.logout();
+            User.config = {};
+        } catch (error: any) {
+            alert(`登出失败：${error?.message ?? '未知错误'}`);
+        }
     }
 }

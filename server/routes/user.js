@@ -18,7 +18,7 @@ router.post('/token', login, async (req, res) => {
             return res.status(403).send({ error: 'Unauthorized' });
         const { id } = req.body;
         if (!id) return res.status(400).send({ error: 'id is required' });
-        const token = User.generateToken(id);
+        const token = User.generateRegisterToken(id);
         res.send(token);
     } catch (error) {
         console.log(error);
@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
     if (password.length < 6) {
         return res.status(400).send({ error: 'password is too short' });
     }
-    if (!User.digestToken(id, token))
+    if (!User.digestRegisterToken(id, token))
         return res.status(403).send({ error: 'Unauthorized' });
     try {
         User.register(id, password);
@@ -89,15 +89,23 @@ router.post('/login', async (req, res) => {
         });
     }
     try {
-        if (!User.validate(id, password)) {
+        const user = User.validate(id, password);
+        if (!user) {
             return res.status(401).send({
                 error: 'Wrong id or password',
                 message: 'ID 或密码错误',
             });
         }
         const config = readJSON(Dir.storage.config);
-        const token = jwt.sign({ id, password }, config.secret, {
-            expiresIn: `${expireTime}d`,
+        const token = jwt.sign(
+            { id, updateTime: user.updateTime },
+            config.secret,
+            {
+                expiresIn: `${expireTime}d`,
+            },
+        );
+        res.cookie('token', token, {
+            httpOnly: true,
         });
         return res.send({
             token,
@@ -111,7 +119,18 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/logout', login, async (req, res) => {
+    res.clearCookie('token');
+    res.send({
+        success: true,
+    });
+});
+
 router.get('/test', login, async (req, res) => {
+    res.send({ id: req.userId });
+});
+
+router.get('/', login, async (req, res) => {
     res.send({ id: req.userId });
 });
 
