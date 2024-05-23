@@ -106,6 +106,7 @@ router.post('/login', async (req, res) => {
         );
         res.cookie('token', token, {
             httpOnly: true,
+            maxAge: expireTime * 24 * 60 * 60 * 1000,
         });
         return res.send({
             token,
