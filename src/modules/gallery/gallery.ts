@@ -7,6 +7,12 @@ export interface GalleryCard {
 
 export const LATEST_CARDS: Array<GalleryCard> = [
     {
+        title: '泉州 开元寺',
+        subtitle: '2023年12月31日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1LTKo5/bqQfVz5yrrGYSXMvKr.cqfUoTovACBQXpWwsIi3Ea2NNlf8U9FPbIvE.LKp6A2s8VuNYo6.f9PS862tn8u7ushK8.8qhAdoMHsE3IYTWVSQ!/r',
+        link: '/gallery/2023/2023-12-31',
+    },
+    {
         title: '南京 石臼湖',
         subtitle: '2023年10月29日',
         bg: 'http://r.photo.store.qq.com/psc?/V12to3FW0jLYul/bqQfVz5yrrGYSXMvKr.cqU1WXetiSNHLcNE47*MMXLVKJWrzLnqywT4jPjfumYRx7a7fAwcdsunEWlREFx3o3avHDHdc8VQ*J2aFRwA362c!/r',
