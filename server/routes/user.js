@@ -11,6 +11,9 @@ const { User, Dir } = require('../config');
 const { readJSON } = require('../utils');
 const router = express.Router();
 
+const MAX_DAY = 120;
+const COOKIE_EXPIRE = MAX_DAY * 24 * 60 * 60 * 1000;
+
 // 生成注册 token
 router.post('/token', login, async (req, res) => {
     try {
@@ -67,8 +70,6 @@ router.get('/list', login, async (req, res) => {
     }
 });
 
-const MAX_DAY = 120;
-
 router.post('/login', async (req, res) => {
     const { id, password, expireTime = MAX_DAY } = req.body;
     if (!id || !password)
@@ -106,7 +107,7 @@ router.post('/login', async (req, res) => {
         );
         res.cookie('token', token, {
             httpOnly: true,
-            maxAge: expireTime * 24 * 60 * 60 * 1000,
+            maxAge: COOKIE_EXPIRE,
         });
         return res.send({
             token,
@@ -116,6 +117,39 @@ router.post('/login', async (req, res) => {
         return res.status(500).send({
             error: error.message,
             message: '登录失败',
+        });
+    }
+});
+
+router.post('/digest', async (req, res) => {
+    const { token } = req.body;
+    if (!token)
+        return res.status(400).send({
+            error: 'token is required',
+            message: '请提供 token',
+        });
+    try {
+        const config = readJSON(Dir.storage.config);
+        const { id, updateTime } = jwt.verify(token, config.secret);
+        const user = User.find(id);
+        if (!user || user.updateTime !== updateTime) {
+            return res.status(401).send({
+                error: 'wrong token or expired',
+                message: 'token 错误或失效',
+            });
+        }
+        res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: COOKIE_EXPIRE,
+        });
+        return res.send({
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            error: error.message,
+            message: '验证失败',
         });
     }
 });
