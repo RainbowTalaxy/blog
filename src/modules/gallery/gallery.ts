@@ -5,7 +5,67 @@ export interface GalleryCard {
     link: string;
 }
 
+export const TEMPLATE_CARD: GalleryCard[] = [
+    {
+        title: '',
+        subtitle: '',
+        bg: '',
+        link: '/gallery/',
+    },
+];
+
 export const LATEST_CARDS: Array<GalleryCard> = [
+    {
+        title: '千岛湖 天屿山',
+        subtitle: '2024年5月1日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqQKp9mNoZDRLQ3ZeBJkOulNMQJywYTRuiCcUdaUslOGhkRhGjcMz1QYQg3hKtljIeMwSotX3OOkZassQeS00dYo!/r',
+        link: '/gallery/2024/2024-05-千岛湖',
+    },
+    {
+        title: '千岛湖灯塔',
+        subtitle: '2024年5月1日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqQ5P3TnGQeUSDrab.9u.OPFKicXbbkO0rhPmbThJ28AzCSNVlztBNiLAfvuO6uJNhkf3ug7g4HSG9N8fYtcfLbg!/r',
+        link: '/gallery/2024/2024-05-千岛湖',
+    },
+    {
+        title: '南京 黄龙岘',
+        subtitle: '2024年4月4日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqUjZMZYuCe7CV8xTQi72KWgVQPD6A.Cw9pSPsXr*GnuVf8p3ukJha02FLvSWNGVr4VdQH2mkUjC9*VSQlmRN7vA!/r',
+        link: '/gallery/2024/2024-04-04',
+    },
+    {
+        title: '南京 玄武湖',
+        subtitle: '2024年3月29日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqWBo5ABwJZp9QYfLf*ZkjqfOE*ZYsBlkfacwPbUtXakofsbORiHsDUiVUbH7JwH4YNG894CPVXy.5cg4LvEJV8o!/r',
+        link: '/gallery/',
+    },
+    {
+        title: '杭州植物园',
+        subtitle: '2024年2月17日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqRuubbqQN0SDKSI4DE7zYf.tpcyxGdbZvkKdSoIJn0kIB9HUEIHgwkeMDsFVrQ28A2FLksLPA2Y2jx.tj9HbWqA!/r',
+        link: '/gallery/2024/2024-02-17',
+    },
+    {
+        title: '厦门大学',
+        subtitle: '2024年2月14日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqT6*N9DYjEegbjKfarQ0gYbMRSLgfbK2ppkacEg1ExD3c0aLnKNocl8cFpuLqYZNr.RS5bdbSnNrfrifupoApOo!/r',
+        link: '/gallery/2024/2024-02-14',
+    },
+    {
+        title: '泉州 月亮湾',
+        subtitle: '2024年2月12日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqfsCEcITUkPhRhOF0OW.uvYQzOHtMh7xuf.mWfx.MhO03CTbDfCz3.BA68CqA8nwr9cquT9wVP*LasI5luMGei8!/r',
+        link: '/gallery/2024/2024-02-12',
+    },
+    {
+        title: '南京 明孝陵',
+        subtitle: '2024年1月14日',
+        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqTCYZqqxNP3S04jAIVMBGM69Sc7FldwLNntLqKjJ8LjRkX*twdDWdiCibwNDwsr3xlxDgULUzkmPm.6Mpr4*cVM!/r',
+        link: '/gallery/2024/2024-01-14',
+    },
+];
+
+export const GALLERY_2023: Array<GalleryCard> = [
     {
         title: '泉州 开元寺',
         subtitle: '2023年12月31日',
