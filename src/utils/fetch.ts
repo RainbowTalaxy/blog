@@ -6,8 +6,7 @@ export interface ResponseError {
 export async function rawFetch<Data>(
     url: string,
     method: string,
-    data: any = {},
-    token: string,
+    data: any = null,
 ) {
     const isGET = method === 'GET' || method === 'HEAD';
     if (isGET) {
@@ -23,7 +22,6 @@ export async function rawFetch<Data>(
         credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `token=${token}`,
         },
         ...options,
     });

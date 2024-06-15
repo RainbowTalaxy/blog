@@ -51,10 +51,10 @@ const UserPage = () => {
                     <>
                         <p>当前用户：{userId}</p>
                         <Button
-                            onClick={() => {
+                            onClick={async () => {
                                 const granted = confirm('确定要退出登录吗？');
                                 if (granted) {
-                                    User.config = {};
+                                    await User.logout();
                                     window.location.reload();
                                 }
                             }}
@@ -105,8 +105,12 @@ const UserPage = () => {
                                         } else {
                                             window.location.reload();
                                         }
-                                    } catch {
-                                        alert('登录失败');
+                                    } catch (error: any) {
+                                        alert(
+                                            `登录失败：${
+                                                error?.message ?? '未知错误'
+                                            }`,
+                                        );
                                     }
                                 }}
                             >

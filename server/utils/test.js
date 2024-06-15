@@ -10,7 +10,7 @@ class Rocket {
         const { data } = await axios.get(this.baseUrl + url, {
             params,
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -22,7 +22,7 @@ class Rocket {
         const { data } = await axios.get(this.baseUrl + url, {
             params,
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -33,7 +33,7 @@ class Rocket {
     async post(url, body) {
         const { data } = await axios.post(this.baseUrl + url, body, {
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -44,7 +44,7 @@ class Rocket {
     async negPost(url, body) {
         const { data } = await axios.post(this.baseUrl + url, body, {
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -55,7 +55,7 @@ class Rocket {
     async put(url, body) {
         const { data } = await axios.put(this.baseUrl + url, body, {
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -66,7 +66,7 @@ class Rocket {
     async negPut(url, body) {
         const { data } = await axios.put(this.baseUrl + url, body, {
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -78,7 +78,7 @@ class Rocket {
         const { data } = await axios.delete(this.baseUrl + url, {
             params,
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });
@@ -90,7 +90,7 @@ class Rocket {
         const { data } = await axios.delete(this.baseUrl + url, {
             params,
             headers: {
-                Authorization: `token=${this.token}`,
+                Cookie: `token=${this.token}`,
             },
             validateStatus: () => true,
         });

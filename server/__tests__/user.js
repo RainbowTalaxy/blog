@@ -18,6 +18,7 @@ async function test() {
     const admin = new Rocket(Server + '/user');
     await admin.login(adminInfo.id, adminInfo.password);
     const user = new Rocket(Server + '/user');
+    const visitor = new Rocket(Server + '/user');
 
     // 测试登录
     await testCase.pos('test login', async () => {
@@ -112,6 +113,24 @@ async function test() {
     // 列出用户信息（管理员）
     await testCase.pos('admin list users', async () => {
         await admin.get('/list');
+    });
+
+    // token 登陆
+    await testCase.pos('digest token', async () => {
+        const { token } = await user.post('/login', {
+            id: userInfo.id,
+            password: newUserInfo.password,
+        });
+        await visitor.post('/digest', {
+            token,
+        });
+    });
+
+    // 用户使用假 token 登陆
+    await testCase.neg('digest fake token', async () => {
+        await visitor.post('/digest', {
+            token: uuid(),
+        });
     });
 
     return testCase.stat();

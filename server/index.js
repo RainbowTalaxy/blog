@@ -1,4 +1,6 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+// 数据补丁
+require('./scripts/index');
 
 const express = require('express');
 const cors = require('cors');
