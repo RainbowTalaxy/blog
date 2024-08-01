@@ -1,7 +1,7 @@
 const File = require('../../utils/file');
 const { Dir } = require('../../config');
 const { adminLogin, weakLogin } = require('../../middlewares');
-const { readJSON, uuid } = require('../../utils');
+const { readJSON, uuid, writeJSON } = require('../../utils');
 const express = require('express');
 const dayjs = require('dayjs');
 const router = express.Router();
@@ -34,6 +34,15 @@ const Controller = {
             (item) => item.token === token,
         );
     },
+    /**
+     * 读取日志
+     * @param {string} date 格式 'YYYY-MM-DD'
+     * @returns
+     */
+    readLog(date) {
+        const logFilePath = path.join(Dir.storage.log, `${date}.txt`);
+        return File.readText(logFilePath);
+    },
 };
 
 router.get('/admin/log-tokens', adminLogin, async (_, res, next) => {
@@ -46,9 +55,17 @@ router.get('/admin/log-tokens', adminLogin, async (_, res, next) => {
     }
 });
 
-router.post('/admin/log-token', adminLogin, async (res, req, next) => {
+router.post('/admin/log-token', adminLogin, async (req, res, next) => {
     try {
         const { title } = req.body;
+
+        if (!title) {
+            return res.status(400).send({
+                error: 'Bad Request',
+                message: '缺少标题',
+            });
+        }
+
         const newTokens = Controller.addLogToken(title);
         res.send(newTokens);
     } catch (error) {
@@ -70,12 +87,16 @@ router.delete('/admin/log-token/:token', adminLogin, async (req, res, next) => {
 });
 
 router.get('/admin/log/:date', adminLogin, async (req, res, next) => {
+    const { date } = req.params;
+
+    if (date.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
+        return res.status(400).send({
+            error: 'Bad Request',
+            message: '日期格式错误',
+        });
+    }
     try {
-        const logFilePath = path.join(
-            Dir.storage.log,
-            `${req.params.date}.txt`,
-        );
-        const log = File.readText(logFilePath);
+        const log = Controller.readLog(date);
         res.send(log);
     } catch (error) {
         res.error = 'Failed to access log';
@@ -88,10 +109,17 @@ router.post('/log', weakLogin, async (req, res, next) => {
     try {
         const { token, message } = req.body;
 
-        if (!Controller.isLogTokenValid(token) || !req.isAdmin) {
+        if (!Controller.isLogTokenValid(token) && !req.isAdmin) {
             return res.status(403).send({
                 error: 'Forbidden',
                 message: '无权访问',
+            });
+        }
+
+        if (!message) {
+            return res.status(400).send({
+                error: 'Bad Request',
+                message: '缺少日志内容',
             });
         }
 

@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
         const config = readJSON(Dir.storage.config);
         const token = jwt.sign(
             { id, updateTime: user.updateTime },
-            config.secret,
+            config.password_encrypt_secret,
             {
                 expiresIn: `${expireTime}d`,
             },
@@ -130,7 +130,10 @@ router.post('/digest', async (req, res) => {
         });
     try {
         const config = readJSON(Dir.storage.config);
-        const { id, updateTime } = jwt.verify(token, config.secret);
+        const { id, updateTime } = jwt.verify(
+            token,
+            config.password_encrypt_secret,
+        );
         const user = User.find(id);
         if (!user || user.updateTime !== updateTime) {
             return res.status(401).send({
