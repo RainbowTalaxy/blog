@@ -31,9 +31,22 @@ class File {
         return JSON.parse(fs.readFileSync(path));
     }
 
+    /** 读取文本文件 */
+    static readText(path) {
+        if (!fs.existsSync(path)) {
+            throw new Error(`File not found: ${path}`);
+        }
+        return fs.readFileSync(path);
+    }
+
     /** 写入 json 文件 */
     static writeJSON(path, json) {
         fs.writeFileSync(path, JSON.stringify(json));
+    }
+
+    /** 写入文本文件 */
+    static appendText(path, text) {
+        fs.appendFileSync(path, text);
     }
 
     /** 删除文件 */
