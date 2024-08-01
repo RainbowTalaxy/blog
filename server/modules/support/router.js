@@ -36,7 +36,7 @@ const Controller = {
     },
 };
 
-router.get('/log-tokens', adminLogin, async (_, res, next) => {
+router.get('/admin/log-tokens', adminLogin, async (_, res, next) => {
     try {
         res.send(Controller.getLogTokens());
     } catch (error) {
@@ -46,7 +46,7 @@ router.get('/log-tokens', adminLogin, async (_, res, next) => {
     }
 });
 
-router.post('/log-token', adminLogin, async (res, req, next) => {
+router.post('/admin/log-token', adminLogin, async (res, req, next) => {
     try {
         const { title } = req.body;
         const newTokens = Controller.addLogToken(title);
@@ -58,7 +58,7 @@ router.post('/log-token', adminLogin, async (res, req, next) => {
     }
 });
 
-router.delete('/log-token/:token', adminLogin, async (req, res, next) => {
+router.delete('/admin/log-token/:token', adminLogin, async (req, res, next) => {
     try {
         const newTokens = Controller.removeLogToken(req.params.token);
         res.send(newTokens);
@@ -69,7 +69,7 @@ router.delete('/log-token/:token', adminLogin, async (req, res, next) => {
     }
 });
 
-router.get('/log/:date', adminLogin, async (req, res, next) => {
+router.get('/admin/log/:date', adminLogin, async (req, res, next) => {
     try {
         const logFilePath = path.join(
             Dir.storage.log,
