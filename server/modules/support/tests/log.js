@@ -89,7 +89,11 @@ async function test() {
         await talaxy.post(`/log`, { message });
 
         const message2 = 'test log 2';
-        await allay.post(`/log`, { message: message2, token: logToken });
+        const message2p = 'test log 2 second line';
+        await allay.post(`/log`, {
+            message: message2 + '\n' + message2p,
+            token: logToken,
+        });
 
         const message3 = 'test log 3';
         await visitor.post(`/log`, { message: message3, token: logToken });
@@ -100,14 +104,14 @@ async function test() {
             if (
                 log.match(new RegExp(`^\\[[0-9:\\- /]*\\] ${message}$`)) ===
                 null
-            ) {
+            )
                 throw new Error(`Log not found: ${message}`);
-            }
         };
 
         checkLog(message, logs[0]);
         checkLog(message2, logs[1]);
-        checkLog(message3, logs[2]);
+        checkLog(message2p, logs[2]);
+        checkLog(message3, logs[3]);
     });
 
     // ## GET `/admin/log/:date`

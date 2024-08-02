@@ -125,9 +125,14 @@ router.post('/log', weakLogin, async (req, res, next) => {
 
         const now = new Date();
         const date = dayjs(now).format('YYYY-MM-DD');
-        const line = `[${now.toLocaleString()}] ${message}\n`;
+        const content = message
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean)
+            .map((line) => `[${now.toLocaleString()}] ${line}\n`)
+            .join('');
         const logFilePath = path.join(Dir.storage.log, `${date}.txt`);
-        File.appendText(logFilePath, line);
+        File.appendText(logFilePath, content);
 
         res.send({
             success: true,
