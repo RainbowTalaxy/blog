@@ -30,10 +30,10 @@ interface Body {
 **响应**
 
 ```ts
-type Response = Array<{
+type Response = {
     title: string;
     token: string;
-}>;
+};
 ```
 
 ### `DELETE` 删除日志权限
@@ -43,10 +43,10 @@ type Response = Array<{
 **响应**
 
 ```ts
-type Response = Array<{
+type Response = {
     title: string;
     token: string;
-}>;
+};
 ```
 
 ### `GET` 获取某日日志
@@ -70,4 +70,12 @@ interface Body {
     token?: string; // 或者是管理员账号
     message: string;
 }
+```
+
+**响应**
+
+```ts
+type Response = {
+    success: boolean;
+};
 ```

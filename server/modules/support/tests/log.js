@@ -2,8 +2,11 @@ const { Server } = require('../../../config');
 const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const dayjs = require('dayjs');
+const { logController } = require('../../support/router');
 
 async function test() {
+    logController.clear();
+
     const testCase = new TestCase('Support - log', true);
 
     const baseUrl = Server + '/support';
@@ -37,13 +40,12 @@ async function test() {
     // 创建新的日志权限 - 管理员
     const testLogTokenTitle = '测试日志权限 1';
     const logToken = await testCase.pos('create new log token', async () => {
-        const logTokens = await talaxy.post(`/admin/log-token`, {
+        const logToken = await talaxy.post(`/admin/log-token`, {
             title: testLogTokenTitle,
         });
-        Assert.array(logTokens, 1);
-        Assert.props(logTokens[0], ['title', 'token']);
-        Assert.expect(logTokens[0].title, testLogTokenTitle);
-        return logTokens[0].token;
+        Assert.props(logToken, ['title', 'token']);
+        Assert.expect(logToken.title, testLogTokenTitle);
+        return logToken.token;
     });
 
     // ## GET `/admin/log-tokens`
@@ -132,6 +134,12 @@ async function test() {
         await visitor.get(`/admin/log/${today}`);
     });
 
+    // 获取日志 - 无日志
+    await testCase.pos('get log - no log', async () => {
+        const logs = await talaxy.get(`/admin/log/2024-01-01`);
+        Assert.expect(logs, '');
+    });
+
     // ## DELETE `/admin/log-token`
 
     // 移除日志权限 - 非管理员
@@ -142,7 +150,8 @@ async function test() {
 
     // 移除日志权限 - 管理员
     await testCase.pos(`remove log token`, async () => {
-        const logTokens = await talaxy.delete(`/admin/log-token/${logToken}`);
+        await talaxy.delete(`/admin/log-token/${logToken}`);
+        const logTokens = await talaxy.get(`/admin/log-tokens`);
         Assert.array(logTokens, 0);
     });
 
