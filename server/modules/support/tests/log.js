@@ -100,7 +100,8 @@ async function test() {
         const message3 = 'test log 3';
         await visitor.post(`/log`, { message: message3, token: logToken });
 
-        const logs = (await talaxy.get(`/admin/log/${today}`)).split('\n');
+        const { log } = await talaxy.get(`/admin/log/${today}`);
+        const logs = log.split('\n');
 
         const checkLog = (message, log) => {
             if (
@@ -136,8 +137,8 @@ async function test() {
 
     // 获取日志 - 无日志
     await testCase.pos('get log - no log', async () => {
-        const logs = await talaxy.get(`/admin/log/2024-01-01`);
-        Assert.expect(logs, '');
+        const { log } = await talaxy.get(`/admin/log/2024-01-01`);
+        Assert.expect(log, '');
     });
 
     // ## DELETE `/admin/log-token`

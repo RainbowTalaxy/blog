@@ -36,7 +36,7 @@ class File {
         if (!fs.existsSync(path)) {
             throw new Error(`File not found: ${path}`);
         }
-        return fs.readFileSync(path);
+        return fs.readFileSync(path, 'utf-8');
     }
 
     /** 写入 json 文件 */

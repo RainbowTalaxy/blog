@@ -56,7 +56,9 @@ type Response = {
 **响应**
 
 ```ts
-type Response = string;
+type Response = {
+    log: string;
+};
 ```
 
 ### `POST` 发送日志

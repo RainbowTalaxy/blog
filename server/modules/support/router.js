@@ -111,7 +111,7 @@ router.get('/admin/log/:date', adminLogin, async (req, res, next) => {
     }
     try {
         const log = Controller.readLog(date);
-        res.send(log);
+        res.send({ log });
     } catch (error) {
         res.error = 'Failed to access log';
         res.message = '获取日志失败';
