@@ -8,29 +8,37 @@ const router = express.Router();
 const path = require('path');
 
 const Controller = {
-    config: readJSON(Dir.storage.config),
+    getConfig() {
+        return readJSON(Dir.storage.config);
+    },
     getLogTokens() {
-        return Controller.config.log_access_tokens;
+        return Controller.getConfig().log_access_tokens;
     },
     addLogToken(title) {
-        const token = uuid();
-        Controller.config.log_access_tokens.push({
+        const newLogToken = {
             title,
-            token,
-        });
-        writeJSON(Dir.storage.config, Controller.config);
-        return Controller.config.log_access_tokens;
+            token: uuid(),
+        };
+        const config = Controller.getConfig();
+        config.log_access_tokens.push(newLogToken);
+        writeJSON(Dir.storage.config, config);
+        return newLogToken;
     },
     removeLogToken(token) {
-        Controller.config.log_access_tokens =
-            Controller.config.log_access_tokens.filter(
-                (item) => item.token !== token,
-            );
-        writeJSON(Dir.storage.config, Controller.config);
-        return Controller.config.log_access_tokens;
+        const config = Controller.getConfig();
+        const logTokenIdx = config.log_access_tokens.findIndex(
+            (item) => item.token === token,
+        );
+        if (logTokenIdx === -1) return null;
+        const removedLogTokens = config.log_access_tokens.splice(
+            logTokenIdx,
+            1,
+        );
+        writeJSON(Dir.storage.config, config);
+        return removedLogTokens[0];
     },
     isLogTokenValid(token) {
-        return Controller.config.log_access_tokens.some(
+        return Controller.getConfig().log_access_tokens.some(
             (item) => item.token === token,
         );
     },
@@ -41,7 +49,13 @@ const Controller = {
      */
     readLog(date) {
         const logFilePath = path.join(Dir.storage.log, `${date}.txt`);
+        if (!File.exists(logFilePath)) return '';
         return File.readText(logFilePath);
+    },
+    clear() {
+        const config = Controller.getConfig();
+        config.log_access_tokens = [];
+        writeJSON(Dir.storage.config, config);
     },
 };
 
@@ -66,8 +80,8 @@ router.post('/admin/log-token', adminLogin, async (req, res, next) => {
             });
         }
 
-        const newTokens = Controller.addLogToken(title);
-        res.send(newTokens);
+        const newLogToken = Controller.addLogToken(title);
+        res.send(newLogToken);
     } catch (error) {
         res.error = 'Failed to add log token';
         res.message = '添加日志 token 失败';
@@ -77,8 +91,8 @@ router.post('/admin/log-token', adminLogin, async (req, res, next) => {
 
 router.delete('/admin/log-token/:token', adminLogin, async (req, res, next) => {
     try {
-        const newTokens = Controller.removeLogToken(req.params.token);
-        res.send(newTokens);
+        const removedLogToken = Controller.removeLogToken(req.params.token);
+        res.send(removedLogToken);
     } catch (error) {
         res.error = 'Failed to remove log token';
         res.message = '移除日志 token 失败';
@@ -144,4 +158,4 @@ router.post('/log', weakLogin, async (req, res, next) => {
     }
 });
 
-module.exports = { logRouter: router };
+module.exports = { logRouter: router, logController: Controller };
