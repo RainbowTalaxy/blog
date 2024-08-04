@@ -97,8 +97,8 @@ type Response = Playlist;
 interface Body {
     name: string;
     description?: string;
-    category?: string;
-    coverImgUrl?: string;
+    category?: string | null;
+    coverImgUrl?: string | null;
     tinyCoverImgUrl?: string | null;
     releaseDate?: number;
 }
@@ -120,8 +120,8 @@ type Response = Playlist;
 interface Body {
     name?: string;
     description?: string;
-    category?: string;
-    coverImgUrl?: string;
+    category?: string | null;
+    coverImgUrl?: string | null;
     tinyCoverImgUrl?: string | null;
     releaseDate?: number;
 }
