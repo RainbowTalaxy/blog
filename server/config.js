@@ -36,6 +36,12 @@ const SERVER_DIR = {
             docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
             users: path.join(STORAGE_PATH, 'luoye', 'users'),
         },
+        playlist: {
+            library: path.join(STORAGE_PATH, 'playlist', 'library.json'),
+            playlist: path.join(STORAGE_PATH, 'playlist', 'playlist'),
+            songLibrary: path.join(STORAGE_PATH, 'playlist', 'songs.json'),
+            song: path.join(STORAGE_PATH, 'playlist', 'song'),
+        },
     },
 };
 
@@ -52,6 +58,12 @@ const LOCAL_DIR = {
             workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
             docs: path.join(TEMP_DIR, 'luoye', 'docs'),
             users: path.join(TEMP_DIR, 'luoye', 'users'),
+        },
+        playlist: {
+            library: path.join(TEMP_DIR, 'playlist', 'library.json'),
+            playlist: path.join(TEMP_DIR, 'playlist', 'playlist'),
+            songLibrary: path.join(TEMP_DIR, 'playlist', 'songs.json'),
+            song: path.join(TEMP_DIR, 'playlist', 'song'),
         },
     },
 };
@@ -74,12 +86,19 @@ mkdirp.sync(Dir.storage.projects);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
+mkdirp.sync(Dir.storage.playlist.playlist);
+mkdirp.sync(Dir.storage.playlist.song);
 
 writeJSONIfNotExist(Dir.storage.config, {
     secret: uuid(),
 });
 
 writeJSONIfNotExist(Dir.storage.token, []);
+
+writeJSONIfNotExist(Dir.storage.playlist.library, {
+    playlists: [],
+    updatedAt: Date.now(),
+});
 
 const encryptUserPassword = (id, password) => {
     const { secret } = readJSON(Dir.storage.config);
