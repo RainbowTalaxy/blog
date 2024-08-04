@@ -110,6 +110,7 @@ class Rocket {
             },
         );
         if (data.error) throw new Error(data.error);
+        this.id = id;
         this.token = data.token;
         // console.log('🐰', 'Login:', id);
     }
