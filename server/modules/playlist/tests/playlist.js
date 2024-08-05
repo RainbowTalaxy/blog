@@ -127,6 +127,16 @@ async function test() {
         Assert.expect(updatedPlaylist.coverImgUrl, data.coverImgUrl);
         Assert.expect(updatedPlaylist.tinyCoverImgUrl, data.tinyCoverImgUrl);
         Assert.expect(updatedPlaylist.releaseDate, data.releaseDate);
+
+        const library = await talaxy.get('/library');
+        Assert.array(library.playlists, 1);
+        Assert.expect(library.playlists[0].id, testPlaylist.id);
+        Assert.expect(library.playlists[0].name, data.name);
+        Assert.expect(library.playlists[0].category, data.category);
+        Assert.expect(
+            library.playlists[0].tinyCoverImgUrl,
+            data.tinyCoverImgUrl,
+        );
     });
 
     // 更新播放列表 - 不存在

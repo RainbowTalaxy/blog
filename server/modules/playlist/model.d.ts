@@ -15,7 +15,7 @@ export interface Song {
 
 export type SongItem = Pick<
     Song,
-    'id' | 'name' | 'author' | 'album' | 'tinyAlbumImgUrl'
+    'id' | 'name' | 'author' | 'album' | 'tinyAlbumImgUrl' | 'duration'
 >;
 
 export interface SongLibrary {
