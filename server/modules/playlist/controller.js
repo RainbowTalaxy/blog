@@ -33,8 +33,8 @@ const Controller = {
                 (item) => item.id === playlist.id,
             );
             if (index === -1) return;
-            const model = new ModelHandler(playlist);
-            const hasFieldUpdated = model.update(playlist, [
+            const handler = new ModelHandler(library.playlists[index]);
+            const hasFieldUpdated = handler.update(playlist, [
                 'name',
                 'tinyCoverImgUrl',
                 'category',
