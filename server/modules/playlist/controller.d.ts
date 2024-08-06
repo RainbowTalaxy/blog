@@ -1,4 +1,4 @@
-import { Playlist, PlaylistLibrary } from './model';
+import { Playlist, PlaylistLibrary, Song, SongLibrary } from './model';
 
 declare const Controller: {
     library: {
@@ -31,6 +31,34 @@ declare const Controller: {
                 releaseDate?: number;
             }): Playlist;
             remove(): Playlist;
+        };
+    };
+    songLibrary: {
+        content: SongLibrary;
+        addSong: (song: Song) => void;
+        updateSong: (song: Song) => void;
+        removeSong: (songId: string) => void;
+    };
+    song: {
+        add: (props: {
+            name: string;
+            artist?: string;
+            album?: string;
+            duration?: number;
+            albumImgUrl?: string | null;
+            tinyAlbumImgUrl?: string | null;
+        }) => Song;
+        ctr(id: string): null | {
+            content: Song;
+            update(props: {
+                name?: string;
+                artist?: string;
+                album?: string;
+                duration?: number;
+                albumImgUrl?: string | null;
+                tinyAlbumImgUrl?: string | null;
+            }): Song;
+            remove(): Song;
         };
     };
 };

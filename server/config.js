@@ -109,6 +109,11 @@ writeJSONIfNotExist(Dir.storage.playlist.library, {
     updatedAt: Date.now(),
 });
 
+writeJSONIfNotExist(Dir.storage.playlist.songLibrary, {
+    songs: [],
+    updatedAt: Date.now(),
+});
+
 const encryptUserPassword = (id, password) => {
     const { password_encrypt_secret } = readJSON(Dir.storage.config);
     const str = `${id}:${password}:${password_encrypt_secret}`;

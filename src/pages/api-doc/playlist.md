@@ -8,28 +8,32 @@
 interface Song {
     id: string;
     name: string;
-    author: string;
+    artist: string;
     album: string;
-    albumImgUrl: string;
-    tinyAlbumImgUrl: string;
+    duration: number; // 单位：秒
+    albumImgUrl: string | null;
+    tinyAlbumImgUrl: string | null;
     audios: Array<{
         label: string;
         url: string;
     }>;
-    duration: number;
+    lyrics: object[];
+    background: string | object | null;
     updatedAt: number;
 }
 ```
 
-### SongItem
+### PlaylistSongItem
 
 ```ts
-interface SongItem {
+interface PlaylistSongItem {
     id: string;
     name: string;
-    author: string;
+    artist: string;
     album: string;
-    tinyAlbumImgUrl: string;
+    duration: number; // 单位：秒
+    tinyAlbumImgUrl: string | null;
+    featured: boolean;
 }
 ```
 
@@ -45,20 +49,9 @@ interface Playlist {
     coverImgUrl: string | null;
     tinyCoverImgUrl: string | null;
     releaseDate: number;
-    songs: SongItem[];
-    duration: number;
+    songs: PlaylistSongItem[];
+    duration: number; // 单位：秒
     updatedAt: number;
-}
-```
-
-### PlaylistItem
-
-```ts
-interface PlaylistItem {
-    id: string;
-    name: string;
-    category: string | null;
-    tinyCoverImgUrl: string | null;
 }
 ```
 
@@ -72,14 +65,19 @@ interface PlaylistItem {
 
 ```ts
 type Response = {
-    playlists: PlaylistItem[];
+    playlists: Array<{
+        id: string;
+        name: string;
+        category: string | null;
+        tinyCoverImgUrl: string | null;
+    }>;
     updatedAt: number;
 };
 ```
 
 ### `GET` 获取播放列表详情
 
-`/:id`
+`/:playlistId`
 
 **响应**
 
@@ -112,7 +110,7 @@ type Response = Playlist;
 
 ### `PUT` 更新播放列表
 
-`/:id`
+`/:playlistId`
 
 **参数**
 
@@ -135,10 +133,96 @@ type Response = Playlist;
 
 ### `DELETE` 删除播放列表
 
-`/:id`
+`/:playlistId`
 
 **响应**
 
 ```ts
 type Response = Playlist;
+```
+
+### `GET` 获取曲库
+
+`/songs`
+
+**响应**
+
+```ts
+type Response = {
+    songs: Array<{
+        id: string;
+        name: string;
+        artist: string;
+        album: string;
+        duration: number; // 单位：秒
+        tinyAlbumImgUrl: string | null;
+    }>;
+    updatedAt: number;
+};
+```
+
+### `GET` 获取歌曲详情
+
+`/song/:songId`
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `POST` 创建歌曲
+
+`/song`
+
+**参数**
+
+```ts
+interface Body {
+    name: string;
+    artist?: string;
+    album?: string;
+    duration?: number;
+    albumImgUrl?: string | null;
+    tinyAlbumImgUrl?: string | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `PUT` 更新歌曲
+
+`/song/:songId`
+
+**参数**
+
+```ts
+interface Body {
+    name?: string;
+    artist?: string;
+    album?: string;
+    duration?: number;
+    albumImgUrl?: string | null;
+    tinyAlbumImgUrl?: string | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `DELETE` 删除歌曲
+
+`/song/:songId`
+
+**响应**
+
+```ts
+type Response = Song;
 ```
