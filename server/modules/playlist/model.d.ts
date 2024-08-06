@@ -3,7 +3,7 @@ export interface Song {
     name: string;
     artist: string;
     album: string;
-    duration: number; // 单位：秒
+    duration: number; // 单位：毫秒
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
     audios: Array<{
@@ -39,7 +39,7 @@ export interface Playlist {
     tinyCoverImgUrl: string | null;
     releaseDate: number;
     songs: PlaylistSongItem[];
-    duration: number; // 单位：秒
+    duration: number; // 单位：毫秒
     updatedAt: number;
 }
 
