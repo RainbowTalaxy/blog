@@ -1,27 +1,33 @@
 export interface Song {
     id: string;
     name: string;
-    author: string;
+    artist: string;
     album: string;
-    albumImgUrl: string;
-    tinyAlbumImgUrl: string;
+    duration: number; // 单位：秒
+    albumImgUrl: string | null;
+    tinyAlbumImgUrl: string | null;
     audios: Array<{
         label: string;
         url: string;
     }>;
-    duration: number;
+    lyrics: object[];
+    background: string | object | null;
     updatedAt: number;
 }
 
 export type SongItem = Pick<
     Song,
-    'id' | 'name' | 'author' | 'album' | 'tinyAlbumImgUrl' | 'duration'
+    'id' | 'name' | 'artist' | 'album' | 'tinyAlbumImgUrl' | 'duration'
 >;
 
 export interface SongLibrary {
     songs: SongItem[];
     updatedAt: number;
 }
+
+export type PlaylistSongItem = SongItem & {
+    featured: boolean;
+};
 
 export interface Playlist {
     id: string;
@@ -32,8 +38,8 @@ export interface Playlist {
     coverImgUrl: string | null;
     tinyCoverImgUrl: string | null;
     releaseDate: number;
-    songs: SongItem[];
-    duration: number;
+    songs: PlaylistSongItem[];
+    duration: number; // 单位：秒
     updatedAt: number;
 }
 

@@ -79,7 +79,7 @@ const Controller = {
             );
             return playlist;
         },
-        ctr: (id) => {
+        ctr(id) {
             if (!id) throw Error('Playlist ID is required');
             const filePath = File.join(PlaylistDir.playlist, `${id}.json`);
             if (!File.exists(filePath)) return null;
@@ -112,6 +112,114 @@ const Controller = {
                     Controller.library.removePlaylist(playlist.id);
                     File.delete(filePath);
                     return playlist;
+                },
+            };
+        },
+    },
+    songLibrary: {
+        get content() {
+            return File.readJSON(PlaylistDir.songLibrary);
+        },
+        set content(value) {
+            File.writeJSON(PlaylistDir.songLibrary, value);
+        },
+        addSong(song) {
+            const songLibrary = this.content;
+            songLibrary.songs.push({
+                id: song.id,
+                name: song.name,
+                artist: song.artist,
+                album: song.album,
+                duration: song.duration,
+                tinyAlbumImgUrl: song.tinyAlbumImgUrl,
+            });
+            songLibrary.updatedAt = Date.now();
+            this.content = songLibrary;
+        },
+        updateSong(song) {
+            const songLibrary = this.content;
+            const index = songLibrary.songs.findIndex(
+                (item) => item.id === song.id,
+            );
+            if (index === -1) return;
+            const handler = new ModelHandler(songLibrary.songs[index]);
+            const hasFieldUpdated = handler.update(song, [
+                'name',
+                'artist',
+                'album',
+                'duration',
+                'tinyAlbumImgUrl',
+            ]);
+            if (!hasFieldUpdated) return;
+            songLibrary.updatedAt = Date.now();
+            this.content = songLibrary;
+        },
+        removeSong(id) {
+            const songLibrary = this.content;
+            const index = songLibrary.songs.findIndex((item) => item.id === id);
+            if (index === -1) return;
+            songLibrary.songs.splice(index, 1);
+            songLibrary.updatedAt = Date.now();
+            this.content = songLibrary;
+        },
+    },
+    song: {
+        add(props) {
+            if (!props) throw Error('Song props are required');
+            const now = Date.now();
+            const song = {
+                id: uuid(),
+                name: props.name ?? '',
+                artist: props.artist ?? '',
+                album: props.album ?? '',
+                duration: props.duration ?? 0,
+                albumImgUrl: props.albumImgUrl || null,
+                tinyAlbumImgUrl: props.tinyAlbumImgUrl || null,
+                audios: [],
+                lyrics: [],
+                background: null,
+                updatedAt: now,
+            };
+            Controller.songLibrary.addSong(song);
+            File.writeJSON(
+                File.join(PlaylistDir.song, `${song.id}.json`),
+                song,
+            );
+            return song;
+        },
+        ctr(id) {
+            if (!id) throw Error('Song ID is required');
+            const filePath = File.join(PlaylistDir.song, `${id}.json`);
+            if (!File.exists(filePath)) return null;
+            return {
+                get content() {
+                    return File.readJSON(filePath);
+                },
+                set content(value) {
+                    File.writeJSON(filePath, value);
+                    Controller.songLibrary.updateSong(value);
+                },
+                update(props) {
+                    if (!props) throw Error('Song props are required');
+                    const handler = new ModelHandler(this.content);
+                    const hasFieldUpdated = handler.update(props, [
+                        'name',
+                        'artist',
+                        'album',
+                        'duration',
+                        'albumImgUrl',
+                        'tinyAlbumImgUrl',
+                    ]);
+                    if (!hasFieldUpdated) return handler.model;
+                    handler.model.updatedAt = Date.now();
+                    this.content = handler.model;
+                    return handler.model;
+                },
+                remove() {
+                    const song = this.content;
+                    Controller.songLibrary.removeSong(song.id);
+                    File.delete(filePath);
+                    return song;
                 },
             };
         },

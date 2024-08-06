@@ -1,4 +1,5 @@
 const playlist = require('./playlist');
+const song = require('./song');
 const { TestCase } = require('../../../utils/test');
 
 async function test() {
@@ -6,6 +7,8 @@ async function test() {
         const testCase = new TestCase('Playlist');
 
         testCase.merge(await playlist());
+
+        testCase.merge(await song());
 
         return testCase.stat();
     } catch (error) {
