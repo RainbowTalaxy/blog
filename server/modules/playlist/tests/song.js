@@ -33,7 +33,7 @@ async function test() {
             name: 'Runaway',
             artist: '陶喆',
             album: '乐之路',
-            duration: 256,
+            duration: 25600,
             albumImgUrl: 'https://some.png.com/tao.png',
             tinyAlbumImgUrl: 'https://some.png.com/tao_tiny.png',
         };

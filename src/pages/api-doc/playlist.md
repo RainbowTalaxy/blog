@@ -10,7 +10,7 @@ interface Song {
     name: string;
     artist: string;
     album: string;
-    duration: number; // 单位：秒
+    duration: number; // 单位：毫秒
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
     audios: Array<{
@@ -31,7 +31,7 @@ interface PlaylistSongItem {
     name: string;
     artist: string;
     album: string;
-    duration: number; // 单位：秒
+    duration: number; // 单位：毫秒
     tinyAlbumImgUrl: string | null;
     featured: boolean;
 }
@@ -50,7 +50,7 @@ interface Playlist {
     tinyCoverImgUrl: string | null;
     releaseDate: number;
     songs: PlaylistSongItem[];
-    duration: number; // 单位：秒
+    duration: number; // 单位：毫秒
     updatedAt: number;
 }
 ```
@@ -154,7 +154,7 @@ type Response = {
         name: string;
         artist: string;
         album: string;
-        duration: number; // 单位：秒
+        duration: number; // 单位：毫秒
         tinyAlbumImgUrl: string | null;
     }>;
     updatedAt: number;
