@@ -194,4 +194,118 @@ router.delete('/:playlistId', login, async (req, res, next) => {
     }
 });
 
+router.post('/:playlistId/songs', login, async (req, res, next) => {
+    try {
+        const { playlistId } = req.params;
+        const playlistCtr = Controller.playlist.ctr(playlistId);
+        if (!playlistCtr)
+            return res.status(404).send({
+                error: 'Playlist not found',
+                message: '播放列表不存在',
+            });
+        const { songIds } = req.body;
+        if (!Array.isArray(songIds))
+            return res.status(400).send({
+                error: '`songIds` are invalid',
+                message: '歌曲 ID 无效',
+            });
+        const updatedPlaylist = playlistCtr.addSongs(songIds);
+        res.send(updatedPlaylist);
+    } catch (error) {
+        res.error = 'Failed to add songs to playlist';
+        res.message = '添加歌曲到播放列表失败';
+        next(error);
+    }
+});
+
+router.delete('/:playlistId/songs', login, async (req, res, next) => {
+    try {
+        const { playlistId } = req.params;
+        const playlistCtr = Controller.playlist.ctr(playlistId);
+        if (!playlistCtr)
+            return res.status(404).send({
+                error: 'Playlist not found',
+                message: '播放列表不存在',
+            });
+        const { songIds } = req.query;
+        if (!Array.isArray(songIds))
+            return res.status(400).send({
+                error: '`songIds` are invalid',
+                message: '歌曲 ID 无效',
+            });
+        const updatedPlaylist = playlistCtr.removeSongs(songIds);
+        res.send(updatedPlaylist);
+    } catch (error) {
+        res.error = 'Failed to remove songs from playlist';
+        res.message = '从播放列表删除歌曲失败';
+        next(error);
+    }
+});
+
+router.put('/:playlistId/song-order', login, async (req, res, next) => {
+    try {
+        const { playlistId } = req.params;
+        const playlistCtr = Controller.playlist.ctr(playlistId);
+        if (!playlistCtr)
+            return res.status(404).send({
+                error: 'Playlist not found',
+                message: '播放列表不存在',
+            });
+        const { songIds } = req.body;
+        if (!Array.isArray(songIds))
+            return res.status(400).send({
+                error: '`songIds` are invalid',
+                message: '歌曲 ID 无效',
+            });
+        const playlistSongIds = playlistCtr.content.songs.map(
+            (song) => song.id,
+        );
+        // 检查 songIds 完整性
+        if (
+            songIds.slice().sort().join() !==
+            playlistSongIds.slice().sort().join()
+        )
+            return res.status(400).send({
+                error: '`songIds` are invalid',
+                message: '歌曲 ID 无效',
+            });
+        const updatedPlaylist = playlistCtr.orderSongs(songIds);
+        res.send(updatedPlaylist);
+    } catch (error) {
+        res.error = 'Failed to update song order';
+        res.message = '更新歌曲顺序失败';
+        next(error);
+    }
+});
+
+router.put(
+    '/:playlistId/song/:songId/attributes',
+    login,
+    async (req, res, next) => {
+        try {
+            const { playlistId, songId } = req.params;
+            const playlistCtr = Controller.playlist.ctr(playlistId);
+            if (!playlistCtr)
+                return res.status(404).send({
+                    error: 'Playlist not found',
+                    message: '播放列表不存在',
+                });
+            const songCtr = Controller.song.ctr(songId);
+            if (!songCtr)
+                return res.status(404).send({
+                    error: 'Song not found',
+                    message: '歌曲不存在',
+                });
+            const updatedPlaylist = playlistCtr.updateSongAttrs(songId, {
+                featured: req.body.featured,
+            });
+            res.send(updatedPlaylist);
+        } catch (error) {
+            res.error = 'Failed to update playlist attributes';
+            res.message = '更新播放列表信息失败';
+            next(error);
+        }
+    },
+);
+
 module.exports = { playlistRouter: router };

@@ -6,12 +6,13 @@ export interface Song {
     duration: number; // 单位：毫秒
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
+    playlistIds: string[];
     audios: Array<{
         label: string;
         url: string;
     }>;
     lyrics: object[];
-    background: string | object | null;
+    theme: string | object | null;
     updatedAt: number;
 }
 
@@ -39,7 +40,6 @@ export interface Playlist {
     tinyCoverImgUrl: string | null;
     releaseDate: number;
     songs: PlaylistSongItem[];
-    duration: number; // 单位：毫秒
     updatedAt: number;
 }
 
