@@ -13,12 +13,13 @@ interface Song {
     duration: number; // 单位：毫秒
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
+    playlistIds: string[];
     audios: Array<{
         label: string;
         url: string;
     }>;
     lyrics: object[];
-    background: string | object | null;
+    theme: string | object | null;
     updatedAt: number;
 }
 ```
@@ -50,12 +51,11 @@ interface Playlist {
     tinyCoverImgUrl: string | null;
     releaseDate: number;
     songs: PlaylistSongItem[];
-    duration: number; // 单位：毫秒
     updatedAt: number;
 }
 ```
 
-## 接口
+## 播放列表接口
 
 ### `GET` 获取所有播放列表
 
@@ -160,6 +160,80 @@ type Response = {
     updatedAt: number;
 };
 ```
+
+### `POST` 添加歌曲到播放列表
+
+`/:playlistId/songs`
+
+**参数**
+
+```ts
+interface Body {
+    songIds: string[];
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `DELETE` 从播放列表中移除歌曲
+
+`/:playlistId/songs`
+
+**参数**
+
+```ts
+interface Body {
+    songIds: string[];
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `PUT` 调整播放列表中歌曲的顺序
+
+`/:playlistId/song-order`
+
+**参数**
+
+```ts
+interface Body {
+    songIds: string[];
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `PUT` 设置播放列表歌曲属性
+
+`/:playlistId/song/:songId/attributes`
+
+**参数**
+
+```ts
+interface Body {
+    featured: boolean;
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+## 歌曲接口
 
 ### `GET` 获取歌曲详情
 

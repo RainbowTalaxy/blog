@@ -31,6 +31,16 @@ declare const Controller: {
                 releaseDate?: number;
             }): Playlist;
             remove(): Playlist;
+            addSongs(songIds: string[]): Playlist;
+            updateSong(song: Song): Playlist;
+            updateSongAttrs(
+                songId: string,
+                attrs: {
+                    featured?: boolean;
+                },
+            ): Playlist;
+            removeSongs(songIds: string[]): Playlist;
+            orderSongs(songIds: string[]): Playlist;
         };
     };
     songLibrary: {
@@ -59,6 +69,8 @@ declare const Controller: {
                 tinyAlbumImgUrl?: string | null;
             }): Song;
             remove(): Song;
+            addPlaylist(playlistId: string): Song;
+            removePlaylist(playlistId: string): Song;
         };
     };
 };

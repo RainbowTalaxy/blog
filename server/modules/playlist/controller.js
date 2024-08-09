@@ -68,7 +68,6 @@ const Controller = {
                 coverImgUrl: props.coverImgUrl ?? null,
                 tinyCoverImgUrl: props.tinyCoverImgUrl ?? null,
                 songs: [],
-                duration: 0,
                 releaseDate: props.releaseDate ?? now,
                 updatedAt: now,
             };
@@ -111,6 +110,102 @@ const Controller = {
                     const playlist = this.content;
                     Controller.library.removePlaylist(playlist.id);
                     File.delete(filePath);
+                    return playlist;
+                },
+                addSongs(songIds) {
+                    if (!songIds) throw Error('`songIds` are required');
+                    const playlist = this.content;
+                    const playlistSongIds = playlist.songs.map(
+                        (song) => song.id,
+                    );
+                    songIds.forEach((songId) => {
+                        if (playlistSongIds.includes(songId)) return;
+                        const songCtr = Controller.song.ctr(songId);
+                        if (!songCtr) return;
+                        const song = songCtr.content;
+                        playlist.songs.push({
+                            id: song.id,
+                            name: song.name,
+                            artist: song.artist,
+                            album: song.album,
+                            duration: song.duration,
+                            tinyAlbumImgUrl: song.tinyAlbumImgUrl,
+                            featured: false,
+                        });
+                        songCtr.addPlaylist(playlist.id);
+                    });
+                    playlist.updatedAt = Date.now();
+                    this.content = playlist;
+                    return playlist;
+                },
+                updateSong(song) {
+                    if (!song) throw Error('Song is required');
+                    const playlist = this.content;
+                    const index = playlist.songs.findIndex(
+                        (item) => item.id === song.id,
+                    );
+                    if (index === -1) return playlist;
+                    const handler = new ModelHandler(playlist.songs[index]);
+                    handler.update(song, [
+                        'name',
+                        'artist',
+                        'album',
+                        'duration',
+                        'tinyAlbumImgUrl',
+                    ]);
+                    if (!handler.hasFieldUpdated) return playlist;
+                    playlist.updatedAt = Date.now();
+                    this.content = playlist;
+                    return playlist;
+                },
+                updateSongAttrs(songId, attrs) {
+                    if (!attrs) throw Error('Song attributes are required');
+                    const playlist = this.content;
+                    const index = playlist.songs.findIndex(
+                        (item) => item.id === songId,
+                    );
+                    if (index === -1) return playlist;
+                    const handler = new ModelHandler(playlist.songs[index]);
+                    handler.update(attrs, ['featured']);
+                    if (!handler.hasFieldUpdated) return playlist;
+                    playlist.updatedAt = Date.now();
+                    this.content = playlist;
+                    return playlist;
+                },
+                removeSongs(songIds) {
+                    if (!songIds) throw Error('`songIds` are required');
+                    const playlist = this.content;
+                    songIds.forEach((songId) => {
+                        const index = playlist.songs.findIndex(
+                            (item) => item.id === songId,
+                        );
+                        if (index === -1) return;
+                        playlist.songs.splice(index, 1);
+                        const songCtr = Controller.song.ctr(songId);
+                        songCtr?.removePlaylist(playlist.id);
+                    });
+                    playlist.updatedAt = Date.now();
+                    this.content = playlist;
+                    return playlist;
+                },
+                orderSongs(songIds) {
+                    const playlist = this.content;
+                    if (
+                        songIds.every(
+                            (id, idx) => id === playlist.songs[idx].id,
+                        )
+                    )
+                        return playlist;
+                    const orderedSongs = songIds.map((songId) => {
+                        const song = playlist.songs.find(
+                            (item) => item.id === songId,
+                        );
+                        if (!song) throw Error(`Song ID ${songId} not found`);
+                        return song;
+                    });
+                    playlist.songs = orderedSongs;
+                    playlist.updatedAt = Date.now();
+                    this.content = playlist;
                     return playlist;
                 },
             };
@@ -175,9 +270,10 @@ const Controller = {
                 duration: props.duration ?? 0,
                 albumImgUrl: props.albumImgUrl || null,
                 tinyAlbumImgUrl: props.tinyAlbumImgUrl || null,
+                playlistIds: [],
                 audios: [],
                 lyrics: [],
-                background: null,
+                theme: null,
                 updatedAt: now,
             };
             Controller.songLibrary.addSong(song);
@@ -201,7 +297,8 @@ const Controller = {
                 },
                 update(props) {
                     if (!props) throw Error('Song props are required');
-                    const handler = new ModelHandler(this.content);
+                    const song = this.content;
+                    const handler = new ModelHandler(song);
                     const hasFieldUpdated = handler.update(props, [
                         'name',
                         'artist',
@@ -213,12 +310,34 @@ const Controller = {
                     if (!hasFieldUpdated) return handler.model;
                     handler.model.updatedAt = Date.now();
                     this.content = handler.model;
+                    // 更新播放列表
+                    song.playlistIds.forEach((playlistId) => {
+                        const playlistCtr = Controller.playlist.ctr(playlistId);
+                        playlistCtr?.updateSong(handler.model);
+                    });
                     return handler.model;
                 },
                 remove() {
                     const song = this.content;
                     Controller.songLibrary.removeSong(song.id);
                     File.delete(filePath);
+                    return song;
+                },
+                addPlaylist(playlistId) {
+                    const song = this.content;
+                    if (song.playlistIds.includes(playlistId)) return song;
+                    song.playlistIds.push(playlistId);
+                    song.updatedAt = Date.now();
+                    this.content = song;
+                    return song;
+                },
+                removePlaylist(playlistId) {
+                    const song = this.content;
+                    const index = song.playlistIds.indexOf(playlistId);
+                    if (index === -1) return song;
+                    song.playlistIds.splice(index, 1);
+                    song.updatedAt = Date.now();
+                    this.content = song;
                     return song;
                 },
             };

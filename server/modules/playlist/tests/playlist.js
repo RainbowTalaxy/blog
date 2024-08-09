@@ -48,7 +48,6 @@ async function test() {
         Assert.expect(playlist.releaseDate, data.releaseDate);
         Assert.expect(playlist.creator, talaxy.id);
         Assert.array(playlist.songs, 0);
-        Assert.expect(playlist.duration, 0);
         return playlist;
     });
 
@@ -79,7 +78,6 @@ async function test() {
         Assert.expect(playlist.releaseDate, testPlaylist.releaseDate);
         Assert.expect(playlist.creator, testPlaylist.creator);
         Assert.array(playlist.songs, 0);
-        Assert.expect(playlist.duration, 0);
     });
 
     // 获取播放列表 - 不存在
@@ -118,7 +116,6 @@ async function test() {
         Assert.expect(playlist.releaseDate, data.releaseDate);
         Assert.expect(playlist.creator, talaxy.id);
         Assert.array(playlist.songs, 0);
-        Assert.expect(playlist.duration, 0);
 
         const updatedPlaylist = await talaxy.get(`/${testPlaylist.id}`);
         Assert.expect(updatedPlaylist.name, data.name);
@@ -147,6 +144,23 @@ async function test() {
     // 更新播放列表 - 游客
     await testCase.neg('update playlist - no admin', async () => {
         await visitor.put(`/${testPlaylist.id}`, {});
+    });
+
+    // ## DELETE /playlist/:playlistId
+
+    // 删除播放列表 - 游客
+    await testCase.neg('delete playlist - no admin', async () => {
+        await visitor.delete(`/${testPlaylist.id}`);
+    });
+
+    // 删除播放列表
+    await testCase.pos('delete playlist', async () => {
+        await talaxy.delete(`/${testPlaylist.id}`);
+    });
+
+    // 删除播放列表 - 不存在
+    await testCase.neg('delete playlist - not exist', async () => {
+        await talaxy.delete('/not-exist');
     });
 
     return testCase;

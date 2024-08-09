@@ -47,7 +47,7 @@ async function test() {
         Assert.expect(song.tinyAlbumImgUrl, data.tinyAlbumImgUrl);
         Assert.array(song.audios, 0);
         Assert.array(song.lyrics, 0);
-        Assert.expect(song.background, null);
+        Assert.expect(song.theme, null);
         return song;
     });
 
@@ -95,7 +95,7 @@ async function test() {
         Assert.expect(song1.tinyAlbumImgUrl, song2.tinyAlbumImgUrl);
         Assert.array(song1.audios, song2.audios.length);
         Assert.array(song1.lyrics, song2.lyrics.length);
-        Assert.expect(song1.background, song2.background);
+        Assert.expect(song1.theme, song2.theme);
     };
 
     // 获取歌曲

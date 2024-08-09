@@ -1,17 +1,17 @@
 class ModelHandler {
     constructor(model) {
         this.model = model;
+        this.hasFieldUpdated = false;
     }
 
     async update(props, keys) {
-        let hasFieldUpdated = false;
         for (const key of keys) {
             if (props[key] !== undefined) {
                 this.model[key] = props[key];
-                hasFieldUpdated = true;
+                this.hasFieldUpdated = true;
             }
         }
-        return hasFieldUpdated;
+        return this.hasFieldUpdated;
     }
 }
 
