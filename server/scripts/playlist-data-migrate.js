@@ -19,7 +19,7 @@ async function main() {
     // 修正 `song` 数据
     const songFiles = fs
         .readdirSync(moduleDir.song)
-        .map((file) => path.join(docDir, file));
+        .map((file) => path.join(moduleDir.song, file));
     songFiles.forEach((file) => {
         const data = readJSON(file);
         if ('background' in data) {
