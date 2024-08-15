@@ -75,7 +75,7 @@ const Dir = {
 // -- 初始化文件夹 --
 
 if (process.env.TEMP_GUARD !== 'true' && fs.existsSync(Dir.temp)) {
-    // fs.rmSync(Dir.temp, { recursive: true });
+    fs.rmSync(Dir.temp, { recursive: true });
 }
 
 mkdirp.sync(Dir.temp);

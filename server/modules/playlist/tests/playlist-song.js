@@ -133,49 +133,19 @@ async function test() {
             name: 'test',
         });
         await talaxy.post(`/${playlist.id}/songs`, { songIds: [song.id] });
-        await talaxy.delete(`/${playlist.id}/songs`, { songIds: [song.id] });
+        await talaxy.delete(`/${playlist.id}/song/${song.id}`);
         const updatedPlaylist = await talaxy.get(`/${playlist.id}`);
         Assert.array(updatedPlaylist.songs, 0);
         const updatedSong = await talaxy.get(`/song/${song.id}`);
         Assert.array(updatedSong.playlistIds, 0);
     });
 
-    // 删除多个歌曲
-    await testCase.pos('remove songs', async () => {
-        const playlist = await talaxy.post('/', {
-            name: 'test',
-        });
-        const songs = await Promise.all(
-            Array(3)
-                .fill(null)
-                .map(() => talaxy.post('/song', { name: 'test' })),
-        );
-        await talaxy.post(`/${playlist.id}/songs`, {
-            songIds: songs.map((song) => song.id),
-        });
-        await talaxy.delete(`/${playlist.id}/songs`, {
-            songIds: songs.map((song) => song.id),
-        });
-        const updatedPlaylist = await talaxy.get(`/${playlist.id}`);
-        Assert.array(updatedPlaylist.songs, 0);
-        const updatedSongs = await Promise.all(
-            songs.map((song) => talaxy.get(`/song/${song.id}`)),
-        );
-        updatedSongs.forEach((song) => {
-            Assert.array(song.playlistIds, 0);
-        });
-    });
-
     // 删除歌曲 - 歌曲不存在
-    await testCase.pos('remove song - song not exist', async () => {
+    await testCase.neg('remove song - song not exist', async () => {
         const playlist = await talaxy.post('/', {
             name: 'test',
         });
-        await talaxy.delete(`/${playlist.id}/songs`, {
-            songIds: ['not-exist'],
-        });
-        const updatedPlaylist = await talaxy.get(`/${playlist.id}`);
-        Assert.array(updatedPlaylist.songs, 0);
+        await talaxy.delete(`/${playlist.id}/songs/not-exist`);
     });
 
     // 删除歌曲 - 播放列表不存在
@@ -183,7 +153,7 @@ async function test() {
         const song = await talaxy.post('/song', {
             name: 'test',
         });
-        await talaxy.delete('/not-exist/songs', { songIds: [song.id] });
+        await talaxy.delete(`/not-exist/songs/${song.id}`);
     });
 
     // 删除歌曲 - 游客

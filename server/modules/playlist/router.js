@@ -218,22 +218,22 @@ router.post('/:playlistId/songs', login, async (req, res, next) => {
     }
 });
 
-router.delete('/:playlistId/songs', login, async (req, res, next) => {
+router.delete('/:playlistId/song/:songId', login, async (req, res, next) => {
     try {
-        const { playlistId } = req.params;
+        const { playlistId, songId } = req.params;
         const playlistCtr = Controller.playlist.ctr(playlistId);
         if (!playlistCtr)
             return res.status(404).send({
                 error: 'Playlist not found',
                 message: '播放列表不存在',
             });
-        const { songIds } = req.query;
-        if (!Array.isArray(songIds))
-            return res.status(400).send({
-                error: '`songIds` are invalid',
-                message: '歌曲 ID 无效',
+        const songCtr = Controller.song.ctr(songId);
+        if (!songCtr)
+            return res.status(404).send({
+                error: 'Song not found',
+                message: '歌曲不存在',
             });
-        const updatedPlaylist = playlistCtr.removeSongs(songIds);
+        const updatedPlaylist = playlistCtr.removeSongs([songCtr.content.id]);
         res.send(updatedPlaylist);
     } catch (error) {
         res.error = 'Failed to remove songs from playlist';
