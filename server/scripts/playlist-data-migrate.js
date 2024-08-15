@@ -16,6 +16,9 @@ async function main() {
             writeJSON(file, data);
         }
     });
+
+    const songLibrary = readJSON(moduleDir.songLibrary);
+
     // 修正 `song` 数据
     const songFiles = fs
         .readdirSync(moduleDir.song)
@@ -29,6 +32,17 @@ async function main() {
         }
         if (!('playlistIds' in data)) {
             data.playlistIds = [];
+            writeJSON(file, data);
+        }
+        if (!('duration' in data)) {
+            const songInLibrary = songLibrary.songs.find(
+                (song) => song.id === data.id,
+            );
+            if (songInLibrary) {
+                data.duration = songInLibrary.duration;
+            } else {
+                data.duration = 0;
+            }
             writeJSON(file, data);
         }
     });
