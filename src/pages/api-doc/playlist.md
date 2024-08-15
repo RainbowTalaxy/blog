@@ -181,15 +181,7 @@ type Response = Playlist;
 
 ### `DELETE` 从播放列表中移除歌曲
 
-`/:playlistId/songs`
-
-**参数**
-
-```ts
-interface Body {
-    songIds: string[];
-}
-```
+`/:playlistId/song/:songId`
 
 **响应**
 
