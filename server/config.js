@@ -43,6 +43,7 @@ const SERVER_DIR = {
             playlist: path.join(STORAGE_PATH, 'playlist', 'playlist'),
             songLibrary: path.join(STORAGE_PATH, 'playlist', 'songs.json'),
             song: path.join(STORAGE_PATH, 'playlist', 'song'),
+            config: path.join(STORAGE_PATH, 'playlist', 'config.json'),
         },
     },
 };
