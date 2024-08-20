@@ -1,4 +1,4 @@
-import { Playlist, PlaylistLibrary, Song, SongLibrary } from './model';
+import { Config, Playlist, PlaylistLibrary, Song, SongLibrary } from './model';
 
 declare const Controller: {
     library: {
@@ -72,6 +72,10 @@ declare const Controller: {
             addPlaylist(playlistId: string): Song;
             removePlaylist(playlistId: string): Song;
         };
+    };
+    config: {
+        content: Config;
+        update(props: { resourcePrefix?: string }): Config;
     };
 };
 

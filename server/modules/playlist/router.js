@@ -3,6 +3,29 @@ const express = require('express');
 const Controller = require('./controller');
 const router = express.Router();
 
+router.get('/config', async (req, res, next) => {
+    try {
+        res.send(Controller.config.content);
+    } catch (error) {
+        res.error = 'Failed to get config';
+        res.message = '获取配置信息失败';
+        next(error);
+    }
+});
+
+router.put('/config', login, async (req, res, next) => {
+    try {
+        const updatedConfig = Controller.config.update({
+            resourcePrefix: req.body.resourcePrefix,
+        });
+        res.send(updatedConfig);
+    } catch (error) {
+        res.error = 'Failed to update config';
+        res.message = '更新配置信息失败';
+        next(error);
+    }
+});
+
 router.get('/songs', login, async (req, res, next) => {
     try {
         const songs = Controller.songLibrary.content;

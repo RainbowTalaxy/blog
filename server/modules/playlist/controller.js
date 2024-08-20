@@ -343,6 +343,22 @@ const Controller = {
             };
         },
     },
+    config: {
+        get content() {
+            return File.readJSON(PlaylistDir.config);
+        },
+        set content(value) {
+            File.writeJSON(PlaylistDir.config, value);
+        },
+        update(props) {
+            if (!props) throw Error('Config props are required');
+            const handler = new ModelHandler(this.content);
+            const hasFieldUpdated = handler.update(props, ['resourcePrefix']);
+            if (!hasFieldUpdated) return handler.model;
+            this.content = handler.model;
+            return handler.model;
+        },
+    },
 };
 
 module.exports = Controller;

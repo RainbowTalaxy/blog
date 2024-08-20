@@ -292,3 +292,30 @@ type Response = Song;
 ```ts
 type Response = Song;
 ```
+
+## 配置相关接口
+
+### `GET` 获取配置
+
+`/config`
+
+**响应**
+
+```ts
+type Response = {
+    version: string;
+    resourcePrefix: string;
+};
+```
+
+### `PUT` 更新配置
+
+`/config`
+
+**参数**
+
+```ts
+interface Body {
+    resourcePrefix?: string;
+}
+```

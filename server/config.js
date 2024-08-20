@@ -64,6 +64,7 @@ const LOCAL_DIR = {
             playlist: path.join(TEMP_DIR, 'playlist', 'playlist'),
             songLibrary: path.join(TEMP_DIR, 'playlist', 'songs.json'),
             song: path.join(TEMP_DIR, 'playlist', 'song'),
+            config: path.join(TEMP_DIR, 'playlist', 'config.json'),
         },
     },
 };
@@ -103,6 +104,11 @@ writeJSONIfNotExist(Dir.storage.playlist.library, {
 writeJSONIfNotExist(Dir.storage.playlist.songLibrary, {
     songs: [],
     updatedAt: Date.now(),
+});
+
+writeJSONIfNotExist(Dir.storage.playlist.config, {
+    version: '1.0.0',
+    resourcePrefix: '',
 });
 
 const encryptUserPassword = (id, password) => {

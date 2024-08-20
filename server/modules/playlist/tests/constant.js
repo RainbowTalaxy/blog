@@ -37,6 +37,7 @@ const PropList = {
         'theme',
         'updatedAt',
     ],
+    config: ['version', 'resourcePrefix'],
 };
 
 module.exports = PropList;
