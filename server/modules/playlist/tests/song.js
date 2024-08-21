@@ -45,7 +45,7 @@ async function test() {
         Assert.expect(song.duration, data.duration);
         Assert.expect(song.albumImgUrl, data.albumImgUrl);
         Assert.expect(song.tinyAlbumImgUrl, data.tinyAlbumImgUrl);
-        Assert.array(song.audios, 0);
+        Assert.array(song.resources, 0);
         Assert.array(song.lyrics, 0);
         Assert.expect(song.theme, null);
         return song;
@@ -93,7 +93,7 @@ async function test() {
         Assert.expect(song1.duration, song2.duration);
         Assert.expect(song1.albumImgUrl, song2.albumImgUrl);
         Assert.expect(song1.tinyAlbumImgUrl, song2.tinyAlbumImgUrl);
-        Assert.array(song1.audios, song2.audios.length);
+        Assert.array(song1.resources, song2.resources.length);
         Assert.array(song1.lyrics, song2.lyrics.length);
         Assert.expect(song1.theme, song2.theme);
     };

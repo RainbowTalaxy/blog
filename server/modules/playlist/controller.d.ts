@@ -71,6 +71,14 @@ declare const Controller: {
             remove(): Song;
             addPlaylist(playlistId: string): Song;
             removePlaylist(playlistId: string): Song;
+            addResource(props: { label: string; path: string }): Song;
+            updateResource(
+                label: string,
+                props: {
+                    path?: string;
+                },
+            ): Song;
+            removeResource(label: string): Song;
         };
     };
     config: {

@@ -14,6 +14,7 @@ const Controller = {
             return File.readJSON(PlaylistDir.library);
         },
         set content(value) {
+            value.updatedAt = Date.now();
             File.writeJSON(PlaylistDir.library, value);
         },
         addPlaylist(playlist) {
@@ -24,7 +25,6 @@ const Controller = {
                 tinyCoverImgUrl: playlist.tinyCoverImgUrl,
                 category: playlist.category,
             });
-            library.updatedAt = Date.now();
             this.content = library;
         },
         updatePlaylist(playlist) {
@@ -40,7 +40,6 @@ const Controller = {
                 'category',
             ]);
             if (!hasFieldUpdated) return;
-            library.updatedAt = Date.now();
             this.content = library;
         },
         removePlaylist(id) {
@@ -48,7 +47,6 @@ const Controller = {
             const index = library.playlists.findIndex((item) => item.id === id);
             if (index === -1) return;
             library.playlists.splice(index, 1);
-            library.updatedAt = Date.now();
             this.content = library;
         },
     },
@@ -87,6 +85,7 @@ const Controller = {
                     return File.readJSON(filePath);
                 },
                 set content(value) {
+                    value.updatedAt = Date.now();
                     File.writeJSON(filePath, value);
                     Controller.library.updatePlaylist(value);
                 },
@@ -102,7 +101,6 @@ const Controller = {
                         'releaseDate',
                     ]);
                     if (!hasFieldUpdated) return handler.model;
-                    handler.model.updatedAt = Date.now();
                     this.content = handler.model;
                     return handler.model;
                 },
@@ -134,7 +132,6 @@ const Controller = {
                         });
                         songCtr.addPlaylist(playlist.id);
                     });
-                    playlist.updatedAt = Date.now();
                     this.content = playlist;
                     return playlist;
                 },
@@ -154,7 +151,6 @@ const Controller = {
                         'tinyAlbumImgUrl',
                     ]);
                     if (!handler.hasFieldUpdated) return playlist;
-                    playlist.updatedAt = Date.now();
                     this.content = playlist;
                     return playlist;
                 },
@@ -168,7 +164,6 @@ const Controller = {
                     const handler = new ModelHandler(playlist.songs[index]);
                     handler.update(attrs, ['featured']);
                     if (!handler.hasFieldUpdated) return playlist;
-                    playlist.updatedAt = Date.now();
                     this.content = playlist;
                     return playlist;
                 },
@@ -184,7 +179,6 @@ const Controller = {
                         const songCtr = Controller.song.ctr(songId);
                         songCtr?.removePlaylist(playlist.id);
                     });
-                    playlist.updatedAt = Date.now();
                     this.content = playlist;
                     return playlist;
                 },
@@ -204,7 +198,6 @@ const Controller = {
                         return song;
                     });
                     playlist.songs = orderedSongs;
-                    playlist.updatedAt = Date.now();
                     this.content = playlist;
                     return playlist;
                 },
@@ -216,6 +209,7 @@ const Controller = {
             return File.readJSON(PlaylistDir.songLibrary);
         },
         set content(value) {
+            value.updatedAt = Date.now();
             File.writeJSON(PlaylistDir.songLibrary, value);
         },
         addSong(song) {
@@ -228,7 +222,6 @@ const Controller = {
                 duration: song.duration,
                 tinyAlbumImgUrl: song.tinyAlbumImgUrl,
             });
-            songLibrary.updatedAt = Date.now();
             this.content = songLibrary;
         },
         updateSong(song) {
@@ -246,7 +239,6 @@ const Controller = {
                 'tinyAlbumImgUrl',
             ]);
             if (!hasFieldUpdated) return;
-            songLibrary.updatedAt = Date.now();
             this.content = songLibrary;
         },
         removeSong(id) {
@@ -254,7 +246,6 @@ const Controller = {
             const index = songLibrary.songs.findIndex((item) => item.id === id);
             if (index === -1) return;
             songLibrary.songs.splice(index, 1);
-            songLibrary.updatedAt = Date.now();
             this.content = songLibrary;
         },
     },
@@ -271,7 +262,7 @@ const Controller = {
                 albumImgUrl: props.albumImgUrl || null,
                 tinyAlbumImgUrl: props.tinyAlbumImgUrl || null,
                 playlistIds: [],
-                audios: [],
+                resources: [],
                 lyrics: [],
                 theme: null,
                 updatedAt: now,
@@ -292,6 +283,7 @@ const Controller = {
                     return File.readJSON(filePath);
                 },
                 set content(value) {
+                    value.updatedAt = Date.now();
                     File.writeJSON(filePath, value);
                     Controller.songLibrary.updateSong(value);
                 },
@@ -308,7 +300,6 @@ const Controller = {
                         'tinyAlbumImgUrl',
                     ]);
                     if (!hasFieldUpdated) return handler.model;
-                    handler.model.updatedAt = Date.now();
                     this.content = handler.model;
                     // 更新播放列表
                     song.playlistIds.forEach((playlistId) => {
@@ -327,7 +318,6 @@ const Controller = {
                     const song = this.content;
                     if (song.playlistIds.includes(playlistId)) return song;
                     song.playlistIds.push(playlistId);
-                    song.updatedAt = Date.now();
                     this.content = song;
                     return song;
                 },
@@ -336,7 +326,42 @@ const Controller = {
                     const index = song.playlistIds.indexOf(playlistId);
                     if (index === -1) return song;
                     song.playlistIds.splice(index, 1);
-                    song.updatedAt = Date.now();
+                    this.content = song;
+                    return song;
+                },
+                addResource(props) {
+                    if (!props) throw Error('Resource props are required');
+                    const song = this.content;
+                    const resource = {
+                        label: props.label ?? '',
+                        path: props.path ?? '',
+                    };
+                    song.resources.push(resource);
+                    this.content = song;
+                    return song;
+                },
+                updateResource(label, props) {
+                    if (!label) throw Error('Resource label is required');
+                    if (!props) throw Error('Resource props are required');
+                    const song = this.content;
+                    const index = song.resources.findIndex(
+                        (item) => item.label === label,
+                    );
+                    if (index === -1) return song;
+                    const handler = new ModelHandler(song.resources[index]);
+                    handler.update(props, ['path']);
+                    if (!handler.hasFieldUpdated) return song;
+                    this.content = song;
+                    return song;
+                },
+                removeResource(label) {
+                    if (!label) throw Error('Resource label is required');
+                    const song = this.content;
+                    const index = song.resources.findIndex(
+                        (item) => item.label === label,
+                    );
+                    if (index === -1) return song;
+                    song.resources.splice(index, 1);
                     this.content = song;
                     return song;
                 },

@@ -14,9 +14,9 @@ interface Song {
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
     playlistIds: string[];
-    audios: Array<{
+    resources: Array<{
         label: string;
-        url: string;
+        path: string;
     }>;
     lyrics: object[];
     theme: string | object | null;
@@ -286,6 +286,53 @@ type Response = Song;
 ### `DELETE` 删除歌曲
 
 `/song/:songId`
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `POST` 增加歌曲资源
+
+`/song/:songId/resource`
+
+**参数**
+
+```ts
+interface Body {
+    label: string;
+    path: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `PUT` 更新歌曲资源
+
+`/song/:songId/resource/:label`
+
+**参数**
+
+```ts
+interface Body {
+    path: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `DELETE` 删除歌曲资源
+
+`/song/:songId/resource/:label`
 
 **响应**
 

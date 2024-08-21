@@ -117,7 +117,7 @@ writeJSONIfNotExist(Dir.storage.playlist.songLibrary, {
 });
 
 writeJSONIfNotExist(Dir.storage.playlist.config, {
-    version: '1.0.0',
+    version: '1.1.0',
     resourcePrefix: '',
 });
 
