@@ -106,6 +106,11 @@ const Controller = {
                 },
                 remove() {
                     const playlist = this.content;
+                    playlist.songs.forEach((song) => {
+                        Controller.song
+                            .ctr(song.id)
+                            ?.removePlaylist(playlist.id);
+                    });
                     Controller.library.removePlaylist(playlist.id);
                     File.delete(filePath);
                     return playlist;
@@ -176,8 +181,9 @@ const Controller = {
                         );
                         if (index === -1) return;
                         playlist.songs.splice(index, 1);
-                        const songCtr = Controller.song.ctr(songId);
-                        songCtr?.removePlaylist(playlist.id);
+                        Controller.song
+                            .ctr(songId)
+                            ?.removePlaylist(playlist.id);
                     });
                     this.content = playlist;
                     return playlist;
