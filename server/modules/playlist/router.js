@@ -340,13 +340,7 @@ router.delete('/:playlistId/song/:songId', login, async (req, res, next) => {
                 error: 'Playlist not found',
                 message: '播放列表不存在',
             });
-        const songCtr = Controller.song.ctr(songId);
-        if (!songCtr)
-            return res.status(404).send({
-                error: 'Song not found',
-                message: '歌曲不存在',
-            });
-        const updatedPlaylist = playlistCtr.removeSongs([songCtr.content.id]);
+        const updatedPlaylist = playlistCtr.removeSongs([songId]);
         res.send(updatedPlaylist);
     } catch (error) {
         res.error = 'Failed to remove songs from playlist';
