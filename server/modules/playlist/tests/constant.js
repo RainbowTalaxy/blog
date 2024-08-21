@@ -32,11 +32,12 @@ const PropList = {
         'albumImgUrl',
         'tinyAlbumImgUrl',
         'playlistIds',
-        'audios',
+        'resources',
         'lyrics',
         'theme',
         'updatedAt',
     ],
+    songResource: ['label', 'path'],
     config: ['version', 'resourcePrefix'],
 };
 

@@ -7,9 +7,9 @@ export interface Song {
     albumImgUrl: string | null;
     tinyAlbumImgUrl: string | null;
     playlistIds: string[];
-    audios: Array<{
+    resources: Array<{
         label: string;
-        url: string;
+        path: string;
     }>;
     lyrics: object[];
     theme: string | object | null;

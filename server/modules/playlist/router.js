@@ -121,6 +121,96 @@ router.delete('/song/:songId', login, async (req, res, next) => {
     }
 });
 
+router.post('/song/:songId/resource', login, async (req, res, next) => {
+    try {
+        const { songId } = req.params;
+        const songCtr = Controller.song.ctr(songId);
+        if (!songCtr)
+            return res.status(404).send({
+                error: 'Song not found',
+                message: '歌曲不存在',
+            });
+        const { label, path } = req.body;
+        if (!label || !path)
+            return res.status(400).send({
+                error: 'Resource label and path are required',
+                message: '资源标签和路径不得为空',
+            });
+        const existingResource = songCtr.content.resources.find(
+            (resource) => resource.label === label,
+        );
+        if (existingResource)
+            return res.status(400).send({
+                error: 'Resource label already exists',
+                message: '资源标签已存在',
+            });
+        const updatedSong = songCtr.addResource({ label, path });
+        res.send(updatedSong);
+    } catch (error) {
+        res.error = 'Failed to upload song resource';
+        res.message = '添加歌曲资源失败';
+        next(error);
+    }
+});
+
+router.put('/song/:songId/resource/:label', login, async (req, res, next) => {
+    try {
+        const { songId, label } = req.params;
+        const songCtr = Controller.song.ctr(songId);
+        if (!songCtr)
+            return res.status(404).send({
+                error: 'Song not found',
+                message: '歌曲不存在',
+            });
+        const existingResource = songCtr.content.resources.find(
+            (resource) => resource.label === label,
+        );
+        if (!existingResource)
+            return res.status(404).send({
+                error: 'Resource not found',
+                message: '资源不存在',
+            });
+        const updatedSong = songCtr.updateResource(label, {
+            path: req.body.path,
+        });
+        res.send(updatedSong);
+    } catch (error) {
+        res.error = 'Failed to update song resource';
+        res.message = '更新歌曲资源失败';
+        next(error);
+    }
+});
+
+router.delete(
+    '/song/:songId/resource/:label',
+    login,
+    async (req, res, next) => {
+        try {
+            const { songId, label } = req.params;
+            const songCtr = Controller.song.ctr(songId);
+            if (!songCtr)
+                return res.status(404).send({
+                    error: 'Song not found',
+                    message: '歌曲不存在',
+                });
+            const existingResource = songCtr.content.resources.find(
+                (resource) => resource.label === label,
+            );
+            if (!existingResource)
+                return res.status(404).send({
+                    error: 'Resource not found',
+                    message: '资源不存在',
+                });
+            const updatedSong = songCtr.removeResource(label);
+            res.send(updatedSong);
+        } catch (error) {
+            res.error = 'Failed to delete song resource';
+            res.message = '删除歌曲资源失败';
+            next(error);
+        }
+    },
+);
+
 router.get('/library', async (req, res, next) => {
     try {
         res.send(Controller.library.content);
