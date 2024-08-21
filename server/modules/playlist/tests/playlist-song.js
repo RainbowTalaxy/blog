@@ -140,6 +140,20 @@ async function test() {
         Assert.array(updatedSong.playlistIds, 0);
     });
 
+    // 删除歌曲 - 被动
+    await testCase.pos('remove song - passive', async () => {
+        const playlist = await talaxy.post('/', {
+            name: 'test',
+        });
+        const song = await talaxy.post('/song', {
+            name: 'test',
+        });
+        await talaxy.post(`/${playlist.id}/songs`, { songIds: [song.id] });
+        await talaxy.delete(`/song/${song.id}`);
+        const updatedPlaylist = await talaxy.get(`/${playlist.id}`);
+        Assert.array(updatedPlaylist.songs, 0);
+    });
+
     // 删除歌曲 - 歌曲不存在
     await testCase.neg('remove song - song not exist', async () => {
         const playlist = await talaxy.post('/', {

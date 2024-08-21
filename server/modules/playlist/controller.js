@@ -310,6 +310,10 @@ const Controller = {
                 },
                 remove() {
                     const song = this.content;
+                    song.playlistIds.forEach((playlistId) => {
+                        const playlistCtr = Controller.playlist.ctr(playlistId);
+                        playlistCtr?.removeSongs([song.id]);
+                    });
                     Controller.songLibrary.removeSong(song.id);
                     File.delete(filePath);
                     return song;
