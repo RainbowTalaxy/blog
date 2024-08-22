@@ -79,6 +79,10 @@ declare const Controller: {
                 },
             ): Song;
             removeResource(label: string): Song;
+            updateAttrs(props: {
+                lyrics?: object[];
+                theme?: string | object | null;
+            }): Song;
         };
     };
     config: {

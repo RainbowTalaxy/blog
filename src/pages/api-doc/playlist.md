@@ -340,6 +340,25 @@ type Response = Song;
 type Response = Song;
 ```
 
+### `PUT` 更新歌曲属性
+
+`/song/:songId/attributes`
+
+**参数**
+
+```ts
+interface Body {
+    lyrics?: object[];
+    theme?: string | object | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
 ## 配置相关接口
 
 ### `GET` 获取配置

@@ -375,6 +375,15 @@ const Controller = {
                     this.content = song;
                     return song;
                 },
+                updateAttrs(props) {
+                    if (!props) throw Error('Song attributes are required');
+                    const song = this.content;
+                    const handler = new ModelHandler(song);
+                    handler.update(props, ['lyrics', 'theme']);
+                    if (!handler.hasFieldUpdated) return song;
+                    this.content = song;
+                    return song;
+                },
             };
         },
     },

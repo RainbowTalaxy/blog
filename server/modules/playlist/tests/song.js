@@ -169,6 +169,42 @@ async function test() {
         await talaxy.delete('/song/not-exist');
     });
 
+    // ## PUT /playlist/song/:songId/attributes
+
+    // 更新歌曲属性
+    await testCase.pos('update song attributes', async () => {
+        const song = await talaxy.post('/song', {
+            name: '11',
+            artist: '邓紫棋',
+        });
+        const data = {
+            lyrics: [1],
+            theme: 'test',
+        };
+        const updatedSong = await talaxy.put(
+            `/song/${song.id}/attributes`,
+            data,
+        );
+        Assert.props(updatedSong, PropList.song);
+        Assert.array(updatedSong.lyrics, data.lyrics.length);
+        Assert.expect(updatedSong.lyrics[0], data.lyrics[0]);
+        Assert.expect(updatedSong.theme, data.theme);
+    });
+
+    // 更新歌曲属性 - 歌词类型错误
+    await testCase.neg(
+        'update song attributes - lyrics type error',
+        async () => {
+            const song = await talaxy.post('/song', {
+                name: '11',
+                artist: '邓紫棋',
+            });
+            await talaxy.put(`/song/${song.id}/attributes`, {
+                lyrics: '1',
+            });
+        },
+    );
+
     return testCase;
 }
 

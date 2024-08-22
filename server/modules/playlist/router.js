@@ -211,6 +211,33 @@ router.delete(
     },
 );
 
+router.put('/song/:songId/attributes', login, async (req, res, next) => {
+    try {
+        const { songId } = req.params;
+        const songCtr = Controller.song.ctr(songId);
+        if (!songCtr)
+            return res.status(404).send({
+                error: 'Song not found',
+                message: '歌曲不存在',
+            });
+        const { lyrics, theme } = req.body;
+        if (lyrics && !Array.isArray(lyrics))
+            return res.status(400).send({
+                error: '`lyrics` are invalid',
+                message: '歌词无效',
+            });
+        const updatedSong = songCtr.updateAttrs({
+            lyrics: lyrics,
+            theme: theme,
+        });
+        res.send(updatedSong);
+    } catch (error) {
+        res.error = 'Failed to update song attributes';
+        res.message = '更新歌曲属性失败';
+        next(error);
+    }
+});
+
 router.get('/library', async (req, res, next) => {
     try {
         res.send(Controller.library.content);
