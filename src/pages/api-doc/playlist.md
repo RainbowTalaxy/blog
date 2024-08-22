@@ -1,0 +1,387 @@
+# Playlist
+
+## 数据类型
+
+### Song
+
+```ts
+interface Song {
+    id: string;
+    name: string;
+    artist: string;
+    album: string;
+    duration: number; // 单位：毫秒
+    albumImgUrl: string | null;
+    tinyAlbumImgUrl: string | null;
+    playlistIds: string[];
+    resources: Array<{
+        label: string;
+        path: string;
+    }>;
+    lyrics: object[];
+    theme: string | object | null;
+    updatedAt: number;
+}
+```
+
+### PlaylistSongItem
+
+```ts
+interface PlaylistSongItem {
+    id: string;
+    name: string;
+    artist: string;
+    album: string;
+    duration: number; // 单位：毫秒
+    tinyAlbumImgUrl: string | null;
+    featured: boolean;
+}
+```
+
+### Playlist
+
+```ts
+interface Playlist {
+    id: string;
+    name: string;
+    description: string;
+    creator: string;
+    category: string | null;
+    coverImgUrl: string | null;
+    tinyCoverImgUrl: string | null;
+    releaseDate: number;
+    songs: PlaylistSongItem[];
+    updatedAt: number;
+}
+```
+
+## 播放列表接口
+
+### `GET` 获取所有播放列表
+
+`/library`
+
+**响应**
+
+```ts
+type Response = {
+    playlists: Array<{
+        id: string;
+        name: string;
+        category: string | null;
+        tinyCoverImgUrl: string | null;
+    }>;
+    updatedAt: number;
+};
+```
+
+### `GET` 获取播放列表详情
+
+`/:playlistId`
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `POST` 创建播放列表
+
+`/`
+
+**参数**
+
+```ts
+interface Body {
+    name: string;
+    description?: string;
+    category?: string | null;
+    coverImgUrl?: string | null;
+    tinyCoverImgUrl?: string | null;
+    releaseDate?: number;
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `PUT` 更新播放列表
+
+`/:playlistId`
+
+**参数**
+
+```ts
+interface Body {
+    name?: string;
+    description?: string;
+    category?: string | null;
+    coverImgUrl?: string | null;
+    tinyCoverImgUrl?: string | null;
+    releaseDate?: number;
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `DELETE` 删除播放列表
+
+`/:playlistId`
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `GET` 获取曲库
+
+`/songs`
+
+**响应**
+
+```ts
+type Response = {
+    songs: Array<{
+        id: string;
+        name: string;
+        artist: string;
+        album: string;
+        duration: number; // 单位：毫秒
+        tinyAlbumImgUrl: string | null;
+    }>;
+    updatedAt: number;
+};
+```
+
+### `POST` 添加歌曲到播放列表
+
+`/:playlistId/songs`
+
+**参数**
+
+```ts
+interface Body {
+    songIds: string[];
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `DELETE` 从播放列表中移除歌曲
+
+`/:playlistId/song/:songId`
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `PUT` 调整播放列表中歌曲的顺序
+
+`/:playlistId/song-order`
+
+**参数**
+
+```ts
+interface Body {
+    songIds: string[];
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+### `PUT` 设置播放列表歌曲属性
+
+`/:playlistId/song/:songId/attributes`
+
+**参数**
+
+```ts
+interface Body {
+    featured: boolean;
+}
+```
+
+**响应**
+
+```ts
+type Response = Playlist;
+```
+
+## 歌曲接口
+
+### `GET` 获取歌曲详情
+
+`/song/:songId`
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `POST` 创建歌曲
+
+`/song`
+
+**参数**
+
+```ts
+interface Body {
+    name: string;
+    artist?: string;
+    album?: string;
+    duration?: number;
+    albumImgUrl?: string | null;
+    tinyAlbumImgUrl?: string | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `PUT` 更新歌曲
+
+`/song/:songId`
+
+**参数**
+
+```ts
+interface Body {
+    name?: string;
+    artist?: string;
+    album?: string;
+    duration?: number;
+    albumImgUrl?: string | null;
+    tinyAlbumImgUrl?: string | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `DELETE` 删除歌曲
+
+`/song/:songId`
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `POST` 增加歌曲资源
+
+`/song/:songId/resource`
+
+**参数**
+
+```ts
+interface Body {
+    label: string;
+    path: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `PUT` 更新歌曲资源
+
+`/song/:songId/resource/:label`
+
+**参数**
+
+```ts
+interface Body {
+    path: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `DELETE` 删除歌曲资源
+
+`/song/:songId/resource/:label`
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+### `PUT` 更新歌曲属性
+
+`/song/:songId/attributes`
+
+**参数**
+
+```ts
+interface Body {
+    lyrics?: object[];
+    theme?: string | object | null;
+}
+```
+
+**响应**
+
+```ts
+type Response = Song;
+```
+
+## 配置相关接口
+
+### `GET` 获取配置
+
+`/config`
+
+**响应**
+
+```ts
+type Response = {
+    version: string;
+    resourcePrefix: string;
+};
+```
+
+### `PUT` 更新配置
+
+`/config`
+
+**参数**
+
+```ts
+interface Body {
+    resourcePrefix?: string;
+}
+```

@@ -3,6 +3,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const { Rocket, TestCase } = require('../utils/test');
 const user = require('./user');
 const luoye = require('../modules/luoye/tests');
+const playlist = require('../modules/playlist/tests');
 const wordBank = require('./word-bank');
 const dictionary = require('./dictionary');
 const statics = require('./statics');
@@ -35,6 +36,9 @@ async function test() {
 
         // luoye 测试
         await luoye();
+
+        // playlist 测试
+        await playlist();
     } catch (error) {
         console.log(error);
     }
