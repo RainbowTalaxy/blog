@@ -16,6 +16,48 @@ export const TEMPLATE_CARD: GalleryCard[] = [
 
 export const LATEST_CARDS: Array<GalleryCard> = [
     {
+        title: '南京 总统府',
+        subtitle: '2024年11月30日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*SXSwU5vw6BizqqrfiNqdndKWINPDcZMrKQ2S2ECfdpm1CV5cUkkJwDU8vDd5djUCPi.63ns0lLqf5ywDrxcFae8!/r',
+        link: '/gallery/2024/2024-11-30',
+    },
+    {
+        title: '南京 明孝陵',
+        subtitle: '2024年11月23日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*SRuQUqIYtLxMDqeymWKigu*IVwPBcj42Zefvfl82b.OOEIIzeZjxhu*bFA2q.*fWGywQ20M51e*ez9EiZMFxLko!/r',
+        link: '/gallery/2024/2024-11-23',
+    },
+    {
+        title: '南京 中山门',
+        subtitle: '2024年11月13日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*Sf47.TgJS6l1XnBaFGTInDx84nsrOfMxgyNEvqfSwSTO.fQN887rVlQCVUCVs9VVu7cRYUBdvQx1w5LlX8U1vI0!/r',
+        link: '/gallery/2024/2024-11-13',
+    },
+    {
+        title: '南京 百家湖',
+        subtitle: '2024年11月9日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*SaFVxS4ZYiMHNC7ebnjIByiWygTh.Jwi2bWdfm9UxmRdqvmoymSxJXR7FopMh4L1g1t8zkx48aSZIdr6c2xAEns!/r',
+        link: '/gallery/2024/2024-11-09',
+    },
+    {
+        title: '南京 老门东',
+        subtitle: '2024年11月3日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*SaP*Sm6V08*BIkhHbnaqm4awxq2NzQF8sK1koWmJOK4xdwNv24kBzuhEMymwZCFuqTpAW34C7KcFx9QlhD.ORrM!/r',
+        link: '/gallery/2024/2024-11-03',
+    },
+    {
+        title: '南京 石臼湖',
+        subtitle: '2024年11月2日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*SeEFudrTDzPvSnjipwfap.30SI.Lgf0Q2l4hww*xDUsUGzmvxE4pfQDw4uiOXSxZ1W6DfaxrghZMZCvc9vUSJVw!/r',
+        link: '/gallery/2024/2024-11-02',
+    },
+    {
+        title: '南京 中山植物园',
+        subtitle: '2024年9月22日',
+        bg: 'http://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/LiySpxowE0yeWXwBdXN*Sca9rkd*osTpm0S1rbj81vXveIVZ9RZ11cl42HkU*cALnQ3CT0z5bXAI08kElM2D2jW4wdUUI2rsWBpk8LTbMdo!/r',
+        link: '/gallery/2024/2024-09-22',
+    },
+    {
         title: '千岛湖 天屿山',
         subtitle: '2024年5月1日',
         bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqQKp9mNoZDRLQ3ZeBJkOulNMQJywYTRuiCcUdaUslOGhkRhGjcMz1QYQg3hKtljIeMwSotX3OOkZassQeS00dYo!/r',
@@ -28,22 +70,10 @@ export const LATEST_CARDS: Array<GalleryCard> = [
         link: '/gallery/2024/2024-05-千岛湖',
     },
     {
-        title: '南京 黄龙岘',
-        subtitle: '2024年4月4日',
-        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqUjZMZYuCe7CV8xTQi72KWgVQPD6A.Cw9pSPsXr*GnuVf8p3ukJha02FLvSWNGVr4VdQH2mkUjC9*VSQlmRN7vA!/r',
-        link: '/gallery/2024/2024-04-04',
-    },
-    {
         title: '南京 玄武湖',
         subtitle: '2024年3月29日',
         bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqWBo5ABwJZp9QYfLf*ZkjqfOE*ZYsBlkfacwPbUtXakofsbORiHsDUiVUbH7JwH4YNG894CPVXy.5cg4LvEJV8o!/r',
         link: '/gallery/',
-    },
-    {
-        title: '杭州植物园',
-        subtitle: '2024年2月17日',
-        bg: 'https://r.photo.store.qq.com/psc?/V53zNsw50AU6SY3IaO3s4AEy7E1ioe76/bqQfVz5yrrGYSXMvKr.cqRuubbqQN0SDKSI4DE7zYf.tpcyxGdbZvkKdSoIJn0kIB9HUEIHgwkeMDsFVrQ28A2FLksLPA2Y2jx.tj9HbWqA!/r',
-        link: '/gallery/2024/2024-02-17',
     },
     {
         title: '厦门大学',

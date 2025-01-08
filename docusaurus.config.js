@@ -139,7 +139,7 @@ const config = {
             footer: {
                 style: 'light',
                 links: [],
-                copyright: `Copyright © ${new Date().getFullYear()} Your Talaxy<br/><a href="http://beian.miit.gov.cn/" target="_blank">苏ICP备19075978号</a>`,
+                copyright: `Copyright © 2025 Your Talaxy<br/><a href="http://beian.miit.gov.cn/" target="_blank">苏ICP备19075978号</a>`,
             },
             prism: {
                 theme: lightCodeTheme,

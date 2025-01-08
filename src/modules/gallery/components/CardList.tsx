@@ -100,7 +100,7 @@ const CardList = ({ id, configs }: Props) => {
             <div ref={cardListRef} className={style['card-list']}>
                 {configs.map((card) => (
                     <div
-                        key={card.title}
+                        key={card.bg}
                         className={clsx(style.card, cardCls)}
                         onClick={() => {
                             window.location.href = card.link;
