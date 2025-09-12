@@ -62,7 +62,7 @@ const Dir = {
 
 // -- 初始化文件夹 --
 
-if (fs.existsSync(Dir.temp)) {
+if (fs.existsSync(Dir.temp) && process.env.DATA_TEST !== 'true') {
     fs.rmSync(Dir.temp, { recursive: true });
 }
 
