@@ -322,7 +322,7 @@ router.put('/doc/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
-        const { name, content, scope, date } = req.body;
+        const { name, content, scope, date, workspaces } = req.body;
         if (!docId)
             return res.status(400).send({
                 error: '`docId` is required',
@@ -340,6 +340,29 @@ router.put('/doc/:docId', login, async (req, res, next) => {
                 error: '`date` is invalid',
                 message: '非法的日期参数',
             });
+        // `workspaces` 参数校验
+        if (workspaces) {
+            if (!Array.isArray(workspaces) || workspaces.length === 0)
+                return res.status(400).send({
+                    error: '`workspaces` is invalid',
+                    message: '工作区列表格式错误或为空',
+                });
+            // 检查所有工作区是否存在且用户有权限
+            for (const workspaceId of workspaces) {
+                const workspaceCtr = Ctr.workspace.ctr(workspaceId);
+                if (!workspaceCtr)
+                    return res.status(404).send({
+                        error: 'workspace not found',
+                        message: `未找到工作区: ${workspaceId}`,
+                    });
+                const workspace = workspaceCtr.content;
+                if (LuoyeUtl.access(workspace, userId) < Access.Member)
+                    return res.status(403).send({
+                        error: 'workspace forbidden',
+                        message: `无权访问工作区: ${workspaceId}`,
+                    });
+            }
+        }
         const docCtr = Ctr.doc.ctr(docId);
         if (!docCtr)
             return res.status(404).send({
@@ -355,6 +378,7 @@ router.put('/doc/:docId', login, async (req, res, next) => {
             content,
             scope,
             date,
+            workspaces,
         });
         return res.send(updatedDoc);
     } catch (error) {

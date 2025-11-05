@@ -349,6 +349,38 @@ const Controller = {
                     const now = Date.now();
                     const slice = this.content;
                     if (slice.deletedAt) return slice;
+
+                    // 处理工作区变更
+                    if (props.workspaces && Array.isArray(props.workspaces)) {
+                        const oldWorkspaces = slice.workspaces;
+                        const newWorkspaces = props.workspaces;
+
+                        // 找出需要移除的工作区
+                        const removedWorkspaces = oldWorkspaces.filter(
+                            (id) => !newWorkspaces.includes(id),
+                        );
+                        // 找出需要添加的工作区
+                        const addedWorkspaces = newWorkspaces.filter(
+                            (id) => !oldWorkspaces.includes(id),
+                        );
+
+                        // 从移除的工作区中删除此文档
+                        removedWorkspaces.forEach((workspaceId) => {
+                            Controller.workspace
+                                .ctr(workspaceId)
+                                ?.removeDoc(docId);
+                        });
+
+                        // 向新增的工作区中添加此文档
+                        addedWorkspaces.forEach((workspaceId) => {
+                            Controller.workspace
+                                .ctr(workspaceId)
+                                ?.addDoc(slice);
+                        });
+
+                        slice.workspaces = newWorkspaces;
+                    }
+
                     // ---
                     slice.name = props.name ?? slice.name;
                     slice.scope = props.scope ?? slice.scope;
