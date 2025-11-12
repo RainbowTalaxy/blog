@@ -82,6 +82,7 @@ declare const Controller: {
                 scope?: Scope;
                 date?: number;
                 content?: string;
+                workspaces?: string[];
             }) => Doc;
             remove: (executor: string) => void;
             restore: () => void;

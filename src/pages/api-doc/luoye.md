@@ -289,6 +289,7 @@ interface Body {
     content?: string;
     scope?: 'private' | 'public';
     date?: number;
+    workspaces?: string[]; // 文档所属的工作区 ID（数组格式，目前仅支持单个）
 }
 ```
 
@@ -297,6 +298,13 @@ interface Body {
 ```ts
 type Response = Doc;
 ```
+
+**说明**
+
+-   `workspaces` 参数用于修改文档所属的工作区
+-   必须是包含单个工作区 ID 的数组
+-   指定的工作区必须存在，且当前用户对该工作区有 Member 及以上权限
+-   修改后会自动同步更新相关工作区的文档列表
 
 ### `DELETE` 删除文档
 
