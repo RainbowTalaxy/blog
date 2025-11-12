@@ -11,7 +11,10 @@ const login = (req, res, next) => {
             .send({ error: 'Please login first', message: '请先登录' });
     const config = readJSON(Dir.storage.config);
     try {
-        const { id, updateTime } = jwt.verify(token, config.secret);
+        const { id, updateTime } = jwt.verify(
+            token,
+            config.password_encrypt_secret,
+        );
         const user = User.find(id);
         const invalid = !user || user.updateTime !== updateTime;
         if (invalid)
@@ -33,14 +36,46 @@ const weakLogin = (req, _, next) => {
     if (!token) return next();
     const config = readJSON(Dir.storage.config);
     try {
-        const { id } = jwt.verify(token, config.secret);
+        const { id } = jwt.verify(token, config.password_encrypt_secret);
         req.userId = id;
         if (User.isAdmin(id)) req.isAdmin = true;
     } catch (error) {}
     next();
 };
 
+const adminLogin = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token)
+        return res
+            .status(401)
+            .send({ error: 'Please login first', message: '请先登录' });
+    const config = readJSON(Dir.storage.config);
+    try {
+        const { id, updateTime } = jwt.verify(
+            token,
+            config.password_encrypt_secret,
+        );
+        const user = User.find(id);
+        const invalid = !user || user.updateTime !== updateTime;
+        if (invalid)
+            return res
+                .status(401)
+                .send({ error: 'Please login again', message: '请重新登录' });
+        req.userId = user.id;
+        if (!User.isAdmin(id))
+            return res
+                .status(403)
+                .send({ error: 'Forbidden', message: '无权访问' });
+        next();
+    } catch (error) {
+        return res
+            .status(401)
+            .send({ error: 'Please login first', message: '用户身份过期' });
+    }
+};
+
 module.exports = {
     login,
     weakLogin,
+    adminLogin,
 };

@@ -118,7 +118,7 @@ class Rocket {
 class TestCase {
     constructor(name, silent = false) {
         this.name = `[${name}]`;
-        this.statics = {
+        this.statistics = {
             success: 0,
             failure: 0,
         };
@@ -129,12 +129,12 @@ class TestCase {
         try {
             const result = await task();
             // console.log('🔆', this.name, title);
-            this.statics.success += 1;
+            this.statistics.success += 1;
             return result;
         } catch (e) {
             console.log('❗️', this.name, title);
             console.error('\tERROR:', e.message);
-            this.statics.failure += 1;
+            this.statistics.failure += 1;
         }
     }
 
@@ -143,24 +143,24 @@ class TestCase {
             await task();
             console.log('❗️', this.name, title);
             console.error('\tERROR:', 'Expect "error"');
-            this.statics.failure += 1;
+            this.statistics.failure += 1;
         } catch (e) {
             // console.log('🔆', this.name, title, `(error: ${e.message})`);
-            this.statics.success += 1;
+            this.statistics.success += 1;
         }
     }
 
     stat() {
         console.log(
-            this.statics.failure === 0 ? '🔆' : '❗️',
-            `success: ${this.statics.success}, failure: ${this.statics.failure}`,
+            this.statistics.failure === 0 ? '🔆' : '❗️',
+            `success: ${this.statistics.success}, failure: ${this.statistics.failure}`,
         );
         return this;
     }
 
     merge(testCase) {
-        this.statics.success += testCase.statics.success;
-        this.statics.failure += testCase.statics.failure;
+        this.statistics.success += testCase.statistics.success;
+        this.statistics.failure += testCase.statistics.failure;
     }
 }
 

@@ -25,12 +25,14 @@ const SERVER_DIR = {
         // 用户数据
         user: path.join(STORAGE_PATH, 'user.json'),
         token: path.join(STORAGE_PATH, 'token.json'),
+        log: path.join(STORAGE_PATH, 'log'),
         // 配置信息
         config: path.join(STORAGE_PATH, 'config.json'),
         // 书籍数据
         books: path.join(STORAGE_PATH, 'books'),
         // Weaver 数据
         projects: path.join(STORAGE_PATH, 'projects'),
+        // 落页数据
         luoye: {
             workspaces: path.join(STORAGE_PATH, 'luoye', 'workspaces'),
             docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
@@ -45,6 +47,7 @@ const LOCAL_DIR = {
     storage: {
         user: path.join(DEV_DIR, 'user.json'),
         token: path.join(TEMP_DIR, 'token.json'),
+        log: path.join(TEMP_DIR, 'log'),
         config: path.join(DEV_DIR, 'config.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
@@ -69,26 +72,29 @@ if (fs.existsSync(Dir.temp) && process.env.DATA_TEST !== 'true') {
 mkdirp.sync(Dir.temp);
 mkdirp.sync(DEV_DIR);
 mkdirp.sync(Dir.static);
+mkdirp.sync(Dir.storage.log);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
 
+const NEW_VERSION = '2.0.0';
+const now = Date.now();
+
 writeJSONIfNotExist(Dir.storage.config, {
-    secret: uuid(),
+    version: NEW_VERSION,
+    password_encrypt_secret: uuid(),
+    log_access_tokens: [],
 });
 
 writeJSONIfNotExist(Dir.storage.token, []);
 
 const encryptUserPassword = (id, password) => {
-    const { secret } = readJSON(Dir.storage.config);
-    const str = `${id}:${password}:${secret}`;
+    const { password_encrypt_secret } = readJSON(Dir.storage.config);
+    const str = `${id}:${password}:${password_encrypt_secret}`;
     return Buffer.from(str).toString('base64');
 };
-
-const NEW_VERSION = '2.0.0';
-const now = Date.now();
 
 // 默认用户配置
 const DEFAULT_USER_CONFIG = {

@@ -1,9 +1,11 @@
-const user = require('./user');
-const luoye = require('./luoye');
+const migrateConfigData = require('./config-data-migrate');
+const migrateUserData = require('./user-data-migrate');
+const migrateLuoyeData = require('./luoye-data-migrate');
 
 async function main() {
-    await user();
-    await luoye();
+    await migrateConfigData();
+    await migrateUserData();
+    await migrateLuoyeData();
 }
 
 main();
