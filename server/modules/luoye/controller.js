@@ -112,11 +112,13 @@ const Controller = {
                 update(doc) {
                     if (!doc) throw new Error('`doc` is required');
                     this.content = this.content.map((dItem) => {
-                        // ---
-                        dItem.name = doc.name;
-                        dItem.scope = doc.scope;
-                        dItem.updatedAt = doc.updatedAt;
-                        // ---
+                        if (dItem.id === doc.id) {
+                            // ---
+                            dItem.name = doc.name;
+                            dItem.scope = doc.scope;
+                            dItem.updatedAt = doc.updatedAt;
+                            // ---
+                        }
                         return dItem;
                     });
                     // 更新最近文档
