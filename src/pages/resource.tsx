@@ -9,7 +9,7 @@ import useUserEntry from '../hooks/useUserEntry';
 import useUser from '../hooks/useUser';
 import { Button } from '../components/Form';
 import Path from '../utils/Path';
-import FolderForm from './components/FolderForm';
+import FolderForm from '@site/src/modules/resource/components/FolderForm';
 
 const BASE_URL = '/resource';
 
