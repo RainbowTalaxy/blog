@@ -16,6 +16,13 @@ const ShortcutPage = () => {
     const [editingShortcut, setEditingShortcut] = useState<Shortcut | null>(
         null,
     );
+    const [origin, setOrigin] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setOrigin(window.location.origin);
+        }
+    }, []);
 
     const refetch = useCallback(async () => {
         try {
@@ -98,7 +105,9 @@ const ShortcutPage = () => {
                                     </thead>
                                     <tbody>
                                         {list.map((shortcut) => {
-                                            const shortUrl = `${window.location.origin}/s/${shortcut.id}`;
+                                            const shortUrl = origin
+                                                ? `${origin}/s/${shortcut.id}`
+                                                : `/s/${shortcut.id}`;
                                             return (
                                                 <tr key={shortcut.id}>
                                                     <td>
