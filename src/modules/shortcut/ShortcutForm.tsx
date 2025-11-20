@@ -11,14 +11,9 @@ interface Props {
 }
 
 const ShortcutForm = ({ shortcut, onClose }: Props) => {
-    const [isBrowser, setIsBrowser] = useState(false);
     const urlRef = useRef<HTMLInputElement>(null);
     const customIdRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        setIsBrowser(true);
-    }, []);
 
     useEffect(() => {
         if (shortcut) {
@@ -55,10 +50,6 @@ const ShortcutForm = ({ shortcut, onClose }: Props) => {
             alert(message);
         }
     };
-
-    if (!isBrowser) {
-        return null;
-    }
 
     return createPortal(
         <div className={styles.container}>
