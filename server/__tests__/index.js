@@ -8,6 +8,7 @@ const dictionary = require('./dictionary');
 const statics = require('./statics');
 const weaver = require('./weaver');
 const support = require('../modules/support/tests');
+const shortcut = require('./shortcut');
 
 require('../config');
 
@@ -36,6 +37,9 @@ async function test() {
 
         // weaver 测试
         await weaver();
+
+        // shortcut 测试
+        await shortcut();
 
         // luoye 测试
         await luoye();

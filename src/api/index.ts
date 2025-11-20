@@ -6,6 +6,7 @@ import UserAPI from './user';
 import { rocket } from './utils';
 import WeaverAPI from './weaver';
 import WordBankAPI from './word-bank';
+import ShortcutAPI from './shortcut';
 
 const API = {
     text: (url: string) => fetch(url).then((res) => res.text()),
@@ -19,6 +20,7 @@ const API = {
     weaver: WeaverAPI,
     user: UserAPI,
     luoye: LuoyeAPI,
+    shortcut: ShortcutAPI,
 };
 
 export default API;
