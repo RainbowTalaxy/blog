@@ -32,6 +32,8 @@ const SERVER_DIR = {
         books: path.join(STORAGE_PATH, 'books'),
         // Weaver 数据
         projects: path.join(STORAGE_PATH, 'projects'),
+        // 短链数据
+        shortcuts: path.join(STORAGE_PATH, 'shortcuts'),
         // 落页数据
         luoye: {
             workspaces: path.join(STORAGE_PATH, 'luoye', 'workspaces'),
@@ -58,6 +60,7 @@ const LOCAL_DIR = {
         config: path.join(DEV_DIR, 'config.json'),
         books: path.join(TEMP_DIR, 'books'),
         projects: path.join(TEMP_DIR, 'projects'),
+        shortcuts: path.join(TEMP_DIR, 'shortcuts'),
         luoye: {
             workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
             docs: path.join(TEMP_DIR, 'luoye', 'docs'),
@@ -89,6 +92,7 @@ mkdirp.sync(Dir.static);
 mkdirp.sync(Dir.storage.log);
 mkdirp.sync(Dir.storage.books);
 mkdirp.sync(Dir.storage.projects);
+mkdirp.sync(Dir.storage.shortcuts);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
