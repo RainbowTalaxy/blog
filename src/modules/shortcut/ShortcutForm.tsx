@@ -1,7 +1,7 @@
 import styles from './ShortcutForm.module.css';
 import { createPortal } from 'react-dom';
 import { Shortcut } from '@site/src/api/shortcut';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Input } from '@site/src/components/Form';
 import API from '@site/src/api';
 

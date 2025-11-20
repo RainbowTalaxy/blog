@@ -1,5 +1,6 @@
 .container {
     padding: 2rem;
+    min-width: 600px;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -8,134 +9,29 @@
     margin-bottom: 2rem;
 }
 
-.actions {
+.headerActions {
     margin-bottom: 1.5rem;
 }
 
 .empty {
     padding: 3rem;
     text-align: center;
-    color: var(--ifm-color-emphasis-600);
     font-size: 1.1rem;
 }
 
-.tableWrapper {
-    overflow-x: auto;
-    border-radius: 8px;
-    border: 1px solid var(--ifm-table-border-color);
-}
-
 .table {
+    margin: 0;
     width: 100%;
-    border-collapse: collapse;
-    background-color: var(--ifm-background-color);
-}
-
-.table th,
-.table td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--ifm-table-border-color);
-}
-
-.table th {
-    background-color: var(--ifm-table-head-background);
-    font-weight: 600;
-    color: var(--ifm-color-emphasis-800);
-    white-space: nowrap;
-}
-
-.table tbody tr:hover {
-    background-color: var(--ifm-table-hover-background);
-}
-
-.table tbody tr:last-child td {
-    border-bottom: none;
 }
 
 .shortId {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.idText {
     font-family: monospace;
     font-weight: 500;
 }
 
-.copyBtn {
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    font-size: 14px;
-}
-
-.copyBtn:hover {
-    opacity: 1;
-}
-
-.urlCell {
-    max-width: 300px;
-}
-
-.urlLink {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: var(--ifm-link-color);
-    text-decoration: none;
-}
-
-.urlLink:hover {
-    text-decoration: underline;
-}
-
-.center {
-    text-align: center;
-}
-
-.actionBtn {
-    padding: 4px 12px;
-    margin-right: 8px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.editBtn {
-    background-color: var(--ifm-color-primary);
-    color: white;
-}
-
-.editBtn:hover {
-    background-color: var(--ifm-color-primary-dark);
-}
-
-.deleteBtn {
-    background-color: var(--ifm-color-danger);
-    color: white;
-}
-
-.deleteBtn:hover {
-    background-color: var(--ifm-color-danger-dark);
-}
-
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-
-    .table th,
-    .table td {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    .urlCell {
-        max-width: 150px;
-    }
+.table .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
