@@ -23,6 +23,7 @@
         -   `docs.json` 文档列表 `DocItem[]`
         -   `recent-docs.json` 最近文档列表 `DocItem[]`
         -   `doc-bin` 文档回收站
+        -   `tags.json` 用户标签列表 `string[]`
 
 ### 权限管理
 
@@ -80,6 +81,7 @@ interface Doc {
     workspaces: string[]; // 所属工作区 id
     docType: 'text' | 'markdown'; // 文档类型
     content: string; // 文档内容
+    tags?: string[]; // 文档标签
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
     deletedAt: number | null; // 删除时间
@@ -95,6 +97,7 @@ interface DocItem {
     creator: string; // 创建者
     scope: 'private' | 'public'; // 可见范围
     docType: 'text' | 'markdown'; // 文档类型
+    tags?: string[]; // 文档标签
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
 }
@@ -235,6 +238,16 @@ interface Response = {
 };
 ```
 
+### `GET` 获取用户标签列表
+
+`/tags`
+
+**响应**
+
+```ts
+type Response = string[];
+```
+
 ### `GET` 获取文档列表
 
 `/docs`
@@ -268,6 +281,7 @@ interface Body {
     scope?: 'private' | 'public';
     date?: number;
     docType?: 'text' | 'markdown';
+    tags?: string[]; // 文档标签
 }
 ```
 
@@ -276,6 +290,12 @@ interface Body {
 ```ts
 type Response = Doc;
 ```
+
+**说明**
+
+-   `tags` 参数用于设置文档的标签
+-   必须是字符串数组，每个标签不能为空字符串
+-   创建文档时设置的标签会自动添加到用户的标签列表中
 
 ### `PUT` 更新文档信息
 
@@ -290,6 +310,7 @@ interface Body {
     scope?: 'private' | 'public';
     date?: number;
     workspaces?: string[]; // 文档所属的工作区 ID（数组格式，目前仅支持单个）
+    tags?: string[]; // 文档标签
 }
 ```
 
@@ -305,6 +326,9 @@ type Response = Doc;
 -   必须是包含单个工作区 ID 的数组
 -   指定的工作区必须存在，且当前用户对该工作区有 Member 及以上权限
 -   修改后会自动同步更新相关工作区的文档列表
+-   `tags` 参数用于修改文档的标签
+-   必须是字符串数组，每个标签不能为空字符串
+-   更新文档时设置的标签会自动添加到用户的标签列表中
 
 ### `DELETE` 删除文档
 

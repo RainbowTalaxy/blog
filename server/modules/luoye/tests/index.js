@@ -6,6 +6,7 @@ const scope = require('./scope');
 const general = require('./general');
 const recentDocs = require('./recent-docs');
 const deletion = require('./deletion');
+const tags = require('./tags');
 const { TestCase } = require('../../../utils/test');
 
 async function test() {
@@ -35,6 +36,9 @@ async function test() {
 
         // 删除操作测试
         testCase.merge(await deletion());
+
+        // 标签功能测试
+        testCase.merge(await tags());
 
         return testCase.stat();
     } catch (error) {
