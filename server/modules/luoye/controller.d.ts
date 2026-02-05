@@ -15,6 +15,7 @@ declare const Controller: {
         docs: string;
         recentDocs: string;
         docBin: string;
+        tags: string;
     };
     user: (userId: string) => {
         workspaceItems: {
@@ -38,6 +39,10 @@ declare const Controller: {
             content: DocBinItem[];
             add: (doc: Doc, executor: string) => void;
             remove: (docId: string) => void;
+        };
+        tags: {
+            content: string[];
+            addTags: (tags: string[]) => void;
         };
     };
     workspace: {
@@ -71,6 +76,7 @@ declare const Controller: {
                 scope?: Scope;
                 date?: number;
                 docType: DocType;
+                tags?: string[];
             },
             workspaceCtr: ReturnType<(typeof Controller)['workspace']['ctr']>,
             creator: string,
@@ -83,6 +89,7 @@ declare const Controller: {
                 date?: number;
                 content?: string;
                 workspaces?: string[];
+                tags?: string[];
             }) => Doc;
             remove: (executor: string) => void;
             restore: () => void;

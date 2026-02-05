@@ -23,6 +23,13 @@ const Utility = {
     docTypeCheck(value) {
         return Object.values(DocType).includes(value);
     },
+    /** Tags 参数检查 */
+    tagsCheck(tags) {
+        if (!Array.isArray(tags)) return false;
+        return tags.every(
+            (tag) => typeof tag === 'string' && tag.trim().length > 0,
+        );
+    },
     /** 过滤私人文档 */
     filterPrivate(workspace) {
         workspace.docs = workspace.docs.filter((doc) => {

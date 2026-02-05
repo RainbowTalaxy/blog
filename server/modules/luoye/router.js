@@ -193,6 +193,19 @@ router.delete('/workspace/:workspaceId', login, async (req, res, next) => {
     }
 });
 
+// 获取用户标签列表
+router.get('/tags', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const tags = Ctr.user(userId).tags.content;
+        return res.send(tags);
+    } catch (error) {
+        res.error = 'Failed to get tags';
+        res.message = '获取标签列表失败';
+        next(error);
+    }
+});
+
 // 获取用户最近文档列表 V2
 router.get('/recent-docs', login, async (req, res, next) => {
     try {
@@ -271,7 +284,7 @@ router.get('/doc/:docId', weakLogin, async (req, res, next) => {
 router.post('/doc', login, async (req, res, next) => {
     try {
         const userId = req.userId;
-        const { workspaceId, name, scope, date, docType } = req.body;
+        const { workspaceId, name, scope, date, docType, tags } = req.body;
         if (!workspaceId)
             return res.status(400).send({
                 error: '`workspaceId` is required',
@@ -295,6 +308,12 @@ router.post('/doc', login, async (req, res, next) => {
                 error: '`date` is invalid',
                 message: '非法的日期参数',
             });
+        // `tags` 参数校验
+        if (tags && !LuoyeUtl.tagsCheck(tags))
+            return res.status(400).send({
+                error: '`tags` is invalid',
+                message: '非法的标签参数',
+            });
         const workspaceCtr = Ctr.workspace.ctr(workspaceId);
         if (!workspaceCtr)
             return res.status(404).send({
@@ -305,10 +324,14 @@ router.post('/doc', login, async (req, res, next) => {
         if (LuoyeUtl.access(workspace, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
         const doc = Ctr.doc.add(
-            { name, scope, date, docType },
+            { name, scope, date, docType, tags },
             workspaceCtr,
             userId,
         );
+        // 更新用户标签列表
+        if (tags && tags.length > 0) {
+            Ctr.user(userId).tags.addTags(tags);
+        }
         return res.send(doc);
     } catch (error) {
         res.error = 'Failed to create doc';
@@ -322,7 +345,7 @@ router.put('/doc/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
-        const { name, content, scope, date, workspaces } = req.body;
+        const { name, content, scope, date, workspaces, tags } = req.body;
         if (!docId)
             return res.status(400).send({
                 error: '`docId` is required',
@@ -339,6 +362,12 @@ router.put('/doc/:docId', login, async (req, res, next) => {
             return res.status(400).send({
                 error: '`date` is invalid',
                 message: '非法的日期参数',
+            });
+        // `tags` 参数校验
+        if (tags && !LuoyeUtl.tagsCheck(tags))
+            return res.status(400).send({
+                error: '`tags` is invalid',
+                message: '非法的标签参数',
             });
         // `workspaces` 参数校验
         if (workspaces) {
@@ -379,7 +408,12 @@ router.put('/doc/:docId', login, async (req, res, next) => {
             scope,
             date,
             workspaces,
+            tags,
         });
+        // 更新用户标签列表
+        if (tags && tags.length > 0) {
+            Ctr.user(userId).tags.addTags(tags);
+        }
         return res.send(updatedDoc);
     } catch (error) {
         res.error = 'Failed to update doc';
