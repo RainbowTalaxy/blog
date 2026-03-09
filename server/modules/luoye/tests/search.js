@@ -44,6 +44,16 @@ async function test() {
         content: 'Hello from workspace2, Hello again.',
     });
 
+    // doc4: 两个关键词间距较远，不会合并
+    const doc4 = await talaxy.post('/doc', {
+        workspaceId: workspace1.id,
+        name: 'FarApart Doc',
+    });
+    await talaxy.put(`/doc/${doc4.id}`, {
+        content:
+            'Hello beginning of text' + '.'.repeat(120) + 'Hello end of text',
+    });
+
     // === 基础搜索 ===
 
     await testCase.neg('search - missing keyword', async () => {
@@ -89,12 +99,29 @@ async function test() {
 
     // === 多匹配项归入同一文档 ===
 
-    await testCase.pos('search - multiple matches in one doc', async () => {
+    await testCase.pos('search - nearby matches merged', async () => {
         const results = await talaxy.get('/search', { keyword: 'Hello' });
         const doc3Result = results.find((r) => r.id === doc3.id);
         Assert.expect(doc3Result !== undefined, true);
-        // doc3 正文有两个 Hello，matches 应 >= 2
-        Assert.expect(doc3Result.matches.length >= 2, true);
+        // doc3 正文有两个 Hello 但距离很近，上下文窗口重叠，应合并为 1 条 content match
+        const contentMatches = doc3Result.matches.filter(
+            (m) => m.field === 'content',
+        );
+        Assert.expect(contentMatches.length, 1);
+        // 合并后的 context 应同时包含两个 Hello
+        const ctx = contentMatches[0].context;
+        Assert.expect(ctx.indexOf('Hello') !== ctx.lastIndexOf('Hello'), true);
+    });
+
+    await testCase.pos('search - far apart matches not merged', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const doc4Result = results.find((r) => r.id === doc4.id);
+        Assert.expect(doc4Result !== undefined, true);
+        // doc4 正文有两个 Hello 但距离很远，不应合并
+        const contentMatches = doc4Result.matches.filter(
+            (m) => m.field === 'content',
+        );
+        Assert.expect(contentMatches.length, 2);
     });
 
     // === limit 参数 ===

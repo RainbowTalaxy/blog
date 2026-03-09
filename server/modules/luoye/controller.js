@@ -489,8 +489,44 @@ const Controller = {
             docIds = docItems.map((d) => d.id);
         }
 
-        const CONTEXT_LEN = 30;
+        const CONTEXT_LEN = 50;
         const results = [];
+
+        /**
+         * 在文本中查找所有匹配项，合并重叠的上下文窗口
+         * @param {string} text
+         * @param {string} keyword
+         * @param {'name' | 'content'} field
+         */
+        const findMatches = (text, keyword, field) => {
+            if (!text || !text.includes(keyword)) return [];
+            // 收集所有匹配项的上下文区间
+            const ranges = [];
+            let idx = 0;
+            while ((idx = text.indexOf(keyword, idx)) !== -1) {
+                const start = Math.max(0, idx - CONTEXT_LEN);
+                const end = Math.min(
+                    text.length,
+                    idx + keyword.length + CONTEXT_LEN,
+                );
+                ranges.push({ start, end });
+                idx += keyword.length;
+            }
+            // 合并重叠区间
+            const merged = [ranges[0]];
+            for (let i = 1; i < ranges.length; i++) {
+                const last = merged[merged.length - 1];
+                if (ranges[i].start <= last.end) {
+                    last.end = Math.max(last.end, ranges[i].end);
+                } else {
+                    merged.push(ranges[i]);
+                }
+            }
+            return merged.map((r) => ({
+                field: /** @type {'name' | 'content'} */ (field),
+                context: text.slice(r.start, r.end),
+            }));
+        };
 
         for (const docId of docIds) {
             const docCtr = Controller.doc.ctr(docId);
@@ -498,41 +534,10 @@ const Controller = {
             const doc = docCtr.content;
             if (doc.deletedAt) continue;
 
-            const matches = [];
-
-            // 搜索标题
-            if (doc.name && doc.name.includes(keyword)) {
-                let idx = 0;
-                while ((idx = doc.name.indexOf(keyword, idx)) !== -1) {
-                    const start = Math.max(0, idx - CONTEXT_LEN);
-                    const end = Math.min(
-                        doc.name.length,
-                        idx + keyword.length + CONTEXT_LEN,
-                    );
-                    matches.push({
-                        field: /** @type {'name'} */ ('name'),
-                        context: doc.name.slice(start, end),
-                    });
-                    idx += keyword.length;
-                }
-            }
-
-            // 搜索正文
-            if (doc.content && doc.content.includes(keyword)) {
-                let idx = 0;
-                while ((idx = doc.content.indexOf(keyword, idx)) !== -1) {
-                    const start = Math.max(0, idx - CONTEXT_LEN);
-                    const end = Math.min(
-                        doc.content.length,
-                        idx + keyword.length + CONTEXT_LEN,
-                    );
-                    matches.push({
-                        field: /** @type {'content'} */ ('content'),
-                        context: doc.content.slice(start, end),
-                    });
-                    idx += keyword.length;
-                }
-            }
+            const matches = [
+                ...findMatches(doc.name, keyword, 'name'),
+                ...findMatches(doc.content, keyword, 'content'),
+            ];
 
             if (matches.length > 0) {
                 results.push({
