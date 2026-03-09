@@ -222,6 +222,8 @@ interface Response = {
 
 `/recent-docs`
 
+返回最近的 20 条文档记录。
+
 **响应**
 
 ```ts

@@ -48,6 +48,19 @@ const Utility = {
         }
         return true;
     },
+    /** 从 Doc 提取 DocItem 字段 */
+    toDocItem(doc) {
+        return {
+            id: doc.id,
+            name: doc.name,
+            creator: doc.creator,
+            scope: doc.scope,
+            docType: doc.docType,
+            updatedAt: doc.updatedAt,
+            createdAt: doc.createdAt,
+            tags: doc.tags,
+        };
+    },
     /** 映射用户工作区项目 */
     workspaceItems(workspaceItems, newWorkspaceIds) {
         if (!Array.isArray(workspaceItems)) return false;

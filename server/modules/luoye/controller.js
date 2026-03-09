@@ -3,6 +3,7 @@
 const { Dir } = require('../../config');
 const { uuid, PropCheck } = require('../../utils');
 const { Scope, DocType } = require('./constants');
+const { LuoyeUtl } = require('./utility');
 const File = require('../../utils/file');
 const _ = require('lodash');
 
@@ -98,16 +99,7 @@ const Controller = {
                 add(doc) {
                     if (!doc) throw new Error('`doc` is required');
                     const docItems = this.content;
-                    const docItem = {
-                        id: doc.id,
-                        name: doc.name,
-                        creator: doc.creator,
-                        scope: doc.scope,
-                        docType: doc.docType,
-                        updatedAt: doc.updatedAt,
-                        createdAt: doc.createdAt,
-                        tags: doc.tags,
-                    };
+                    const docItem = LuoyeUtl.toDocItem(doc);
                     docItems.unshift(docItem);
                     File.writeJSON(userFile.docs, docItems);
                     // 更新最近文档
@@ -127,16 +119,7 @@ const Controller = {
                         return dItem;
                     });
                     // 更新最近文档
-                    const docItem = {
-                        id: doc.id,
-                        name: doc.name,
-                        creator: doc.creator,
-                        scope: doc.scope,
-                        docType: doc.docType,
-                        updatedAt: doc.updatedAt,
-                        createdAt: doc.createdAt,
-                        tags: doc.tags,
-                    };
+                    const docItem = LuoyeUtl.toDocItem(doc);
                     Controller.user(userId).recentDocs.record(docItem);
                 },
                 remove(docId) {

@@ -2,7 +2,7 @@ const path = require('path');
 const { Dir } = require('../config');
 const fs = require('fs');
 const { readJSON, writeJSON, writeJSONIfNotExist } = require('../utils');
-const { LuoyeFile } = require('../modules/luoye/utility');
+const { LuoyeFile, LuoyeUtl } = require('../modules/luoye/utility');
 
 async function main() {
     const docDir = Dir.storage.luoye.docs;
@@ -25,7 +25,7 @@ async function main() {
         const docsFile = readJSON(path.join(userDir, LuoyeFile.USER_DOCS_FILE));
         writeJSONIfNotExist(
             path.join(userDir, LuoyeFile.USER_RECENT_DOCS_FILE),
-            docsFile.slice(0, 20),
+            docsFile.slice(0, 20).map(LuoyeUtl.toDocItem),
         );
     });
     // 文档回收站数据补丁
