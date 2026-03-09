@@ -211,7 +211,7 @@ router.get('/recent-docs', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const recentDocs = Ctr.user(userId).recentDocs.content;
-        return res.send(recentDocs.slice(0, 10));
+        return res.send(recentDocs.slice(0, 20));
     } catch (error) {
         res.error = 'Failed to get recent docs';
         res.message = '获取最近文档失败';
