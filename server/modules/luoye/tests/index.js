@@ -7,6 +7,7 @@ const general = require('./general');
 const recentDocs = require('./recent-docs');
 const deletion = require('./deletion');
 const tags = require('./tags');
+const search = require('./search');
 const { TestCase } = require('../../../utils/test');
 
 async function test() {
@@ -39,6 +40,9 @@ async function test() {
 
         // 标签功能测试
         testCase.merge(await tags());
+
+        // 搜索功能测试
+        testCase.merge(await search());
 
         return testCase.stat();
     } catch (error) {

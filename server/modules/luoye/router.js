@@ -503,4 +503,44 @@ router.put('/doc/:docId/restore', login, async (req, res, next) => {
     }
 });
 
+// 搜索文档
+router.get('/search', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { keyword, workspaceId, limit } = req.query;
+        if (!keyword)
+            return res.status(400).send({
+                error: '`keyword` is required',
+                message: '搜索关键词不能为空',
+            });
+        const parsedLimit = limit ? parseInt(limit, 10) : 15;
+        if (isNaN(parsedLimit) || parsedLimit < 1)
+            return res.status(400).send({
+                error: '`limit` is invalid',
+                message: '非法的 limit 参数',
+            });
+        // 如指定工作区，校验权限
+        if (workspaceId) {
+            const workspaceCtr = Ctr.workspace.ctr(workspaceId);
+            if (!workspaceCtr)
+                return res.status(404).send({
+                    error: 'workspace not found',
+                    message: '未找到工作区',
+                });
+            const workspace = workspaceCtr.content;
+            if (LuoyeUtl.access(workspace, userId) < Access.Member)
+                return res.status(403).send(ErrorMessage.Forbidden);
+        }
+        const results = Ctr.search(userId, keyword, {
+            workspaceId,
+            limit: parsedLimit,
+        });
+        return res.send(results);
+    } catch (error) {
+        res.error = 'Failed to search docs';
+        res.message = '搜索文档失败';
+        next(error);
+    }
+});
+
 module.exports = { luoyeRouter: router };

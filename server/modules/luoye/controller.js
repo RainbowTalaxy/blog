@@ -475,6 +475,79 @@ const Controller = {
             };
         },
     },
+    search(userId, keyword, options = {}) {
+        const { workspaceId, limit = 15 } = options;
+        // 确定候选文档 ID 集合
+        let docIds;
+        if (workspaceId) {
+            const workspaceCtr = Controller.workspace.ctr(workspaceId);
+            if (!workspaceCtr) return null; // 工作区不存在
+            const workspace = workspaceCtr.content;
+            docIds = workspace.docs.map((d) => d.docId);
+        } else {
+            const docItems = Controller.user(userId).docItems.content;
+            docIds = docItems.map((d) => d.id);
+        }
+
+        const CONTEXT_LEN = 30;
+        const results = [];
+
+        for (const docId of docIds) {
+            const docCtr = Controller.doc.ctr(docId);
+            if (!docCtr) continue;
+            const doc = docCtr.content;
+            if (doc.deletedAt) continue;
+
+            const matches = [];
+
+            // 搜索标题
+            if (doc.name && doc.name.includes(keyword)) {
+                let idx = 0;
+                while ((idx = doc.name.indexOf(keyword, idx)) !== -1) {
+                    const start = Math.max(0, idx - CONTEXT_LEN);
+                    const end = Math.min(
+                        doc.name.length,
+                        idx + keyword.length + CONTEXT_LEN,
+                    );
+                    matches.push({
+                        field: /** @type {'name'} */ ('name'),
+                        context: doc.name.slice(start, end),
+                    });
+                    idx += keyword.length;
+                }
+            }
+
+            // 搜索正文
+            if (doc.content && doc.content.includes(keyword)) {
+                let idx = 0;
+                while ((idx = doc.content.indexOf(keyword, idx)) !== -1) {
+                    const start = Math.max(0, idx - CONTEXT_LEN);
+                    const end = Math.min(
+                        doc.content.length,
+                        idx + keyword.length + CONTEXT_LEN,
+                    );
+                    matches.push({
+                        field: /** @type {'content'} */ ('content'),
+                        context: doc.content.slice(start, end),
+                    });
+                    idx += keyword.length;
+                }
+            }
+
+            if (matches.length > 0) {
+                results.push({
+                    id: doc.id,
+                    name: doc.name,
+                    updatedAt: doc.updatedAt,
+                    matches,
+                });
+            }
+        }
+
+        // 按更新时间降序排序
+        results.sort((a, b) => b.updatedAt - a.updatedAt);
+        return results.slice(0, limit);
+    },
     clear() {
         File.rmdir(LuoyeDir.workspaces);
         File.rmdir(LuoyeDir.docs);
