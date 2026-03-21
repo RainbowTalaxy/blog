@@ -94,3 +94,9 @@ interface SearchResultItem {
 ## 任务三
 
 请你补充接口的单元测试。
+
+## 任务四
+
+支持一下多词搜索，例如搜索 "hello world" 时，返回 "hello world" 和 "hello" 和 "world" 都匹配的文档。
+
+补充一下单元测试，并且更新一下接口文档 `src/pages/api-doc/luoye.md` 。
