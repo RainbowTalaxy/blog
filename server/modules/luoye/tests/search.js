@@ -214,6 +214,71 @@ async function test() {
         Assert.array(after, 0);
     });
 
+    // === 多词搜索（OR 匹配） ===
+
+    await testCase.pos('search - multi-word OR match both', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello World',
+        });
+        Assert.array(results);
+        Assert.expect(results.length >= 2, true);
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc3.id), true);
+    });
+
+    await testCase.pos('search - multi-word OR match first only', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello nonexistent',
+        });
+        Assert.array(results);
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc3.id), true);
+    });
+
+    await testCase.pos('search - multi-word OR match second only', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'nonexistent World',
+        });
+        Assert.array(results);
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+    });
+
+    await testCase.pos('search - multi-word no match', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'foo bar',
+        });
+        Assert.array(results, 0);
+    });
+
+    await testCase.pos(
+        'search - multi-word overlapping matches merged',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: 'Hello World',
+            });
+            const doc1Result = results.find((r) => r.id === doc1.id);
+            Assert.expect(doc1Result !== undefined, true);
+            const nameMatches = doc1Result.matches.filter(
+                (m) => m.field === 'name',
+            );
+            Assert.expect(nameMatches.length, 1);
+        },
+    );
+
+    await testCase.pos(
+        'search - multi-word with whitespace trimming',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: '  Hello   World  ',
+            });
+            Assert.array(results);
+            Assert.expect(results.length >= 2, true);
+        },
+    );
+
     return testCase;
 }
 

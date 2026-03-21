@@ -4,6 +4,7 @@ const { Scope, Access, ErrorMessage } = require('./constants');
 const { PropCheck } = require('../../utils');
 const { LuoyeUtl } = require('./utility');
 const Ctr = require('./controller');
+const { search } = require('./methods/search');
 const router = express.Router();
 
 // 获取工作区列表 V2
@@ -531,7 +532,7 @@ router.get('/search', login, async (req, res, next) => {
             if (LuoyeUtl.access(workspace, userId) < Access.Member)
                 return res.status(403).send(ErrorMessage.Forbidden);
         }
-        const results = Ctr.search(userId, keyword, {
+        const results = search(userId, keyword, {
             workspaceId,
             limit: parsedLimit,
         });
