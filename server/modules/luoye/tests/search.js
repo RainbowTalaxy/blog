@@ -214,36 +214,29 @@ async function test() {
         Assert.array(after, 0);
     });
 
-    // === 多词搜索（OR 匹配） ===
+    // === 多词搜索（AND 匹配） ===
 
-    await testCase.pos('search - multi-word OR match both', async () => {
+    await testCase.pos('search - multi-word AND match both', async () => {
         const results = await talaxy.get('/search', {
             keyword: 'Hello World',
         });
-        Assert.array(results);
-        Assert.expect(results.length >= 2, true);
+        Assert.array(results, 1);
         const ids = results.map((r) => r.id);
         Assert.expect(ids.includes(doc1.id), true);
-        Assert.expect(ids.includes(doc3.id), true);
     });
 
-    await testCase.pos('search - multi-word OR match first only', async () => {
+    await testCase.pos('search - multi-word AND missing second', async () => {
         const results = await talaxy.get('/search', {
             keyword: 'Hello nonexistent',
         });
-        Assert.array(results);
-        const ids = results.map((r) => r.id);
-        Assert.expect(ids.includes(doc1.id), true);
-        Assert.expect(ids.includes(doc3.id), true);
+        Assert.array(results, 0);
     });
 
-    await testCase.pos('search - multi-word OR match second only', async () => {
+    await testCase.pos('search - multi-word AND missing first', async () => {
         const results = await talaxy.get('/search', {
             keyword: 'nonexistent World',
         });
-        Assert.array(results);
-        const ids = results.map((r) => r.id);
-        Assert.expect(ids.includes(doc1.id), true);
+        Assert.array(results, 0);
     });
 
     await testCase.pos('search - multi-word no match', async () => {
@@ -274,8 +267,7 @@ async function test() {
             const results = await talaxy.get('/search', {
                 keyword: '  Hello   World  ',
             });
-            Assert.array(results);
-            Assert.expect(results.length >= 2, true);
+            Assert.array(results, 1);
         },
     );
 
