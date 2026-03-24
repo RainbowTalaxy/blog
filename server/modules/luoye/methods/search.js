@@ -120,6 +120,14 @@ const search = (userId, keyword, options = {}) => {
         if (!docCtr) continue;
         const doc = docCtr.content;
         if (doc.deletedAt) continue;
+        let hasAllKeywords = true;
+        for (const word of keywords) {
+            if (!doc.name.includes(word) && !doc.content.includes(word)) {
+                hasAllKeywords = false;
+                break;
+            }
+        }
+        if (!hasAllKeywords) continue;
 
         const nameRanges = searchRanges(doc.name);
         const contentRanges = searchRanges(doc.content);

@@ -41,7 +41,7 @@ GET /api/luoye/search?keyword=xxx&workspaceId=xxx&limit=15
 2. 如指定 `workspaceId`，先校验工作区存在且用户有权限（`Access >= Member`），然后从 `workspace.docs` 中过滤出目标 doc ID 集合。
 3. 遍历目标 doc ID，用 `Ctr.doc.ctr(docId)` 逐一读取文档完整内容。
 4. 跳过 `deletedAt !== null` 的已删除文档。
-5. 在 `name` 和 `content` 中进行大小写敏感的子串搜索（`String.prototype.includes`）。
+5. 对每个文档要求所有关键词都在 `name` 或 `content` 中至少命中一次（大小写敏感子串匹配）。
 6. 对每个匹配文档，提取所有匹配项的上下文摘要（匹配位置前后各截取约 30 字符），同一文档的多个匹配项归入同一项。
 7. 按 `updatedAt` 降序排序，取前 `limit` 条文档返回。
 
@@ -85,7 +85,7 @@ interface SearchResultItem {
 
 已实现搜索接口，改动涉及三个文件：
 
-1. **`controller.js`** — 新增 `Controller.search(userId, keyword, options)` 方法。根据是否传入 `workspaceId` 确定候选文档范围（工作区文档列表或用户全部文档列表），逐一读取文档 JSON，跳过已删除文档，对 `name` 和 `content` 字段执行大小写敏感的 `indexOf` 子串匹配，提取匹配位置前后各 30 字符的上下文摘要，同一文档的多个匹配项归入同一条记录。最后按 `updatedAt` 降序排序并截取 `limit` 条返回。
+1. **`controller.js`** — 新增 `Controller.search(userId, keyword, options)` 方法。根据是否传入 `workspaceId` 确定候选文档范围（工作区文档列表或用户全部文档列表），逐一读取文档 JSON，跳过已删除文档，要求所有关键词在 `name` 或 `content` 中至少命中一次（大小写敏感子串匹配），提取匹配位置前后各 30 字符的上下文摘要，同一文档的多个匹配项归入同一条记录。最后按 `updatedAt` 降序排序并截取 `limit` 条返回。
 
 2. **`router.js`** — 新增 `GET /search` 路由，使用 `login` 中间件鉴权。接收 `keyword`（必填）、`workspaceId`（可选）、`limit`（可选，默认 15）三个 query 参数。若指定 `workspaceId`，会先校验工作区存在且用户权限 `>= Member`。
 
@@ -97,6 +97,6 @@ interface SearchResultItem {
 
 ## 任务四
 
-支持一下多词搜索，例如搜索 "hello world" 时，返回 "hello world" 和 "hello" 和 "world" 都匹配的文档。
+支持一下多词搜索，例如搜索 "hello world" 时，仅返回同时包含 "hello" 和 "world" 的文档。
 
 补充一下单元测试，并且更新一下接口文档 `src/pages/api-doc/luoye.md` 。
