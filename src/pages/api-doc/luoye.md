@@ -24,6 +24,9 @@
         -   `recent-docs.json` 最近文档列表 `DocItem[]`
         -   `doc-bin` 文档回收站
         -   `tags.json` 用户标签列表 `string[]`
+-   `chat` AI 聊天会话目录
+    -   `{userId}` 用户会话目录
+        -   `{sessionId}.json` 会话信息 `ChatSession`
 
 ### 权限管理
 
@@ -122,6 +125,88 @@ interface DocBinItem {
     name: string; // 文档名称
     executor: string; // 执行者
     deletedAt: number; // 删除时间
+}
+```
+
+### ChatSession
+
+```ts
+interface ChatSession {
+    schemaVersion: 1; // 会话数据结构版本
+    sessionId: string; // 会话 id
+    userId: string; // 所属用户 id
+    docId?: string; // 关联文档 id
+    title: string; // 会话标题
+    messages: ChatMessage[]; // 消息列表
+    docUpdatedAt?: number; // 会话记录的文档更新时间
+    createdAt: number; // 创建时间
+    updatedAt: number; // 更新时间
+}
+```
+
+### ChatSessionSummary
+
+```ts
+interface ChatSessionSummary {
+    schemaVersion: 1;
+    sessionId: string;
+    userId: string;
+    docId?: string;
+    title: string;
+    messageCount: number;
+    createdAt: number;
+    updatedAt: number;
+}
+```
+
+### ChatMessage
+
+```ts
+type ChatMessage = ChatUserMessage | ChatAssistantMessage;
+
+interface ChatUserMessage {
+    schemaVersion: 1;
+    messageId: string;
+    type: 'user_message';
+    content: string;
+    createdAt: number;
+}
+
+interface ChatAssistantMessage {
+    schemaVersion: 1;
+    messageId: string;
+    type: 'assistant_message';
+    parts: ChatMessagePart[];
+    createdAt: number;
+}
+```
+
+### ChatMessagePart
+
+```ts
+type ChatMessagePart = ChatTextPart | ChatToolPart;
+
+interface ChatTextPart {
+    schemaVersion: 1;
+    partId: string;
+    type: 'text';
+    content: string;
+    createdAt: number;
+}
+
+interface ChatToolPart {
+    schemaVersion: 1;
+    partId: string;
+    type: 'tool_call';
+    toolName: string;
+    runId: string; // 用于更新该 tool call 的稳定 id
+    toolCallId?: string; // LLM provider 的 tool call id
+    input: Record<string, unknown>;
+    output?: unknown;
+    content?: string;
+    status?: string; // 如 pending、confirmed、cancelled
+    createdAt: number;
+    updatedAt: number;
 }
 ```
 
@@ -405,3 +490,139 @@ type Response = SearchResultItem[];
 -   同一文档的多个匹配项归入同一条记录，不单独计入 `limit`
 -   结果按文档更新时间降序排序
 -   已删除的文档不会出现在搜索结果中
+
+### `GET` 获取 AI 聊天会话列表
+
+`/chat-sessions`
+
+**参数**
+
+```ts
+interface Query {
+    docId?: string; // 仅返回指定文档关联的会话
+    limit?: number; // 返回数量上限，默认 20
+}
+```
+
+**响应**
+
+```ts
+type Response = ChatSessionSummary[];
+```
+
+### `POST` 创建 AI 聊天会话
+
+`/chat-sessions`
+
+**参数**
+
+```ts
+interface Body {
+    docId?: string;
+    docUpdatedAt?: number;
+}
+```
+
+**响应**
+
+```ts
+type Response = ChatSession;
+```
+
+**说明**
+
+-   传入 `docId` 时，会校验当前用户是否有权限读取该文档
+-   会话默认标题为 `新会话`，追加第一条用户消息后会自动生成标题
+
+### `GET` 获取 AI 聊天会话详情
+
+`/chat-sessions/:sessionId`
+
+**响应**
+
+```ts
+type Response = ChatSession;
+```
+
+### `PATCH` 更新 AI 聊天会话元信息
+
+`/chat-sessions/:sessionId`
+
+**参数**
+
+```ts
+interface Body {
+    title?: string;
+    docUpdatedAt?: number;
+}
+```
+
+**响应**
+
+```ts
+type Response = ChatSession;
+```
+
+**说明**
+
+-   该接口只更新会话元信息，不支持修改历史消息内容
+
+### `POST` 追加 AI 聊天消息
+
+`/chat-sessions/:sessionId/messages`
+
+**参数**
+
+```ts
+interface Body {
+    message: ChatMessage;
+}
+```
+
+**响应**
+
+```ts
+type Response = ChatSession;
+```
+
+**说明**
+
+-   消息主体采用 append-only 策略，不支持覆盖已有消息
+-   后端会统一保存为当前 `schemaVersion`
+
+### `PATCH` 更新 AI 聊天 tool call
+
+`/chat-sessions/:sessionId/tool-calls/:runId`
+
+**参数**
+
+```ts
+interface Body {
+    status?: string;
+    output?: unknown;
+    content?: string;
+}
+```
+
+**响应**
+
+```ts
+type Response = ChatSession;
+```
+
+**说明**
+
+-   用于更新指定 `runId` 对应的 `tool_call`
+-   第一版主要用于 `save_doc_request` 的 `pending` / `confirmed` / `cancelled` 状态回写
+
+### `DELETE` 删除 AI 聊天会话
+
+`/chat-sessions/:sessionId`
+
+**响应**
+
+```ts
+interface Response = {
+    success: boolean;
+};
+```

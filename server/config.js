@@ -37,6 +37,7 @@ const SERVER_DIR = {
             workspaces: path.join(STORAGE_PATH, 'luoye', 'workspaces'),
             docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
             users: path.join(STORAGE_PATH, 'luoye', 'users'),
+            chat: path.join(STORAGE_PATH, 'luoye', 'chat'),
         },
     },
 };
@@ -55,6 +56,7 @@ const LOCAL_DIR = {
             workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
             docs: path.join(TEMP_DIR, 'luoye', 'docs'),
             users: path.join(TEMP_DIR, 'luoye', 'users'),
+            chat: path.join(TEMP_DIR, 'luoye', 'chat'),
         },
     },
 };
@@ -78,6 +80,7 @@ mkdirp.sync(Dir.storage.projects);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
+mkdirp.sync(Dir.storage.luoye.chat);
 
 const NEW_VERSION = '2.0.0';
 const now = Date.now();

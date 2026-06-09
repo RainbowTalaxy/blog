@@ -5,7 +5,25 @@ const { PropCheck } = require('../../utils');
 const { LuoyeUtl } = require('./utility');
 const Ctr = require('./controller');
 const { search } = require('./methods/search');
+const { ChatSession } = require('./chat-session');
 const router = express.Router();
+
+function parsePositiveInt(value, fallback) {
+    if (value === undefined) return fallback;
+    const parsed = parseInt(value, 10);
+    if (isNaN(parsed) || parsed < 1) return null;
+    return parsed;
+}
+
+function checkDocReadable(docId, userId) {
+    const docCtr = Ctr.doc.ctr(docId);
+    if (!docCtr) return { status: 404, body: { error: 'doc not found', message: '未找到文档' } };
+    const doc = docCtr.content;
+    if (LuoyeUtl.access(doc, userId) === Access.Forbidden) {
+        return { status: 403, body: ErrorMessage.Forbidden };
+    }
+    return { doc };
+}
 
 // 获取工作区列表 V2
 router.get('/workspaces', login, async (req, res, next) => {
@@ -540,6 +558,183 @@ router.get('/search', login, async (req, res, next) => {
     } catch (error) {
         res.error = 'Failed to search docs';
         res.message = '搜索文档失败';
+        next(error);
+    }
+});
+
+// 获取 AI 聊天会话列表
+router.get('/chat-sessions', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.query;
+        const limit = parsePositiveInt(req.query.limit, 20);
+        if (limit === null)
+            return res.status(400).send({
+                error: '`limit` is invalid',
+                message: '非法的 limit 参数',
+            });
+        if (docId) {
+            const result = checkDocReadable(docId, userId);
+            if (result.status)
+                return res.status(result.status).send(result.body);
+        }
+        return res.send(ChatSession.list(userId, { docId, limit }));
+    } catch (error) {
+        res.error = 'Failed to get chat sessions';
+        res.message = '获取会话列表失败';
+        next(error);
+    }
+});
+
+// 创建 AI 聊天会话
+router.post('/chat-sessions', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { docId, docUpdatedAt } = req.body;
+        if (docId) {
+            const result = checkDocReadable(docId, userId);
+            if (result.status)
+                return res.status(result.status).send(result.body);
+        }
+        return res.send(ChatSession.create(userId, { docId, docUpdatedAt }));
+    } catch (error) {
+        res.error = 'Failed to create chat session';
+        res.message = '创建会话失败';
+        next(error);
+    }
+});
+
+// 获取 AI 聊天会话详情
+router.get('/chat-sessions/:sessionId', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { sessionId } = req.params;
+        const session = ChatSession.get(userId, sessionId);
+        if (!session)
+            return res.status(404).send({
+                error: 'chat session not found',
+                message: '会话不存在',
+            });
+        return res.send(session);
+    } catch (error) {
+        res.error = 'Failed to get chat session';
+        res.message = '获取会话失败';
+        next(error);
+    }
+});
+
+// 更新 AI 聊天会话元信息
+router.patch('/chat-sessions/:sessionId', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { sessionId } = req.params;
+        const { title, docUpdatedAt } = req.body;
+        if (title !== undefined && typeof title !== 'string')
+            return res.status(400).send({
+                error: '`title` is invalid',
+                message: '非法的标题参数',
+            });
+        const session = ChatSession.updateMeta(userId, sessionId, {
+            title,
+            docUpdatedAt,
+        });
+        if (!session)
+            return res.status(404).send({
+                error: 'chat session not found',
+                message: '会话不存在',
+            });
+        return res.send(session);
+    } catch (error) {
+        res.error = 'Failed to update chat session';
+        res.message = '更新会话失败';
+        next(error);
+    }
+});
+
+// 追加 AI 聊天消息
+router.post(
+    '/chat-sessions/:sessionId/messages',
+    login,
+    async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            const { sessionId } = req.params;
+            const { message } = req.body;
+            if (!message)
+                return res.status(400).send({
+                    error: '`message` is required',
+                    message: '消息不能为空',
+                });
+            const session = ChatSession.appendMessage(
+                userId,
+                sessionId,
+                message,
+            );
+            if (!session)
+                return res.status(404).send({
+                    error: 'chat session not found',
+                    message: '会话不存在或消息格式错误',
+                });
+            return res.send(session);
+        } catch (error) {
+            res.error = 'Failed to append chat message';
+            res.message = '追加消息失败';
+            next(error);
+        }
+    },
+);
+
+// 更新 AI 聊天 tool call
+router.patch(
+    '/chat-sessions/:sessionId/tool-calls/:runId',
+    login,
+    async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            const { sessionId, runId } = req.params;
+            const { status, output, content } = req.body;
+            if (
+                status === undefined &&
+                output === undefined &&
+                content === undefined
+            )
+                return res.status(400).send({
+                    error: '`status`, `output` or `content` is required',
+                    message: '缺少更新内容',
+                });
+            const session = ChatSession.patchToolCall(userId, sessionId, runId, {
+                status,
+                output,
+                content,
+            });
+            if (!session)
+                return res.status(404).send({
+                    error: 'chat session part not found',
+                    message: '会话或消息片段不存在',
+                });
+            return res.send(session);
+        } catch (error) {
+            res.error = 'Failed to patch chat session tool call';
+            res.message = '更新工具调用失败';
+            next(error);
+        }
+    },
+);
+
+// 删除 AI 聊天会话
+router.delete('/chat-sessions/:sessionId', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { sessionId } = req.params;
+        if (!ChatSession.delete(userId, sessionId))
+            return res.status(404).send({
+                error: 'chat session not found',
+                message: '会话不存在',
+            });
+        return res.send({ success: true });
+    } catch (error) {
+        res.error = 'Failed to delete chat session';
+        res.message = '删除会话失败';
         next(error);
     }
 });
