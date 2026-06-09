@@ -39,6 +39,7 @@ const SERVER_DIR = {
             workspaces: path.join(STORAGE_PATH, 'luoye', 'workspaces'),
             docs: path.join(STORAGE_PATH, 'luoye', 'docs'),
             users: path.join(STORAGE_PATH, 'luoye', 'users'),
+            chat: path.join(STORAGE_PATH, 'luoye', 'chat'),
         },
         playlist: {
             library: path.join(STORAGE_PATH, 'playlist', 'library.json'),
@@ -65,6 +66,7 @@ const LOCAL_DIR = {
             workspaces: path.join(TEMP_DIR, 'luoye', 'workspaces'),
             docs: path.join(TEMP_DIR, 'luoye', 'docs'),
             users: path.join(TEMP_DIR, 'luoye', 'users'),
+            chat: path.join(TEMP_DIR, 'luoye', 'chat'),
         },
         playlist: {
             library: path.join(TEMP_DIR, 'playlist', 'library.json'),
@@ -96,6 +98,7 @@ mkdirp.sync(Dir.storage.shortcuts);
 mkdirp.sync(Dir.storage.luoye.workspaces);
 mkdirp.sync(Dir.storage.luoye.docs);
 mkdirp.sync(Dir.storage.luoye.users);
+mkdirp.sync(Dir.storage.luoye.chat);
 mkdirp.sync(Dir.storage.playlist.playlist);
 mkdirp.sync(Dir.storage.playlist.song);
 

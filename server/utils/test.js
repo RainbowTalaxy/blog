@@ -74,6 +74,28 @@ class Rocket {
         throw new Error('Expect "error"');
     }
 
+    async patch(url, body) {
+        const { data } = await axios.patch(this.baseUrl + url, body, {
+            headers: {
+                Cookie: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) throw new Error(data.error);
+        return data;
+    }
+
+    async negPatch(url, body) {
+        const { data } = await axios.patch(this.baseUrl + url, body, {
+            headers: {
+                Cookie: `token=${this.token}`,
+            },
+            validateStatus: () => true,
+        });
+        if (data.error) return null;
+        throw new Error('Expect "error"');
+    }
+
     async delete(url, params) {
         const { data } = await axios.delete(this.baseUrl + url, {
             params,
