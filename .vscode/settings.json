@@ -47,5 +47,7 @@
         ".docusaurus/**",
         "build/**",
         "temp/**"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true
 }
