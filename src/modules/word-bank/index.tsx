@@ -181,6 +181,7 @@ const WordBank = () => {
                                         onReturn={() => {
                                             if (idx === editData.words.length - 1) {
                                                 document.documentElement.scrollTo({
+                                                    // @ts-ignore
                                                     top: window.__docusaurus.scrollHeight,
                                                     behavior: 'smooth',
                                                 });

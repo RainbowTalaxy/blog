@@ -55,6 +55,7 @@ export interface DocItem {
     docType: string; // 文档类型
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
+    tags?: string[]; // 标签列表
 }
 
 export interface Doc {
@@ -71,6 +72,7 @@ export interface Doc {
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
     deletedAt: number | null; // 删除时间
+    tags?: string[]; // 标签列表
 }
 
 export interface DocBinItem {

@@ -1,0 +1,277 @@
+const { Server } = require('../../../config');
+const Assert = require('../../../utils/assert');
+const { Rocket, TestCase } = require('../../../utils/test');
+const Controller = require('../controller');
+
+async function test() {
+    const testCase = new TestCase('Luoye - Search', true);
+
+    const baseUrl = Server + '/luoye';
+    const talaxy = new Rocket(baseUrl);
+    await talaxy.login('talaxy', 'talaxy');
+
+    Controller.clear();
+
+    // 创建测试用工作区和文档
+    const workspace1 = await talaxy.post('/workspace', {
+        name: 'search-workspace-1',
+    });
+    const workspace2 = await talaxy.post('/workspace', {
+        name: 'search-workspace-2',
+    });
+
+    const doc1 = await talaxy.post('/doc', {
+        workspaceId: workspace1.id,
+        name: 'Hello World Document',
+    });
+    await talaxy.put(`/doc/${doc1.id}`, {
+        content: 'This is a test content with Hello keyword.',
+    });
+
+    const doc2 = await talaxy.post('/doc', {
+        workspaceId: workspace1.id,
+        name: 'Another Document',
+    });
+    await talaxy.put(`/doc/${doc2.id}`, {
+        content: 'Some text without the keyword.',
+    });
+
+    const doc3 = await talaxy.post('/doc', {
+        workspaceId: workspace2.id,
+        name: 'Workspace2 Doc',
+    });
+    await talaxy.put(`/doc/${doc3.id}`, {
+        content: 'Hello from workspace2, Hello again.',
+    });
+
+    // doc4: 两个关键词间距较远，不会合并
+    const doc4 = await talaxy.post('/doc', {
+        workspaceId: workspace1.id,
+        name: 'FarApart Doc',
+    });
+    await talaxy.put(`/doc/${doc4.id}`, {
+        content:
+            'Hello beginning of text' + '.'.repeat(120) + 'Hello end of text',
+    });
+
+    // === 基础搜索 ===
+
+    await testCase.neg('search - missing keyword', async () => {
+        await talaxy.get('/search', {});
+    });
+
+    await testCase.pos('search - keyword in name', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        Assert.array(results);
+        // doc1 标题含 Hello, doc3 正文含 Hello
+        Assert.expect(results.length >= 2, true);
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc3.id), true);
+    });
+
+    await testCase.pos('search - keyword in content', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'test content',
+        });
+        Assert.array(results, 1);
+        Assert.expect(results[0].id, doc1.id);
+        Assert.expect(results[0].matches.length >= 1, true);
+        Assert.expect(results[0].matches[0].field, 'content');
+    });
+
+    await testCase.pos('search - no match', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'nonexistent-xyz',
+        });
+        Assert.array(results, 0);
+    });
+
+    // === 大小写敏感 ===
+
+    await testCase.pos('search - case sensitive', async () => {
+        const upper = await talaxy.get('/search', { keyword: 'Hello' });
+        const lower = await talaxy.get('/search', { keyword: 'hello' });
+        // "Hello" 应匹配到结果，"hello" 不应匹配
+        Assert.expect(upper.length >= 1, true);
+        Assert.expect(lower.length, 0);
+    });
+
+    // === 多匹配项归入同一文档 ===
+
+    await testCase.pos('search - nearby matches merged', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const doc3Result = results.find((r) => r.id === doc3.id);
+        Assert.expect(doc3Result !== undefined, true);
+        // doc3 正文有两个 Hello 但距离很近，上下文窗口重叠，应合并为 1 条 content match
+        const contentMatches = doc3Result.matches.filter(
+            (m) => m.field === 'content',
+        );
+        Assert.expect(contentMatches.length, 1);
+        // 合并后的 context 应同时包含两个 Hello
+        const ctx = contentMatches[0].context;
+        Assert.expect(ctx.indexOf('Hello') !== ctx.lastIndexOf('Hello'), true);
+    });
+
+    await testCase.pos('search - far apart matches not merged', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const doc4Result = results.find((r) => r.id === doc4.id);
+        Assert.expect(doc4Result !== undefined, true);
+        // doc4 正文有两个 Hello 但距离很远，不应合并
+        const contentMatches = doc4Result.matches.filter(
+            (m) => m.field === 'content',
+        );
+        Assert.expect(contentMatches.length, 2);
+    });
+
+    // === limit 参数 ===
+
+    await testCase.pos('search - limit', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            limit: 1,
+        });
+        Assert.array(results, 1);
+    });
+
+    await testCase.neg('search - invalid limit', async () => {
+        await talaxy.get('/search', { keyword: 'Hello', limit: 'abc' });
+    });
+
+    // === 按工作区限定搜索 ===
+
+    await testCase.pos('search - filter by workspaceId', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            workspaceId: workspace2.id,
+        });
+        Assert.array(results, 1);
+        Assert.expect(results[0].id, doc3.id);
+    });
+
+    await testCase.pos('search - workspaceId with no match', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            workspaceId: workspace1.id,
+        });
+        // workspace1 中 doc1 标题含 Hello, doc1 正文也含 Hello
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc3.id), false);
+    });
+
+    await testCase.neg('search - invalid workspaceId', async () => {
+        await talaxy.get('/search', {
+            keyword: 'Hello',
+            workspaceId: 'invalid-workspace-id',
+        });
+    });
+
+    // === 结果排序：按 updatedAt 降序 ===
+
+    await testCase.pos('search - sorted by updatedAt desc', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        for (let i = 1; i < results.length; i++) {
+            Assert.expect(
+                results[i - 1].updatedAt >= results[i].updatedAt,
+                true,
+            );
+        }
+    });
+
+    // === 返回数据结构校验 ===
+
+    await testCase.pos('search - result item structure', async () => {
+        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        Assert.expect(results.length >= 1, true);
+        const item = results[0];
+        Assert.expect('id' in item, true);
+        Assert.expect('name' in item, true);
+        Assert.expect('updatedAt' in item, true);
+        Assert.expect('matches' in item, true);
+        Assert.array(item.matches);
+        Assert.expect(item.matches.length >= 1, true);
+        const match = item.matches[0];
+        Assert.expect('field' in match, true);
+        Assert.expect('context' in match, true);
+        Assert.expect(['name', 'content'].includes(match.field), true);
+    });
+
+    // === 已删除文档不在搜索结果中 ===
+
+    await testCase.pos('search - deleted doc excluded', async () => {
+        const tempDoc = await talaxy.post('/doc', {
+            workspaceId: workspace1.id,
+            name: 'DeleteMe SearchTarget',
+        });
+        // 确认搜索能找到
+        const before = await talaxy.get('/search', { keyword: 'DeleteMe' });
+        Assert.expect(before.length >= 1, true);
+        // 删除文档
+        await talaxy.delete(`/doc/${tempDoc.id}`);
+        // 确认搜索不再找到
+        const after = await talaxy.get('/search', { keyword: 'DeleteMe' });
+        Assert.array(after, 0);
+    });
+
+    // === 多词搜索（AND 匹配） ===
+
+    await testCase.pos('search - multi-word AND match both', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello World',
+        });
+        Assert.array(results, 1);
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+    });
+
+    await testCase.pos('search - multi-word AND missing second', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello nonexistent',
+        });
+        Assert.array(results, 0);
+    });
+
+    await testCase.pos('search - multi-word AND missing first', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'nonexistent World',
+        });
+        Assert.array(results, 0);
+    });
+
+    await testCase.pos('search - multi-word no match', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'foo bar',
+        });
+        Assert.array(results, 0);
+    });
+
+    await testCase.pos(
+        'search - multi-word overlapping matches merged',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: 'Hello World',
+            });
+            const doc1Result = results.find((r) => r.id === doc1.id);
+            Assert.expect(doc1Result !== undefined, true);
+            const nameMatches = doc1Result.matches.filter(
+                (m) => m.field === 'name',
+            );
+            Assert.expect(nameMatches.length, 1);
+        },
+    );
+
+    await testCase.pos(
+        'search - multi-word with whitespace trimming',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: '  Hello   World  ',
+            });
+            Assert.array(results, 1);
+        },
+    );
+
+    return testCase;
+}
+
+module.exports = test;

@@ -3,6 +3,7 @@
 const { Dir } = require('../../config');
 const { uuid, PropCheck } = require('../../utils');
 const { Scope, DocType } = require('./constants');
+const { LuoyeUtl } = require('./utility');
 const File = require('../../utils/file');
 const _ = require('lodash');
 
@@ -23,6 +24,8 @@ const Controller = {
             recentDocs: File.join(userDir, 'recent-docs.json'),
             // 用户文档回收站
             docBin: File.join(userDir, 'doc-bin.json'),
+            // 用户标签列表
+            tags: File.join(userDir, 'tags.json'),
         };
         if (!File.exists(userDir)) {
             // 初始化用户文件
@@ -31,6 +34,7 @@ const Controller = {
             File.writeJSON(userFile.docs, []);
             File.writeJSON(userFile.recentDocs, []);
             File.writeJSON(userFile.docBin, []);
+            File.writeJSON(userFile.tags, []);
             // 初始化结束
 
             // 初始化用户的默认工作区
@@ -95,15 +99,7 @@ const Controller = {
                 add(doc) {
                     if (!doc) throw new Error('`doc` is required');
                     const docItems = this.content;
-                    const docItem = {
-                        id: doc.id,
-                        name: doc.name,
-                        creator: doc.creator,
-                        scope: doc.scope,
-                        docType: doc.docType,
-                        updatedAt: doc.updatedAt,
-                        createdAt: doc.createdAt,
-                    };
+                    const docItem = LuoyeUtl.toDocItem(doc);
                     docItems.unshift(docItem);
                     File.writeJSON(userFile.docs, docItems);
                     // 更新最近文档
@@ -117,12 +113,14 @@ const Controller = {
                             dItem.name = doc.name;
                             dItem.scope = doc.scope;
                             dItem.updatedAt = doc.updatedAt;
+                            dItem.tags = doc.tags;
                             // ---
                         }
                         return dItem;
                     });
                     // 更新最近文档
-                    Controller.user(userId).recentDocs.record(doc);
+                    const docItem = LuoyeUtl.toDocItem(doc);
+                    Controller.user(userId).recentDocs.record(docItem);
                 },
                 remove(docId) {
                     if (!docId) throw new Error('`docId` is required');
@@ -184,6 +182,28 @@ const Controller = {
                     this.content = this.content.filter(
                         (doc) => doc.docId !== docId,
                     );
+                },
+            },
+            tags: {
+                get content() {
+                    if (!File.exists(userFile.tags)) {
+                        File.writeJSON(userFile.tags, []);
+                    }
+                    return File.readJSON(userFile.tags);
+                },
+                set content(newTags) {
+                    if (!newTags) throw new Error('`newTags` is required');
+                    File.writeJSON(userFile.tags, newTags);
+                },
+                addTags(tags) {
+                    if (!tags || !Array.isArray(tags)) return;
+                    const currentTags = this.content;
+                    const newTags = tags.filter(
+                        (tag) => !currentTags.includes(tag),
+                    );
+                    if (newTags.length > 0) {
+                        this.content = [...currentTags, ...newTags];
+                    }
                 },
             },
         };
@@ -323,6 +343,7 @@ const Controller = {
                 createdAt: now,
                 updatedAt: now,
                 deletedAt: null,
+                tags: props.tags,
             };
             const docFile = File.json(LuoyeDir.docs, doc.id);
             File.writeJSON(docFile, doc);
@@ -386,6 +407,7 @@ const Controller = {
                     slice.scope = props.scope ?? slice.scope;
                     slice.date = props.date ?? slice.date;
                     slice.content = props.content ?? slice.content;
+                    slice.tags = props.tags ?? slice.tags;
                     slice.updatedAt = now;
                     // ---
                     // 更新用户的文档列表

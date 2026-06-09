@@ -23,6 +23,13 @@ const Utility = {
     docTypeCheck(value) {
         return Object.values(DocType).includes(value);
     },
+    /** Tags 参数检查 */
+    tagsCheck(tags) {
+        if (!Array.isArray(tags)) return false;
+        return tags.every(
+            (tag) => typeof tag === 'string' && tag.trim().length > 0,
+        );
+    },
     /** 过滤私人文档 */
     filterPrivate(workspace) {
         workspace.docs = workspace.docs.filter((doc) => {
@@ -40,6 +47,19 @@ const Utility = {
             if (!item.updatedAt) return false;
         }
         return true;
+    },
+    /** 从 Doc 提取 DocItem 字段 */
+    toDocItem(doc) {
+        return {
+            id: doc.id,
+            name: doc.name,
+            creator: doc.creator,
+            scope: doc.scope,
+            docType: doc.docType,
+            updatedAt: doc.updatedAt,
+            createdAt: doc.createdAt,
+            tags: doc.tags,
+        };
     },
     /** 映射用户工作区项目 */
     workspaceItems(workspaceItems, newWorkspaceIds) {
