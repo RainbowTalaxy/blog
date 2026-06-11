@@ -2,28 +2,11 @@ const express = require('express');
 const { login, weakLogin } = require('../../middlewares');
 const { Scope, Access, ErrorMessage } = require('./constants');
 const { PropCheck } = require('../../utils');
-const { LuoyeUtl } = require('./utility');
+const { LuoyeAttachment, LuoyeUtl } = require('./utility');
 const Ctr = require('./controller');
 const { search } = require('./methods/search');
 const { ChatSession } = require('./chat-session');
 const router = express.Router();
-
-function parsePositiveInt(value, fallback) {
-    if (value === undefined) return fallback;
-    const parsed = parseInt(value, 10);
-    if (isNaN(parsed) || parsed < 1) return null;
-    return parsed;
-}
-
-function checkDocReadable(docId, userId) {
-    const docCtr = Ctr.doc.ctr(docId);
-    if (!docCtr) return { status: 404, body: { error: 'doc not found', message: '未找到文档' } };
-    const doc = docCtr.content;
-    if (LuoyeUtl.access(doc, userId) === Access.Forbidden) {
-        return { status: 403, body: ErrorMessage.Forbidden };
-    }
-    return { doc };
-}
 
 // 获取工作区列表 V2
 router.get('/workspaces', login, async (req, res, next) => {
@@ -567,14 +550,17 @@ router.get('/chat-sessions', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.query;
-        const limit = parsePositiveInt(req.query.limit, 20);
+        const limit = LuoyeUtl.parsePositiveInt(req.query.limit, 20);
         if (limit === null)
             return res.status(400).send({
                 error: '`limit` is invalid',
                 message: '非法的 limit 参数',
             });
         if (docId) {
-            const result = checkDocReadable(docId, userId);
+            const result = LuoyeUtl.checkDocReadable(
+                Ctr.doc.ctr(docId),
+                userId,
+            );
             if (result.status)
                 return res.status(result.status).send(result.body);
         }
@@ -592,7 +578,10 @@ router.post('/chat-sessions', login, async (req, res, next) => {
         const userId = req.userId;
         const { docId, docUpdatedAt } = req.body;
         if (docId) {
-            const result = checkDocReadable(docId, userId);
+            const result = LuoyeUtl.checkDocReadable(
+                Ctr.doc.ctr(docId),
+                userId,
+            );
             if (result.status)
                 return res.status(result.status).send(result.body);
         }
@@ -737,6 +726,27 @@ router.delete('/chat-sessions/:sessionId', login, async (req, res, next) => {
         res.message = '删除会话失败';
         next(error);
     }
+});
+
+// 上传 AI 聊天图片附件
+router.post('/attachments/images', login, (req, res) => {
+    LuoyeAttachment.imageUpload.single('file')(req, res, (error) => {
+        if (error) {
+            return res.status(400).send({
+                error: '图片上传失败',
+                message: error.message,
+            });
+        }
+        if (!req.file) {
+            return res.status(400).send({
+                error: '没有上传文件',
+            });
+        }
+        return res.send({
+            message: '图片上传成功',
+            file: LuoyeAttachment.buildImageFile(req.file),
+        });
+    });
 });
 
 module.exports = { luoyeRouter: router };

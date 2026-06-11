@@ -9,6 +9,7 @@ const deletion = require('./deletion');
 const tags = require('./tags');
 const search = require('./search');
 const chatSession = require('./chat-session');
+const attachment = require('./attachment');
 const { TestCase } = require('../../../utils/test');
 
 async function test() {
@@ -47,6 +48,9 @@ async function test() {
 
         // AI 会话历史测试
         testCase.merge(await chatSession());
+
+        // AI 图片附件测试
+        testCase.merge(await attachment());
 
         return testCase.stat();
     } catch (error) {
