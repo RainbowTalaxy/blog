@@ -210,6 +210,22 @@ interface ChatToolPart {
 }
 ```
 
+### ImageUploadResponse
+
+```ts
+interface ImageUploadResponse {
+    message: string;
+    file: {
+        filename: string; // 服务端生成的文件名
+        originalname: string; // 原始文件名
+        mimetype: 'image/png' | 'image/jpeg' | 'image/webp' | 'image/gif';
+        size: number; // 文件大小（字节）
+        path: string; // 静态资源相对路径，例如 temp/luoye/xxx.png
+        url: string; // 完整访问 URL
+    };
+}
+```
+
 ## 接口
 
 ### `GET` 获取工作区列表
@@ -626,3 +642,32 @@ interface Response = {
     success: boolean;
 };
 ```
+
+### `POST` 上传 AI 聊天图片附件
+
+`/attachments/images`
+
+**权限要求：** 需要登录
+
+**参数**
+
+```ts
+// Content-Type: multipart/form-data
+interface FormData {
+    file: File; // 要上传的图片，字段名固定为 file
+}
+```
+
+**响应**
+
+```ts
+type Response = ImageUploadResponse;
+```
+
+**说明**
+
+-   上传目录固定为静态资源目录下的 `temp/luoye`
+-   服务端会重新生成文件名，调用方不能指定目标目录
+-   仅支持 `image/png`、`image/jpeg`、`image/webp`、`image/gif`
+-   单文件最大 `10MB`
+-   返回的 `file.url` 可直接作为 `/statics/temp/luoye/...` 图片资源地址使用
