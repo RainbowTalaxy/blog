@@ -224,6 +224,8 @@ const Statics = `${SERVER_URL}/statics`;
 
 module.exports = {
     PORT,
+    LOCAL_SERVER_URL,
+    SERVER_URL,
     Server,
     Statics,
     Dir,
