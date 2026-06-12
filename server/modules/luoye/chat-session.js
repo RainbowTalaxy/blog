@@ -10,6 +10,20 @@ const CURRENT_SCHEMA_VERSION = 1;
 const MAX_SESSIONS = 50;
 const SESSION_TTL = 90 * 24 * 60 * 60 * 1000;
 const DEFAULT_TITLE = '新会话';
+const MAX_IMAGE_ATTACHMENTS = 3;
+const MAX_IMAGE_ATTACHMENT_SIZE = 50 * 1024 * 1024;
+const TRUSTED_ATTACHMENT_PATH_PREFIX = '/statics/temp/luoye/';
+const TRUSTED_ATTACHMENT_HOSTS = new Set([
+    'blog.talaxy.cn',
+    'localhost',
+    '127.0.0.1',
+]);
+const SUPPORTED_ATTACHMENT_MIME_TYPES = new Set([
+    'image/png',
+    'image/jpeg',
+    'image/webp',
+    'image/gif',
+]);
 
 const ChatDir = Dir.storage.luoye.chat;
 
@@ -63,10 +77,20 @@ const partId = () => {
 };
 
 /** @type {import('./chat-session').TitleFromContent} */
-const titleFromContent = (content) => {
+const titleFromContent = (content, attachments) => {
     const text = typeof content === 'string' ? content.trim() : '';
-    if (!text) return DEFAULT_TITLE;
-    return text.length > 20 ? `${text.slice(0, 20)}...` : text;
+    if (text) return text.length > 20 ? `${text.slice(0, 20)}...` : text;
+    if (attachments?.length) {
+        const filename =
+            typeof attachments[0].name === 'string'
+                ? attachments[0].name.trim()
+                : '';
+        const imageTitle = filename ? `图片：${filename}` : '图片对话';
+        return imageTitle.length > 20
+            ? `${imageTitle.slice(0, 20)}...`
+            : imageTitle;
+    }
+    return DEFAULT_TITLE;
 };
 
 /** @type {import('./chat-session').NormalizeStatus} */
@@ -81,6 +105,43 @@ const normalizeToolInput = (input) => {
         return /** @type {Record<string, unknown>} */ (input);
     }
     return {};
+};
+
+/** @type {import('./chat-session').NormalizeImageAttachments} */
+const normalizeImageAttachments = (input) => {
+    if (!Array.isArray(input)) return [];
+    return input
+        .filter((item) => {
+            if (!item || typeof item !== 'object') return false;
+            const attachment =
+                /** @type {Partial<import('./chat-session').ChatImageAttachment>} */ (
+                    item
+                );
+            if (
+                typeof attachment.id !== 'string' ||
+                typeof attachment.url !== 'string' ||
+                typeof attachment.name !== 'string' ||
+                typeof attachment.mimeType !== 'string' ||
+                !SUPPORTED_ATTACHMENT_MIME_TYPES.has(attachment.mimeType) ||
+                typeof attachment.size !== 'number' ||
+                !Number.isFinite(attachment.size) ||
+                attachment.size <= 0 ||
+                attachment.size > MAX_IMAGE_ATTACHMENT_SIZE
+            ) {
+                return false;
+            }
+            try {
+                const url = new URL(attachment.url);
+                return (
+                    ['http:', 'https:'].includes(url.protocol) &&
+                    TRUSTED_ATTACHMENT_HOSTS.has(url.hostname) &&
+                    url.pathname.startsWith(TRUSTED_ATTACHMENT_PATH_PREFIX)
+                );
+            } catch {
+                return false;
+            }
+        })
+        .slice(0, MAX_IMAGE_ATTACHMENTS);
 };
 
 /** @type {import('./chat-session').NormalizeTextPart} */
@@ -142,11 +203,13 @@ const normalizePart = (part) => {
 
 /** @type {import('./chat-session').NormalizeUserMessage} */
 const normalizeUserMessage = (message) => {
+    const attachments = normalizeImageAttachments(message.attachments);
     return {
         schemaVersion: CURRENT_SCHEMA_VERSION,
         messageId: message.messageId || message.id || messageId(),
         type: 'user_message',
         content: typeof message.content === 'string' ? message.content : '',
+        ...(attachments.length ? { attachments } : {}),
         createdAt: message.createdAt || now(),
     };
 };
@@ -201,7 +264,12 @@ const normalizeChatSession = (session) => {
         sessionId: raw?.sessionId || raw?.id || uuid(),
         userId: raw?.userId || '',
         ...(raw?.docId ? { docId: raw.docId } : {}),
-        title: raw?.title || titleFromContent(firstUserMessage?.content),
+        title:
+            raw?.title ||
+            titleFromContent(
+                firstUserMessage?.content,
+                firstUserMessage?.attachments,
+            ),
         messages,
         ...(raw?.docUpdatedAt !== undefined
             ? { docUpdatedAt: raw.docUpdatedAt }
@@ -235,6 +303,11 @@ const validateMessage = (message) => {
         raw.role === 'user' ||
         raw.role === 'assistant'
     );
+};
+
+/** @type {import('./chat-session').HasValidUserMessageContent} */
+const hasValidUserMessageContent = (message) => {
+    return !!message.content.trim() || !!message.attachments?.length;
 };
 
 /** @type {import('./chat-session').ChatSessionController} */
@@ -312,13 +385,23 @@ const ChatSession = {
         const session = this.get(userId, sessionId);
         if (!session) return null;
         const normalizedMessage = normalizeMessage(message);
+        if (
+            normalizedMessage.type === 'user_message' &&
+            'content' in normalizedMessage &&
+            !hasValidUserMessageContent(normalizedMessage)
+        ) {
+            return null;
+        }
         session.messages.push(normalizedMessage);
         if (
             session.title === DEFAULT_TITLE &&
             normalizedMessage.type === 'user_message' &&
             'content' in normalizedMessage
         ) {
-            session.title = titleFromContent(normalizedMessage.content);
+            session.title = titleFromContent(
+                normalizedMessage.content,
+                normalizedMessage.attachments,
+            );
         }
         session.updatedAt = now();
         return this.save(session);

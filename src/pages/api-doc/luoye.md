@@ -169,6 +169,7 @@ interface ChatUserMessage {
     messageId: string;
     type: 'user_message';
     content: string;
+    attachments?: ChatImageAttachment[];
     createdAt: number;
 }
 
@@ -180,6 +181,26 @@ interface ChatAssistantMessage {
     createdAt: number;
 }
 ```
+
+### ChatImageAttachment
+
+```ts
+interface ChatImageAttachment {
+    id: string;
+    url: string;
+    name: string;
+    mimeType: 'image/png' | 'image/jpeg' | 'image/webp' | 'image/gif';
+    size: number;
+}
+```
+
+**说明**
+
+-   单条用户消息最多保留 3 张图片附件
+-   `url` 仅允许 `http/https`，路径必须以 `/statics/temp/luoye/` 开头
+-   `url` host 仅允许 `blog.talaxy.cn`、`localhost`、`127.0.0.1`
+-   `size` 必须大于 0 且不超过 `50MB`
+-   用户消息必须包含非空 `content` 或至少一个合法图片附件
 
 ### ChatMessagePart
 
@@ -200,7 +221,7 @@ interface ChatToolPart {
     type: 'tool_call';
     toolName: string;
     runId: string; // 用于更新该 tool call 的稳定 id
-    toolCallId?: string; // LLM provider 的 tool call id
+    toolCallId?: string; // 外部工具调用 id
     input: Record<string, unknown>;
     output?: unknown;
     content?: string;
@@ -216,15 +237,43 @@ interface ChatToolPart {
 interface ImageUploadResponse {
     message: string;
     file: {
-        filename: string; // 服务端生成的文件名
+        filename: string; // 接口返回的文件名
         originalname: string; // 原始文件名
         mimetype: 'image/png' | 'image/jpeg' | 'image/webp' | 'image/gif';
-        size: number; // 文件大小（字节）
+        size: number; // 最终保存文件大小（字节）
         path: string; // 静态资源相对路径，例如 temp/luoye/xxx.png
         url: string; // 完整访问 URL
     };
 }
 ```
+
+### AI 聊天会话写入约定
+
+AI 聊天会话接口只负责历史数据存储，不负责模型推理、流式响应和中断控制。调用方写入会话历史时建议遵循下面的顺序：
+
+1. 调用 `POST /chat-sessions` 创建会话，后续请求使用返回的 `sessionId`。
+2. 用户输入产生后，调用 `POST /chat-sessions/:sessionId/messages` 追加一条完整的 `user_message`。消息可以是纯文本、纯图片、或文本加图片。
+3. 调用方可读取完整 `ChatSession`，并按自身需要转换为模型上下文。
+4. 模型响应完成后，再追加一条完整的 `assistant_message`。中断或失败的未完成响应不强制写入历史。
+5. 需要记录的工具调用应作为 `assistant_message.parts[]` 中的 `tool_call` 写入；状态或结果变化时，再调用 `PATCH /chat-sessions/:sessionId/tool-calls/:runId` 回写。
+
+图片附件需要先通过 `POST /attachments/images` 上传，再使用上传接口返回值组装 `ChatImageAttachment`：
+
+```ts
+const attachment: ChatImageAttachment = {
+    id: 'client-generated-id',
+    url: upload.file.url,
+    name: upload.file.originalname || upload.file.filename,
+    mimeType: upload.file.mimetype,
+    size: upload.file.size,
+};
+```
+
+**注意**
+
+-   `mimeType`、`size`、`url` 必须使用上传接口返回的最终值，不要使用上传前文件对象的原始值。
+-   上传失败时不要追加对应附件；如果用户消息没有文本且没有合法附件，接口会拒绝追加。
+-   消费会话数据时应按 `schemaVersion`、`message.type`、`part.type` 分支处理；遇到未知版本或未知类型时应做兼容兜底。
 
 ## 接口
 
@@ -526,6 +575,13 @@ interface Query {
 type Response = ChatSessionSummary[];
 ```
 
+**说明**
+
+-   仅返回当前登录用户自己的会话
+-   结果按 `updatedAt` 降序排序
+-   `limit` 默认 `20`，传入非法正整数时返回参数错误
+-   每个用户保留最近 `50` 个会话，并清理超过 `90` 天未更新的会话
+
 ### `POST` 创建 AI 聊天会话
 
 `/chat-sessions`
@@ -549,6 +605,7 @@ type Response = ChatSession;
 
 -   传入 `docId` 时，会校验当前用户是否有权限读取该文档
 -   会话默认标题为 `新会话`，追加第一条用户消息后会自动生成标题
+-   第一条用户消息是纯图片时，标题会按第一张图片名生成，例如 `图片：xxx.png`
 
 ### `GET` 获取 AI 聊天会话详情
 
@@ -559,6 +616,11 @@ type Response = ChatSession;
 ```ts
 type Response = ChatSession;
 ```
+
+**说明**
+
+-   只允许当前会话所属用户读取
+-   返回数据会使用当前 `schemaVersion`
 
 ### `PATCH` 更新 AI 聊天会话元信息
 
@@ -582,6 +644,8 @@ type Response = ChatSession;
 **说明**
 
 -   该接口只更新会话元信息，不支持修改历史消息内容
+-   `title` 会 `trim` 后保存，最长保留 80 个字符
+-   `docUpdatedAt` 可用于调用方记录该会话对应的文档更新时间
 
 ### `POST` 追加 AI 聊天消息
 
@@ -603,8 +667,13 @@ type Response = ChatSession;
 
 **说明**
 
--   消息主体采用 append-only 策略，不支持覆盖已有消息
--   后端会统一保存为当前 `schemaVersion`
+-   消息只支持追加，不支持覆盖已有消息
+-   返回数据会使用当前 `schemaVersion`
+-   仅支持追加 `user_message` / `assistant_message`，兼容 `role: 'user' | 'assistant'` 输入
+-   `user_message.content.trim()` 非空，或 `attachments` 中至少有 1 个合法图片附件；否则返回 `404`，错误文案为“会话不存在或消息格式错误”
+-   `user_message.attachments` 会过滤非法项，并最多保留 3 张；如果文本非空但图片全部非法，消息仍会保存为纯文本
+-   `assistant_message.parts` 用于保存完整 assistant 输出；文本内容使用 `{ type: 'text', content }`，工具调用使用 `{ type: 'tool_call', toolName, runId, input, output, status }`
+-   需要后续确认、取消或结果回写的工具调用，应通过 `tool_call.status`、`tool_call.output` 等结构化字段表达，不建议写入文本 `content`
 
 ### `PATCH` 更新 AI 聊天 tool call
 
@@ -629,7 +698,10 @@ type Response = ChatSession;
 **说明**
 
 -   用于更新指定 `runId` 对应的 `tool_call`
--   第一版主要用于 `save_doc_request` 的 `pending` / `confirmed` / `cancelled` 状态回写
+-   可用于工具调用的 `pending` / `confirmed` / `cancelled` 等状态回写，也可用于写入执行结果
+-   请求体至少包含 `status`、`output`、`content` 中的一个字段，否则返回 `400`
+-   如果会话不存在，或找不到对应 `runId` 的 `tool_call`，返回 `404`
+-   该接口只更新 tool call 局部状态，不支持修改普通文本消息
 
 ### `DELETE` 删除 AI 聊天会话
 
@@ -667,7 +739,12 @@ type Response = ImageUploadResponse;
 **说明**
 
 -   上传目录固定为静态资源目录下的 `temp/luoye`
--   服务端会重新生成文件名，调用方不能指定目标目录
+-   接口会重新生成文件名，调用方不能指定目标目录
 -   仅支持 `image/png`、`image/jpeg`、`image/webp`、`image/gif`
--   单文件最大 `10MB`
+-   单文件最大 `50MB`
+-   接口会校验图片格式；文件内容格式必须与上传 MIME 一致
+-   `image/png`、`image/jpeg`、`image/webp` 可能会被压缩处理
+-   `image/gif` 不压缩
 -   返回的 `file.url` 可直接作为 `/statics/temp/luoye/...` 图片资源地址使用
+-   上传失败返回 `400`；调用方不要把失败图片写入 `ChatImageAttachment`
+-   后续追加会话消息时，应使用返回的 `file.url`、`file.mimetype`、`file.size` 作为附件可信字段
