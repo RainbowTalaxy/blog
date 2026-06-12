@@ -52,20 +52,129 @@ async function test() {
     });
 
     await testCase.pos('append user message', async () => {
+        const attachment = {
+            id: 'image-1',
+            url: 'https://blog.talaxy.cn/statics/temp/luoye/cat.png',
+            name: 'cat.png',
+            mimeType: 'image/png',
+            size: 123,
+        };
         const updated = await talaxy.post(
             `/chat-sessions/${session.sessionId}/messages`,
             {
                 message: {
                     type: 'user_message',
                     content: '帮我总结这篇文档',
+                    attachments: [attachment],
                     createdAt: Date.now(),
                 },
             },
         );
         Assert.array(updated.messages, 1);
         Assert.expect(updated.messages[0].type, 'user_message');
+        Assert.expect(updated.messages[0].attachments[0].url, attachment.url);
         Assert.expect(updated.title, '帮我总结这篇文档');
         session = updated;
+    });
+
+    await testCase.pos('append image only user message', async () => {
+        const imageOnlySession = await talaxy.post('/chat-sessions', {});
+        const attachment = {
+            id: 'image-only',
+            url: 'https://blog.talaxy.cn/statics/temp/luoye/dog.png',
+            name: 'dog.png',
+            mimeType: 'image/png',
+            size: 456,
+        };
+        const updated = await talaxy.post(
+            `/chat-sessions/${imageOnlySession.sessionId}/messages`,
+            {
+                message: {
+                    type: 'user_message',
+                    content: '',
+                    attachments: [attachment],
+                    createdAt: Date.now(),
+                },
+            },
+        );
+        Assert.expect(updated.messages[0].attachments[0].name, 'dog.png');
+        Assert.expect(updated.title, '图片：dog.png');
+    });
+
+    await testCase.pos('append user message should keep at most 3 images', async () => {
+        const imageSession = await talaxy.post('/chat-sessions', {});
+        const attachments = [0, 1, 2, 3].map((index) => ({
+            id: `image-${index}`,
+            url: `https://blog.talaxy.cn/statics/temp/luoye/${index}.png`,
+            name: `${index}.png`,
+            mimeType: 'image/png',
+            size: 100 + index,
+        }));
+        const updated = await talaxy.post(
+            `/chat-sessions/${imageSession.sessionId}/messages`,
+            {
+                message: {
+                    type: 'user_message',
+                    content: '看看这些图',
+                    attachments,
+                    createdAt: Date.now(),
+                },
+            },
+        );
+        Assert.array(updated.messages[0].attachments, 3);
+    });
+
+    await testCase.pos('append empty user message with invalid images should fail', async () => {
+        const invalidSession = await talaxy.post('/chat-sessions', {});
+        const invalidAttachments = [
+            {
+                id: 'bad-host',
+                url: 'https://example.com/statics/temp/luoye/bad.png',
+                name: 'bad-host.png',
+                mimeType: 'image/png',
+                size: 123,
+            },
+            {
+                id: 'bad-path',
+                url: 'https://blog.talaxy.cn/statics/other/bad.png',
+                name: 'bad-path.png',
+                mimeType: 'image/png',
+                size: 123,
+            },
+            {
+                id: 'bad-mime',
+                url: 'https://blog.talaxy.cn/statics/temp/luoye/bad.txt',
+                name: 'bad-mime.txt',
+                mimeType: 'text/plain',
+                size: 123,
+            },
+            {
+                id: 'bad-size',
+                url: 'https://blog.talaxy.cn/statics/temp/luoye/bad.png',
+                name: 'bad-size.png',
+                mimeType: 'image/png',
+                size: 50 * 1024 * 1024 + 1,
+            },
+        ];
+
+        for (const attachment of invalidAttachments) {
+            await talaxy.negPost(
+                `/chat-sessions/${invalidSession.sessionId}/messages`,
+                {
+                    message: {
+                        type: 'user_message',
+                        content: '',
+                        attachments: [attachment],
+                        createdAt: Date.now(),
+                    },
+                },
+            );
+        }
+
+        const detail = await talaxy.get(
+            `/chat-sessions/${invalidSession.sessionId}`,
+        );
+        Assert.array(detail.messages, 0);
     });
 
     await testCase.pos('append assistant message with text and tool parts', async () => {
@@ -195,6 +304,33 @@ async function test() {
         Assert.expect(old.messages[1].type, 'assistant_message');
         Assert.expect(old.messages[1].parts[1].type, 'tool_call');
         Assert.expect(old.messages[1].parts[1].status, 'cancelled');
+    });
+
+    await testCase.pos('normalize image only session title', async () => {
+        const session = normalizeChatSession({
+            sessionId: 'image-title-session',
+            userId: 'talaxy',
+            messages: [
+                {
+                    messageId: 'user-image',
+                    type: 'user_message',
+                    content: '',
+                    attachments: [
+                        {
+                            id: 'image-title',
+                            url: 'https://blog.talaxy.cn/statics/temp/luoye/title.png',
+                            name: 'title.png',
+                            mimeType: 'image/png',
+                            size: 123,
+                        },
+                    ],
+                    createdAt: 1,
+                },
+            ],
+            createdAt: 1,
+            updatedAt: 1,
+        });
+        Assert.expect(session.title, '图片：title.png');
     });
 
     await testCase.pos('stress list sessions with cleanup and limit', async () => {

@@ -730,7 +730,7 @@ router.delete('/chat-sessions/:sessionId', login, async (req, res, next) => {
 
 // 上传 AI 聊天图片附件
 router.post('/attachments/images', login, (req, res) => {
-    LuoyeAttachment.imageUpload.single('file')(req, res, (error) => {
+    LuoyeAttachment.imageUpload.single('file')(req, res, async (error) => {
         if (error) {
             return res.status(400).send({
                 error: '图片上传失败',
@@ -742,10 +742,18 @@ router.post('/attachments/images', login, (req, res) => {
                 error: '没有上传文件',
             });
         }
-        return res.send({
-            message: '图片上传成功',
-            file: LuoyeAttachment.buildImageFile(req.file),
-        });
+        try {
+            const file = await LuoyeAttachment.compressImage(req.file);
+            return res.send({
+                message: '图片上传成功',
+                file: LuoyeAttachment.buildImageFile(file),
+            });
+        } catch (compressError) {
+            return res.status(400).send({
+                error: '图片处理失败',
+                message: compressError.message,
+            });
+        }
     });
 });
 

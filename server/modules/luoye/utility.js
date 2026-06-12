@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const dayjs = require('dayjs');
+const sharp = require('sharp');
 const { Dir, SERVER_URL, LOCAL_SERVER_URL } = require('../../config');
 const { uuid } = require('../../utils');
 const { Scope, Access, DocType, ErrorMessage } = require('./constants');
@@ -13,11 +14,25 @@ const USER_DOC_BIN_FILE = 'doc-bin.json'; // 用户文档回收站
 const DEFAULT_WORKSPACE_NAME = 'default'; // 默认工作区名称
 const ATTACHMENT_PATH = path.join('temp', 'luoye');
 const IMAGE_DIR = path.join(Dir.static, ATTACHMENT_PATH);
+const MAX_IMAGE_UPLOAD_SIZE = 50 * 1024 * 1024;
+const MAX_COMPRESSED_IMAGE_EDGE = 2560;
+const COMPRESSED_IMAGE_QUALITY = 85;
+const SHARP_INPUT_OPTIONS = {
+    failOn: 'warning',
+    limitInputPixels: 50_000_000,
+    limitInputChannels: 5,
+};
 const IMAGE_EXTENSIONS = {
     'image/png': '.png',
     'image/jpeg': '.jpg',
     'image/webp': '.webp',
     'image/gif': '.gif',
+};
+const IMAGE_MIMES_BY_FORMAT = {
+    png: 'image/png',
+    jpeg: 'image/jpeg',
+    webp: 'image/webp',
+    gif: 'image/gif',
 };
 
 const Utility = {
@@ -131,6 +146,77 @@ const Attachment = {
             url: Attachment.buildStaticUrl(relativePath),
         };
     },
+    async validateImage(file) {
+        if (!file) throw new Error('没有上传文件');
+        const metadata = await sharp(file.path, SHARP_INPUT_OPTIONS).metadata();
+        const actualMime = IMAGE_MIMES_BY_FORMAT[metadata.format];
+
+        if (!actualMime) throw new Error('不支持的图片格式');
+        if (actualMime !== file.mimetype)
+            throw new Error('图片类型与文件内容不匹配');
+        if (!metadata.width || !metadata.height)
+            throw new Error('图片尺寸无效');
+
+        return metadata;
+    },
+    async compressImage(file) {
+        if (!file) throw new Error('没有上传文件');
+
+        const originalPath = file.path;
+        const compressedPath = `${originalPath}.compressed`;
+
+        try {
+            await Attachment.validateImage(file);
+            if (file.mimetype === 'image/gif') {
+                file.size = fs.statSync(originalPath).size;
+                return file;
+            }
+
+            let image = sharp(originalPath, SHARP_INPUT_OPTIONS)
+                .rotate()
+                .resize({
+                    width: MAX_COMPRESSED_IMAGE_EDGE,
+                    height: MAX_COMPRESSED_IMAGE_EDGE,
+                    fit: 'inside',
+                    withoutEnlargement: true,
+                });
+
+            if (file.mimetype === 'image/jpeg') {
+                image = image.jpeg({
+                    quality: COMPRESSED_IMAGE_QUALITY,
+                    mozjpeg: true,
+                });
+            } else if (file.mimetype === 'image/png') {
+                image = image.png({
+                    compressionLevel: 9,
+                    adaptiveFiltering: true,
+                });
+            } else if (file.mimetype === 'image/webp') {
+                image = image.webp({
+                    quality: COMPRESSED_IMAGE_QUALITY,
+                });
+            } else {
+                return file;
+            }
+
+            await image.toFile(compressedPath);
+
+            const originalSize = fs.statSync(originalPath).size;
+            const compressedSize = fs.statSync(compressedPath).size;
+            if (compressedSize < originalSize) {
+                fs.renameSync(compressedPath, originalPath);
+                file.size = compressedSize;
+            } else {
+                fs.unlinkSync(compressedPath);
+                file.size = originalSize;
+            }
+            return file;
+        } catch (error) {
+            if (fs.existsSync(compressedPath)) fs.unlinkSync(compressedPath);
+            if (fs.existsSync(originalPath)) fs.unlinkSync(originalPath);
+            throw error;
+        }
+    },
     imageUpload: multer({
         storage: multer.diskStorage({
             destination(_, __, cb) {
@@ -144,7 +230,7 @@ const Attachment = {
             },
         }),
         limits: {
-            fileSize: 10 * 1024 * 1024,
+            fileSize: MAX_IMAGE_UPLOAD_SIZE,
         },
         fileFilter(_, file, cb) {
             if (IMAGE_EXTENSIONS[file.mimetype]) {
@@ -165,5 +251,6 @@ module.exports = {
         USER_DOC_BIN_FILE,
         DEFAULT_WORKSPACE_NAME,
         ATTACHMENT_PATH,
+        MAX_IMAGE_UPLOAD_SIZE,
     },
 };

@@ -31,11 +31,20 @@ export interface ChatUnknownPart {
 
 export type ChatPart = ChatTextPart | ChatToolPart | ChatUnknownPart;
 
+export interface ChatImageAttachment {
+    id: string;
+    url: string;
+    name: string;
+    mimeType: string;
+    size: number;
+}
+
 export interface ChatUserMessage {
     schemaVersion: number;
     messageId: string;
     type: 'user_message';
     content: string;
+    attachments?: ChatImageAttachment[];
     createdAt: number;
 }
 
@@ -90,9 +99,15 @@ export type EnsureUserDir = (userId: string) => string;
 export type Now = () => number;
 export type MessageId = () => string;
 export type PartId = () => string;
-export type TitleFromContent = (content: unknown) => string;
+export type TitleFromContent = (
+    content: unknown,
+    attachments?: ChatImageAttachment[],
+) => string;
 export type NormalizeStatus = (value: unknown) => string;
 export type NormalizeToolInput = (input: unknown) => Record<string, unknown>;
+export type NormalizeImageAttachments = (
+    input: unknown,
+) => ChatImageAttachment[];
 export type NormalizeTextPart = (part: any) => ChatTextPart;
 export type NormalizeToolPart = (part: any) => ChatToolPart;
 export type NormalizePart = (part: any) => ChatPart;
@@ -104,6 +119,9 @@ export type NormalizeMessage = (message: any) => ChatMessage;
 export type NormalizeChatSession = (session: unknown) => ChatSessionData;
 export type ToSummary = (session: ChatSessionData) => ChatSessionSummary;
 export type ValidateMessage = (message: unknown) => boolean;
+export type HasValidUserMessageContent = (
+    message: ChatUserMessage,
+) => boolean;
 
 export interface ChatSessionController {
     CURRENT_SCHEMA_VERSION: number;
