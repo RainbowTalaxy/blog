@@ -4,6 +4,9 @@ declare function search(
     options?: {
         workspaceId?: string;
         limit?: number;
+        timeField?: 'updatedAt' | 'createdAt' | 'date';
+        startTime?: number;
+        endTime?: number;
     },
 ):
     | {

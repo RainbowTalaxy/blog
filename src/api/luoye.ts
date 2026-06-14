@@ -15,6 +15,8 @@ interface DocDir {
     docId: string; // 文档 id
     name: string; // 文档名称
     scope: Scope; // 可见范围
+    createdAt: number; // 创建时间
+    date: number; // 所属日期
     updatedAt: number; // 更新时间
 }
 
@@ -45,6 +47,7 @@ export interface DocItem {
     creator: string; // 创建者
     scope: Scope; // 可见范围
     docType: DocType; // 文档类型
+    date: number; // 所属日期
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
 }

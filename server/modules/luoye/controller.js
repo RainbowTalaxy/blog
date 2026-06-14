@@ -112,6 +112,8 @@ const Controller = {
                             // ---
                             dItem.name = doc.name;
                             dItem.scope = doc.scope;
+                            dItem.createdAt = doc.createdAt;
+                            dItem.date = doc.date;
                             dItem.updatedAt = doc.updatedAt;
                             dItem.tags = doc.tags;
                             // ---
@@ -291,6 +293,8 @@ const Controller = {
                         docId: doc.id,
                         name: doc.name,
                         scope: doc.scope,
+                        createdAt: doc.createdAt,
+                        date: doc.date,
                         updatedAt: doc.updatedAt,
                     });
                     this.content = slice;
@@ -303,6 +307,8 @@ const Controller = {
                             // ---
                             docDir.name = doc.name;
                             docDir.scope = doc.scope;
+                            docDir.createdAt = doc.createdAt;
+                            docDir.date = doc.date;
                             docDir.updatedAt = doc.updatedAt;
                             // ---
                         }

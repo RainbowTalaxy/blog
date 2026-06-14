@@ -3,6 +3,21 @@ const Assert = require('../../../utils/assert');
 const { Rocket, TestCase } = require('../../../utils/test');
 const Controller = require('../controller');
 
+const day = (date) => new Date(`${date}T00:00:00`).getTime();
+
+const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const shiftDate = (offset) => {
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+    return formatDate(date);
+};
+
 async function test() {
     const testCase = new TestCase('Luoye - Search', true);
 
@@ -11,6 +26,9 @@ async function test() {
     await talaxy.login('talaxy', 'talaxy');
 
     Controller.clear();
+
+    const today = shiftDate(0);
+    const tomorrow = shiftDate(1);
 
     // 创建测试用工作区和文档
     const workspace1 = await talaxy.post('/workspace', {
@@ -23,6 +41,7 @@ async function test() {
     const doc1 = await talaxy.post('/doc', {
         workspaceId: workspace1.id,
         name: 'Hello World Document',
+        date: day('2024-01-10'),
     });
     await talaxy.put(`/doc/${doc1.id}`, {
         content: 'This is a test content with Hello keyword.',
@@ -31,6 +50,7 @@ async function test() {
     const doc2 = await talaxy.post('/doc', {
         workspaceId: workspace1.id,
         name: 'Another Document',
+        date: day('2024-02-10'),
     });
     await talaxy.put(`/doc/${doc2.id}`, {
         content: 'Some text without the keyword.',
@@ -39,6 +59,7 @@ async function test() {
     const doc3 = await talaxy.post('/doc', {
         workspaceId: workspace2.id,
         name: 'Workspace2 Doc',
+        date: day('2024-03-10'),
     });
     await talaxy.put(`/doc/${doc3.id}`, {
         content: 'Hello from workspace2, Hello again.',
@@ -48,10 +69,17 @@ async function test() {
     const doc4 = await talaxy.post('/doc', {
         workspaceId: workspace1.id,
         name: 'FarApart Doc',
+        date: day('2024-01-20'),
     });
     await talaxy.put(`/doc/${doc4.id}`, {
         content:
             'Hello beginning of text' + '.'.repeat(120) + 'Hello end of text',
+    });
+
+    const indexDoc = await talaxy.post('/doc', {
+        workspaceId: workspace1.id,
+        name: 'Index Sync Document',
+        date: day('2024-04-10'),
     });
 
     // === 基础搜索 ===
@@ -165,6 +193,148 @@ async function test() {
             keyword: 'Hello',
             workspaceId: 'invalid-workspace-id',
         });
+    });
+
+    // === 时间范围筛选 ===
+
+    await testCase.pos('search - filter by doc date range', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            timeField: 'date',
+            startDate: '2024-01-01',
+            endDate: '2024-01-31',
+        });
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc4.id), true);
+        Assert.expect(ids.includes(doc3.id), false);
+    });
+
+    await testCase.pos(
+        'search - filter by doc date range with workspace and limit',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: 'Hello',
+                workspaceId: workspace2.id,
+                timeField: 'date',
+                startDate: '2024-03-01',
+                endDate: '2024-03-31',
+                limit: 1,
+            });
+            Assert.array(results, 1);
+            Assert.expect(results[0].id, doc3.id);
+        },
+    );
+
+    await testCase.pos('search - filter by createdAt range', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            timeField: 'createdAt',
+            startDate: today,
+            endDate: today,
+        });
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc3.id), true);
+    });
+
+    await testCase.pos(
+        'search - filter by createdAt range excludes future',
+        async () => {
+            const results = await talaxy.get('/search', {
+                keyword: 'Hello',
+                timeField: 'createdAt',
+                startDate: tomorrow,
+            });
+            Assert.array(results, 0);
+        },
+    );
+
+    await testCase.pos('search - default time field is updatedAt', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            startDate: today,
+            endDate: today,
+        });
+        Assert.expect(results.length >= 1, true);
+    });
+
+    await testCase.pos('search - startDate only', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            timeField: 'date',
+            startDate: '2024-03-01',
+        });
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc3.id), true);
+        Assert.expect(ids.includes(doc1.id), false);
+    });
+
+    await testCase.pos('search - endDate only', async () => {
+        const results = await talaxy.get('/search', {
+            keyword: 'Hello',
+            timeField: 'date',
+            endDate: '2024-01-31',
+        });
+        const ids = results.map((r) => r.id);
+        Assert.expect(ids.includes(doc1.id), true);
+        Assert.expect(ids.includes(doc4.id), true);
+        Assert.expect(ids.includes(doc3.id), false);
+    });
+
+    await testCase.neg('search - invalid timeField', async () => {
+        await talaxy.get('/search', {
+            keyword: 'Hello',
+            timeField: 'created',
+        });
+    });
+
+    await testCase.neg('search - invalid startDate', async () => {
+        await talaxy.get('/search', {
+            keyword: 'Hello',
+            startDate: '2024-02-31',
+        });
+    });
+
+    await testCase.neg('search - invalid date range', async () => {
+        await talaxy.get('/search', {
+            keyword: 'Hello',
+            startDate: '2024-02-01',
+            endDate: '2024-01-01',
+        });
+    });
+
+    // === 索引字段同步 ===
+
+    await testCase.pos('search - doc time fields indexed on create', async () => {
+        const docItem = Controller.user('talaxy').docItems.content.find(
+            (item) => item.id === indexDoc.id,
+        );
+        const docDir = Controller.workspace
+            .ctr(workspace1.id)
+            .content.docs.find((item) => item.docId === indexDoc.id);
+
+        Assert.expect(typeof docItem.createdAt, 'number');
+        Assert.expect(docItem.date, day('2024-04-10'));
+        Assert.expect(typeof docItem.updatedAt, 'number');
+        Assert.expect(typeof docDir.createdAt, 'number');
+        Assert.expect(docDir.date, day('2024-04-10'));
+        Assert.expect(typeof docDir.updatedAt, 'number');
+    });
+
+    await testCase.pos('search - doc date indexed on update', async () => {
+        await talaxy.put(`/doc/${indexDoc.id}`, {
+            date: day('2024-04-11'),
+        });
+        const docItem = Controller.user('talaxy').docItems.content.find(
+            (item) => item.id === indexDoc.id,
+        );
+        const docDir = Controller.workspace
+            .ctr(workspace1.id)
+            .content.docs.find((item) => item.docId === indexDoc.id);
+
+        Assert.expect(docItem.date, day('2024-04-11'));
+        Assert.expect(docDir.date, day('2024-04-11'));
     });
 
     // === 结果排序：按 updatedAt 降序 ===

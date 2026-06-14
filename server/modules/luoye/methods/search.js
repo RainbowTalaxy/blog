@@ -4,21 +4,45 @@ const Controller = require('../controller');
 
 /** @type {import('./search').search} */
 const search = (userId, keyword, options = {}) => {
-    const { workspaceId, limit = 15 } = options;
+    const {
+        workspaceId,
+        limit = 15,
+        timeField = 'updatedAt',
+        startTime,
+        endTime,
+    } = options;
     if (!keyword) return [];
     const keywords = Array.from(
         new Set(keyword.trim().split(/\s+/).filter(Boolean)),
     );
-    let docIds;
+    let candidates;
     if (workspaceId) {
         const workspaceCtr = Controller.workspace.ctr(workspaceId);
         if (!workspaceCtr) return null;
         const workspace = workspaceCtr.content;
-        docIds = workspace.docs.map((d) => d.docId);
+        candidates = workspace.docs.map((d) => ({
+            id: d.docId,
+            updatedAt: d.updatedAt,
+            createdAt: d.createdAt,
+            date: d.date,
+        }));
     } else {
         const docItems = Controller.user(userId).docItems.content;
-        docIds = docItems.map((d) => d.id);
+        candidates = docItems.map((d) => ({
+            id: d.id,
+            updatedAt: d.updatedAt,
+            createdAt: d.createdAt,
+            date: d.date,
+        }));
     }
+
+    candidates = candidates.filter((item) => {
+        const time = item[timeField];
+        if (typeof time !== 'number') return false;
+        if (startTime !== undefined && time < startTime) return false;
+        if (endTime !== undefined && time > endTime) return false;
+        return true;
+    });
 
     const CONTEXT_LEN = 50;
     const results = [];
@@ -115,8 +139,8 @@ const search = (userId, keyword, options = {}) => {
         return merged;
     };
 
-    for (const docId of docIds) {
-        const docCtr = Controller.doc.ctr(docId);
+    for (const candidate of candidates) {
+        const docCtr = Controller.doc.ctr(candidate.id);
         if (!docCtr) continue;
         const doc = docCtr.content;
         if (doc.deletedAt) continue;

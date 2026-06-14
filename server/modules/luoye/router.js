@@ -8,6 +8,29 @@ const { search } = require('./methods/search');
 const { ChatSession } = require('./chat-session');
 const router = express.Router();
 
+const SearchTimeFields = ['updatedAt', 'createdAt', 'date'];
+
+const parseSearchDate = (value, endOfDay = false) => {
+    if (value === undefined) return undefined;
+    if (typeof value !== 'string') return null;
+    const matched = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!matched) return null;
+    const year = Number(matched[1]);
+    const month = Number(matched[2]);
+    const day = Number(matched[3]);
+    const date = endOfDay
+        ? new Date(year, month - 1, day, 23, 59, 59, 999)
+        : new Date(year, month - 1, day, 0, 0, 0, 0);
+    if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day
+    ) {
+        return null;
+    }
+    return date.getTime();
+};
+
 // 获取工作区列表 V2
 router.get('/workspaces', login, async (req, res, next) => {
     try {
@@ -153,6 +176,8 @@ router.put('/workspace/:workspaceId', login, async (req, res, next) => {
                 docId: docDir.docId,
                 name: docDir.name,
                 scope: docDir.scope,
+                createdAt: docDir.createdAt,
+                date: docDir.date,
                 updatedAt: docDir.updatedAt,
             })),
         });
@@ -509,7 +534,14 @@ router.put('/doc/:docId/restore', login, async (req, res, next) => {
 router.get('/search', login, async (req, res, next) => {
     try {
         const userId = req.userId;
-        const { keyword, workspaceId, limit } = req.query;
+        const {
+            keyword,
+            workspaceId,
+            limit,
+            timeField = 'updatedAt',
+            startDate,
+            endDate,
+        } = req.query;
         if (!keyword)
             return res.status(400).send({
                 error: '`keyword` is required',
@@ -520,6 +552,32 @@ router.get('/search', login, async (req, res, next) => {
             return res.status(400).send({
                 error: '`limit` is invalid',
                 message: '非法的 limit 参数',
+            });
+        if (!SearchTimeFields.includes(timeField))
+            return res.status(400).send({
+                error: '`timeField` is invalid',
+                message: '非法的时间字段参数',
+            });
+        const startTime = parseSearchDate(startDate);
+        if (startTime === null)
+            return res.status(400).send({
+                error: '`startDate` is invalid',
+                message: '非法的开始日期参数',
+            });
+        const endTime = parseSearchDate(endDate, true);
+        if (endTime === null)
+            return res.status(400).send({
+                error: '`endDate` is invalid',
+                message: '非法的结束日期参数',
+            });
+        if (
+            startTime !== undefined &&
+            endTime !== undefined &&
+            startTime > endTime
+        )
+            return res.status(400).send({
+                error: '`startDate` should not be later than `endDate`',
+                message: '开始日期不能晚于结束日期',
             });
         // 如指定工作区，校验权限
         if (workspaceId) {
@@ -536,6 +594,9 @@ router.get('/search', login, async (req, res, next) => {
         const results = search(userId, keyword, {
             workspaceId,
             limit: parsedLimit,
+            timeField,
+            startTime,
+            endTime,
         });
         return res.send(results);
     } catch (error) {

@@ -101,6 +101,7 @@ interface DocItem {
     scope: 'private' | 'public'; // 可见范围
     docType: 'text' | 'markdown'; // 文档类型
     tags?: string[]; // 文档标签
+    date: number; // 所属日期
     createdAt: number; // 创建时间
     updatedAt: number; // 更新时间
 }
@@ -113,6 +114,8 @@ interface DocDir {
     docId: string; // 文档 id
     name: string; // 文档名称
     scope: 'private' | 'public'; // 可见范围
+    createdAt: number; // 创建时间
+    date: number; // 所属日期
     updatedAt: number; // 更新时间
 }
 ```
@@ -527,6 +530,9 @@ interface Query {
     keyword: string; // 搜索关键词（大小写敏感，多词 AND 搜索，用空白分隔）
     workspaceId?: string; // 限定搜索的工作区 ID
     limit?: number; // 返回结果数量上限，默认 15
+    timeField?: 'updatedAt' | 'createdAt' | 'date'; // 时间筛选字段，默认 updatedAt
+    startDate?: string; // 开始日期，格式 YYYY-MM-DD，包含当天 00:00:00.000
+    endDate?: string; // 结束日期，格式 YYYY-MM-DD，包含当天 23:59:59.999
 }
 ```
 
@@ -552,6 +558,8 @@ type Response = SearchResultItem[];
 -   搜索关键词为大小写敏感的精确子串匹配，不支持模糊搜索
 -   搜索范围为当前用户有权限访问的文档的标题和正文
 -   如果指定 `workspaceId`，则仅在该工作区的文档中搜索，需要 Member 及以上权限
+-   支持按 `updatedAt`、`createdAt` 或 `date` 做时间范围筛选；不传 `timeField` 时默认按 `updatedAt` 筛选
+-   `startDate` 和 `endDate` 只支持 `YYYY-MM-DD`，可只传一端；若两端都传，`startDate` 不能晚于 `endDate`
 -   同一文档的多个匹配项归入同一条记录，不单独计入 `limit`
 -   结果按文档更新时间降序排序
 -   已删除的文档不会出现在搜索结果中
