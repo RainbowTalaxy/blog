@@ -27,6 +27,9 @@ async function test() {
 
     Controller.clear();
 
+    const searchResponse = (params) => talaxy.get('/search', params);
+    const searchItems = async (params) => (await searchResponse(params)).items;
+
     const today = shiftDate(0);
     const tomorrow = shiftDate(1);
 
@@ -84,12 +87,28 @@ async function test() {
 
     // === 基础搜索 ===
 
-    await testCase.neg('search - missing keyword', async () => {
-        await talaxy.get('/search', {});
+    await testCase.pos('search - missing keyword returns docs', async () => {
+        const response = await searchResponse({});
+        Assert.expect(response.total >= 5, true);
+        Assert.expect(response.items.length <= 30, true);
+        Assert.expect(
+            response.items.every((item) => item.matches.length === 0),
+            true,
+        );
+    });
+
+    await testCase.pos('search - blank keyword returns docs', async () => {
+        const response = await searchResponse({ keyword: '   ' });
+        Assert.expect(response.total >= 5, true);
+        Assert.expect(response.items.length <= 30, true);
+        Assert.expect(
+            response.items.every((item) => item.matches.length === 0),
+            true,
+        );
     });
 
     await testCase.pos('search - keyword in name', async () => {
-        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const results = await searchItems({ keyword: 'Hello' });
         Assert.array(results);
         // doc1 标题含 Hello, doc3 正文含 Hello
         Assert.expect(results.length >= 2, true);
@@ -99,7 +118,7 @@ async function test() {
     });
 
     await testCase.pos('search - keyword in content', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'test content',
         });
         Assert.array(results, 1);
@@ -109,7 +128,7 @@ async function test() {
     });
 
     await testCase.pos('search - no match', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'nonexistent-xyz',
         });
         Assert.array(results, 0);
@@ -118,8 +137,8 @@ async function test() {
     // === 大小写敏感 ===
 
     await testCase.pos('search - case sensitive', async () => {
-        const upper = await talaxy.get('/search', { keyword: 'Hello' });
-        const lower = await talaxy.get('/search', { keyword: 'hello' });
+        const upper = await searchItems({ keyword: 'Hello' });
+        const lower = await searchItems({ keyword: 'hello' });
         // "Hello" 应匹配到结果，"hello" 不应匹配
         Assert.expect(upper.length >= 1, true);
         Assert.expect(lower.length, 0);
@@ -128,7 +147,7 @@ async function test() {
     // === 多匹配项归入同一文档 ===
 
     await testCase.pos('search - nearby matches merged', async () => {
-        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const results = await searchItems({ keyword: 'Hello' });
         const doc3Result = results.find((r) => r.id === doc3.id);
         Assert.expect(doc3Result !== undefined, true);
         // doc3 正文有两个 Hello 但距离很近，上下文窗口重叠，应合并为 1 条 content match
@@ -142,7 +161,7 @@ async function test() {
     });
 
     await testCase.pos('search - far apart matches not merged', async () => {
-        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const results = await searchItems({ keyword: 'Hello' });
         const doc4Result = results.find((r) => r.id === doc4.id);
         Assert.expect(doc4Result !== undefined, true);
         // doc4 正文有两个 Hello 但距离很远，不应合并
@@ -155,11 +174,26 @@ async function test() {
     // === limit 参数 ===
 
     await testCase.pos('search - limit', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             limit: 1,
         });
         Assert.array(results, 1);
+    });
+
+    await testCase.pos('search - limit capped at 30 with total', async () => {
+        for (let i = 0; i < 35; i++) {
+            await talaxy.post('/doc', {
+                workspaceId: workspace1.id,
+                name: `BulkSearch ${i}`,
+            });
+        }
+        const response = await searchResponse({
+            keyword: 'BulkSearch',
+            limit: 100,
+        });
+        Assert.expect(response.total, 35);
+        Assert.array(response.items, 30);
     });
 
     await testCase.neg('search - invalid limit', async () => {
@@ -169,7 +203,7 @@ async function test() {
     // === 按工作区限定搜索 ===
 
     await testCase.pos('search - filter by workspaceId', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             workspaceId: workspace2.id,
         });
@@ -178,7 +212,7 @@ async function test() {
     });
 
     await testCase.pos('search - workspaceId with no match', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             workspaceId: workspace1.id,
         });
@@ -198,7 +232,7 @@ async function test() {
     // === 时间范围筛选 ===
 
     await testCase.pos('search - filter by doc date range', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             timeField: 'date',
             startDate: '2024-01-01',
@@ -213,7 +247,7 @@ async function test() {
     await testCase.pos(
         'search - filter by doc date range with workspace and limit',
         async () => {
-            const results = await talaxy.get('/search', {
+            const results = await searchItems({
                 keyword: 'Hello',
                 workspaceId: workspace2.id,
                 timeField: 'date',
@@ -227,7 +261,7 @@ async function test() {
     );
 
     await testCase.pos('search - filter by createdAt range', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             timeField: 'createdAt',
             startDate: today,
@@ -241,7 +275,7 @@ async function test() {
     await testCase.pos(
         'search - filter by createdAt range excludes future',
         async () => {
-            const results = await talaxy.get('/search', {
+            const results = await searchItems({
                 keyword: 'Hello',
                 timeField: 'createdAt',
                 startDate: tomorrow,
@@ -251,7 +285,7 @@ async function test() {
     );
 
     await testCase.pos('search - default time field is updatedAt', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             startDate: today,
             endDate: today,
@@ -260,7 +294,7 @@ async function test() {
     });
 
     await testCase.pos('search - startDate only', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             timeField: 'date',
             startDate: '2024-03-01',
@@ -271,7 +305,7 @@ async function test() {
     });
 
     await testCase.pos('search - endDate only', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello',
             timeField: 'date',
             endDate: '2024-01-31',
@@ -340,7 +374,7 @@ async function test() {
     // === 结果排序：按 updatedAt 降序 ===
 
     await testCase.pos('search - sorted by updatedAt desc', async () => {
-        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const results = await searchItems({ keyword: 'Hello' });
         for (let i = 1; i < results.length; i++) {
             Assert.expect(
                 results[i - 1].updatedAt >= results[i].updatedAt,
@@ -352,7 +386,10 @@ async function test() {
     // === 返回数据结构校验 ===
 
     await testCase.pos('search - result item structure', async () => {
-        const results = await talaxy.get('/search', { keyword: 'Hello' });
+        const response = await searchResponse({ keyword: 'Hello' });
+        Assert.expect(typeof response.total, 'number');
+        Assert.array(response.items);
+        const results = response.items;
         Assert.expect(results.length >= 1, true);
         const item = results[0];
         Assert.expect('id' in item, true);
@@ -375,19 +412,19 @@ async function test() {
             name: 'DeleteMe SearchTarget',
         });
         // 确认搜索能找到
-        const before = await talaxy.get('/search', { keyword: 'DeleteMe' });
+        const before = await searchItems({ keyword: 'DeleteMe' });
         Assert.expect(before.length >= 1, true);
         // 删除文档
         await talaxy.delete(`/doc/${tempDoc.id}`);
         // 确认搜索不再找到
-        const after = await talaxy.get('/search', { keyword: 'DeleteMe' });
+        const after = await searchItems({ keyword: 'DeleteMe' });
         Assert.array(after, 0);
     });
 
     // === 多词搜索（AND 匹配） ===
 
     await testCase.pos('search - multi-word AND match both', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello World',
         });
         Assert.array(results, 1);
@@ -396,21 +433,21 @@ async function test() {
     });
 
     await testCase.pos('search - multi-word AND missing second', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'Hello nonexistent',
         });
         Assert.array(results, 0);
     });
 
     await testCase.pos('search - multi-word AND missing first', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'nonexistent World',
         });
         Assert.array(results, 0);
     });
 
     await testCase.pos('search - multi-word no match', async () => {
-        const results = await talaxy.get('/search', {
+        const results = await searchItems({
             keyword: 'foo bar',
         });
         Assert.array(results, 0);
@@ -419,7 +456,7 @@ async function test() {
     await testCase.pos(
         'search - multi-word overlapping matches merged',
         async () => {
-            const results = await talaxy.get('/search', {
+            const results = await searchItems({
                 keyword: 'Hello World',
             });
             const doc1Result = results.find((r) => r.id === doc1.id);
@@ -434,7 +471,7 @@ async function test() {
     await testCase.pos(
         'search - multi-word with whitespace trimming',
         async () => {
-            const results = await talaxy.get('/search', {
+            const results = await searchItems({
                 keyword: '  Hello   World  ',
             });
             Assert.array(results, 1);

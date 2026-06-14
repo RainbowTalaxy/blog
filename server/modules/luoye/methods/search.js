@@ -6,15 +6,15 @@ const Controller = require('../controller');
 const search = (userId, keyword, options = {}) => {
     const {
         workspaceId,
-        limit = 15,
+        limit = 30,
         timeField = 'updatedAt',
         startTime,
         endTime,
     } = options;
-    if (!keyword) return [];
     const keywords = Array.from(
-        new Set(keyword.trim().split(/\s+/).filter(Boolean)),
+        new Set((keyword || '').trim().split(/\s+/).filter(Boolean)),
     );
+    const hasKeyword = keywords.length > 0;
     let candidates;
     if (workspaceId) {
         const workspaceCtr = Controller.workspace.ctr(workspaceId);
@@ -144,30 +144,33 @@ const search = (userId, keyword, options = {}) => {
         if (!docCtr) continue;
         const doc = docCtr.content;
         if (doc.deletedAt) continue;
-        let hasAllKeywords = true;
-        for (const word of keywords) {
-            if (!doc.name.includes(word) && !doc.content.includes(word)) {
-                hasAllKeywords = false;
-                break;
+        let matches = [];
+        if (hasKeyword) {
+            let hasAllKeywords = true;
+            for (const word of keywords) {
+                if (!doc.name.includes(word) && !doc.content.includes(word)) {
+                    hasAllKeywords = false;
+                    break;
+                }
             }
+            if (!hasAllKeywords) continue;
+
+            const nameRanges = searchRanges(doc.name);
+            const contentRanges = searchRanges(doc.content);
+
+            matches = [
+                ...mergeRanges(nameRanges).map((r) => ({
+                    field: /** @type {'name' | 'content'} */ ('name'),
+                    context: doc.name.slice(r.start, r.end),
+                })),
+                ...mergeRanges(contentRanges).map((r) => ({
+                    field: /** @type {'name' | 'content'} */ ('content'),
+                    context: doc.content.slice(r.start, r.end),
+                })),
+            ];
         }
-        if (!hasAllKeywords) continue;
 
-        const nameRanges = searchRanges(doc.name);
-        const contentRanges = searchRanges(doc.content);
-
-        const matches = [
-            ...mergeRanges(nameRanges).map((r) => ({
-                field: /** @type {'name' | 'content'} */ ('name'),
-                context: doc.name.slice(r.start, r.end),
-            })),
-            ...mergeRanges(contentRanges).map((r) => ({
-                field: /** @type {'name' | 'content'} */ ('content'),
-                context: doc.content.slice(r.start, r.end),
-            })),
-        ];
-
-        if (matches.length > 0) {
+        if (!hasKeyword || matches.length > 0) {
             results.push({
                 id: doc.id,
                 name: doc.name,
@@ -178,7 +181,10 @@ const search = (userId, keyword, options = {}) => {
     }
 
     results.sort((a, b) => b.updatedAt - a.updatedAt);
-    return results.slice(0, limit);
+    return {
+        total: results.length,
+        items: results.slice(0, limit),
+    };
 };
 
 module.exports = {
