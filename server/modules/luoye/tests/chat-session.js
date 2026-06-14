@@ -215,6 +215,32 @@ async function test() {
         session = updated;
     });
 
+    await testCase.pos('append large assistant message within body limit', async () => {
+        const largeSession = await talaxy.post('/chat-sessions', {});
+        const content = 'large assistant output\n'.repeat(7000);
+        const updated = await talaxy.post(
+            `/chat-sessions/${largeSession.sessionId}/messages`,
+            {
+                message: {
+                    type: 'assistant_message',
+                    parts: [
+                        {
+                            type: 'text',
+                            content,
+                            createdAt: Date.now(),
+                        },
+                    ],
+                    createdAt: Date.now(),
+                },
+            },
+        );
+        Assert.expect(updated.messages[0].type, 'assistant_message');
+        Assert.expect(
+            updated.messages[0].parts[0].content.length,
+            content.length,
+        );
+    });
+
     await testCase.pos('patch save doc request status', async () => {
         const updated = await talaxy.patch(
             `/chat-sessions/${session.sessionId}/tool-calls/run-save-doc`,

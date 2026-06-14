@@ -17,9 +17,15 @@ const { luoyeRouter } = require('./modules/luoye/router');
 const { logRouter } = require('./modules/support/router');
 
 const app = express();
+const LUOYE_CHAT_SESSION_BODY_LIMIT = '10mb';
 
 app.use(cors());
 app.use(cookieParser());
+// AI 会话消息会包含完整 assistant 输出，单独放宽请求体上限。
+app.use(
+    '/luoye/chat-sessions',
+    bodyParser.json({ limit: LUOYE_CHAT_SESSION_BODY_LIMIT }),
+);
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -52,6 +58,12 @@ app.use('*', (_, res) => {
 // error handle
 app.use((error, _, res, __) => {
     console.log(error);
+    if (error?.type === 'entity.too.large') {
+        return res.status(413).send({
+            error: 'Payload Too Large',
+            message: '请求体过大',
+        });
+    }
     res.status(500).send({
         error: res.error || 'Internal Server Error',
         message: res.message || '服务器错误',
