@@ -7,6 +7,7 @@ const PropList = {
             'creator',
             'scope',
             'docType',
+            'date',
             'createdAt',
             'updatedAt',
         ],
@@ -24,7 +25,7 @@ const PropList = {
         'createdAt',
         'updatedAt',
     ],
-    docDir: ['docId', 'name', 'scope', 'updatedAt'],
+    docDir: ['docId', 'name', 'scope', 'createdAt', 'date', 'updatedAt'],
     doc: [
         'id',
         'name',

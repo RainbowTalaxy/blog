@@ -92,11 +92,13 @@ const Utility = {
     docDirCheck(dir, workspace) {
         if (!Array.isArray(dir)) return false;
         if (dir.length !== workspace.docs.length) return false;
-        for (item of dir) {
+        for (const item of dir) {
             if (!item.docId) return false;
             if (item.name === undefined) return false;
             if (!Utility.scopeCheck(item.scope)) return false;
-            if (!item.updatedAt) return false;
+            if (typeof item.createdAt !== 'number') return false;
+            if (typeof item.date !== 'number') return false;
+            if (typeof item.updatedAt !== 'number') return false;
         }
         return true;
     },
@@ -108,6 +110,7 @@ const Utility = {
             creator: doc.creator,
             scope: doc.scope,
             docType: doc.docType,
+            date: doc.date,
             updatedAt: doc.updatedAt,
             createdAt: doc.createdAt,
             tags: doc.tags,
