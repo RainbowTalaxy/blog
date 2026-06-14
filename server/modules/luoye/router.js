@@ -542,17 +542,18 @@ router.get('/search', login, async (req, res, next) => {
             startDate,
             endDate,
         } = req.query;
-        if (!keyword)
+        if (keyword !== undefined && typeof keyword !== 'string')
             return res.status(400).send({
-                error: '`keyword` is required',
-                message: '搜索关键词不能为空',
+                error: '`keyword` is invalid',
+                message: '非法的搜索关键词参数',
             });
-        const parsedLimit = limit ? parseInt(limit, 10) : 15;
+        const parsedLimit = limit ? parseInt(limit, 10) : 30;
         if (isNaN(parsedLimit) || parsedLimit < 1)
             return res.status(400).send({
                 error: '`limit` is invalid',
                 message: '非法的 limit 参数',
             });
+        const detailLimit = Math.min(parsedLimit, 30);
         if (!SearchTimeFields.includes(timeField))
             return res.status(400).send({
                 error: '`timeField` is invalid',
@@ -593,7 +594,7 @@ router.get('/search', login, async (req, res, next) => {
         }
         const results = search(userId, keyword, {
             workspaceId,
-            limit: parsedLimit,
+            limit: detailLimit,
             timeField,
             startTime,
             endTime,

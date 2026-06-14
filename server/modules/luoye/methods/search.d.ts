@@ -1,6 +1,6 @@
 declare function search(
     userId: string,
-    keyword: string,
+    keyword?: string,
     options?: {
         workspaceId?: string;
         limit?: number;
@@ -8,16 +8,17 @@ declare function search(
         startTime?: number;
         endTime?: number;
     },
-):
-    | {
-          id: string;
-          name: string;
-          updatedAt: number;
-          matches: {
-              field: 'name' | 'content';
-              context: string;
-          }[];
-      }[]
-    | null;
+): {
+    total: number;
+    items: {
+        id: string;
+        name: string;
+        updatedAt: number;
+        matches: {
+            field: 'name' | 'content';
+            context: string;
+        }[];
+    }[];
+} | null;
 
 export { search };
