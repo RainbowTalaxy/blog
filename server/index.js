@@ -13,6 +13,7 @@ const { wordBankRouter } = require('./routes/word-bank');
 const { dictionaryRouter } = require('./routes/dictionary');
 const { staticsRouter } = require('./routes/statics');
 const { weaverRouter } = require('./routes/weaver');
+const { shortcutRouter } = require('./routes/shortcut');
 const { luoyeRouter } = require('./modules/luoye/router');
 const { logRouter } = require('./modules/support/router');
 
@@ -40,6 +41,7 @@ app.use('/word-bank', wordBankRouter);
 app.use('/dictionary', dictionaryRouter);
 app.use('/statics', staticsRouter);
 app.use('/weaver', weaverRouter);
+app.use('/shortcut', shortcutRouter);
 app.use('/luoye', luoyeRouter);
 app.use('/support', logRouter);
 

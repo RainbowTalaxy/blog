@@ -36,6 +36,10 @@
     border: 1px solid var(--primary);
 }
 
+.input::placeholder {
+    color: var(--shadow);
+}
+
 /* 按钮 */
 .btn {
     flex-shrink: 0;
