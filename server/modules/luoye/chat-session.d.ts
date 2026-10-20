@@ -3,6 +3,12 @@ export interface ChatTextPart {
     partId: string;
     type: 'text';
     content: string;
+    reasoningContent?: string;
+    toolCalls?: Array<{
+        id: string;
+        name: string;
+        args: Record<string, unknown>;
+    }>;
     createdAt: number;
 }
 

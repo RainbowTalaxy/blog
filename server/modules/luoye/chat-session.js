@@ -152,6 +152,20 @@ const normalizeTextPart = (part) => {
         partId: part.partId || part.id || messageId(),
         type: 'text',
         content: typeof part.content === 'string' ? part.content : '',
+        ...(typeof part.reasoningContent === 'string'
+            ? { reasoningContent: part.reasoningContent }
+            : {}),
+        ...(Array.isArray(part.toolCalls)
+            ? { toolCalls: part.toolCalls.filter(
+                /** @param {any} call */
+                (call) => call && typeof call.id === 'string' && call.id.length > 0 &&
+                    typeof call.name === 'string' && call.name.length > 0 &&
+                    call.args && typeof call.args === 'object' && !Array.isArray(call.args),
+            ).map(
+                /** @param {any} call */
+                (call) => ({ id: call.id, name: call.name, args: call.args }),
+            ) }
+            : {}),
         createdAt,
     };
 };
