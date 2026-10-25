@@ -50,6 +50,7 @@ export interface ChatUserMessage {
     messageId: string;
     type: 'user_message';
     content: string;
+    modelContent?: string;
     attachments?: ChatImageAttachment[];
     createdAt: number;
 }

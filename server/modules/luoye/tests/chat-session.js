@@ -414,6 +414,29 @@ async function test() {
         await talaxy.negGet(`/chat-sessions/${session.sessionId}`);
     });
 
+    await testCase.pos('append user message should preserve model content', async () => {
+        const modelSession = await talaxy.post('/chat-sessions', {});
+        const modelContent =
+            '改写这句话\n用户选中的文档内容：\n<selected_text>\n你好\n</selected_text>';
+        const updated = await talaxy.post(
+            `/chat-sessions/${modelSession.sessionId}/messages`,
+            {
+                message: {
+                    type: 'user_message',
+                    content: '改写这句话',
+                    modelContent,
+                    createdAt: Date.now(),
+                },
+            },
+        );
+        Assert.expect(updated.messages[0].modelContent, modelContent);
+
+        const restored = await talaxy.get(
+            `/chat-sessions/${modelSession.sessionId}`,
+        );
+        Assert.expect(restored.messages[0].modelContent, modelContent);
+    });
+
     return testCase;
 }
 

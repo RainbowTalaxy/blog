@@ -107,6 +107,7 @@ declare const Controller: {
                     tags?: string[];
                 },
                 executor?: string,
+                changeSource?: 'user' | 'ai',
             ) => Doc;
             remove: (executor: string) => void;
             restore: () => void;

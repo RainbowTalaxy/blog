@@ -105,6 +105,48 @@ async function test() {
         Assert.expect(publicDoc.lastModifiedBy, undefined);
     });
 
+    await testCase.pos('ai update creates history and rejects stale versions', async () => {
+        const doc = await user.post('/doc', {
+            workspaceId: workspace.id,
+            name: 'ai edit history',
+        });
+        const first = await user.put('/doc/' + doc.id, {
+            content: 'before-ai',
+        });
+
+        const updated = await user.put('/doc/' + doc.id, {
+            content: 'after-ai',
+            baseUpdatedAt: first.updatedAt,
+            changeSource: 'ai',
+        });
+        Assert.expect(updated.content, 'after-ai');
+
+        let history = await user.get('/doc/' + doc.id + '/history');
+        Assert.expect(
+            history.history.some(
+                (item) =>
+                    item.reason === 'ai' && item.content === 'before-ai',
+            ),
+            true,
+        );
+
+        await testCase.neg('stale ai update', async () => {
+            await user.put('/doc/' + doc.id, {
+                content: 'stale-ai',
+                baseUpdatedAt: first.updatedAt,
+                changeSource: 'ai',
+            });
+        });
+
+        const unchanged = await user.get('/doc/' + doc.id);
+        Assert.expect(unchanged.content, 'after-ai');
+        history = await user.get('/doc/' + doc.id + '/history');
+        Assert.expect(
+            history.history.some((item) => item.content === 'stale-ai'),
+            false,
+        );
+    });
+
     await testCase.neg('invalid history reason', async () => {
         const doc = await user.post('/doc', {
             workspaceId: workspace.id,

@@ -223,6 +223,9 @@ const normalizeUserMessage = (message) => {
         messageId: message.messageId || message.id || messageId(),
         type: 'user_message',
         content: typeof message.content === 'string' ? message.content : '',
+        ...(typeof message.modelContent === 'string'
+            ? { modelContent: message.modelContent }
+            : {}),
         ...(attachments.length ? { attachments } : {}),
         createdAt: message.createdAt || now(),
     };

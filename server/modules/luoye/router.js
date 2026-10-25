@@ -372,11 +372,36 @@ router.put('/doc/:docId', login, async (req, res, next) => {
     try {
         const userId = req.userId;
         const { docId } = req.params;
-        const { name, content, scope, date, workspaces, tags } = req.body;
+        const {
+            name,
+            content,
+            scope,
+            date,
+            workspaces,
+            tags,
+            baseUpdatedAt,
+            changeSource,
+        } = req.body;
         if (!docId)
             return res.status(400).send({
                 error: '`docId` is required',
                 message: '文档 ID 不能为空',
+            });
+        if (
+            baseUpdatedAt !== undefined &&
+            (!Number.isInteger(baseUpdatedAt) || baseUpdatedAt < 1)
+        )
+            return res.status(400).send({
+                error: '`baseUpdatedAt` is invalid',
+                message: '非法的文档版本参数',
+            });
+        if (
+            changeSource !== undefined &&
+            !['user', 'ai'].includes(changeSource)
+        )
+            return res.status(400).send({
+                error: '`changeSource` is invalid',
+                message: '非法的文档修改来源',
             });
         // `scope` 参数校验
         if (scope && !LuoyeUtl.scopeCheck(scope))
@@ -429,6 +454,15 @@ router.put('/doc/:docId', login, async (req, res, next) => {
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
+        if (
+            baseUpdatedAt !== undefined &&
+            doc.updatedAt !== baseUpdatedAt
+        )
+            return res.status(409).send({
+                error: 'doc conflict',
+                message: '文档已被修改，请刷新后重新发起修改',
+                currentUpdatedAt: doc.updatedAt,
+            });
         const updatedDoc = docCtr.update(
             {
                 name,
@@ -439,6 +473,7 @@ router.put('/doc/:docId', login, async (req, res, next) => {
                 tags,
             },
             userId,
+            changeSource,
         );
         // 更新用户标签列表
         if (tags && tags.length > 0) {
