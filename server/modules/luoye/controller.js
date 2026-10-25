@@ -475,7 +475,7 @@ const Controller = {
                     this.content = slice;
                     return slice;
                 },
-                update(props, executor) {
+                update(props, executor, changeSource = 'user') {
                     if (!props) throw new Error('`props` is required');
                     const now = Date.now();
                     const slice = this.content;
@@ -486,6 +486,22 @@ const Controller = {
                         (props.content !== undefined &&
                             props.content !== slice.content);
                     if (hasContentChange) {
+                        if (changeSource === 'ai') {
+                            const latest = slice.history?.[0];
+                            if (!sameDocContent(latest, slice)) {
+                                const entry = createDocHistoryEntry(
+                                    slice,
+                                    executor,
+                                    'ai',
+                                );
+                                slice.history = [
+                                    entry,
+                                    ...(Array.isArray(slice.history)
+                                        ? slice.history
+                                        : []),
+                                ].slice(0, MAX_DOC_HISTORY);
+                            }
+                        }
                         slice.previousBackup = createDocHistoryEntry(
                             slice,
                             executor,

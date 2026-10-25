@@ -66,7 +66,8 @@ export type DocHistoryReason =
     | 'edit-start'
     | 'restore'
     | 'delete'
-    | 'manual';
+    | 'manual'
+    | 'ai';
 
 export interface DocHistoryEntry {
     id: string;
