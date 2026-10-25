@@ -1,6 +1,7 @@
 const init = require('./init');
 const workspace = require('./workspace');
 const doc = require('./doc');
+const docHistory = require('./doc-history');
 const user = require('./user');
 const scope = require('./scope');
 const general = require('./general');
@@ -24,6 +25,9 @@ async function test() {
 
         // 文档相关
         testCase.merge(await doc());
+
+        // 文档历史测试
+        testCase.merge(await docHistory());
 
         // 用户相关
         testCase.merge(await user());

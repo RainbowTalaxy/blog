@@ -116,6 +116,16 @@ const Utility = {
             tags: doc.tags,
         };
     },
+    /** 隐藏文档内部安全字段 */
+    toDoc(doc) {
+        const {
+            previousBackup,
+            history,
+            lastModifiedBy,
+            ...publicDoc
+        } = doc;
+        return publicDoc;
+    },
     /** 映射用户工作区项目 */
     workspaceItems(workspaceItems, newWorkspaceIds) {
         if (!Array.isArray(workspaceItems)) return false;
