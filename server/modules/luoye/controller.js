@@ -8,6 +8,22 @@ const File = require('../../utils/file');
 const _ = require('lodash');
 
 const LuoyeDir = Dir.storage.luoye;
+const MAX_DOC_HISTORY = 20;
+
+const createDocHistoryEntry = (doc, executor, reason, savedAt) => ({
+    id: uuid(),
+    name: doc.name,
+    content: doc.content,
+    savedAt: savedAt ?? Date.now(),
+    savedBy: doc.lastModifiedBy || executor || doc.creator,
+    reason,
+});
+
+const sameDocContent = (left, right) =>
+    left &&
+    right &&
+    left.name === right.name &&
+    left.content === right.content;
 
 /** @type {import('./controller')} */
 const Controller = {
@@ -350,6 +366,9 @@ const Controller = {
                 updatedAt: now,
                 deletedAt: null,
                 tags: props.tags,
+                previousBackup: null,
+                history: [],
+                lastModifiedBy: creator,
             };
             const docFile = File.json(LuoyeDir.docs, doc.id);
             File.writeJSON(docFile, doc);
@@ -371,11 +390,109 @@ const Controller = {
                     if (!newDoc) throw new Error('`newDoc` is required');
                     File.writeJSON(docFile, newDoc);
                 },
-                update(props) {
+                historyState() {
+                    const slice = this.content;
+                    return {
+                        previous: slice.previousBackup
+                            ? { ...slice.previousBackup, id: 'previous' }
+                            : null,
+                        history: Array.isArray(slice.history)
+                            ? slice.history
+                            : [],
+                    };
+                },
+                checkpoint(executor, reason = 'manual') {
+                    const slice = this.content;
+                    if (slice.deletedAt) return null;
+                    if (!slice.name && !slice.content) return null;
+                    const latest = slice.history?.[0];
+                    if (sameDocContent(latest, slice)) return latest ?? null;
+                    const entry = createDocHistoryEntry(
+                        slice,
+                        executor,
+                        reason,
+                    );
+                    slice.history = [
+                        entry,
+                        ...(Array.isArray(slice.history)
+                            ? slice.history
+                            : []),
+                    ].slice(0, MAX_DOC_HISTORY);
+                    this.content = slice;
+                    return entry;
+                },
+                restoreHistory(executor, historyId) {
+                    if (!historyId) throw new Error('`historyId` is required');
+                    const slice = this.content;
+                    if (slice.deletedAt) return null;
+                    const target =
+                        historyId === 'previous'
+                            ? slice.previousBackup
+                            : slice.history?.find(
+                                  (item) => item.id === historyId,
+                              );
+                    if (!target) return null;
+
+                    const currentEntry = createDocHistoryEntry(
+                        slice,
+                        executor,
+                        'restore',
+                    );
+                    slice.history = [
+                        currentEntry,
+                        ...(Array.isArray(slice.history)
+                            ? slice.history
+                            : []),
+                    ]
+                        .filter(
+                            (item, index, items) =>
+                                items.findIndex(
+                                    (other) =>
+                                        other.id === item.id ||
+                                        sameDocContent(other, item),
+                                ) === index,
+                        )
+                        .slice(0, MAX_DOC_HISTORY);
+                    slice.previousBackup = createDocHistoryEntry(
+                        slice,
+                        executor,
+                        'save',
+                        slice.updatedAt,
+                    );
+                    slice.name = target.name;
+                    slice.content = target.content;
+                    slice.updatedAt = Date.now();
+                    slice.lastModifiedBy = executor;
+
+                    slice.members.forEach((memberId) =>
+                        Controller.user(memberId).docItems.update(slice),
+                    );
+                    slice.workspaces.forEach((workspaceId) =>
+                        Controller.workspace
+                            .ctr(workspaceId)
+                            ?.updateDoc(slice),
+                    );
+                    this.content = slice;
+                    return slice;
+                },
+                update(props, executor) {
                     if (!props) throw new Error('`props` is required');
                     const now = Date.now();
                     const slice = this.content;
                     if (slice.deletedAt) return slice;
+                    const hasContentChange =
+                        (props.name !== undefined &&
+                            props.name !== slice.name) ||
+                        (props.content !== undefined &&
+                            props.content !== slice.content);
+                    if (hasContentChange) {
+                        slice.previousBackup = createDocHistoryEntry(
+                            slice,
+                            executor,
+                            'save',
+                            slice.updatedAt,
+                        );
+                    }
 
                     // 处理工作区变更
                     if (props.workspaces && Array.isArray(props.workspaces)) {
@@ -415,6 +532,7 @@ const Controller = {
                     slice.content = props.content ?? slice.content;
                     slice.tags = props.tags ?? slice.tags;
                     slice.updatedAt = now;
+                    slice.lastModifiedBy = executor || slice.lastModifiedBy;
                     // ---
                     // 更新用户的文档列表
                     slice.members.forEach((memberId) =>
@@ -431,6 +549,22 @@ const Controller = {
                     if (!executor) throw new Error('`executor` is required');
                     const slice = this.content;
                     if (slice.deletedAt) return;
+                    if (slice.name || slice.content) {
+                        const latest = slice.history?.[0];
+                        if (!sameDocContent(latest, slice)) {
+                            const entry = createDocHistoryEntry(
+                                slice,
+                                executor,
+                                'delete',
+                            );
+                            slice.history = [
+                                entry,
+                                ...(Array.isArray(slice.history)
+                                    ? slice.history
+                                    : []),
+                            ].slice(0, MAX_DOC_HISTORY);
+                        }
+                    }
                     slice.deletedAt = Date.now();
                     slice.members.forEach((memberId) =>
                         Controller.user(memberId).docItems.remove(docId),

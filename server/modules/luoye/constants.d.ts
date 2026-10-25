@@ -61,6 +61,22 @@ export interface DocItem {
     tags?: string[]; // 标签列表
 }
 
+export type DocHistoryReason =
+    | 'save'
+    | 'edit-start'
+    | 'restore'
+    | 'delete'
+    | 'manual';
+
+export interface DocHistoryEntry {
+    id: string;
+    name: string;
+    content: string;
+    savedAt: number;
+    savedBy: string;
+    reason: DocHistoryReason;
+}
+
 export interface Doc {
     id: string; // 文档 id
     name: string; // 文档名称
@@ -76,6 +92,9 @@ export interface Doc {
     updatedAt: number; // 更新时间
     deletedAt: number | null; // 删除时间
     tags?: string[]; // 标签列表
+    previousBackup?: DocHistoryEntry | null;
+    history?: DocHistoryEntry[];
+    lastModifiedBy?: string;
 }
 
 export interface DocBinItem {

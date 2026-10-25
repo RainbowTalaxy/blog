@@ -299,7 +299,7 @@ router.get('/doc/:docId', weakLogin, async (req, res, next) => {
         const doc = docCtr.content;
         if (LuoyeUtl.access(doc, userId) === Access.Forbidden)
             return res.status(403).send(ErrorMessage.Forbidden);
-        return res.send(doc);
+        return res.send(LuoyeUtl.toDoc(doc));
     } catch (error) {
         res.error = 'Failed to get doc';
         res.message = '获取文档失败';
@@ -359,7 +359,7 @@ router.post('/doc', login, async (req, res, next) => {
         if (tags && tags.length > 0) {
             Ctr.user(userId).tags.addTags(tags);
         }
-        return res.send(doc);
+        return res.send(LuoyeUtl.toDoc(doc));
     } catch (error) {
         res.error = 'Failed to create doc';
         res.message = '创建文档失败';
@@ -429,19 +429,22 @@ router.put('/doc/:docId', login, async (req, res, next) => {
         // 权限校验
         if (LuoyeUtl.access(doc, userId) < Access.Member)
             return res.status(403).send(ErrorMessage.Forbidden);
-        const updatedDoc = docCtr.update({
-            name,
-            content,
-            scope,
-            date,
-            workspaces,
-            tags,
-        });
+        const updatedDoc = docCtr.update(
+            {
+                name,
+                content,
+                scope,
+                date,
+                workspaces,
+                tags,
+            },
+            userId,
+        );
         // 更新用户标签列表
         if (tags && tags.length > 0) {
             Ctr.user(userId).tags.addTags(tags);
         }
-        return res.send(updatedDoc);
+        return res.send(LuoyeUtl.toDoc(updatedDoc));
     } catch (error) {
         res.error = 'Failed to update doc';
         res.message = '更新文档失败';
@@ -529,6 +532,90 @@ router.put('/doc/:docId/restore', login, async (req, res, next) => {
         next(error);
     }
 });
+
+// 获取文档保存历史
+router.get('/doc/:docId/history', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
+            return res.status(404).send({
+                error: 'doc not found',
+                message: '未找到文档',
+            });
+        const doc = docCtr.content;
+        if (doc.deletedAt || LuoyeUtl.access(doc, userId) < Access.Member)
+            return res.status(403).send(ErrorMessage.Forbidden);
+        return res.send(docCtr.historyState());
+    } catch (error) {
+        res.error = 'Failed to get doc history';
+        res.message = '获取文档历史失败';
+        next(error);
+    }
+});
+
+// 创建文档保存快照
+router.post('/doc/:docId/history', login, async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { docId } = req.params;
+        const { reason = 'manual' } = req.body;
+        const allowedReasons = ['edit-start', 'manual'];
+        if (!allowedReasons.includes(reason))
+            return res.status(400).send({
+                error: '`reason` is invalid',
+                message: '非法的历史快照来源',
+            });
+        const docCtr = Ctr.doc.ctr(docId);
+        if (!docCtr)
+            return res.status(404).send({
+                error: 'doc not found',
+                message: '未找到文档',
+            });
+        const doc = docCtr.content;
+        if (doc.deletedAt || LuoyeUtl.access(doc, userId) < Access.Member)
+            return res.status(403).send(ErrorMessage.Forbidden);
+        docCtr.checkpoint(userId, reason);
+        return res.send(docCtr.historyState());
+    } catch (error) {
+        res.error = 'Failed to create doc history';
+        res.message = '创建文档历史失败';
+        next(error);
+    }
+});
+
+// 恢复文档保存快照
+router.post(
+    '/doc/:docId/history/:historyId/restore',
+    login,
+    async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            const { docId, historyId } = req.params;
+            const docCtr = Ctr.doc.ctr(docId);
+            if (!docCtr)
+                return res.status(404).send({
+                    error: 'doc not found',
+                    message: '未找到文档',
+                });
+            const doc = docCtr.content;
+            if (doc.deletedAt || LuoyeUtl.access(doc, userId) < Access.Member)
+                return res.status(403).send(ErrorMessage.Forbidden);
+            const updatedDoc = docCtr.restoreHistory(userId, historyId);
+            if (!updatedDoc)
+                return res.status(404).send({
+                    error: 'history not found',
+                    message: '未找到历史版本',
+                });
+            return res.send(LuoyeUtl.toDoc(updatedDoc));
+        } catch (error) {
+            res.error = 'Failed to restore doc history';
+            res.message = '恢复文档历史失败';
+            next(error);
+        }
+    },
+);
 
 // 搜索文档
 router.get('/search', login, async (req, res, next) => {

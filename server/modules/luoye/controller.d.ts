@@ -1,5 +1,7 @@
 import {
     Doc,
+    DocHistoryEntry,
+    DocHistoryReason,
     DocBinItem,
     DocDir,
     DocItem,
@@ -83,14 +85,29 @@ declare const Controller: {
         ) => Doc;
         ctr: (docId: string) => {
             content: Doc;
-            update: (props: {
-                name?: string;
-                scope?: Scope;
-                date?: number;
-                content?: string;
-                workspaces?: string[];
-                tags?: string[];
-            }) => Doc;
+            historyState: () => {
+                previous: DocHistoryEntry | null;
+                history: DocHistoryEntry[];
+            };
+            checkpoint: (
+                executor: string,
+                reason?: DocHistoryReason,
+            ) => DocHistoryEntry | null;
+            restoreHistory: (
+                executor: string,
+                historyId: string,
+            ) => Doc | null;
+            update: (
+                props: {
+                    name?: string;
+                    scope?: Scope;
+                    date?: number;
+                    content?: string;
+                    workspaces?: string[];
+                    tags?: string[];
+                },
+                executor?: string,
+            ) => Doc;
             remove: (executor: string) => void;
             restore: () => void;
             delete: () => void;
