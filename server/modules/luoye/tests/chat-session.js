@@ -255,6 +255,52 @@ async function test() {
         session = updated;
     });
 
+    await testCase.pos('edit doc request status should persist', async () => {
+        const editSession = await talaxy.post('/chat-sessions', {});
+        await talaxy.post(`/chat-sessions/${editSession.sessionId}/messages`, {
+            message: {
+                type: 'assistant_message',
+                parts: [
+                    {
+                        type: 'tool_call',
+                        toolName: 'edit_doc_request',
+                        runId: 'run-edit-doc',
+                        input: {
+                            docId: doc.id,
+                            content: '修改后的正文',
+                        },
+                        output: {
+                            status: 'pending',
+                            docId: doc.id,
+                            baseUpdatedAt: doc.updatedAt,
+                            content: '修改后的正文',
+                        },
+                        status: 'pending',
+                        createdAt: Date.now(),
+                    },
+                ],
+                createdAt: Date.now(),
+            },
+        });
+
+        const confirmed = await talaxy.patch(
+            `/chat-sessions/${editSession.sessionId}/tool-calls/run-edit-doc`,
+            { status: 'confirmed' },
+        );
+        Assert.expect(confirmed.messages[0].parts[0].status, 'confirmed');
+
+        const restored = await talaxy.get(
+            `/chat-sessions/${editSession.sessionId}`,
+        );
+        Assert.expect(restored.messages[0].parts[0].status, 'confirmed');
+
+        const cancelled = await talaxy.patch(
+            `/chat-sessions/${editSession.sessionId}/tool-calls/run-edit-doc`,
+            { status: 'cancelled' },
+        );
+        Assert.expect(cancelled.messages[0].parts[0].status, 'cancelled');
+    });
+
     await testCase.pos('get session detail', async () => {
         const detail = await talaxy.get(
             `/chat-sessions/${session.sessionId}`,

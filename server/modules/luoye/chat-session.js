@@ -191,7 +191,8 @@ const normalizeToolPart = (part) => {
         input: normalizeToolInput(part.input || part.args),
         output: part.output,
         content,
-        ...(toolName === 'save_doc_request'
+        ...(toolName === 'save_doc_request' ||
+        toolName === 'edit_doc_request'
             ? { status: normalizeStatus(part.status || content) }
             : {}),
         createdAt: timestamp,
